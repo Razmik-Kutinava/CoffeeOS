@@ -253,3 +253,169 @@ Security: API-ключи CRM хранятся только в ENV; frontend не
 
 `order #1 → post-pay email save → очистить LS → order #2 (тот же verified phone) → success → server prefill → без повторного запроса`.  
 Сохранить существующие тесты LS-hide и идемпотентности.
+
+---
+
+## Патч_2: 2026-10-05
+
+**Google Doc:** https://docs.google.com/document/d/1igng5OvrPOKMs5NkAZ8CAQYSufJBk3i3ZTI3bTgFLY8/edit?usp=sharing (п.6)  
+**Тип:** ПАТЧ (2-й к #71; следующий → ПЕРЕПИСАТЬ) · канон `docs/operations/dev/TASK_PATCH.md`
+
+### Текст заказчика — дословно
+
+патч_2 к основной задаче #71: Email-сбор после оплаты (Callcheck-флоу)
+
+Цель патча: довести исправление server-side prefill email из "patch_1" до полного соответствия исходному сценарию задачи #71, устранить подтверждённые регрессии и добавить доказательное автоматическое покрытие.
+
+Основание: QA-аудит "patch_1".
+
+Подтверждено аудитом:
+
+- post-pay email сохраняется в "MobileCustomer.email";
+- profile API возвращает сохранённый email;
+- следующий заказ может получить этот email;
+- изменение и очистка "MobileCustomer.email" технически работают;
+- полного автоматического regression test для "order #1 → save → order #2 → server prefill" нет;
+- обнаружено изменение поведения "Receipt.Email/Receipt.Phone";
+- prefill имеет неправильный приоритет источников: LocalStorage рассматривается раньше server profile;
+- требуется отдельно подтвердить и закрыть изоляцию пользователя.
+
+1. Связь с картой интеграций
+
+- Затронутые сервисы из "@INTEGRATIONS.md": внутренний Shop API / profile API.
+- Проверяемые связанные механизмы: существующий receipt flow, CRM/email jobs — только в части регрессии, возникшей после "patch_1".
+- Внешние интеграционные контракты не расширять.
+- Смежные модули, которые НЕЛЬЗЯ ломать: payment flow, callcheck/verified phone, "TbankReceiptBuilder", "Receipt.Email/Receipt.Phone", "OrderEmail", существующий CRM consent flow.
+
+2. Связь с картой компонентов
+
+- Затронутые компоненты из "@COMPONENT_MAP.md": "PaymentResult.svelte", "emailCollection.js", backend email/profile contract, "MobileCustomer.email".
+- Общий файл с другой задачей: нет подтверждённого нового конфликта владения. Если "Checkout.svelte" отмечен в карте как общий файл с задачами #89/#90/#91, его в рамках PATCH_2 не менять.
+- Новый компонент (не в карте): нет.
+
+3. Разрешенный и Запрещенный Scope
+
+Разрешено менять
+
+- backend сохранения post-pay email;
+- API/serializer canonical user profile, если это необходимо для server-side prefill;
+- "PaymentResult.svelte";
+- "emailCollection.js";
+- backend/frontend tests;
+- тесты user isolation;
+- тесты idempotency;
+- минимальный код, необходимый для восстановления существующего receipt contract после "patch_1";
+- минимальный код, необходимый для устранения зависимости receipt/CRM от неподтверждённого profile email, если она появилась именно из-за "patch_1".
+
+Строго запрещено менять
+
+- payment flow;
+- callcheck;
+- verified phone mechanism;
+- "TbankReceiptBuilder";
+- существующий fiscal contract "Receipt.Email/Receipt.Phone";
+- состав и расчёт заказа;
+- "OrderEmail" как историческую order-level сущность;
+- "ActiveOrders";
+- "receiptView";
+- SMS;
+- CRM/marketing consent contract, кроме точечного regression fix, если он непосредственно вызван "patch_1";
+- email OTP;
+- обязательность email для оплаты;
+- существующий LocalStorage/guest-profile механизм как fallback;
+- "Checkout.svelte", если изменение не является строго необходимым для уже существующего email contract.
+
+4. Сценарии и Чек-лист (Gherkin)
+
+- [ ] Subtask 1: Server profile становится primary source для prefill
+  - Given: verified user имеет сохранённый email в canonical user profile.
+  - When: новый заказ завершается и открывается "PaymentResult".
+  - Then: "PaymentResult" получает email из server profile и использует его для prefill.
+- [ ] Subtask 2: LocalStorage становится fallback
+  - Given: server profile содержит сохранённый email.
+  - When: LocalStorage пуст, недоступен или содержит другое значение.
+  - Then: server profile имеет приоритет, а LocalStorage не может заменить canonical server email.
+- [ ] Subtask 3: Fallback при отсутствии server email
+  - Given: canonical server profile не содержит email.
+  - When: success screen загружается и LocalStorage содержит допустимый email.
+  - Then: существующий LocalStorage/guest-profile fallback продолжает работать.
+- [ ] Subtask 4: Полный regression test order #1 → order #2
+  - Given: verified user завершает order #1 и сохраняет email.
+  - When: LocalStorage очищается/недоступен, пользователь создаёт order #2 и открывает success screen.
+  - Then: server profile возвращает email, "PaymentResult" предзаполняет его, повторный email request не показывается.
+- [ ] Subtask 5: Проверка canonical identity
+  - Given: пользователь имеет verified phone.
+  - When: post-pay email сохраняется.
+  - Then: email записывается только в canonical profile пользователя, определённого текущей verified identity.
+- [ ] Subtask 6: User isolation
+  - Given: пользователь A имеет свой профиль и email.
+  - When: пользователь B отправляет post-pay email через свой авторизованный/verified контекст.
+  - Then: изменяется только профиль B; профиль A не изменяется.
+- [ ] Subtask 7: Защита от произвольного user/customer/order ID
+  - Given: пользователь B передаёт идентификатор заказа/клиента пользователя A.
+  - When: вызывается post-pay email endpoint.
+  - Then: backend использует identity текущего пользователя и не изменяет профиль A.
+- [ ] Subtask 8: Изменение email сохраняет canonical source
+  - Given: profile email = "old@example.com".
+  - When: пользователь сохраняет "new@example.com" согласно существующему контракту.
+  - Then: canonical profile содержит "new@example.com", а следующий success screen получает новое значение.
+- [ ] Subtask 9: Очистка email не оставляет stale prefill
+  - Given: profile email существует.
+  - When: email очищается через существующий контракт.
+  - Then: canonical profile больше не содержит старое значение, и следующий success screen не предзаполняет удалённый email.
+- [ ] Subtask 10: Идемпотентность повторного сохранения
+  - Given: email уже сохранён.
+  - When: тот же email отправляется повторно.
+  - Then: не создаются дополнительные "OrderEmail" и пользовательские контакты; существующие background operations не дублируются сверх предусмотренного контрактом поведения.
+- [ ] Subtask 11: Восстановить существующий Receipt contract
+  - Given: post-pay email сохранён в profile.
+  - When: создаётся следующий заказ.
+  - Then: "Receipt.Email/Receipt.Phone" работают так же, как до "patch_1"; profile email не должен автоматически менять fiscal receipt behavior.
+- [ ] Subtask 12: Receipt regression test
+  - Given: сохранённый post-pay email существует.
+  - When: формируется receipt следующего заказа.
+  - Then: автоматический тест фиксирует существующий ожидаемый "Receipt.Email/Receipt.Phone" contract.
+- [ ] Subtask 13: Ошибка profile/email API не блокирует success screen
+  - Given: запрос сохранённого email завершается 4xx/5xx или недоступен.
+  - When: success screen загружается.
+  - Then: success screen продолжает работать; email collection использует существующий fallback/empty state и не блокирует успешную оплату.
+- [ ] Subtask 14: Сохранить существующий LocalStorage-hide regression
+  - Given: email доступен через существующий LocalStorage/guest-profile механизм.
+  - When: success screen загружается.
+  - Then: существующее поведение скрытия email collection сохраняется.
+- [ ] Subtask 15: Добавить сквозной backend/frontend regression coverage
+  - Given: order #1, verified phone и post-pay email.
+  - When: создаётся order #2 без LocalStorage.
+  - Then: автоматические тесты подтверждают сохранение → profile API → PaymentResult prefill → отсутствие повторного запроса.
+
+5. Команды TDD-проверки
+
+- Backend: "bundle exec rspec spec/requests/shop/api/orders/email_spec.rb"
+- Frontend: запустить существующие тесты "PaymentResult" / "emailCollection"
+- Типы: "npx tsc --noEmit", если TypeScript toolchain присутствует
+- Frontend lint: ESLint изменённых frontend-файлов, если присутствует
+- Backend lint: "bundle exec rubocop" по изменённым Ruby-файлам
+- Обязательная регрессия: отдельный интеграционный тест "order #1 → save email → clear LocalStorage → order #2 → server profile → PaymentResult prefill"
+- Обязательная изоляция: "user A ≠ user B → B save не изменяет A"
+- Обязательная fiscal regression: post-pay email не изменяет существующий "Receipt.Email/Receipt.Phone" contract
+
+### DoD (заказчик)
+
+- [ ] Server profile является primary source для prefill.
+- [ ] LocalStorage используется только как fallback.
+- [ ] Order #1 → save email → Order #2 → server prefill покрыт автоматическим тестом.
+- [ ] Повторный запрос email на втором success screen не появляется.
+- [ ] Email сохраняется только для текущего verified user.
+- [ ] Нельзя изменить профиль другого пользователя через post-pay email endpoint.
+- [ ] Изменение email обновляет canonical profile.
+- [ ] Очистка email удаляет stale server-side prefill.
+- [ ] Повторное сохранение не создаёт дубли.
+- [ ] "Receipt.Email/Receipt.Phone" не меняются вследствие PATCH_2.
+- [ ] Ошибка email/profile API не блокирует success screen.
+- [ ] Существующий LocalStorage-hide regression остаётся зелёным.
+- [ ] Все тесты PATCH_2 проходят.
+- [ ] Запрещённые модули не изменены.
+
+### Заметки агента (intake)
+
+- Канон тестов CoffeeOS: Minitest + `node --test` (не RSpec) — `spec/requests/...` из ТЗ = аналог в `test/`.
