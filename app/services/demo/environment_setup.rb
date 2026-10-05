@@ -112,6 +112,7 @@ module Demo
       if Rails.env.production? && !ActiveModel::Type::Boolean.new.cast(ENV.fetch("DEMO_AUTO_SEED", "false"))
         raise "Demo::EnvironmentSetup aborted in production (set DEMO_AUTO_SEED=true to allow)"
       end
+      guard_shop_point_not_renamed!
 
       roles = nil
       org = nil
@@ -173,6 +174,20 @@ module Demo
     end
 
     private
+
+    # Точку A ищем по slug: если витрина (SHOP_DEFAULT_TENANT_ID) смотрит на точку с другим slug,
+    # сид создал бы дубль «Demo Coffee Point A» и увёл туда barista-a/gm-a — табло перестало бы видеть витрину.
+    def guard_shop_point_not_renamed!
+      shop_tid = ENV["SHOP_DEFAULT_TENANT_ID"].presence
+      return unless shop_tid
+
+      shop_point = Tenant.find_by(id: shop_tid)
+      return if shop_point.nil? || shop_point.slug == TENANT_A_SLUG
+
+      raise "Demo::EnvironmentSetup aborted: SHOP_DEFAULT_TENANT_ID=#{shop_tid} is tenant " \
+            "'#{shop_point.name}' (slug #{shop_point.slug}), not #{TENANT_A_SLUG}. " \
+            "Seed would bind demo logins to a different point than the shop."
+    end
 
     def ensure_roles!
       ROLES.each_with_object({}) do |spec, memo|
