@@ -136,6 +136,18 @@ describe("TASK_100 message и CTA — отдельные UI-элементы [TD
     assert.match(src, /\{errorCta\}|errorCta=\{errorCta\}/)
   })
 
+  it("«Попробовать позже» закрывает шторку и сбрасывает ошибку (повторное открытие — чистая кнопка)", () => {
+    const sheet = read("app/frontend/components/PaymentMethodsSheet.svelte")
+    assert.match(sheet, /onTryLater/)
+    const src = read("app/frontend/routes/Checkout.svelte")
+    const m = src.match(/function onPayErrorTryLater\(\)\s*\{([\s\S]*?)\n  \}/)
+    assert.ok(m, "onPayErrorTryLater в Checkout")
+    assert.match(m[1], /payFsmState\s*=\s*PAY_FSM\.DEFAULT/)
+    assert.match(m[1], /payErrorCategory\s*=\s*null/)
+    assert.match(m[1], /closePaymentSheet\(\)/)
+    assert.match(src, /onTryLater=\{onPayErrorTryLater\}/)
+  })
+
   it("Checkout классифицирует ошибку и передаёт errorCta в шторку", () => {
     const src = read("app/frontend/routes/Checkout.svelte")
     assert.match(src, /classifyPaymentError/)
