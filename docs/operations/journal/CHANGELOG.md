@@ -14,6 +14,7 @@
 ## 2026-10-05 — docs: intake TASK_101 (сумма заказа в блоке способов оплаты)
 
 - ТЗ 1:1 из Google Doc → `customer_tasks/TASK-101-Сумма-заказа-в-блоке-способов-оплаты.md`, строка #101 в CBR. Код не менялся.
+- /unlazy: ledger `artifacts/order_total_payment_methods/GATES.md` G1–G8, baseline G3–G6 met; открыт вопрос промо-скидки (cart.total vs Amount) → G7.
 
 ## 2026-10-05 — docs: intake TASK_100 (сообщения ошибки оплаты + CTA)
 
