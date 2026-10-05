@@ -112,6 +112,10 @@ module Shop
         @survivor.phone_verified = true if @survivor.phone == @donor.phone
       end
 
+      if @survivor.receipt_email.blank? && @donor.receipt_email.present?
+        @survivor.receipt_email = @donor.receipt_email
+      end
+
       if @survivor.first_name.blank? || @survivor.first_name == "Гость"
         @survivor.first_name = @donor.first_name if @donor.first_name.present?
       end
