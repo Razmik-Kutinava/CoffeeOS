@@ -1,3 +1,58 @@
+# todo — TASK_101: сумма заказа в блоке способов оплаты
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_101](../milestones/veha_2/requirements/customer_tasks/TASK-101-Сумма-заказа-в-блоке-способов-оплаты.md) · новая задача, полный SBR · [GATES](../milestones/veha_2/artifacts/order_total_payment_methods/GATES.md) G1–G8 |
+| **Статус** | SPEC `[x]` · `[ОТКРЫТЫЙ ВОПРОС]` = 0 → готово к Build |
+
+## SBR
+
+- [x] intake `a8992dc9` · ledger `96fa9c9a`
+- [x] SPEC — факты + решение владельца по акции 11 ₽ (ниже)
+- [ ] RED — `payment_methods_order_total_test.mjs` + `cart_total_amount_test.rb`
+- [ ] GREEN
+- [ ] `/regress`
+- [ ] `/review` (bugbot + security + crit-audit, push) · БЛОК 4 `COMPONENT_MAP.md` (строка PaymentMethodsSheet + TASK_101)
+
+## Факт (до правок)
+
+- `/shop/api/cart` (`Shop::Api::CartController` show/add/update/destroy) **уже** отдаёт `total` = Σ `line_total`, цена строки с модификаторами (`CartService#json_lines`) → backend и `shop-api.md` не меняем (Subtask 1).
+- Фронт: `cartSheetStore.cartTotal` ← `data.total`; при +/− / удалении сначала оптимистичный Σ `line_total`, затем `applyCartData` ответа сервера. `Checkout.svelte` уже подписан на `cartTotal` и передаёт `cartTotalRub` в `PaymentMethodsSheet` (сейчас только для промо-подсказки) → Checkout, скорее всего, не меняем (Subtask 7).
+- `Amount` = `(order.final_amount * 100).to_i` (`TbankAdapter#init_payment`); `final_amount` = `cart.total − promo_discount` (всегда `0`, BUG-004), затем `Payments::GrowthPromo.price!`: при акции привязки + галочке сохранения → `final_amount` = 11 ₽.
+- Форматтера денег с разделителем тысяч нет (`orderCancelFlow` / `promoNudgeInsteadOf` — `String(Math.round)`).
+- `COMPONENT_MAP.md`: `PaymentMethodsSheet` — владельцы TASK_89-POSTCALL-EXT, #89 (internals привязки/СБП не менять); TASK_100 правит inline-ошибку и CTA в том же файле. TASK_101 трогает **только** новую строку под `<header>`.
+
+## Решение владельца (G7, 2026-10-05)
+
+- «Итого» = **всегда** серверный `total` корзины (`cartTotalRub`), в том числе при акции 11 ₽. Про 11 ₽ уже говорит существующая промо-строка — её не трогаем.
+- `total` = `Amount / 100` проверяем тестом **без** акции (Subtask 3, 9). При акции расхождение ожидаемо и задокументировано.
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/components/PaymentMethodsSheet.svelte` — строка `Итого` сразу под `<header class="pm-sheet__header">`, **до** веток `loading` / `loadError` / списка → над первой картой / СБП / «Картой +» (с картами и без), не зависит от `fsmState` / `inlineError` (видна в error state). Показ только при `cartTotalRub > 0` (нет `0 ₽`). Стили — существующие токены шторки; сумма справа (`justify-content: space-between`), `white-space: nowrap`.
+2. `app/frontend/lib/paymentMethodI18n.js` — `labelOrderTotal()` → `"Итого"` и `formatRubAmount(n)` → `"3 245 ₽"` (неразрывный пробел между тысячами и перед `₽`, округление до рубля как в промо-подсказке). Общий helper рядом с прочими денежными строками шторки; отдельный файл не заводим.
+3. `test/javascript/payment_methods_order_total_test.mjs` (новый) — `formatRubAmount` (3245 → `3 245 ₽`, 1000000, 0/NaN/пусто → пусто) + source-оракул шторки: строка с `data-testid="payment-methods-order-total"` до `pm-sheet__list` и вне `{#if loading}` / `inlineError`, guard `cartTotalRub > 0`, нет `price * quantity`.
+4. `test/integration/shop/api/cart_total_amount_test.rb` (новый) — корзина: 2 товара, qty 2, модификатор с доплатой → `GET /shop/api/cart` `total` = ожидаемое; заказ из той же корзины (`Shop::OrderCreator`, без привязки) → `TbankAdapter#init_payment` с перехватом `post_json` → `Amount == (total * 100).to_i`.
+5. `docs/operations/session/COMPONENT_MAP.md` — на REVIEW (БЛОК 4): TASK_101 в строке `PaymentMethodsSheet`.
+
+**Соседи (blast-radius, не менять — только регрессия):** `Checkout.svelte` (источник `cartTotalRub`), `cartSheetStore.js` (оптимистичный пересчёт → серверный `total`), `CheckoutPayButton.svelte` / `shopPayFsm.js` (TASK_100, error state).
+
+## Не ломать
+
+- Оплата: `TbankAdapter`, `OrderCreator`, `GrowthPromo`, callback — ни строчки (G3).
+- Сохранённые карты / СБП / «Картой +» / промо-строка 11 ₽ — разметка и выбор без изменений.
+- Ошибка оплаты TASK_100: текст `pm-sheet__inline-error` + CTA кнопки — без изменений, «Итого» не сдвигается.
+- Кнопка оплаты и её состояния.
+
+## Проверка
+
+- `node --test test/javascript/payment_methods_order_total_test.mjs` + G4 JS зона (4 файла)
+- `ruby bin/rails test test/integration/shop/api/cart_total_amount_test.rb` + G5 Rails зона (6 файлов)
+- `npm run vite:build` (вместо typecheck/lint — их нет в `package.json`)
+- Ручная: 360×780 без горизонтального overflow · Telegram/Instagram In-App и Fly MCP Point A — после deploy по апруву
+
+---
+
 # todo — TASK_100: точные сообщения при ошибке оплаты и отдельный CTA
 
 | Поле | Значение |

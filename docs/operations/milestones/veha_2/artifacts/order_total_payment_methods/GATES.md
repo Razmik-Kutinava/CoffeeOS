@@ -38,8 +38,8 @@ Scope: в `PaymentMethodsSheet` над первой сохранённой ка�
   CWD: C:/Tools/workarea/CoffeeOS
   EVIDENCE: automatic-evidence=v1; definition-sha256=f7e7622df49ec841733ad3773c617530864e0ea56f57087c6b0303b7181c2140; exit=0; EXPECT=matched; output-sha256=48bea1e68a53bc42cd96682495c6c1d2a36286123e074bc1dac1251f728e6795; output-bytes=16597; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
 
-- [ ] G7: решение по промо-скидке — `cart.total` (без промо) vs `Amount` = `order.final_amount` (subtotal − `promo_discount`): что показывать в «Итого» при промо; 0 `[ОТКРЫТЫЙ ВОПРОС]` = готово к Build (Subtask 3, 9, DoD 4)
-  EVIDENCE: pending — /spec, решение владельца
+- [x] G7: решение по промо-скидке — `cart.total` (без промо) vs `Amount` = `order.final_amount` (subtotal − `promo_discount`): что показывать в «Итого» при промо; 0 `[ОТКРЫТЫЙ ВОПРОС]` = готово к Build (Subtask 3, 9, DoD 4)
+  EVIDENCE: manual 2026-10-05 — /spec: `promo_discount` всегда 0 (BUG-004); реальное расхождение только `GrowthPromo` (акция привязки + галочка → `final_amount` = 11 ₽). Решение владельца: «Итого» = всегда серверный `total` корзины; `total` = `Amount/100` проверяется без акции (G2). `[ОТКРЫТЫЙ ВОПРОС]` = 0 · todo.md § «Решение владельца»
 
 - [ ] G8: manual — viewport ~360 px без overflow, Telegram/Instagram In-App Browser, Fly MCP Point A checkout без 5xx (Subtask 11–12)
   EVIDENCE: pending — 360 px локально на GREEN; In-App + Fly после deploy по апруву; tenant `2fdee1ac-4674-41ee-b89e-87b45643f789`
