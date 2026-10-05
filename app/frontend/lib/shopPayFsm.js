@@ -172,6 +172,7 @@ export function resolveCheckoutSheetInlineError(error, fsmState, category = unde
   ) {
     return null
   }
+  if (category === undefined && fsmState === PAY_FSM.NET_ERROR) return payFsmLabel(fsmState)
   let cat = category === undefined ? classifyPaymentError(error) : category
   if (!cat && fsmState === PAY_FSM.CLIENT_ERROR) cat = PAY_ERROR_CATEGORY.CARD_DECLINED
   const ui = resolvePaymentErrorUi(cat)
