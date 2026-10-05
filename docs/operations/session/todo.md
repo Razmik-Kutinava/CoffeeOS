@@ -44,7 +44,7 @@
 | Поле | Значение |
 |------|----------|
 | **Основание** | [TASK_90 § Патч 1: 2026-10-02](../milestones/veha_2/requirements/customer_tasks/TASK-90-Восстановление-WebPush-после-запрета-уведомлений.md) · Subtask 7 (patch v1) · остальные Subtask #90 — контекст, не scope · [Google Doc](https://docs.google.com/document/d/1YtZzj-Lf2HHrM4azejIuZISTKsWdu8q6y-kPHvm_d44/edit?usp=sharing) |
-| **Статус** | `/regress` PASS → `/review` |
+| **Статус** | REVIEW `[x]` · CI green [37283046314](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37283046314) на `3f14dda9` · deploy по апруву |
 
 ## SBR
 
