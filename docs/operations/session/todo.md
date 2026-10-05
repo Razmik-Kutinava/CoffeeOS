@@ -70,7 +70,9 @@
 - [x] RED `314bf518` — 5 fail (CONFIRMED / REJECTED / CANCELED / нет карт / сеть), regression 2/2 зелёные
 - [x] GREEN — `historyRepeatAdapter.runHistoryRepeatPayFlow`: SUCCESS → `resetRepeatInlinePayUi` + `navigate("/")` без reset-таймера; FALLBACK/ERROR без `showRetry` → `openRepeatPaymentSheet(first, { preferNewCard: false })`; NO_CARD → `preferNewCard: true`; сеть/timeout — inline retry как было · DI (`createOrder`/`payFlow`/`navigate`/`openPaymentSheet`/`setTimeoutFn`) для тестов
 - [x] `/regress` PASS — JS 688 (60 fail = legacy, те же 3 набора) · Rails `test/integration/shop` + `test/services/payments` 825/0
-- [ ] `/review` (bugbot + security + crit-audit, push)
+- [x] `/review`: security 0 · bugbot #1 (history `activeKey` после отказа) → RED `7dbff0c5` → GREEN `6e10a462` · bugbot #2 (то же при retry/уходе с ЛК) → RED `35b8618f` → GREEN `9bd2d690` (`releaseHistoryRepeatUi` в unmount `Profile`/`OrderReceipt`) · bugbot #3 — только код базовой TASK_94 (подписи кнопок) → backlog · crit-audit CLEAN (`last_audited_sha` = `9bd2d690`)
+- [ ] Entire attach → push → CI green
+- [ ] Backlog: `Profile.repeatLabel` не показывает сетевую ошибку; `OrderReceipt.repeatButtonLabel` берёт чужой `errorText` без сверки `activeKey` (базовая TASK_94)
 - [ ] `COMPONENT_MAP.md` (Profile / OrderReceipt / historyRepeatAdapter) — после Review
 - [ ] deploy по апруву → Fly MCP Point A (закрывает и G5 базовой TASK_94)
 
@@ -87,9 +89,10 @@
 
 ## Файлы
 
-- `app/frontend/lib/historyRepeatAdapter.js` — orchestration результата (единственный файл кода)
-- `test/javascript/lk_history_repeat_one_click_test.mjs` — +7 тестов (5 поведенческих + 2 regression)
-- `Profile.svelte` / `OrderReceipt.svelte` / `widgetRepeatPayFlow.js` / `openRepeatPaymentSheet.js` — не тронуты
+- `app/frontend/lib/historyRepeatAdapter.js` — orchestration результата + `releaseHistoryRepeatUi`
+- `app/frontend/routes/Profile.svelte`, `OrderReceipt.svelte` — только вызов `releaseHistoryRepeatUi` при unmount (bugbot #2)
+- `test/javascript/lk_history_repeat_one_click_test.mjs` — +10 тестов (15 всего)
+- `widgetRepeatPayFlow.js` / `openRepeatPaymentSheet.js` / `RepeatSection` / Checkout — не тронуты
 
 ## Не ломать
 

@@ -17,6 +17,12 @@
 - RED `f935fcdd` → GREEN `440a686a`: удалены кнопка, `MessageCircle`, `onSupportChatClick`, импорт и монтирование `SupportContactSheet`. «Профиль ID» без изменений. `SupportContactSheet.svelte` / `Profile.svelte` / `supportConfig.js` не тронуты (запрет ТЗ).
 - Тест `shop_header_no_support_chat_test.mjs`: SSR (обычная ширина) + исходник (узкая). /regress: JS 687 — 60 legacy · Rails шапка/ЛК 17/0 · vite OK. Review: bugbot 0 · security 0 · crit-audit CLEAN.
 
+## 2026-10-05 — feat: TASK_94 Патч 1 — ЛК → Повторить: успех на главный экран, отказ на экран оплаты
+
+- **RED** `314bf518` → **GREEN** `c29c14a2`: `historyRepeatAdapter.runHistoryRepeatPayFlow` — CONFIRMED → сброс inline-UI + `push("/")` (статус в существующем `OrderStatusSheet`), reset-таймер не ставится; REJECTED/CANCELED → существующий `openRepeatPaymentSheet` (`#/checkout`, сохранённые карты / новая / СБП); нет карт → форма новой карты; сеть/timeout — inline retry как было.
+- **REVIEW:** security 0 · bugbot #1 — ключ `history:*` оставался в общем store → Quick Repeat на `/` показывал чужой fallback → RED `7dbff0c5` → GREEN `6e10a462` · bugbot #2 — то же в окне retry → `releaseHistoryRepeatUi` при уходе с `Profile`/`OrderReceipt` → RED `35b8618f` → GREEN `9bd2d690` · bugbot #3 — только код базовой TASK_94 → backlog · crit-audit CLEAN.
+- **Local:** зона 15/0 · JS 688 — 60 legacy · Rails shop+payments 825/0 · vite build OK. Checkout, Quick Repeat, `OrderStatusSheet`, `cartSheetStore`, payment API не тронуты.
+
 ## 2026-10-05 — docs: TASK_94 Патч 1 — /patch (ЛК → Повторить: успех на `#/`, отказ на экран оплаты)
 
 - Патч 1 (2026-10-01) из Google Doc вписан 1:1 секцией в TASK-94 + аудит (файл:строка). Тип — ПАТЧ (Subtask 5, 6).
