@@ -11,6 +11,10 @@ module Shop
     end
 
     def show
+      # На 304 Rails не отдаёт CSP — браузер взял бы старую политику из кэша.
+      # ETag по телу не меняется при смене CSP, поэтому валидатор уникален на каждый ответ.
+      response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+      response.headers["ETag"] = %(W/"#{SecureRandom.hex(16)}")
       render layout: false, formats: :js
     end
   end
