@@ -6,6 +6,7 @@
 
 | ID | Статус | Блокер |
 |----|--------|--------|
+| Telegram-алерты не уходят | 🟡 | на Fly есть `TELEGRAM_BOT_TOKEN`, нет `TELEGRAM_CHAT_ID` → `TelegramAlertJob#perform` выходит сразу (1–3 мс на prod 2026-10-05 15:45 UTC), алерты о зависших платежах теряются · нужен chat_id от владельца → `fly secrets set TELEGRAM_CHAT_ID=…` |
 | SBP webhook `RATE_LIMITED` | 🟡 | `SbpAccountTokenFromWebhook#call!` проверяет только `BLOCKED`; `SbpAccountTokenStore.persist!` при velocity возвращает `:rate_limited` → `stored.method_hash` → `NoMethodError` в callback (найдено на TASK_102, вне scope) |
 | UserCards / RebillId | 🟢 | v493 MIR RebillId+Charge PASS · new save_card FA не re-run |
 | Checkout UX (Фаза 2) | 🟡 | апрув заказчика |

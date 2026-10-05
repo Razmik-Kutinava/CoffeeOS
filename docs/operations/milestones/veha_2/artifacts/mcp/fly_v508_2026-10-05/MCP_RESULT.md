@@ -39,7 +39,24 @@
 - Вход в панели: https://coffeeos.fly.dev/login (бариста `/barista`, менеджер `/manager`, УК `/admin`, цех `/prep_kitchen`)
 - ТВ-табло A: `https://coffeeos.fly.dev/tv_board?token=<device_token tv_board «зал»>`
 
+## Дополнительно (тот же день, после апрува владельца)
+
+| Задача | Проверка | Статус |
+|--------|----------|--------|
+| TASK_101 | live: товар 10 ₽ → checkout → «+10₽» → шторка «Способ оплаты»: «Итого 10 ₽»; закрыта без оплаты, товар удалён | **PASS** — [скрин](task101_itogo_sheet.png) |
+| TASK_100 | live на прод-бандле, подмена ответа `POST /shop/api/payments/one_click` в `fetch` страницы (на сервер/банк запрос не ушёл, заказов не создано): 1051 → «Недостаточно средств на карте» + «Изменить карту»; 119 → «Слишком много попыток оплаты. Попробуйте позже» + «Попробовать позже» (закрывает шторку); повторное открытие → ошибка сброшена, «Оплатить» | **PASS** — [скрин 1051](task100_1051_insufficient.png) |
+| TASK_94 | live, реальная оплата 10 ₽ (апрув): ЛК → «повторить» `#202610-0003` → через ~7 с переход на `#/` со шторкой статуса `#202610-0004` (Принят → Оплачен) · prod: order `accepted`, payment `succeeded` · табло barista-a: `#202610-0004` появился | **PASS** — [скрин](task94_repeat_to_status.png) · [табло](barista_a_board_after_repeat.png) |
+| Push Android (TASK_37/90) | prod: `push_enabled` 16, новых подписок после v508 — 0 | **skip** — нужен физический Android |
+
+## Sentry (MCP подключён) + Fly v509
+
+- 24h unresolved: 1 — [RUBY-1P](https://llc-manageengine.sentry.io/issues/RUBY-1P) N+1 `INSERT INTO solid_queue_jobs` в `StuckPaymentsCheckJob` (11:15 UTC, v507): `TelegramAlertJob.perform_later` в цикле.
+- Fix RED `93f01b59` → GREEN `b784c934` (`ActiveJob.perform_all_later`) · Local 7/0 + payments jobs/services/callback 182/0 · CI [37333766140](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37333766140) green · deploy [37334241792](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37334241792) → **v509**.
+- Prod 15:45 UTC: `Enqueued 4 jobs to SolidQueue (4 TelegramAlertJob)` — одна пакетная вставка · RUBY-1P → resolved · повторный поиск 24h: 0.
+- Найдено: `TELEGRAM_CHAT_ID` не задан на Fly → алерты не отправляются (ISSUES).
+
 ## Next
 
-- Sentry 24h вручную (MCP недоступен)
-- Глазами заказчика на телефоне: ошибки оплаты/«Итого» (TASK_100/101), WebPush Android (TASK_37/90), Повторить в ЛК (TASK_94)
+- Push на физическом Android (TASK_37/90): разрешить уведомления → подписка → `push_enabled_at` обновится
+- `TELEGRAM_CHAT_ID` на Fly — от владельца
+- Тестовый заказ `#202610-0004` (10 ₽) — отменить/оставить по решению владельца
