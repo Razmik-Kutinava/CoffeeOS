@@ -131,7 +131,7 @@
 - [x] GREEN `ad6b448e` — миграция `receipt_email` + перенос · `EmailService` → только `receipt_email` · `profile_json.receipt_email` · `resolveReceiptEmailPrefill` · `clearReceiptEmail` при пустом submit
 - [x] Регрессия локально: Rails `test/integration/shop` + `test/services/{payments,shop}` + `test/jobs` 1225/0 · JS 677 — 60 legacy · vite build OK · RuboCop 0
 - [x] `/review`: bugbot #1 — `CustomerProfileMerger` терял `receipt_email` донора → RED `d0e9d883` → GREEN `20138734` → bugbot 0 · security 0 · crit-audit CLEAN · Entire `01M45YZTD6Z31SD7MP9Q7KS21X` на `20138734`
-- [ ] push → CI green
+- [x] push `6a79c0de` → **CI green** [37307196592](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37307196592) + Semgrep/CodeQL
 - [ ] `COMPONENT_MAP.md` строка `PaymentResult` (receipt_email, server-first) — после Review
 - [ ] deploy по апруву → миграция на проде → Fly MCP Point A
 
