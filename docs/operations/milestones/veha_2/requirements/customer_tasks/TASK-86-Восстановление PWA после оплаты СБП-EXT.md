@@ -427,3 +427,68 @@ iOS требует отдельного поведения.
 **Факт кода на intake:** `codeblack_pending_order` + visibilitychange/pageshow/cold start уже есть; gap = реальный device path PWA→NSPK→bank→return и ясный result screen (подтверждено жалобой Android).
 
 **Путь:** полный SBR (Spec уже в Google → `/spec` в todo → `/sbr`). Не «просто доп.работа».
+
+---
+
+## Патч 1: 02.10.2026
+
+**Intake:** 2026-10-05 · источник — Google Doc (тот же), блок в конце документа · текст дословно.
+
+Основание: runtime-аудит recovery "PaymentResult" от 02.10.2026; подтверждено, что уже смонтированный экран "WAITING_FOR_BANK" не обновляется при переходе recovery в "status=ok" без пересоздания компонента.
+
+### Расхождение
+
+Subtask 4: "CONFIRMED → clear pending → show success".
+
+По факту recovery корректно получает "CONFIRMED" и формирует переход на "/payment-result?status=ok...", однако уже смонтированный "PaymentResult" не реагирует на изменение "status" и продолжает отображать "WAITING_FOR_BANK".
+
+Расхождение: сценарий требует отображения результата "CONFIRMED", но при возврате в уже открытый PWA-контекст экран может остаться в "WAITING_FOR_BANK".
+
+Доказательства:
+
+- "shopSbpPay.js:204, 261-263" — recovery получает "CONFIRMED" и возвращает "ui: "ok"";
+- "App.svelte:94-96" — выполняется переход на "/payment-result?status=ok...";
+- "PaymentResult.svelte:112-116, 143-146" — "status" читается при монтировании, состояние "waiting" не отслеживает последующее изменение;
+- runtime-тест от 02.10.2026 — дефект подтверждён: уже смонтированный WAITING-экран не переходит в результат после recovery без remount.
+
+### Исправленный сценарий
+
+- [ ] Subtask 4 (patch v2): Given PWA находится на "/payment-result" со статусом "waiting" и экран "WAITING_FOR_BANK" уже смонтирован, When recovery получает для сохранённого "orderId" статус "CONFIRMED", Then текущий экран без обязательного полного перезапуска PWA должен перейти в состояние успешной оплаты, pending-запись должна быть очищена, а пользователь должен увидеть предусмотренный существующим TASK_86 успешный результат.
+
+- [ ] Subtask 5 (patch v2): Given PWA находится на "/payment-result" со статусом "waiting" и экран уже смонтирован, When recovery получает "REJECTED" или "CANCELED", Then текущий экран должен перейти в предусмотренное TASK_86 состояние ошибки/повторной оплаты, а pending-запись должна быть очищена.
+
+### Не трогать
+
+См. "COMPONENT_MAP.md" для компонентов PWA/payment recovery.
+
+Не изменять:
+
+- backend payment processing;
+- T-Kassa webhook;
+- источник истины статуса платежа;
+- SHA-256 validation;
+- tokenization/Rebill;
+- card payment flow;
+- guest session restore;
+- правила TTL pending order;
+- бизнес-логику PENDING;
+- UX длительного ожидания, polling, timeout, cancel/open-bank — это отдельная задача и в этот патч не входит.
+
+### Scope
+
+Разрешено:
+
+- исправить реакцию уже смонтированного "PaymentResult" на изменение результата recovery;
+- обеспечить переход WAITING → SUCCESS для "CONFIRMED";
+- обеспечить переход WAITING → ERROR/RETRY для "REJECTED/CANCELED";
+- добавить/исправить TDD-тесты, непосредственно проверяющие этот lifecycle-сценарий.
+
+Запрещено:
+
+- менять backend payment flow;
+- менять webhook/GetState;
+- менять правила определения "CONFIRMED/REJECTED/CANCELED";
+- добавлять polling или таймер;
+- менять UX длительного "PENDING";
+- менять TTL;
+- добавлять новые кнопки или продуктовые сценарии.

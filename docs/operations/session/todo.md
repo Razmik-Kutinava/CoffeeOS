@@ -1,3 +1,58 @@
+# todo — TASK_86 Патч 1: смонтированный WAITING-экран переходит в результат
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_86 § Патч 1: 02.10.2026](../milestones/veha_2/requirements/customer_tasks/TASK-86-Восстановление%20PWA%20после%20оплаты%20СБП-EXT.md) · Subtask 4 и 5 (patch v2) · остальные Subtask #86 — контекст, не scope |
+| **Статус** | intake `[x]` · SPEC `[x]` → RED |
+
+## SBR
+
+- [x] intake Патча 1 в `customer_tasks/TASK-86-…-EXT.md`
+- [x] SPEC — факт ниже, файлы, Не ломать, Проверка
+- [ ] RED — unit `resolveWaitingScreenTransition` + исходник `PaymentResult` (hashchange-подписка)
+- [ ] GREEN — `PaymentResult` реагирует на смену `status` без remount
+- [ ] `/regress` → `/review` (bugbot + security + crit-audit, Entire, push, CI)
+- [ ] `COMPONENT_MAP.md` строка `PaymentResult` — только после зелёного Review
+- [ ] Device: Android/iOS «вернулся в открытый PWA → экран сам ушёл в результат» — после deploy по апруву
+
+## Факт (до правок)
+
+- `App.svelte` `recoverCodeblackPendingOrder` → `recoverPendingPayment` → `push("/payment-result?status=ok|fail&order_id=…")`.
+- `svelte-spa-router`: тот же маршрут `/payment-result`, меняется только query → компонент **не** пересоздаётся.
+- `PaymentResult.svelte` читает `status` / `order_id` один раз в `onMount` → при `waiting` ставит `waitingForBank = true` и больше URL не слушает → экран висит в `WAITING_FOR_BANK`.
+- `checkOrderStatus` уже чистит pending при `CONFIRMED/REJECTED/CANCELED`; повторный terminal на тот же `orderId` режется `terminalShownForOrderId` (#86, не меняем).
+- Паттерн проекта для реакции на URL — `window.addEventListener("hashchange", …)` (`CartSheet`, `OrderStatusSheet`, `Cart`).
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/lib/shopSbpPay.js` — чистая `resolveWaitingScreenTransition({ currentStatus, nextStatus, currentOrderId, nextOrderId })` → `"success" | "incomplete" | "none"`. Переход только из `waiting` и только для того же `orderId`.
+2. `app/frontend/routes/PaymentResult.svelte` — `hashchange` в `onMount` (+ снятие), при `success` → существующий `prepareSuccessScreen` + `maybeAutoReturnToCatalog` (как `onIPaid`); при `incomplete` → `clearPendingOrder`, `waitingForBank = false`, `SBP_INCOMPLETE_MESSAGE` (как `onIPaid` для REJECTED/CANCELED). Без таймеров/polling/кнопок.
+3. `test/javascript/sbp_waiting_screen_transition_test.mjs` (новый) — unit + оракул исходника.
+
+**Только чтение (blast-radius):** `App.svelte` (источник push), `codeblackPendingOrder.js`, `shopGuestSession.js`.
+
+## Не ломать
+
+- Холодный старт `PaymentResult` с `status=ok|fail|cancel|waiting` — ветки `onMount` без изменений.
+- «Я оплатил» (`onIPaid`) и email-блок #71 / авто-возврат в каталог TASK_91.
+- `recoverCodeblackPendingOrder` / `pendingStatusGuard` / `terminalShownForOrderId` в App и `shopSbpPay` — без изменений.
+- Card/Rebill, webhook, TTL, PENDING-UX — не трогаем.
+
+## Проверка
+
+- `node --test test/javascript/sbp_waiting_screen_transition_test.mjs test/javascript/shop_sbp_pay_test.mjs test/javascript/codeblack_pending_order_test.mjs test/javascript/email_collection_test.mjs`
+- `ruby bin/rails test test/integration/shop/sbp_payment_return_ui_test.rb test/integration/shop/checkout_acceptance_cbr_test.rb test/integration/shop/order_status_acceptance_cbr_test.rb`
+- `npm run vite:build`
+
+## DoD
+
+- Subtask 4 (patch v2): WAITING смонтирован → `status=ok` того же заказа → экран успеха, pending очищен, без remount.
+- Subtask 5 (patch v2): WAITING смонтирован → `status=fail|cancel` → экран «Оплата не завершена», pending очищен.
+- Чужой `order_id` / повторный `waiting` — экран не меняется.
+- Тесты из «Проверки» зелёные, `vite build` OK, Review пройден, deploy — по апруву.
+
+---
+
 # todo — TASK_101: сумма заказа в блоке способов оплаты
 
 | Поле | Значение |
