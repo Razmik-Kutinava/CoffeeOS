@@ -26,9 +26,10 @@ import { resolveNetworkRetryUi } from "../../app/frontend/lib/widgetRepeatPayFlo
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
 
-/** Checkout / shopPayFsm — длинный канон 2026-08-13 (не Патч 1 inline). */
+/** TASK_100: карточный fallback Матрицы (старый общий текст удалён). */
 const CHECKOUT_CARD_MSG =
-  "Недостаточно средств, или карта заблокирована банком, или истёк срок действия карты"
+  "Не удалось списать деньги. Обратитесь в банк — этой картой нельзя оплатить заказ."
+const CLIENT_ERROR_CTA = "Изменить карту"
 const NET_MSG = "Нет связи. Повторить"
 
 describe("payment error user messages — inline labels [Патч 1]", () => {
@@ -59,7 +60,7 @@ describe("payment error user messages — inline labels [Патч 1]", () => {
 
 describe("payment error user messages — checkout FSM labels [TDD]", () => {
   it("CLIENT_ERROR / NET_ERROR labels match customer copy", () => {
-    assert.equal(PAY_FSM_LABELS[PAY_FSM.CLIENT_ERROR], CHECKOUT_CARD_MSG)
+    assert.equal(PAY_FSM_LABELS[PAY_FSM.CLIENT_ERROR], CLIENT_ERROR_CTA)
     assert.equal(PAY_FSM_LABELS[PAY_FSM.NET_ERROR], NET_MSG)
   })
 
