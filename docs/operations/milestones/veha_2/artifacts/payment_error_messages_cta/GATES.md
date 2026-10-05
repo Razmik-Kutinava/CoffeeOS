@@ -32,8 +32,8 @@ Scope: payment error в `PaymentMethodsSheet` классифицируется �
   CWD: C:/Tools/workarea/CoffeeOS
   EVIDENCE: pending
 
-- [ ] G6: классификация остальных `error_code` из `CLIENT_ERROR_CODES` (1005, 1013, 1041, 1053, 1054, 1057, 1061, 1062, 1078) — каждый: «карточная» / «общая» / `[ОТКРЫТЫЙ ВОПРОС]` с источником (код / backend message / доки Т-Банка); 0 открытых вопросов = готово к Build (§10)
-  EVIDENCE: pending — manual, таблица в todo на `/spec`
+- [x] G6: классификация остальных `error_code` из `CLIENT_ERROR_CODES` (1005, 1013, 1041, 1053, 1054, 1057, 1061, 1062, 1078) — каждый: «карточная» / «общая» / `[ОТКРЫТЫЙ ВОПРОС]` с источником (код / backend message / доки Т-Банка); 0 открытых вопросов = готово к Build (§10)
+  EVIDENCE: manual 2026-10-05 — todo.md § «Классификация error_code»: все 9 → карточный fallback (1005/1041/1054/1057/1062 — комментарии `shopWidgetPayFsm.js`; 1013/1053/1061/1078 — `INVALID_REBILL_CODES` + решение владельца) · 3DS abort → общий · NET/BANK без изменений · `[ОТКРЫТЫЙ ВОПРОС]` = 0
 
 - [ ] G7: hot-path Fly MCP Point A — checkout / `PaymentMethodsSheet` без 5xx, бандл с новыми текстами
   EVIDENCE: pending — после deploy по апруву; tenant `2fdee1ac-4674-41ee-b89e-87b45643f789`

@@ -1,3 +1,84 @@
+# todo — TASK_100: точные сообщения при ошибке оплаты и отдельный CTA
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_100](../milestones/veha_2/requirements/customer_tasks/TASK-100-Точные-сообщения-при-ошибке-оплаты-и-отдельный-CTA.md) · новая задача, полный SBR · [GATES](../milestones/veha_2/artifacts/payment_error_messages_cta/GATES.md) G1–G7 |
+| **Статус** | SPEC `[x]` · `[ОТКРЫТЫЙ ВОПРОС]` = 0 → готово к Build |
+
+## SBR
+
+- [x] intake `f0fa419a` · ledger `a3059bd7`
+- [x] SPEC — классификация кодов + решения владельца (ниже)
+- [ ] RED — `payment_error_matrix_test.mjs` + обновить тесты старого текста
+- [ ] GREEN
+- [ ] `/regress`
+- [ ] `/review` (bugbot + security + crit-audit, push)
+
+## Факт (до правок)
+
+- `shopPayFsm.js`: 12 кодов `CLIENT_ERROR_CODES` + regex по message → одно `PAY_FSM.CLIENT_ERROR` с длинным текстом «…или карта заблокирована банком…».
+- «Смешано» буквально: `CheckoutPayButton` в `CLIENT_ERROR` показывает **тот же** `PAY_FSM_LABELS[5]` как подпись кнопки, а `PaymentMethodsSheet` — его же в `role="alert"` (`resolveCheckoutSheetInlineError`).
+- CTA сейчас: `CLIENT_ERROR` → `onChangeCard` (форма новой карты по клику; auto-open = false — §7 п.5 уже соблюдён); `NET/BANK` → retry.
+- Backend `Shop::TbankPaymentError::FRIENDLY_MESSAGES` ≠ Матрице («Карта просрочена») — **не трогаем** (HTTP-контракт), маппинг на фронте по `error_code`.
+
+## Классификация `error_code` (G6)
+
+| Код | Категория | Источник |
+|-----|-----------|----------|
+| 1051 | Недостаточно средств | ТЗ Матрица |
+| 1014 | Истёк срок карты | ТЗ Матрица |
+| 119, 2200 | Слишком много попыток | ТЗ Матрица |
+| 1005 | карточный fallback | `shopWidgetPayFsm.js` «отказ эмитента» |
+| 1041 | карточный fallback | там же «утеряна» |
+| 1054 | карточный fallback | там же «истёк срок» — ТЗ закрепляет «истёк» только за 1014 → не расширяем |
+| 1057 | карточный fallback | там же «не разрешена» |
+| 1062 | карточный fallback | там же «ограничение карты» |
+| 1013, 1053, 1061, 1078 | карточный fallback | `INVALID_REBILL_CODES` (токен карты невалиден) · **решение владельца 2026-10-05** |
+| нет кода, message по regex «карт/средств/истёк/блокир…» | карточный fallback | backend message подтверждает карту |
+| неизвестный код без карточного message | общий fallback | ТЗ §5 п.5–6 |
+| 3DS прерван (нет кода) | общий fallback | **решение владельца** |
+| сеть (`NET_ERROR`), 5xx (`BANK_ERROR`) | без изменений | **решение владельца** — вне Матрицы |
+
+## Решения владельца (2026-10-05)
+
+- CTA «Попробовать позже» (119/2200) → закрывает шторку оплаты, карту не трогает.
+- «Изменить карту» → текущее `onChangeCard` (форма новой карты по клику).
+- «Повторить оплату» → текущий retry.
+
+## Дизайн
+
+- `shopPayFsm.js`: `classifyPaymentError(error)` → категория `insufficient_funds | card_expired | too_many_attempts | card_declined | payment_failed` (null для NET/BANK); FSM-переход как был (карточные + попытки → `CLIENT_ERROR`; `payment_failed` → новое отображение без смены `NET/BANK`). `resolvePaymentErrorUi(category)` → `{ message, ctaLabel, ctaAction: change_card | close | retry }`. Старый текст `PAY_FSM_LABELS[CLIENT_ERROR]` удалить.
+- `paymentMethodI18n.js`: 5 сообщений + 3 CTA, ключи по категориям (§9).
+- `Checkout.svelte`: хранить `payErrorCategory` рядом с `payFsmState` в catch / `onThreeDsClose` / 3DS catch; сброс там же, где `sheetInlineError = null`; передать в шторку.
+- `PaymentMethodsSheet.svelte`: alert = `message`, кнопка = `ctaLabel` — два отдельных элемента.
+- `CheckoutPayButton.svelte` (+1 сосед): проп `errorCta` (label + action) вместо `payFsmLabel` в ошибке; `close` → новый колбэк `onClose`.
+
+## Файлы (ожидаемо)
+
+- `app/frontend/lib/shopPayFsm.js` — классификация + UI-резолвер (общий файл: только payment error)
+- `app/frontend/lib/paymentMethodI18n.js` — тексты Матрицы
+- `app/frontend/routes/Checkout.svelte` — категория ошибки → шторка
+- `app/frontend/components/PaymentMethodsSheet.svelte` — message и CTA раздельно
+- `app/frontend/components/CheckoutPayButton.svelte` — подпись/действие CTA (blast-radius: рендерит label ошибки)
+- `test/javascript/payment_error_matrix_test.mjs` — новый (G1)
+- `test/javascript/payment_error_user_messages_test.mjs`, `test/integration/shop/shop_pay_fsm_3ds_test.rb` — обновить ожидания старого текста
+
+## Не ломать
+
+- repeat-order invalid-token: `isInvalidRebillPaymentError` → `setTokenInvalid` (не трогаем `repeatInvalidTokenStore.js`)
+- HTTP 422 / payment token / SBP autopay (`resolveSbpAutopaySheetError`) / выбор способа оплаты
+- открытие/закрытие `PaymentMethodsSheet`, 3DS overlay, `shouldAutoOpenNewCardOnClientError = false`
+- inline pay виджета (`shopInlinePayFsm.js` / `shopWidgetPayFsm.js`) — другой поток
+
+## Проверка
+
+- `node --test test/javascript/payment_error_matrix_test.mjs` (G1) + G2 оракул из GATES
+- `node --test test/javascript/payment_error_user_messages_test.mjs test/javascript/repeat_invalid_token_payment_test.mjs test/javascript/widget_repeat_pay_flow_patch1_test.mjs test/javascript/shop_inline_pay_button_fsm_test.mjs test/javascript/open_repeat_payment_sheet_test.mjs test/javascript/shop_widget_pay_fsm_test.mjs test/javascript/payment_method_promo_11rub_i18n_test.mjs` — baseline 68/0
+- `bin/rails test test/integration/shop/shop_pay_fsm_3ds_test.rb test/integration/shop/inline_pay_button_patch1_test.rb test/services/shop/tbank_payment_error_test.rb test/integration/shop/api/payment_status_error_code_test.rb`
+- `npm run vite:build` · Fly MCP Point A после deploy по апруву
+
+---
+
 # todo — TASK_SAFE-BOTTOM-MIN (доп.задачи 3+4): минимальный нижний отступ 8px
 
 | Поле | Значение |
