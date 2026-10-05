@@ -31,6 +31,17 @@ class Shop::FirebaseSwCspTest < ActionDispatch::IntegrationTest
     assert_equal global["connect-src"], csp_directive(header, "connect-src")
   end
 
+  test "SW response is not cached, so revalidation never reuses an old CSP via 304" do
+    get "/firebase-messaging-sw.js"
+    assert_includes response.headers["Cache-Control"].to_s, "no-store"
+
+    etag = response.headers["ETag"]
+    get "/firebase-messaging-sw.js", headers: { "If-None-Match" => etag.to_s }
+
+    assert_response :success
+    assert_includes csp_directive(response.headers["Content-Security-Policy"], "script-src"), GSTATIC
+  end
+
   test "global CSP is not widened for Firebase" do
     script_src = Rails.application.config.content_security_policy.directives["script-src"]
 
