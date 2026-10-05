@@ -43,7 +43,7 @@
 | Поле | Значение |
 |------|----------|
 | **Основание** | [TASK_90 § Патч 1: 2026-10-02](../milestones/veha_2/requirements/customer_tasks/TASK-90-Восстановление-WebPush-после-запрета-уведомлений.md) · Subtask 7 (patch v1) · остальные Subtask #90 — контекст, не scope · [Google Doc](https://docs.google.com/document/d/1YtZzj-Lf2HHrM4azejIuZISTKsWdu8q6y-kPHvm_d44/edit?usp=sharing) |
-| **Статус** | GREEN `[x]` → `/regress` → `/review` |
+| **Статус** | `/regress` PASS → `/review` |
 
 ## SBR
 
@@ -51,7 +51,8 @@
 - [x] SPEC — факт ниже; `COMPONENT_MAP.md` сверен (строки `ActiveOrdersAccordion` / `orderStatusNotifyActions.js` / `firebasePush.js`: TASK_90 — владелец recovery, #83/#84 не трогаем)
 - [x] RED `736d79a9` — нет экспорта `resumePushAfterSettings` (импорт падает)
 - [x] GREEN `2f3d39de` — `resumePushAfterSettings` (lib) + `visibilitychange`/`pageshow` в аккордеоне, пока показан recovery UI · тест 34/0 · JS зона 183/1 (1 = legacy `order_action_buttons_cancel_test`, падает и без патча) · `vite build` OK
-- [ ] `/regress` → `/review` (bugbot + security + crit-audit, Entire, push, CI)
+- [x] `/regress` PASS (на `3bdc6b78`): JS весь `test/javascript` 671 — 60 fail = legacy (те же 3 набора: #71 email, sticky cancel #41, personal cabinet [RED]) · Rails push_register + order_status (sheet mount, acceptance CBR, meta canon) + profile offer 28/0 · `vite build` OK
+- [ ] `/review` (bugbot + security + crit-audit, Entire, push, CI)
 - [ ] `COMPONENT_MAP.md` строка `ActiveOrdersAccordion` / `orderStatusNotifyActions.js` (re-entry TASK_90 Патч 1) — только после зелёного Review
 - [ ] Device: Android + Chrome «denied → настройки → разрешил → вернулся → подписка без повторного CTA» — после deploy по апруву
 
