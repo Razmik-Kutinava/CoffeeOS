@@ -148,6 +148,18 @@ describe("TASK_100 message и CTA — отдельные UI-элементы [TD
     assert.match(src, /onTryLater=\{onPayErrorTryLater\}/)
   })
 
+  it("повторное открытие шторки после закрытия крестиком/фоном — без застрявшего error-CTA", () => {
+    const src = read("app/frontend/routes/Checkout.svelte")
+    const m = src.match(/async function openPaymentSheet\(\)\s*\{([\s\S]*?)\n  \}/)
+    assert.ok(m, "openPaymentSheet в Checkout")
+    assert.match(m[1], /resetPayErrorState\(\)/)
+    const r = src.match(/function resetPayErrorState\(\)\s*\{([\s\S]*?)\n  \}/)
+    assert.ok(r, "resetPayErrorState в Checkout")
+    assert.match(r[1], /payFsmState\s*=\s*PAY_FSM\.DEFAULT/)
+    assert.match(r[1], /payErrorCategory\s*=\s*null/)
+    assert.match(r[1], /isPayFsmClickable\(payFsmState\)/)
+  })
+
   it("Checkout классифицирует ошибку и передаёт errorCta в шторку", () => {
     const src = read("app/frontend/routes/Checkout.svelte")
     assert.match(src, /classifyPaymentError/)
