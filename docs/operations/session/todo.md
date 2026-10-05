@@ -1,3 +1,61 @@
+# todo — Задача_2 (ЛК в PWA) Патч 3: убрать support-chat из шапки витрины
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [ЛК в PWA § Патч 3: 2026-10-02](../milestones/veha_2/requirements/customer_tasks/Доработка%20личного%20кабинета%20(ЛК)%20в%20PWA.md) · Subtask 1 (patch v3) · доделка Патча 1 (2026-09-17) · аудит CBR #69 · [Google Doc](https://docs.google.com/document/d/1yH1DzM48Bcg43X9lT_37WVICKUkmFLGETduYX3eOpzo/edit?usp=sharing) |
+| **Тип** | патч (не доп.задача) · Патч 2 («Tg» → «Telegram») уже в коде · остальные Subtask ЛК — контекст, не scope |
+| **Статус** | SPEC `[x]` → `/sbr` |
+
+## SBR
+
+- [x] intake Патча 3 в ТЗ (секция после Патча 2)
+- [x] SPEC — факт, файлы, Не ломать, Проверка
+- [ ] RED — защитный тест падает (кнопка есть)
+- [ ] GREEN — кнопка удалена, тест зелёный
+- [ ] `/regress` — шапка + поддержка/ЛК
+- [ ] `/review` — bugbot + security + crit-audit · push · CI
+- [ ] `COMPONENT_MAP.md` — запрещено в Spec/Build; после Review только если попросят
+- [ ] deploy по апруву → Fly MCP Point A (шапка без иконки, 320 и 390 px)
+
+## Факт (до правок)
+
+- `Header.svelte:135-143` — `<button data-testid="shop-header-support-chat">` с `MessageCircle`, стоит **до** кнопки профиля и вне `{#if narrow}` (`:151`) → видна на всех ширинах.
+- Связанный код, который станет мёртвым только из-за удаления: импорт `MessageCircle` (`:4`), `import SupportContactSheet` (`:15`), `supportSheetRef` (`:22`), `onSupportChatClick` (`:39-43`), `<SupportContactSheet bind:this={supportSheetRef} />` (`:172`).
+- Сам `SupportContactSheet.svelte` **не трогаем** (запрет ТЗ), даже если у него не останется вызывающих. Его по-прежнему читает `telegram_support_test.mjs` (по исходнику) — тест не зависит от `Header`.
+- Тестов на **наличие** `shop-header-support-chat` нет → сломать нечего.
+- `b113_s1_profile_header_test.rb` проверяет `shop-header-profile`, `push("/profile")`, `formatProfileIdShort` — должен остаться зелёным.
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/components/Header.svelte` — удалить кнопку `shop-header-support-chat` (`:135-143`) и только ставший мёртвым код (`MessageCircle`, `SupportContactSheet` import + монтирование, `supportSheetRef`, `onSupportChatClick`). Обёртку `<div class="flex shrink-0 items-center gap-2">` и кнопку профиля не менять.
+2. `test/javascript/shop_header_no_support_chat_test.mjs` (новый) — SSR (`svelte_ssr_helper.mjs`): в HTML шапки нет `shop-header-support-chat` / «Связь с поддержкой», есть `shop-header-profile` + `shop-header-profile-label` (обычная ширина). Узкая ширина: `narrow` ставится в `onMount` через `matchMedia` → SSR его не видит → оракул исходника: в файле нет `shop-header-support-chat` и `MessageCircle` ни в одной ветке, `shop-header-profile-id-badge` в ветке `narrow` на месте.
+
+**Только чтение (blast-radius):** `SupportContactSheet.svelte`, `supportConfig.js` (запрет), `test/integration/shop/b113_s1_profile_header_test.rb`, `test/integration/shop/b114_header_tenant_address_test.rb` (тоже читают `Header.svelte`).
+
+## Не ломать
+
+- «Профиль ID» в шапке: `shop-header-profile` → `push("/profile")`, label на обычной ширине, badge на узкой.
+- Адрес точки / выпадашка тенантов / часы работы в шапке (B1.14, B1.13).
+- Обратная связь в ЛК: `Profile.svelte` (иконка `MessageCircle`), `ContactSupportSheet.svelte`, `SupportContactSheet.svelte`, `supportConfig.js`, Telegram URL, email.
+- Auth / logout / routing / оплата / статусы / push — не трогаем.
+
+## Проверка
+
+- `node --test test/javascript/shop_header_no_support_chat_test.mjs test/javascript/telegram_support_test.mjs`
+- `ruby bin/rails test test/integration/shop/b113_s1_profile_header_test.rb test/integration/shop/b114_header_tenant_address_test.rb`
+- `npm run vite:build`
+- Ручная / Fly MCP Point A после deploy: шапка без иконки на 320 px и 390 px, «Профиль ID» кликабелен.
+
+## DoD
+
+- [ ] Нет `shop-header-support-chat` в шапке на обычной ширине (SSR)
+- [ ] Нет на узкой ширине (оракул исходника — ветка `narrow`)
+- [ ] «Профиль ID» доступен
+- [ ] Дифф: только `Header.svelte` + новый тест; `SupportContactSheet.svelte` / `supportConfig.js` / `Profile.svelte` без изменений
+- [ ] Защитный тест зелёный
+
+---
+
 # todo — #71 Патч_2: server-first prefill email, `receipt_email`, Receipt contract
 
 | Поле | Значение |
