@@ -11,6 +11,8 @@ import { dirname, join } from "node:path"
 
 import {
   subscribeOrderPush,
+  resumePushAfterSettings,
+  pushRegisteredStorageKey,
   openNotificationSettings,
   PUSH_DENIED_TOAST,
   PUSH_OPEN_SETTINGS_CTA,
@@ -235,6 +237,125 @@ describe("ActiveOrdersAccordion wires push + denied settings (#81 / #92)", () =>
     const src = readFileSync(swPath, "utf8")
     assert.match(src, /payload\.data\s*&&\s*payload\.data\.title|data\.title/)
     assert.match(src, /payload\.data\s*&&\s*payload\.data\.body|data\.body/)
+  })
+})
+
+describe("TASK_90 Patch 1 — resume push after settings (Subtask 7 patch v1)", () => {
+  function memStorage() {
+    const data = {}
+    return {
+      data,
+      getItem: (k) => (k in data ? data[k] : null),
+      setItem: (k, v) => {
+        data[k] = String(v)
+      }
+    }
+  }
+
+  for (const permission of ["denied", "default"]) {
+    it(`armed + permission ${permission}: registerShopPush not called`, async () => {
+      let calls = 0
+      const result = await resumePushAfterSettings({
+        armed: true,
+        permission,
+        registerShopPushImpl: async () => {
+          calls += 1
+          return { ok: true }
+        }
+      })
+      assert.equal(calls, 0)
+      assert.equal(result.resumed, false)
+    })
+  }
+
+  it("not armed (no prior denied): granted does not auto-register", async () => {
+    let calls = 0
+    const result = await resumePushAfterSettings({
+      armed: false,
+      permission: "granted",
+      registerShopPushImpl: async () => {
+        calls += 1
+        return { ok: true }
+      }
+    })
+    assert.equal(calls, 0)
+    assert.equal(result.resumed, false)
+  })
+
+  it("full chain: denied → settings → granted → return → registerShopPush once", async () => {
+    const storage = memStorage()
+    let permission = "denied"
+    let registerCalls = 0
+    const registerShopPushImpl = async () => {
+      registerCalls += 1
+      return permission === "granted"
+        ? { ok: true, registered: true }
+        : { ok: false, reason: "denied", permission }
+    }
+
+    const first = await subscribeOrderPush({ registerShopPushImpl, onToast: () => {}, storage })
+    assert.equal(first.openSettings, true)
+    assert.equal(registerCalls, 1)
+
+    const settings = openNotificationSettings({ openSettings: () => false })
+    assert.equal(settings.fallbackInstruction, PUSH_SETTINGS_FALLBACK)
+
+    permission = "granted"
+    const resumed = await resumePushAfterSettings({
+      armed: first.openSettings === true,
+      permission,
+      registerShopPushImpl,
+      onToast: () => {},
+      storage
+    })
+    assert.equal(registerCalls, 2)
+    assert.equal(resumed.resumed, true)
+    assert.equal(resumed.ok, true)
+    assert.match(resumed.primaryLabel, /Уведомления включены/)
+    assert.equal(storage.getItem(pushRegisteredStorageKey()), "true")
+  })
+
+  it("granted but register fails: resumed, not ok, no throw", async () => {
+    const result = await resumePushAfterSettings({
+      armed: true,
+      permission: "granted",
+      registerShopPushImpl: async () => {
+        throw new Error("network boom")
+      },
+      onToast: () => {}
+    })
+    assert.equal(result.resumed, true)
+    assert.equal(result.ok, false)
+  })
+
+  it("reads Notification.permission when permission not injected", async () => {
+    globalThis.Notification = { permission: "granted" }
+    let calls = 0
+    try {
+      const result = await resumePushAfterSettings({
+        armed: true,
+        registerShopPushImpl: async () => {
+          calls += 1
+          return { ok: true }
+        },
+        storage: null
+      })
+      assert.equal(calls, 1)
+      assert.equal(result.ok, true)
+    } finally {
+      delete globalThis.Notification
+    }
+  })
+
+  it("accordion: visibilitychange + pageshow re-check while recovery is shown", () => {
+    const src = readFileSync(accordionPath, "utf8")
+    assert.match(src, /resumePushAfterSettings/)
+    assert.match(src, /addEventListener\(\s*["']visibilitychange["']/)
+    assert.match(src, /addEventListener\(\s*["']pageshow["']/)
+    assert.match(src, /removeEventListener\(\s*["']visibilitychange["']/)
+    assert.match(src, /removeEventListener\(\s*["']pageshow["']/)
+    assert.match(src, /armed:\s*pushRecovery/)
+    assert.doesNotMatch(src, /orderStatusCtaMachine/)
   })
 })
 
