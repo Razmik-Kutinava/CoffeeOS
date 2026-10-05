@@ -7,6 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Витрина A → табло бариста** (жалоба заказчика 2026-10-05) · prod read-only: смена `2fdee1ac` открыта, callback → `accepted` за 2–3 с, табло показывает `#202609-0035` · корень: демо-логины на дубле `c1bf2ab1` (seed 18.09) → перепривязаны (апрув), дубль inactive · prod: login barista-a → заказ на табло, live replace `#barista-board-slots` PASS · Local: link+seed 13/0 · зона barista/callback 56/0 · RED `2c2f9395` / GREEN `8ee27e88` | push → CI → deploy по апруву |
 | **Fly v506 задеплоен** (`0fa72666`, RUBY-1N) · CI green [37198039812](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37198039812) · worker 11:30 OK · Point A 200 · Sentry RUBY-1N → resolved · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v506_2026-10-04/MCP_RESULT.md) | ~5 ч: RUBY-1N не regressed (traces 5%) · backlog 4 тестовых pending 11 ₽ |
 | **RUBY-1N хвост** (Sentry MCP подключён, org `llc-manageengine`): событие 04.10 — ещё v505 · `save_card=true` тоже давал reload на каждый stuck → RED `6f401fb5` → GREEN `1642a746` (rebill-ветка только для succeeded) · Local 146/0 + 57/0 | push → CI → deploy по апруву → проверить, что новых событий RUBY-1N нет |
 | **/crit-audit 2026-10-04 CLEAN** · scope `6309066c..0319513b` (2 файла RUBY-1N: stuck job + `rebill_still_needed?`) · C1–C5 кандидатов нет · local `test/services/payments` 137/0 + jobs/sync 15/0 · CI pending (5 коммитов не запушены) · [CRITICAL_LEDGER](../dev/CRITICAL_LEDGER.md) | push → CI → deploy по апруву |

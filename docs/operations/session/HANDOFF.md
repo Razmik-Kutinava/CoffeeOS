@@ -7,6 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Витрина A → табло (2026-10-05)** — причина: демо-логины barista-a/gm-a/shift-a/uk/franchise с 18.09 сидели на дубле `Demo Coffee Point A` (`c1bf2ab1`, 0 заказов), витрина — `2fdee1ac`. Prod data fixed (апрув): логины → `2fdee1ac`, дубль inactive · prod check: barista-a видит `#202609-0035`, live broadcast PASS · RED `2c2f9395` → GREEN `8ee27e88` (seed guard) · Local 13/0 + 56/0 | ответ заказчику + ссылки · push → CI → deploy по апруву · **не запускать `demo:seed` на проде** без guard |
 | **Fly v506** задеплоен (`0fa72666`) — RUBY-1N на проде; регресс 10:45 был от старого v505 · Sentry → resolved · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v506_2026-10-04/MCP_RESULT.md) | через ~5 ч проверить Sentry · 4 тестовых pending 11 ₽ спамят алертами — решение владельца |
 | **RUBY-1N** дочинен `1642a746` (`Fixes RUBY-1N`): N+1 в `StuckPaymentsCheckJob` убран и для `save_card=true` · Local payments 146/0 · не запушено | push → CI → deploy по апруву → Sentry без новых событий |
 | **/crit-audit CLEAN** (2026-10-04) на `0319513b` — фикс RUBY-1N без критических рисков для оплаты · local payments 137/0 · CI pending | push → CI → deploy по апруву |

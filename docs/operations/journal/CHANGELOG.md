@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-05 — fix: заказы витрины Point A не видны на табло бариста (prod data + seed guard)
+
+- **Причина (prod):** 15.09 Point A `2fdee1ac` переименована (`napi x code_black`, slug `code_black`); 18.09 `demo:seed` искал точку по slug `demo-point-a` → создал пустой дубль `Demo Coffee Point A` (`c1bf2ab1`) и перепривязал barista-a / gm-a / shift-a / uk / franchise. Витрина пишет в `2fdee1ac`, бариста смотрел табло дубля (0 заказов). Код цепочки витрина→callback→табло исправен: все оплаченные заказы 29.09–01.10 получили `accepted` за 2–3 с.
+- **Prod data (апрув владельца):** 5 демо-логинов + роли → `2fdee1ac`, дубль `c1bf2ab1` → `inactive` (без удаления). Проверено: barista-a на codeblack.coffee видит `#202609-0035`; live Turbo-рассылка заменяет `#barista-board-slots` без reload.
+- **Код:** тест связи `test/integration/shop_order_to_barista_board_test.rb` (RED `2c2f9395`); `Demo::EnvironmentSetup` прерывается, если `SHOP_DEFAULT_TENANT_ID` — точка с другим slug (GREEN `8ee27e88`). Local 13/0 + зона barista/callback 56/0. Не запушено, deploy по апруву.
+
 ## 2026-10-04 — deploy: Fly v506 (RUBY-1N)
 
 - RUBY-1N «Regressed» в 10:45 UTC: фикс не был запушен — прод v505 крутил старый код; Sentry resolved час назад без деплоя → следующий сэмпл = регрессия.
