@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-05 — fix: TASK_37 Патч 1 — CSP Service Worker Firebase
+
+- Патч 1 (2026-10-02) из Google Doc вписан секцией в TASK-37.
+- `Shop::FirebaseSwController`: локальная `content_security_policy` — глобальный `script-src` + `https://www.gstatic.com` (SW делает `importScripts` Firebase SDK). Глобальная CSP, `connect-src`, `show.js.erb`, `firebasePush.js` не менялись.
+- Тест `test/integration/shop/firebase_sw_csp_test.rb` (CSP ответа SW + охрана глобальной CSP).
+- RED `46de7f82` → GREEN `9608d9f2` · Rails 24/0 · JS 45/0 · Entire `01M45HNNHAF3YGAFK4X55X00Z4`.
+
 ## 2026-10-05 — feat: TASK_90 Патч 1 — подписка продолжается после возврата из настроек
 
 - Intake Патча 1 (Subtask 7 patch v1) `cba87679` · RED `736d79a9` · GREEN `2f3d39de`
