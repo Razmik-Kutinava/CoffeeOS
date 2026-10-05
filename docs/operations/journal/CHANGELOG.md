@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-05 — fix: TASK_86 Патч 1 — WAITING-экран СБП переходит в результат без remount
+
+- Патч 1 (2026-10-02) из Google Doc вписан секцией в TASK-86-EXT.
+- `shopSbpPay.js`: `resolveWaitingScreenTransition` — из `waiting` того же `order_id`: `ok/ok_sbp/success` → success, `fail/cancel` → incomplete, иначе ничего.
+- `PaymentResult.svelte`: `hashchange` → `applyWaitingTransition` (success — существующий `prepareSuccessScreen` с серверным finalize; incomplete — `clearPendingOrder` + «Оплата не завершена»), повторная сверка hash после reconnect. Backend, TTL, PENDING, polling — без изменений.
+- Тест `test/javascript/sbp_waiting_screen_transition_test.mjs`.
+- RED `0e85e41d` → GREEN `e553a6a7` · /regress JS 664 (60 legacy) · Rails 814/0 · bugbot/security 0 · crit-audit CLEAN · Entire `01M45JR1SGADBM4RF8EZZDQBZ7` · CI green [37283046314](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37283046314).
+
 ## 2026-10-05 — fix: TASK_37 Патч 1 — CSP Service Worker Firebase
 
 - Патч 1 (2026-10-02) из Google Doc вписан секцией в TASK-37.
