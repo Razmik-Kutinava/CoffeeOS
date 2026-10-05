@@ -59,6 +59,31 @@ class Shop::Api::UserCardsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # TASK_102 / #75 Патч 1 — Subtask 6, 8, 16: legacy карта после backfill → eligible=false,
+  # повторный вход тем же гостем право не возвращает.
+  test "legacy saved card after backfill: growth_promo.eligible false, also after re-login" do
+    card_id = "legacy-api-#{SecureRandom.hex(3)}"
+    MobilePaymentMethod.create!(
+      customer_id: @customer.id, payment_type: "card",
+      card_token: "rebill-#{card_id}", bank_card_id: card_id,
+      card_hash: Payments::SavedCardStore.card_hash_for(card_id),
+      card_masked: "4300 **** 1111", card_expires_at: "12/30", is_active: true
+    )
+    Payments::GrowthLedgerBackfill.run!
+
+    2.times do
+      open_session do |sess|
+        verify_shop_email!(tenant_id: @tenant.id, email: @email, session: sess)
+        Shop::CustomerSession.set_customer_id!(sess.session, @tenant.id, @customer.id)
+
+        sess.get "/shop/api/user/cards", headers: shop_headers, as: :json
+
+        assert_equal 200, sess.response.status, sess.response.body
+        assert_equal false, JSON.parse(sess.response.body).dig("growth_promo", "eligible")
+      end
+    end
+  end
+
   test "anonymous growth_promo.amount_rub uses tenant promo_amount_rub" do
     setting = PointCampaignSetting.card_binding_promo_for(@tenant.id)
     setting.update!(config: { "promo_amount_rub" => 15 })
