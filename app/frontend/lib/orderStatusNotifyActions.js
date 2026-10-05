@@ -261,6 +261,31 @@ export async function subscribeOrderPush(opts = {}) {
 }
 
 /**
+ * TASK_90 Patch 1: возврат в PWA после denied → settings. Если permission стал
+ * `granted` — тот же `subscribeOrderPush` / `registerShopPush`, без повторного CTA.
+ * `armed` — пользователь уже получил denied (recovery UI на экране): без него
+ * не регистрируем тех, кто CTA не нажимал.
+ *
+ * @param {{
+ *   armed?: boolean,
+ *   permission?: string,
+ *   registerShopPushImpl?: () => Promise<{ok:boolean, reason?:string}>,
+ *   onToast?: (msg: string) => void,
+ *   storage?: Storage|null
+ * }} [opts]
+ * @returns {Promise<{ resumed: boolean, ok?: boolean, primaryLabel?: string, error?: string, openSettings?: boolean }>}
+ */
+export async function resumePushAfterSettings(opts = {}) {
+  const permission =
+    opts.permission ??
+    (typeof Notification !== "undefined" ? Notification.permission : "default")
+  if (!opts.armed || permission !== "granted") return { resumed: false }
+  const { armed: _armed, permission: _permission, ...rest } = opts
+  const result = await subscribeOrderPush(rest)
+  return { resumed: true, ...result }
+}
+
+/**
  * Начальное состояние primary CTA (mount).
  *
  * @param {{

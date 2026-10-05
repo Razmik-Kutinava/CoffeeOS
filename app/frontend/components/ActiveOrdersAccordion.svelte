@@ -10,6 +10,7 @@
   import {
     downloadWalletPass,
     subscribeOrderPush,
+    resumePushAfterSettings,
     resolveNotifyPrimaryInit,
     openNotificationSettings,
     openOrderReceipt,
@@ -187,6 +188,39 @@
     toastMsg = ""
     toastOpensSettings = false
   }
+
+  async function resumeAfterSettings() {
+    if (actionLoading) return
+    actionLoading = true
+    const result = await resumePushAfterSettings({
+      armed: pushRecovery,
+      onToast: (msg) => {
+        toastMsg = msg
+      }
+    })
+    actionLoading = false
+    if (!result.resumed) return
+    if (result.ok) {
+      pushSubscribed = true
+      pushRecovery = false
+      settingsFallback = ""
+    }
+  }
+
+  // TASK_90 Patch 1: возврат из настроек сайта (вкладка / bfcache) → re-check permission.
+  $effect(() => {
+    if (!pushRecovery) return
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") resumeAfterSettings()
+    }
+    const onPageShow = () => resumeAfterSettings()
+    document.addEventListener("visibilitychange", onVisibility)
+    window.addEventListener("pageshow", onPageShow)
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility)
+      window.removeEventListener("pageshow", onPageShow)
+    }
+  })
 
   function onOpenSettingsClick(e) {
     e.stopPropagation()
