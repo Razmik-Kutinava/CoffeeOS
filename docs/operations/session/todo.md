@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [#75 «Привязка способа оплаты и промо 11₽» § Патч 1: 2026-10-05](../milestones/veha_2/requirements/customer_tasks/Привязка%20способа%20оплаты%20и%20промо%2011₽.md) · Subtask 1–18 (patch v1) · исходные сценарии #75 — контекст, не scope · [Google Doc TASK_102](https://docs.google.com/document/d/13FpCn2e2dCtJEoTUndzCTD6BU5teVvOYQWiKciQz-Pk/edit?usp=sharing) |
 | **Тип** | патч (1-й к #75): сценарий «Не показывать промо после использования» был, журнал не покрывал legacy / сохранение без промо |
-| **Статус** | intake `c8d52260` · RED `ea28c9fb` · GREEN `eb2d3d1d` · `/regress` PASS → `/review` |
+| **Статус** | intake `c8d52260` · RED `ea28c9fb` · GREEN `eb2d3d1d` · `/regress` PASS · REVIEW bugbot 0 / security 2 → not-critical / crit-audit CLEAN → push/CI |
 | **Решение агента (делегировано владельцем 2026-10-05)** | Subtask 18: сохранение без промо тоже пишет growth-запись (`saved_without_promo`), иначе дыра открывается снова после backfill |
 
 ## SBR
@@ -12,9 +12,11 @@
 - [x] `/patch`: аудит (файл:строка) + секция Патч 1 в ТЗ #75 `c8d52260` — отдельный SPEC не нужен, секция патча = SPEC (файлы, инварианты, Scope)
 - [x] RED `ea28c9fb` — 21 run: 16 E (нет `Payments::GrowthLedgerBackfill`, нет `card_binding_attempts.source`), 5 зелёных = 3 старых теста контроллера + 2 охранных (до backfill MPM не читается; повторное сохранение без новых записей)
 - [x] GREEN `eb2d3d1d` — миграция `source` + backfill в `up`, `GrowthLedgerBackfill` (батчи, preload покрытия), `CardBindingAttempt.growth_covered?`, `GrowthPromo.cover_saved_method!` (savepoint) после `consume_from_payment!` в `SavedCardStore` и `SbpAccountTokenFromWebhook`, rake `growth_ledger:backfill:{dry_run,apply}` · целевые 21/0 · зона 1489/0 · RuboCop 0
-- [ ] Entire — GREEN из Windows без трейлера → attach на REVIEW
+- [x] Entire — GREEN из Windows без трейлера → attach сессии `3faed8ba` на REVIEW docs-коммит
+- [x] `/review`: bugbot 0 · security 2 medium → `rejected: not-critical` (журнал CRITICAL_LEDGER) · crit-audit CLEAN (`last_audited_sha` = `7f6da70d`)
+- [ ] **Вопрос владельцу (backlog):** гость без телефона (только email) — `available?` проверяет только телефон (до патча так же); критерий ТЗ «phone ИЛИ method_hash» → для email-only legacy промо не закрывается. Добавить `account_id` как критерий? Нужно решение
 - [x] `/regress` PASS — `test/services/{payments,shop,subscriptions}` + `test/models` + `test/controllers/{shop,callbacks}` + `test/integration/shop` (вкл. §2.3) + `test/jobs` 1550/0 · миграция rollback → migrate (test DB) OK · повторный `growth_ledger:backfill:dry_run` → `to_create: 0`
-- [ ] `/review` — bugbot + security + crit-audit → push → CI
+- [ ] push → CI green
 - [ ] `COMPONENT_MAP.md` — после Review (строки `GrowthPromo` нет; добавить `growth_promo.rb` / `growth_ledger_backfill.rb`)
 - [ ] deploy по апруву: миграция запускает backfill на проде → `bin/rails growth_ledger:backfill:dry_run` должен дать `to_create: 0` → Fly MCP Point A
 

@@ -16,6 +16,7 @@
 - Аудит: право на промо считалось только по growth-записям `card_binding_attempts`; карты/СБП, сохранённые до #75 или без промо, записей не имели → `growth_promo.eligible = true`.
 - **RED** `ea28c9fb` → **GREEN** `eb2d3d1d`: колонка `card_binding_attempts.source`; миграция запускает `Payments::GrowthLedgerBackfill` (все card/sbp, вкл. неактивные → `is_growth_event`, `backfill_pre_promo`, `point_id = NULL`); `GrowthPromo.cover_saved_method!` пишет `saved_without_promo` после `consume_from_payment!` в `SavedCardStore` и `SbpAccountTokenFromWebhook`; rake `growth_ledger:backfill:{dry_run,apply}`. Логика `eligible?` / `available?` / `price!` не менялась.
 - **Local:** целевые 21/0 · payments/shop/subscriptions/models/integration shop/jobs 1489/0 · RuboCop 0. Найдено вне scope: SBP webhook падает на `RATE_LIMITED` → ISSUES.
+- **/regress** 1550/0, миграция rollback → migrate OK. **REVIEW:** bugbot 0 · security 2 medium → not-critical (гости без телефона — до патча так же, вопрос владельцу; fail-open журнала — осознанно, чтобы не откатывать сохранение карты в callback) · crit-audit CLEAN.
 
 ## 2026-10-05 — fix: Задача_2 (ЛК в PWA) Патч 3 — в шапке витрины нет иконки поддержки
 
