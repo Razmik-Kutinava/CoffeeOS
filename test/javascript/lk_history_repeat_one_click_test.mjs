@@ -210,6 +210,39 @@ describe("TASK_94 Патч 1 — результат оплаты ЛК → Repeat
   })
 })
 
+describe("TASK_94 Патч 1 — уход с экрана ЛК не оставляет history activeKey", () => {
+  it("releaseHistoryRepeatUi сбрасывает history:* (не busy), чужой ключ не трогает", async () => {
+    const mod = await import("../../app/frontend/lib/historyRepeatAdapter.js")
+    const store = await import("../../app/frontend/lib/repeatInlinePayUiStore.js")
+    const read = () => {
+      let v
+      store.repeatInlinePayUi.subscribe((s) => { v = s })()
+      return v
+    }
+
+    store.patchRepeatInlinePayUi({ activeKey: "history:hist-1", busy: false, showRetry: true })
+    mod.releaseHistoryRepeatUi()
+    assert.equal(read().activeKey, null)
+
+    store.patchRepeatInlinePayUi({ activeKey: "history:hist-1", busy: true })
+    mod.releaseHistoryRepeatUi()
+    assert.equal(read().activeKey, "history:hist-1", "идущую оплату не обрываем")
+
+    store.patchRepeatInlinePayUi({ activeKey: "p1::", busy: false })
+    mod.releaseHistoryRepeatUi()
+    assert.equal(read().activeKey, "p1::", "Quick Repeat ключ не наш")
+    store.resetRepeatInlinePayUi()
+  })
+
+  it("Profile и OrderReceipt вызывают releaseHistoryRepeatUi при unmount", () => {
+    for (const rel of [ "app/frontend/routes/Profile.svelte", "app/frontend/routes/OrderReceipt.svelte" ]) {
+      const src = readFileSync(join(root, rel), "utf8")
+      assert.match(src, /releaseHistoryRepeatUi/, rel)
+      assert.match(src, /return \(\) => \{[^}]*releaseHistoryRepeatUi\(\)/, rel)
+    }
+  })
+})
+
 describe("TASK_94 Патч 1 — regression: checkout и Quick Repeat вне ЛК", () => {
   it("Checkout успех по-прежнему через /payment-result, отказ — status=fail", () => {
     const src = readFileSync(join(root, "app/frontend/routes/Checkout.svelte"), "utf8")
