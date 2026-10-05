@@ -112,6 +112,11 @@ describe("TASK_100 inline-сообщение шторки [TDD]", () => {
     )
   })
 
+  it("состояние NET_ERROR — всегда «Нет связи», даже с неизвестным кодом (решение владельца)", () => {
+    const e = bankErr("NETWORK", "Ошибка соединения")
+    assert.equal(resolveCheckoutSheetInlineError(e, PAY_FSM.NET_ERROR), "Нет связи. Повторить")
+  })
+
   it("ошибка не открывает форму новой карты автоматически", () => {
     assert.equal(shouldAutoOpenNewCardOnClientError(PAY_FSM.CLIENT_ERROR), false)
   })
