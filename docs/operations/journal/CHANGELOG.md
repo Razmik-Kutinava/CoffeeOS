@@ -16,6 +16,7 @@
 - ТЗ 1:1 из Google Doc → `customer_tasks/TASK-100-Точные-сообщения-при-ошибке-оплаты-и-отдельный-CTA.md` + строка #100 в CBR.
 - Новая задача (не патч/EXT), полный SBR. Ссылка на `TASK-26-REPEAT-ORDER-INVALID-TOKEN-EXT.md` — файла в репо нет.
 - Код не менялся. Дальше `/spec`.
+- /unlazy: ledger `artifacts/payment_error_messages_cta/GATES.md` (G1–G7), baseline JS зоны 68/0.
 
 ## 2026-10-05 — docs: превью шторок для заказчика (4 пункта, без кода)
 
