@@ -203,12 +203,7 @@ describe("#71 QA reopen — remember receipt email, don't re-ask", () => {
     const src = readFront("routes/PaymentResult.svelte")
     assert.match(src, /loadReceiptEmail/)
     assert.match(src, /saveReceiptEmail/)
-    assert.match(src, /shouldAskReceiptEmail/)
-    // Патч_1: LS || serverEmail — не только savedReceipt
-    assert.match(
-      src,
-      /shouldAskReceiptEmail\(\s*savedReceipt\s*\|\|\s*serverEmail\s*\)/
-    )
+    assert.match(src, /resolveReceiptEmailPrefill/)
     assert.match(
       src,
       /\{#if\s+askReceiptEmail\}[\s\S]*OrderSuccessEmailBlock[\s\S]*\{\/if\}/
@@ -223,28 +218,68 @@ describe("#71 QA reopen — remember receipt email, don't re-ask", () => {
     )
   })
 
-  it("P1 PaymentResult loads server profile email for prefill without LS [TDD]", () => {
+  it("P2 PaymentResult loads server receipt_email and resolves server-first [TDD]", () => {
     const src = readFront("routes/PaymentResult.svelte")
     assert.match(src, /api\(\s*["']profile["']\s*\)/)
-    assert.match(src, /serverEmail/)
+    assert.match(src, /receipt_email/)
     assert.match(
       src,
-      /prefillEmail\s*=\s*savedReceipt\s*\|\|\s*serverEmail/
+      /resolveReceiptEmailPrefill\(\s*\{[\s\S]{0,160}serverEmail[\s\S]{0,160}\}\s*\)/
     )
-    assert.match(
-      src,
-      /shouldAskReceiptEmail\(\s*savedReceipt\s*\|\|\s*serverEmail\s*\)/
-    )
+    assert.doesNotMatch(src, /savedReceipt\s*\|\|\s*serverEmail/)
   })
 
-  it("P1 shouldAskReceiptEmail false when only server email present [TDD]", async () => {
-    const { shouldAskReceiptEmail } = await import(
+  it("P2 S9 empty submit clears LS receipt email (no stale fallback) [TDD]", () => {
+    const src = readFront("routes/PaymentResult.svelte")
+    assert.match(
+      src,
+      /async function handleEmailSubmit[\s\S]*?clearReceiptEmail\(\)[\s\S]*?async function handleEmailSkip/
+    )
+  })
+})
+
+describe("#71 Патч_2 — resolveReceiptEmailPrefill (server → LS → guest profile)", () => {
+  async function resolve(args) {
+    const { resolveReceiptEmailPrefill } = await import(
       "../../app/frontend/lib/emailCollection.js"
     )
-    const savedReceipt = ""
-    const serverEmail = "from-server@example.com"
-    assert.equal(shouldAskReceiptEmail(savedReceipt || serverEmail), false)
-    assert.equal(shouldAskReceiptEmail(savedReceipt || ""), true)
+    assert.equal(typeof resolveReceiptEmailPrefill, "function")
+    return resolveReceiptEmailPrefill(args)
+  }
+
+  it("S1 server email is primary: prefill + no re-ask [TDD]", async () => {
+    const r = await resolve({ serverEmail: "Srv@Example.com", localEmail: "", guestEmail: "" })
+    assert.deepEqual(r, { prefill: "srv@example.com", ask: false })
+  })
+
+  it("S2 server wins over different LocalStorage value [TDD]", async () => {
+    const r = await resolve({
+      serverEmail: "srv@example.com",
+      localEmail: "ls@example.com",
+      guestEmail: "guest@example.com"
+    })
+    assert.deepEqual(r, { prefill: "srv@example.com", ask: false })
+  })
+
+  it("S3/S14 no server email → LS fallback hides block [TDD]", async () => {
+    const r = await resolve({ serverEmail: "", localEmail: "ls@example.com", guestEmail: "" })
+    assert.deepEqual(r, { prefill: "ls@example.com", ask: false })
+  })
+
+  it("S13 profile API failed (null) → same fallback, guest profile only prefills [TDD]", async () => {
+    const r = await resolve({ serverEmail: null, localEmail: "", guestEmail: "guest@example.com" })
+    assert.deepEqual(r, { prefill: "guest@example.com", ask: true })
+  })
+
+  it("S4/S15 order #2 without LS: server email → block not shown [TDD]", async () => {
+    const r = await resolve({ serverEmail: "saved@example.com", localEmail: "", guestEmail: undefined })
+    assert.equal(r.ask, false)
+    assert.equal(r.prefill, "saved@example.com")
+  })
+
+  it("nothing known → ask with empty prefill [TDD]", async () => {
+    const r = await resolve({})
+    assert.deepEqual(r, { prefill: "", ask: true })
   })
 })
 

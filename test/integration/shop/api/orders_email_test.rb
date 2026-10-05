@@ -131,7 +131,7 @@ class Shop::Api::OrdersEmailTest < ActionDispatch::IntegrationTest
     assert_equal 1, OrderEmail.where(order_id: @order.id, email: email).count
   end
 
-  # --- Патч_1 2026-09-17: server profile email (Subtask 12/12a/13/14 patch v2) ---
+  # --- Патч_1 2026-09-17 → Патч_2 2026-10-05: canonical = MobileCustomer.receipt_email ---
 
   test "P1 S12 saves post-pay email on MobileCustomer profile [TDD]" do
     email = "patch71-#{SecureRandom.hex(3)}@example.com"
@@ -144,7 +144,8 @@ class Shop::Api::OrdersEmailTest < ActionDispatch::IntegrationTest
 
     assert_response :success, response.body
     @customer.reload
-    assert_equal email, @customer.email
+    assert_equal email, @customer.receipt_email
+    assert_nil @customer.email
     assert @customer.email_collected_at.present?
     assert_equal 1, OrderEmail.where(order_id: @order.id, email: email).count
   end
@@ -159,12 +160,12 @@ class Shop::Api::OrdersEmailTest < ActionDispatch::IntegrationTest
 
     OrderEmail.where(order_id: @order.id).delete_all
     @customer.reload
-    assert_equal email, @customer.email
+    assert_equal email, @customer.receipt_email
   end
 
-  test "P1 S13 empty email clears MobileCustomer.email [TDD]" do
+  test "P1 S13 empty email clears receipt_email [TDD]" do
     email = "patch71-clear-#{SecureRandom.hex(3)}@example.com"
-    @customer.update!(email: email, email_collected_at: Time.current)
+    @customer.update!(receipt_email: email, email_collected_at: Time.current)
 
     post "/shop/api/orders/#{@order.id}/email",
       headers: shop_tenant_headers(@tenant.id),
@@ -173,13 +174,13 @@ class Shop::Api::OrdersEmailTest < ActionDispatch::IntegrationTest
 
     assert_response :success, response.body
     @customer.reload
-    assert_nil @customer.email
+    assert_nil @customer.receipt_email
   end
 
-  test "P1 S13 change email updates MobileCustomer.email [TDD]" do
+  test "P1 S13 change email updates receipt_email [TDD]" do
     old = "patch71-old-#{SecureRandom.hex(3)}@example.com"
     new_email = "patch71-new-#{SecureRandom.hex(3)}@example.com"
-    @customer.update!(email: old, email_collected_at: Time.current)
+    @customer.update!(receipt_email: old, email_collected_at: Time.current)
 
     post "/shop/api/orders/#{@order.id}/email",
       headers: shop_tenant_headers(@tenant.id),
@@ -188,7 +189,7 @@ class Shop::Api::OrdersEmailTest < ActionDispatch::IntegrationTest
 
     assert_response :success, response.body
     @customer.reload
-    assert_equal new_email, @customer.email
+    assert_equal new_email, @customer.receipt_email
   end
 
   test "P1 S14 idempotent same email does not duplicate customer contact [TDD]" do
@@ -208,14 +209,14 @@ class Shop::Api::OrdersEmailTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     @customer.reload
-    assert_equal email, @customer.email
-    assert_equal false, @customer.email_verified
+    assert_equal email, @customer.receipt_email
+    assert_nil @customer.email
     assert_equal collected_at.to_i, @customer.email_collected_at.to_i
     assert_equal 1, OrderEmail.where(order_id: @order.id, email: email).count
-    assert_equal 1, MobileCustomer.where(email: email).count
+    assert_equal 1, MobileCustomer.where(receipt_email: email).count
   end
 
-  test "P1 post-pay email clears email_verified on change [TDD]" do
+  test "P2 post-pay email change keeps verified OTP email [TDD]" do
     old = "patch71-ver-#{SecureRandom.hex(3)}@example.com"
     new_email = "patch71-unver-#{SecureRandom.hex(3)}@example.com"
     @customer.update!(email: old, email_verified: true, email_collected_at: Time.current)
@@ -227,13 +228,14 @@ class Shop::Api::OrdersEmailTest < ActionDispatch::IntegrationTest
 
     assert_response :success, response.body
     @customer.reload
-    assert_equal new_email, @customer.email
-    assert_equal false, @customer.email_verified
+    assert_equal old, @customer.email
+    assert_equal true, @customer.email_verified
+    assert_equal new_email, @customer.receipt_email
   end
 
-  test "P1 verified email conflict does not leave OrderEmail without profile [TDD]" do
+  test "P2 email verified on another customer is not claimed or changed [TDD]" do
     taken = "patch71-taken-#{SecureRandom.hex(3)}@example.com"
-    MobileCustomer.create!(
+    other = MobileCustomer.create!(
       email: taken,
       first_name: "Other",
       is_active: true,
@@ -245,9 +247,12 @@ class Shop::Api::OrdersEmailTest < ActionDispatch::IntegrationTest
       params: email_params(email: taken),
       as: :json
 
-    assert_response :bad_request
-    assert_equal 0, OrderEmail.where(order_id: @order.id, email: taken).count
+    assert_response :success, response.body
+    assert_equal 1, OrderEmail.where(order_id: @order.id, email: taken).count
     assert_nil @customer.reload.email
+    assert_equal taken, @customer.receipt_email
+    assert_equal taken, other.reload.email
+    assert_equal true, other.email_verified
   end
 
   test "S11 bounce marks order_email bounced with HMAC" do
