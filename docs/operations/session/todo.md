@@ -16,7 +16,7 @@
 - [x] `/review`: bugbot 0 · security 2 medium → `rejected: not-critical` (журнал CRITICAL_LEDGER) · crit-audit CLEAN (`last_audited_sha` = `7f6da70d`)
 - [ ] **Вопрос владельцу (backlog):** гость без телефона (только email) — `available?` проверяет только телефон (до патча так же); критерий ТЗ «phone ИЛИ method_hash» → для email-only legacy промо не закрывается. Добавить `account_id` как критерий? Нужно решение
 - [x] `/regress` PASS — `test/services/{payments,shop,subscriptions}` + `test/models` + `test/controllers/{shop,callbacks}` + `test/integration/shop` (вкл. §2.3) + `test/jobs` 1550/0 · миграция rollback → migrate (test DB) OK · повторный `growth_ledger:backfill:dry_run` → `to_create: 0`
-- [ ] push → CI green
+- [x] push `a669b645` → **CI green** [37328102301](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37328102301) + Semgrep/CodeQL · Entire `01M468MZ53RK1BA5DWFXAZ787A` на `a669b645`
 - [ ] `COMPONENT_MAP.md` — после Review (строки `GrowthPromo` нет; добавить `growth_promo.rb` / `growth_ledger_backfill.rb`)
 - [ ] deploy по апруву: миграция запускает backfill на проде → `bin/rails growth_ledger:backfill:dry_run` должен дать `to_create: 0` → Fly MCP Point A
 
