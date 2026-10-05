@@ -349,7 +349,7 @@
 - [x] GREEN `5fdefa93` (Entire `01M45FTHXKPJ8GNP4F47DNQX7Q`) — строка `Итого` под header шторки (`{#if orderTotalLabel}`), `labelOrderTotal` / `formatRubAmount` (NBSP) в i18n · GATES G1–G7 met (JS 10/0 · Rails 3/0 · scope OK · JS зона · Rails зона · vite build) · G8 manual
 - [x] `/regress` PASS (на `c7f0cff0`): JS весь `test/javascript` 650 — 60 fail = legacy (те же 3 набора: #71 email, sticky cancel, personal cabinet [RED]) · Rails `test/integration/shop` + `test/services/payments` 811/0 · `vite build` OK
 - [x] `/review`: bugbot 0 · security 0 · crit-audit CLEAN (TASK_101-only, журнал) · Entire `01M45FTHXKPJ8GNP4F47DNQX7Q` на `5fdefa93` · push `fd87c3a4` · CI green [37280048623](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37280048623)
-- [ ] `COMPONENT_MAP.md` — новый компонент не создавался (строка внутри `PaymentMethodsSheet`) → БЛОК 4 не требуется; правка карты — только после принятия владельцем, если попросит
+- [x] `COMPONENT_MAP.md` — строка `PaymentMethodsSheet` обновлена (связи `cartTotalRub` / i18n, TASK_101, «не трогать» по «Итого»); новый компонент не создавался → БЛОК 4 не требуется
 - [ ] G8: 360 px локально / Telegram+Instagram In-App / Fly MCP Point A — после deploy по апруву
 
 ## Факт (до правок)

@@ -62,6 +62,7 @@
 - Строка «Итого 3 245 ₽» под заголовком `PaymentMethodsSheet` (над картами / СБП / «Картой +»): серверный `total` корзины (`cartTotalRub`), видна при загрузке и ошибке оплаты, скрыта при 0 / незагруженной сумме; `labelOrderTotal` / `formatRubAmount` (NBSP) в `paymentMethodI18n.js`. Backend/оплата не менялись.
 - Решение владельца: «Итого» = сумма корзины и при акции привязки 11 ₽.
 - RED `3b752e0a` → GREEN `5fdefa93` · JS 10/0 · Rails `cart_total_amount_test` 3/0 (total = Amount/100) · /regress JS 650 (60 legacy) + Rails 811/0 · bugbot/security 0 · crit-audit CLEAN.
+- `COMPONENT_MAP.md`: строка `PaymentMethodsSheet` — связи `cartTotalRub` / i18n, TASK_101, правила «Итого».
 
 ## 2026-10-05 — docs: intake TASK_101 (сумма заказа в блоке способов оплаты)
 
