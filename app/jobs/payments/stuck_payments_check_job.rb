@@ -23,7 +23,10 @@ module Payments
 
       return if stuck.none?
 
+      @alerts = []
       stuck.each { |payment| process_stuck!(payment) }
+      # Одна пакетная вставка в очередь вместо INSERT на каждый платёж (Sentry N+1).
+      ActiveJob.perform_all_later(@alerts) if @alerts.any?
 
       Rails.logger.warn("[StuckPaymentsCheckJob] #{stuck.size} stuck payment(s) processed")
     end
@@ -54,7 +57,7 @@ module Payments
     end
 
     def alert_stuck!(payment)
-      TelegramAlertJob.perform_later(
+      @alerts << TelegramAlertJob.new(
         "⏳ Зависший платёж Т-Банк ##{payment.id}\n" \
         "Заказ ##{payment.order_id}, сумма #{payment.amount}₽, статус #{payment.status}",
         {
