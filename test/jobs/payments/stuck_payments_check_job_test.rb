@@ -199,7 +199,7 @@ class Payments::StuckPaymentsCheckJobTest < ActiveSupport::TestCase
       end
 
       assert_equal "failed", payment.reload.status
-      assert_equal "pending_payment", payment.order.reload.status
+      assert_equal "cancelled", payment.order.reload.status
     end
   end
 

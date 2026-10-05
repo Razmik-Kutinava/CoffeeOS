@@ -34,6 +34,8 @@ module Payments
       "REJECTED"         => "failed",
       "REVERSED"         => "failed",
       "CANCELED"         => "failed",
+      "DEADLINE_EXPIRED" => "failed",
+      "AUTH_FAIL"        => "failed",
       "REFUNDED"         => "refunded",
       "PARTIAL_REFUNDED" => "partially_refunded"
     }.freeze
