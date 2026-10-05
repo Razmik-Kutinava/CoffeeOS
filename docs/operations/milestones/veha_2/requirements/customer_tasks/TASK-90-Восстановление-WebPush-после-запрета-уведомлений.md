@@ -248,3 +248,75 @@ DoD
 - ID заказчика **TASK_90** = CBR **#90** (канон 2026-09-17: EXT семьи 89 не занимают 90/91).
 - Фокус intake: только gap **9.1 / denied → settings** (переход в настройки браузера + recovery UI). Остальные gaps #81 (фоновые FCM/Wallet, чат) — **не** этот шаг.
 - Исходный продуктовый док заказчика по виджету: #37 «Адаптивный виджет…».
+
+---
+
+## Патч 1: 2026-10-02
+
+Основание: аудит от 2026-10-02, факт `ActiveOrdersAccordion.svelte:191-196, 233-241`, `orderStatusNotifyActions.js:25-28`, lifecycle-проверка `ActiveOrdersAccordion.svelte:165`, `App.svelte:126-139`, `OrderStatusSheet.svelte:192-199`.
+
+### Расхождение
+
+**Subtask 7:** Given: ранее уведомления были запрещены; пользователь включил уведомления для текущего сайта в настройках браузера; When: пользователь возвращается в PWA; Then: существующий WebPush flow должен обнаружить актуальное состояние permission и дальнейшее получение подписки / токена должно выполняться существующим механизмом.
+
+**По факту:** после возврата из настроек автоматической проверки `Notification.permission` и вызова `registerShopPush()` нет. `ActiveOrdersAccordion` не имеет `focus`, `visibilitychange` или `pageshow`-обработчика для recovery. `registerShopPush()` вызывается из существующего CTA `onAction("push")`; после возврата пользователю требуется повторно нажать CTA.
+
+### Исправленный сценарий
+
+1. **Subtask 7 (patch v1): Recovery после повторного разрешения уведомлений**
+   1. Given: ранее `Notification.permission === 'denied'`
+   1. And: пользователь открыл настройки уведомлений текущего сайта
+   1. And: пользователь разрешил уведомления
+   1. When: пользователь возвращается в PWA
+   1. Then: существующий lifecycle/re-entry механизм повторно проверяет актуальный `Notification.permission`
+   1. And: при `Notification.permission === 'granted'` запускается существующий WebPush flow
+   1. And: существующий `registerShopPush()` выполняется без необходимости повторно нажимать первоначальный CTA
+   1. And: существующий flow получения Service Worker / FCM token / регистрации push продолжается без изменения backend-контракта
+   1. And: модель статуса заказа не изменяется
+   1. And: новый recovery-state не создаётся
+
+### Не трогать
+
+См. `COMPONENT_MAP.md` строки компонентов и существующие границы задач.
+
+Не изменять:
+1. backend push API;
+1. `/shop/api/push/register`;
+1. VAPID / FCM конфигурацию;
+1. существующий контракт `registerShopPush()`;
+1. Service Worker;
+1. модель статуса заказа;
+1. `orderStatusCtaMachine.js`;
+1. `OrderStatus.svelte`, кроме случаев, если фактический выбранный lifecycle-механизм требует минимальной точки интеграции для recovery;
+1. Apple Wallet / iOS;
+1. refund / tips / другие CTA;
+1. TASK_37 и его CSP-патч;
+1. соседние задачи #83/#84.
+
+### Scope
+
+**Разрешено:**
+1. добавить минимальный lifecycle/re-entry механизм после возврата из browser/site notification settings;
+1. повторно проверять `Notification.permission` после возврата;
+1. при `granted` инициировать существующий `registerShopPush()` / существующий WebPush flow;
+1. добавить/обновить regression tests для полной цепочки `denied → settings → granted → return → registerShopPush()`;
+1. сохранить существующий fallback для браузеров без deep-link.
+
+**Запрещено:**
+1. переписывать `registerShopPush()`;
+1. менять backend push contract;
+1. менять VAPID/FCM;
+1. менять Service Worker;
+1. добавлять новый статус заказа или recovery-state;
+1. менять модель определения статуса;
+1. повторно показывать первоначальный permission-flow без необходимости;
+1. удалять существующие denied→settings regression tests;
+1. менять unrelated CTA.
+
+### Критерий готовности патча
+
+Сценарий считается исправленным только если тестами и ручной проверкой подтверждена последовательность:
+
+`denied → settings → пользователь разрешил → возврат в PWA → permission === granted → registerShopPush() → существующий WebPush flow`
+
+и при этом пользователь не обязан повторно нажимать первоначальную кнопку подписки.
