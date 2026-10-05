@@ -180,6 +180,8 @@ export async function runHistoryRepeatPayFlow({
       savedCards: out.savedCards || []
     })
     if (out.openPaymentSheet || (out.showFallbackMethods && !out.showRetry)) {
+      // RepeatSection рендерит InlinePayFallback при любом activeKey и retry уходит в items[0].
+      resetRepeatInlinePayUi()
       const first = historyOrderItemsToRepeatItems(order)[0]
       if (first) {
         await openPaymentSheet(first, { preferNewCard: !!out.openPaymentSheet })
