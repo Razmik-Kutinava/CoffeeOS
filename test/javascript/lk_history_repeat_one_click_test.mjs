@@ -184,6 +184,12 @@ describe("TASK_94 Патч 1 — результат оплаты ЛК → Repeat
     assert.equal(opts?.preferNewCard, false, "сохранённые карты остаются доступны")
   })
 
+  it("REJECTED → history activeKey не остаётся в общем store (Quick Repeat на `/` не подхватит)", async () => {
+    const r = await runWith(payOut("FALLBACK"))
+    assert.equal(r.ui.activeKey, null)
+    assert.equal(r.ui.showFallbackMethods, false)
+  })
+
   it("CANCELED → те же гарантии, что REJECTED", async () => {
     const r = await runWith(payOut("ERROR", { error_code: "CANCELED" }))
     assert.equal(r.navigate.mock.callCount(), 0)
