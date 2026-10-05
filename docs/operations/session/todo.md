@@ -1,3 +1,98 @@
+# todo — TASK_37 Патч 1: CSP ответа `/firebase-messaging-sw.js` разрешает gstatic
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_37 § Патч 1: 2026-10-02](../milestones/veha_2/requirements/customer_tasks/Адаптивный%20виджет%20статуса%20заказа%20Детекция%20ОС%20и%20подписка%20на%20уведомления.md) · Шаг 5 (patch v1) · остальные шаги #37 — контекст, не scope · [Google Doc](https://docs.google.com/document/d/1gBhAA7-xZd0zkEZueOaKrNo8upuk8DfOJLibCt6bvd0/edit) |
+| **Тип** | патч (не доп.задача) |
+| **Статус** | RED `46de7f82` · GREEN `9608d9f2` → `/regress` → `/review` |
+
+## SBR
+
+- [x] intake Патча 1 в TASK-37 (секция в конце файла)
+- [x] RED `46de7f82` — `firebase_sw_csp_test.rb`: 2 fail (нет `https://www.gstatic.com` в `script-src` ответа SW), охранный тест «глобальная CSP без gstatic» зелёный сразу
+- [x] GREEN `9608d9f2` — `content_security_policy` в `Shop::FirebaseSwController`: глобальный `script-src` + `https://www.gstatic.com`
+- [ ] `/regress` → `/review` (bugbot + security + crit-audit, Entire, push, CI)
+- [ ] Device: Android Chrome / desktop — SW регистрируется, `getToken()` проходит — после deploy по апруву · Fly MCP Point A
+
+## Файлы
+
+- `app/controllers/shop/firebase_sw_controller.rb` — локальная CSP только для этого ответа (берёт глобальный `script-src` и добавляет один источник)
+- `test/integration/shop/firebase_sw_csp_test.rb` — новый (HTTP-регрессия CSP ответа SW + охрана глобальной CSP)
+
+## Не ломать
+
+- `config/initializers/content_security_policy.rb` — без изменений; `connect-src` не расширяем (ошибка не подтверждена)
+- `app/views/shop/firebase_sw/show.js.erb` (COMPONENT_MAP `firebase_sw (FCM)`, TASK_92/#38), `firebasePush.js`, Firebase/VAPID конфиг, `POST /shop/api/push/register`
+- Apple Wallet, PWA SW, TASK_90 (denied → настройки), TASK_81/#90, TASK_92/#38
+
+## Проверка
+
+- `ruby bin/rails test test/integration/shop/firebase_sw_csp_test.rb test/integration/shop/push_pipeline_simulation_test.rb test/integration/shop/api/push_register_test.rb test/integration/shop/order_status_acceptance_cbr_test.rb test/integration/shop/api/profile_subscription_offer_test.rb` — 24/0
+- `node --test test/javascript/order_status_push_subscribe_test.mjs test/javascript/subscription_offer_card_test.mjs` — 45/0
+
+## DoD
+
+- [x] Ответ `/firebase-messaging-sw.js`: `script-src` = глобальный + `https://www.gstatic.com`; `connect-src` = глобальный
+- [x] Глобальная CSP без `gstatic` / `google` / `*`
+- [ ] SW регистрируется и `getToken()` проходит на устройстве — после deploy по апруву
+
+---
+
+# todo — TASK_90 Патч 1: авто-подписка после возврата из настроек уведомлений
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_90 § Патч 1: 2026-10-02](../milestones/veha_2/requirements/customer_tasks/TASK-90-Восстановление-WebPush-после-запрета-уведомлений.md) · Subtask 7 (patch v1) · остальные Subtask #90 — контекст, не scope · [Google Doc](https://docs.google.com/document/d/1YtZzj-Lf2HHrM4azejIuZISTKsWdu8q6y-kPHvm_d44/edit?usp=sharing) |
+| **Статус** | GREEN `[x]` → `/regress` → `/review` |
+
+## SBR
+
+- [x] intake Патча 1 в `TASK-90-…md` · `cba87679`
+- [x] SPEC — факт ниже; `COMPONENT_MAP.md` сверен (строки `ActiveOrdersAccordion` / `orderStatusNotifyActions.js` / `firebasePush.js`: TASK_90 — владелец recovery, #83/#84 не трогаем)
+- [x] RED `736d79a9` — нет экспорта `resumePushAfterSettings` (импорт падает)
+- [x] GREEN `2f3d39de` — `resumePushAfterSettings` (lib) + `visibilitychange`/`pageshow` в аккордеоне, пока показан recovery UI · тест 34/0 · JS зона 183/1 (1 = legacy `order_action_buttons_cancel_test`, падает и без патча) · `vite build` OK
+- [ ] `/regress` → `/review` (bugbot + security + crit-audit, Entire, push, CI)
+- [ ] `COMPONENT_MAP.md` строка `ActiveOrdersAccordion` / `orderStatusNotifyActions.js` (re-entry TASK_90 Патч 1) — только после зелёного Review
+- [ ] Device: Android + Chrome «denied → настройки → разрешил → вернулся → подписка без повторного CTA» — после deploy по апруву
+
+## Факт (до правок)
+
+- `registerShopPush()` вызывается только из CTA `onAction("push")` → `subscribeOrderPush`; при `denied` аккордеон ставит `pushRecovery = true` (recovery UI «Открыть настройки» / «Смотреть готовность»).
+- В `ActiveOrdersAccordion` нет `visibilitychange` / `pageshow` / `focus` → после возврата из настроек permission не перепроверяется, нужен повторный клик.
+- Паттерн проекта для re-entry — `visibilitychange` + `pageshow` (`App.svelte` 106–147, `OrderStatusSheet.svelte` 192–205).
+- `registerShopPush()` при уже `granted` диалога не показывает (`requestPermission` сразу `granted`) → повторного permission-flow нет.
+
+## Файлы
+
+1. `app/frontend/lib/orderStatusNotifyActions.js` — `resumePushAfterSettings({ armed, permission?, … })`: если `armed` и `Notification.permission === "granted"` → существующий `subscribeOrderPush` → `registerShopPush`; иначе `{ resumed: false }`.
+2. `app/frontend/components/ActiveOrdersAccordion.svelte` — `$effect` пока `pushRecovery`: `visibilitychange` (visible) + `pageshow` → `resumeAfterSettings()`; при `ok` → `pushSubscribed = true`, recovery скрыт. Guard `actionLoading` от двойного срабатывания. Отдельного recovery-state нет — флаг готовности = существующий `pushRecovery`.
+3. `test/javascript/order_status_push_subscribe_test.mjs` — +7 тестов: denied/default/не armed → без register; цепочка `denied → settings → granted → return → registerShopPush`; ошибка register без throw; чтение `Notification.permission`; source-оракул слушателей.
+
+**Только чтение:** `firebasePush.js` (`registerShopPush` без изменений), `App.svelte`, `OrderStatusSheet.svelte`, `COMPONENT_MAP.md`.
+
+## Не ломать
+
+- `registerShopPush()` / `/shop/api/push/register` / VAPID / FCM / Service Worker — ни строчки.
+- Обычный CTA push: `default → requestPermission → granted`, `denied` → recovery UI, fallback-инструкция без deep-link.
+- «Смотреть готовность» скрывает recovery и снимает слушатели (re-entry только пока recovery на экране).
+- Чек / CTA «Состав заказа» (#84), отсутствие `×` (#83), iOS Wallet, tips/chat/cancel, `orderStatusCtaMachine.js`, `OrderStatus.svelte`.
+
+## Проверка
+
+- `node --test test/javascript/order_status_push_subscribe_test.mjs` — 34/0
+- JS зона (`order_status*` `active_orders*` `order_action*` `cart_sheet*` `sticky*` `order_cancel*`) — 183/1 (legacy)
+- `npm run vite:build`
+- Ручная: Android + Chrome и desktop — после deploy по апруву
+
+## DoD
+
+- [x] Subtask 7 (patch v1): возврат в PWA при `granted` → `registerShopPush()` без повторного клика по CTA
+- [x] `denied`/`default` после возврата → recovery UI остаётся, регистрации нет
+- [x] Без нового статуса заказа / recovery-state, backend и `registerShopPush` не менялись
+- [ ] Review + CI green · ручная проверка Android + Chrome после deploy
+
+---
+
 # todo — TASK_86 Патч 1: смонтированный WAITING-экран переходит в результат
 
 | Поле | Значение |
