@@ -72,7 +72,7 @@
 - [x] `/regress` PASS — JS 688 (60 fail = legacy, те же 3 набора) · Rails `test/integration/shop` + `test/services/payments` 825/0
 - [x] `/review`: security 0 · bugbot #1 (history `activeKey` после отказа) → RED `7dbff0c5` → GREEN `6e10a462` · bugbot #2 (то же при retry/уходе с ЛК) → RED `35b8618f` → GREEN `9bd2d690` (`releaseHistoryRepeatUi` в unmount `Profile`/`OrderReceipt`) · bugbot #3 — только код базовой TASK_94 (подписи кнопок) → backlog · crit-audit CLEAN (`last_audited_sha` = `9bd2d690`)
 - [x] Entire `01M461KXH89CE60XQN4QGKXC4H` на `4646fdd4` → push → **CI green** [37311939208](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37311939208) + Semgrep/CodeQL
-- [ ] deploy по апруву → Fly MCP Point A (ручная: Profile → Повторить → `/` / `#/checkout`) · `COMPONENT_MAP` (historyRepeatAdapter / Profile / OrderReceipt) после принятия
+- [ ] deploy по апруву → Fly MCP Point A (ручная: Profile → Повторить → `/` / `#/checkout`) · `COMPONENT_MAP` (historyRepeatAdapter / Profile / OrderReceipt) `[x]`
 - [ ] Backlog: `Profile.repeatLabel` не показывает сетевую ошибку; `OrderReceipt.repeatButtonLabel` берёт чужой `errorText` без сверки `activeKey` (базовая TASK_94)
 - [ ] `COMPONENT_MAP.md` (Profile / OrderReceipt / historyRepeatAdapter) — после Review
 - [ ] deploy по апруву → Fly MCP Point A (закрывает и G5 базовой TASK_94)
