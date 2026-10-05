@@ -136,4 +136,27 @@ class Shop::CustomerProfileMergerTest < ActiveSupport::TestCase
       merger.send(:reassign_optional_table!, "promo_code_usages")
     end
   end
+
+  test "#71 P2 merge carries donor receipt_email when survivor has none [TDD]" do
+    receipt = "rcpt-#{SecureRandom.hex(3)}@example.com"
+    survivor = MobileCustomer.create!(phone: @phone, first_name: "S", is_active: true, phone_verified: true)
+    donor = MobileCustomer.create!(email: @email, first_name: "D", is_active: true, email_verified: true,
+                                   receipt_email: receipt)
+
+    Shop::CustomerProfileMerger.merge!(survivor: survivor, donor: donor)
+
+    assert_equal receipt, survivor.reload.receipt_email
+  end
+
+  test "#71 P2 merge keeps survivor receipt_email over donor [TDD]" do
+    mine = "mine-#{SecureRandom.hex(3)}@example.com"
+    survivor = MobileCustomer.create!(phone: @phone, first_name: "S", is_active: true, phone_verified: true,
+                                      receipt_email: mine)
+    donor = MobileCustomer.create!(email: @email, first_name: "D", is_active: true, email_verified: true,
+                                   receipt_email: "donor-#{SecureRandom.hex(3)}@example.com")
+
+    Shop::CustomerProfileMerger.merge!(survivor: survivor, donor: donor)
+
+    assert_equal mine, survivor.reload.receipt_email
+  end
 end
