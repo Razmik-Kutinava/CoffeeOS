@@ -31,6 +31,11 @@ module Payments
         method_hash: stored.method_hash,
         method_type: "sbp"
       )
+      GrowthPromo.cover_saved_method!(
+        customer: payment.order&.customer,
+        method_hash: stored.method_hash,
+        method_type: "sbp"
+      )
       stored
     end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_05_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_05_140000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -128,6 +128,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_05_120000) do
     t.uuid "point_id"
     t.string "reason", limit: 128
     t.string "result", limit: 64, default: "ok", null: false
+    t.string "source", limit: 32
     t.datetime "updated_at", null: false
     t.boolean "verification_charge_required", default: false, null: false
     t.index ["is_growth_event", "method_hash"], name: "idx_card_binding_attempts_growth_hash"

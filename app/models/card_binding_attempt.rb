@@ -35,8 +35,16 @@ class CardBindingAttempt < ApplicationRecord
       result: attrs.fetch(:result, "ok"),
       reason: attrs[:reason],
       verification_charge_required: attrs.fetch(:verification_charge_required, false),
-      is_growth_event: attrs.fetch(:is_growth_event, false)
+      is_growth_event: attrs.fetch(:is_growth_event, false),
+      source: attrs[:source]
     )
+  end
+
+  # TASK_102: право на промо уже покрыто журналом по каждому известному идентификатору.
+  def self.growth_covered?(phone_digest:, method_hash:)
+    growth = where(is_growth_event: true)
+    (method_hash.blank? || growth.where(method_hash: method_hash.to_s).exists?) &&
+      (phone_digest.blank? || growth.where(phone_digest: phone_digest).exists?)
   end
 
   def self.growth_used_for_phone?(phone)

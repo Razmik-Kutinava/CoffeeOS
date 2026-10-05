@@ -5,6 +5,7 @@ module Payments
   # Сумма: point_campaign_settings.config["promo_amount_rub"], иначе DEFAULT_PROMO_AMOUNT_RUB.
   class GrowthPromo
     AMOUNT_RUB = PointCampaignSetting::DEFAULT_PROMO_AMOUNT_RUB
+    SAVED_WITHOUT_PROMO_SOURCE = "saved_without_promo"
 
     def self.eligible?(tenant:, customer:, bind_requested:, method_hash: nil)
       return false unless ActiveModel::Type::Boolean.new.cast(bind_requested)
@@ -90,6 +91,30 @@ module Payments
         result: "ok",
         is_growth_event: true
       )
+    end
+
+    # TASK_102: сохранённый без 11₽ способ оплаты тоже закрывает право на промо.
+    # Вызывать после consume_from_payment!; point_id=nil — лимит акции точки не тратится.
+    # Savepoint: сбой журнала не откатывает сохранение карты/СБП.
+    def self.cover_saved_method!(customer:, method_hash:, method_type:)
+      digest = CardBindingAttempt.phone_digest_for(customer&.phone)
+      return if digest.blank? && method_hash.blank?
+      return if CardBindingAttempt.growth_covered?(phone_digest: digest, method_hash: method_hash)
+
+      CardBindingAttempt.transaction(requires_new: true) do
+        CardBindingAttempt.record!(
+          method_type: method_type,
+          method_hash: method_hash,
+          phone_digest: digest,
+          account_id: customer&.id,
+          point_id: nil,
+          result: "ok",
+          is_growth_event: true,
+          source: SAVED_WITHOUT_PROMO_SOURCE
+        )
+      end
+    rescue StandardError => e
+      Rails.logger.warn("[GrowthPromo] cover_saved_method failed: #{e.class}: #{e.message}")
     end
 
     # После успешной привязки при росте: серверный method_hash, без доверия клиенту.

@@ -113,6 +113,11 @@ module Payments
           method_hash: card_hash,
           method_type: "card"
         )
+        Payments::GrowthPromo.cover_saved_method!(
+          customer: order&.customer,
+          method_hash: card_hash,
+          method_type: "card"
+        )
         record_attempt!(
           customer_id: customer_id,
           method_hash: card_hash,
