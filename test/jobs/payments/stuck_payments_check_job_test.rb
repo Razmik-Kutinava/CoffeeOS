@@ -184,6 +184,25 @@ class Payments::StuckPaymentsCheckJobTest < ActiveSupport::TestCase
     payments.each { |p| assert_equal "pending", p.reload.status }
   end
 
+  # Т-Банк закрыл платёж финальным отказом — не держать его в pending и не алертить каждые 15 минут
+  %w[DEADLINE_EXPIRED AUTH_FAIL].each do |bank_status|
+    test "stuck payment with bank status #{bank_status} becomes failed without alert" do
+      payment = create_stuck_payment!(provider_payment_id: "pay-final-#{bank_status}", created_at: 45.minutes.ago)
+      Payments::StuckPaymentsCheckJob.sync_adapter = fake_adapter(
+        "Status" => bank_status,
+        "PaymentId" => "pay-final-#{bank_status}",
+        "Amount" => 20_000
+      )
+
+      assert_no_enqueued_jobs(only: TelegramAlertJob) do
+        Payments::StuckPaymentsCheckJob.perform_now
+      end
+
+      assert_equal "failed", payment.reload.status
+      assert_equal "pending_payment", payment.order.reload.status
+    end
+  end
+
   # RUBY-1P: N+1 `INSERT INTO solid_queue_jobs` — алерт на каждый stuck-платёж ставился отдельно
   test "alerts for several stuck payments are enqueued in one bulk call" do
     3.times do |i|
