@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [ЛК в PWA § Патч 3: 2026-10-02](../milestones/veha_2/requirements/customer_tasks/Доработка%20личного%20кабинета%20(ЛК)%20в%20PWA.md) · Subtask 1 (patch v3) · доделка Патча 1 (2026-09-17) · аудит CBR #69 · [Google Doc](https://docs.google.com/document/d/1yH1DzM48Bcg43X9lT_37WVICKUkmFLGETduYX3eOpzo/edit?usp=sharing) |
 | **Тип** | патч (не доп.задача) · Патч 2 («Tg» → «Telegram») уже в коде · остальные Subtask ЛК — контекст, не scope |
-| **Статус** | RED `f935fcdd` · GREEN `440a686a` → `/regress` |
+| **Статус** | RED `f935fcdd` · GREEN `440a686a` · `/regress` PASS → `/review` |
 
 ## SBR
 
@@ -12,7 +12,7 @@
 - [x] SPEC — факт, файлы, Не ломать, Проверка
 - [x] RED `f935fcdd` — 2 fail: SSR-HTML и исходник содержат `shop-header-support-chat`; badge narrow — зелёный сразу (охрана). В тесте заглушки `svelte-spa-router` / `lucide-svelte` (Node ESM их не резолвит)
 - [x] GREEN `440a686a` — из `Header.svelte` убраны кнопка, `MessageCircle`, `onSupportChatClick`, `supportSheetRef`, импорт и монтирование `SupportContactSheet` · тест 3/0 + `telegram_support` 17/0 · Rails b113/b114 7/0 · `vite build` OK · Entire: GREEN из Windows без трейлера, поверх лёг `c29c14a2` (TASK_94, соседняя сессия) → attach на docs-коммит
-- [ ] `/regress` — шапка + поддержка/ЛК
+- [x] `/regress` PASS — JS весь `test/javascript` 687 — 60 fail = legacy (те же 3 набора: `email_collection` 1, `order_action_buttons_cancel` 1, `personal_cabinet` 58) · Rails шапка/поддержка/ЛК (b113, b114, `shop_telegram_webview`, `profile_ui_contract`) 17/0 · `vite build` OK (на GREEN)
 - [ ] `/review` — bugbot + security + crit-audit · push · CI
 - [ ] `COMPONENT_MAP.md` — запрещено в Spec/Build; после Review только если попросят
 - [ ] deploy по апруву → Fly MCP Point A (шапка без иконки, 320 и 390 px)
