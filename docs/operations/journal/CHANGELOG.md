@@ -17,6 +17,7 @@
 - `Shop::FirebaseSwController`: локальная `content_security_policy` — глобальный `script-src` + `https://www.gstatic.com` (SW делает `importScripts` Firebase SDK). Глобальная CSP, `connect-src`, `show.js.erb`, `firebasePush.js` не менялись.
 - Тест `test/integration/shop/firebase_sw_csp_test.rb` (CSP ответа SW + охрана глобальной CSP).
 - RED `46de7f82` → GREEN `9608d9f2` · Rails 24/0 · JS 45/0 · Entire `01M45HNNHAF3YGAFK4X55X00Z4`.
+- REVIEW: bugbot — на 304 Rails не отдаёт CSP, браузер держал бы старую политику → RED `19fff712` → GREEN `e91f2daa`: `Cache-Control: no-store` + уникальный weak ETag на ответ SW. Повторный bugbot 0 · security 0 · crit-audit CLEAN.
 
 ## 2026-10-05 — feat: TASK_90 Патч 1 — подписка продолжается после возврата из настроек
 
