@@ -303,9 +303,17 @@
     }
   }
 
+  /** TASK_100: ошибка прошлой попытки не переживает повторное открытие шторки (busy-состояния не трогаем). */
+  function resetPayErrorState() {
+    if (!isPayFsmClickable(payFsmState) || payFsmState === PAY_FSM.DEFAULT) return
+    payFsmState = PAY_FSM.DEFAULT
+    payErrorCategory = null
+  }
+
   async function openPaymentSheet() {
     err = null
     sheetInlineError = null
+    resetPayErrorState()
     cardsLoadError = null
     if (!identityReady) {
       err = "Подтвердите телефон"
