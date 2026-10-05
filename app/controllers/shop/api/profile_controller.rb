@@ -73,6 +73,7 @@ module Shop
           id: customer.id,
           email: customer.email,
           email_verified: customer.email_verified,
+          receipt_email: customer.receipt_email,
           phone: customer.phone,
           phone_verified: customer.phone_verified,
           first_name: customer.first_name,

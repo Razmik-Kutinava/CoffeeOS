@@ -21,6 +21,22 @@ export function shouldAskReceiptEmail(savedEmail) {
   return !String(savedEmail || "").trim()
 }
 
+function normalizeEmail(value) {
+  return String(value || "").trim().toLowerCase()
+}
+
+/**
+ * #71 Патч_2: источник prefill — server profile (receipt_email) → LS receipt → guest profile.
+ * LS/guest — только fallback; guest profile лишь предзаполняет, блок не скрывает.
+ */
+export function resolveReceiptEmailPrefill({ serverEmail, localEmail, guestEmail } = {}) {
+  const server = normalizeEmail(serverEmail)
+  if (server) return { prefill: server, ask: false }
+  const local = normalizeEmail(localEmail)
+  if (local) return { prefill: local, ask: false }
+  return { prefill: normalizeEmail(guestEmail), ask: true }
+}
+
 export async function submitOrderEmail(
   api,
   { orderId, email, marketing_consent, reconnect_token }

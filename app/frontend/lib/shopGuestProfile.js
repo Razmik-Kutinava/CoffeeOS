@@ -81,6 +81,10 @@ export function loadReceiptEmail() {
   return email
 }
 
+export function clearReceiptEmail() {
+  removeShopLocalStorage(receiptEmailStorageKey())
+}
+
 export function saveReceiptEmail(email) {
   const e = String(email || "").trim().toLowerCase()
   if (!e || !isValidEmail(e)) return

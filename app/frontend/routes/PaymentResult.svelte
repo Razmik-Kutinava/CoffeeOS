@@ -3,7 +3,12 @@
   import { push } from "svelte-spa-router"
   import { api } from "../lib/api.js"
   import { clearGuestOrderSession, reconnectGuestOrder, guestReconnectToken } from "../lib/shopGuestSession.js"
-  import { loadGuestProfile, loadReceiptEmail, saveReceiptEmail } from "../lib/shopGuestProfile.js"
+  import {
+    loadGuestProfile,
+    loadReceiptEmail,
+    saveReceiptEmail,
+    clearReceiptEmail
+  } from "../lib/shopGuestProfile.js"
   import { clearPaymentSession } from "../lib/tbankPayment.js"
   import { clearPendingOrder } from "../lib/codeblackPendingOrder.js"
   import {
@@ -16,7 +21,7 @@
     SBP_I_PAID_LABEL
   } from "../lib/shopSbpPay.js"
   import OrderSuccessEmailBlock from "../components/OrderSuccessEmailBlock.svelte"
-  import { submitOrderEmail, shouldAskReceiptEmail } from "../lib/emailCollection.js"
+  import { submitOrderEmail, resolveReceiptEmailPrefill } from "../lib/emailCollection.js"
   import { clearSubscriptionOfferCtaCache } from "../lib/subscriptionOfferCta.js"
 
   let status = $state("fail")
@@ -126,7 +131,8 @@
         marketing_consent,
         reconnect_token: reconnectToken || undefined
       })
-      saveReceiptEmail(email)
+      if (String(email || "").trim()) saveReceiptEmail(email)
+      else clearReceiptEmail()
       askReceiptEmail = false
       err = null
       await new Promise((r) => setTimeout(r, 800))
@@ -174,16 +180,21 @@
       await reconnectGuestOrder(api)
       clearPaymentSession()
 
-      // #71 Патч_1: server profile email (verified phone) — LS is fallback only.
+      // #71 Патч_2: server receipt_email первичен; LS / guest profile — fallback.
       let serverEmail = ""
       try {
         const remote = await api("profile")
-        serverEmail = String(remote?.email || "").trim().toLowerCase()
+        serverEmail = remote?.receipt_email || ""
       } catch {
-        /* unauthorized / guest — LS + guest profile only */
+        /* 401 гость / 4xx / 5xx — success screen не блокируем, только fallback */
       }
-      prefillEmail = savedReceipt || serverEmail || profile?.email || ""
-      askReceiptEmail = shouldAskReceiptEmail(savedReceipt || serverEmail)
+      const resolved = resolveReceiptEmailPrefill({
+        serverEmail,
+        localEmail: savedReceipt,
+        guestEmail: profile?.email
+      })
+      prefillEmail = resolved.prefill
+      askReceiptEmail = resolved.ask
 
       if (status === "waiting") {
         waitingForBank = true

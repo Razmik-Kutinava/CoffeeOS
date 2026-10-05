@@ -56,41 +56,25 @@ module Orders
       }
     end
 
-    # #71 Патч_1: post-pay email → MobileCustomer for server prefill.
-    # Never marks email_verified (OTP path only). Releases unverified squat on other rows.
+    # #71 Патч_2: post-pay email → MobileCustomer.receipt_email (prefill следующего заказа).
+    # MobileCustomer.email / email_verified не трогаем: это identity (OTP) и Receipt.Email
+    # в TbankReceiptBuilder.for_order!.
     def persist_customer_contact!(email_value)
       customer = @order.customer
       return unless customer
 
       if email_value.blank?
-        return if customer.email.blank?
-
-        customer.update!(email: nil, email_verified: false)
+        customer.update!(receipt_email: nil) if customer.receipt_email.present?
         return
       end
 
-      return if customer.email == email_value
+      return if customer.receipt_email == email_value
 
-      release_unverified_email_claim!(email_value, except_id: customer.id)
-
-      other = MobileCustomer.where(email: email_value).where.not(id: customer.id).first
-      if other&.email_verified?
-        raise ValidationError, "Email already in use"
-      end
-
-      customer.email = email_value
-      customer.email_verified = false
+      customer.receipt_email = email_value
       customer.email_collected_at ||= Time.current
       customer.save!
     rescue ActiveRecord::RecordInvalid => e
       raise ValidationError, e.record.errors.full_messages.join(", ")
-    end
-
-    def release_unverified_email_claim!(email_value, except_id:)
-      MobileCustomer
-        .where(email: email_value, email_verified: false)
-        .where.not(id: except_id)
-        .find_each { |row| row.update!(email: nil) }
     end
   end
 end

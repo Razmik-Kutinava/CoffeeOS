@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_29_150000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_05_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -445,6 +445,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_29_150000) do
     t.datetime "push_enabled_at"
     t.string "push_token", limit: 255
     t.datetime "pwa_installed_at"
+    t.string "receipt_email", limit: 255
     t.string "telegram_chat_id", limit: 64, comment: "Telegram chat_id гостя для OrderReadyCascade (#39)"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_mobile_customers_on_email", unique: true, where: "(email IS NOT NULL)"
