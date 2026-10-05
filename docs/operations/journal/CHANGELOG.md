@@ -18,6 +18,11 @@
 - Находки: шторка «Связь с поддержкой» (`SupportContactSheet`) открывается под `CartSheet` (обе `z-index: 50`), `✕` недоступен — и на проде → ISSUES; на iPhone под `CartSheet` пустая полоса 34px, сквозь неё видна страница; нижние отступы шторок разные (34 пусто / 50 внутри / 16 без safe-area).
 - [MEASURE + черновик сообщения заказчику](../milestones/veha_2/artifacts/active_orders_receipt_display_restore/customer_preview_2026-10-05/MEASURE.md).
 
+## 2026-10-05 — deploy: Fly v507 (seed guard Point A)
+
+- Push `41a2d245..47be43cc` · CI [37273023483](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37273023483) + Semgrep + CodeQL green · deploy [37273363637](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37273363637) → v507.
+- После выката: `/up` и витрина Point A 200 · barista-a на табло видит `#202609-0035` · guard в коде прода · демо-логины на `2fdee1ac`, дубль inactive · логи без 5xx.
+
 ## 2026-10-05 — fix: заказы витрины Point A не видны на табло бариста (prod data + seed guard)
 
 - **Причина (prod):** 15.09 Point A `2fdee1ac` переименована (`napi x code_black`, slug `code_black`); 18.09 `demo:seed` искал точку по slug `demo-point-a` → создал пустой дубль `Demo Coffee Point A` (`c1bf2ab1`) и перепривязал barista-a / gm-a / shift-a / uk / franchise. Витрина пишет в `2fdee1ac`, бариста смотрел табло дубля (0 заказов). Код цепочки витрина→callback→табло исправен: все оплаченные заказы 29.09–01.10 получили `accepted` за 2–3 с.
