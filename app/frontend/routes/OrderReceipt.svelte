@@ -4,7 +4,7 @@
   import { api } from "../lib/api.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import PageSkeleton from "../components/PageSkeleton.svelte"
-  import { runHistoryRepeatPayFlow } from "../lib/historyRepeatAdapter.js"
+  import { releaseHistoryRepeatUi, runHistoryRepeatPayFlow } from "../lib/historyRepeatAdapter.js"
   import { repeatInlinePayUi } from "../lib/repeatInlinePayUiStore.js"
   import {
     ORDER_RECEIPT_FISCAL_POLL_MS,
@@ -33,7 +33,10 @@
         loading = false
       }
     })()
-    return () => unsubPay()
+    return () => {
+      unsubPay()
+      releaseHistoryRepeatUi()
+    }
   })
 
   // #73 Патч 1: пока «Чек формируется» — poll GET /orders/:id (не status-sheet Cable).

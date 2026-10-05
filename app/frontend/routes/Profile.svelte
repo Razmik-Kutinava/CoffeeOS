@@ -14,7 +14,7 @@
   import ContactSupportSheet from "../components/ContactSupportSheet.svelte"
   import PageSkeleton from "../components/PageSkeleton.svelte"
   import { MessageCircle, Settings } from "lucide-svelte"
-  import { startHistoryRepeatFromOrderId } from "../lib/historyRepeatAdapter.js"
+  import { releaseHistoryRepeatUi, startHistoryRepeatFromOrderId } from "../lib/historyRepeatAdapter.js"
   import { repeatInlinePayUi } from "../lib/repeatInlinePayUiStore.js"
 
   useTelegramBack(() => push("/"))
@@ -44,7 +44,10 @@
       historyError = result.errorKind
       historyLoading = false
     })()
-    return () => unsubPay()
+    return () => {
+      unsubPay()
+      releaseHistoryRepeatUi()
+    }
   })
 
   function displayName() {

@@ -15,8 +15,10 @@ import {
   classifyInlinePayErrorLabel,
   INLINE_NETWORK_ERROR_LABEL
 } from "./shopInlinePayFsm.js"
+import { get } from "svelte/store"
 import {
   patchRepeatInlinePayUi,
+  repeatInlinePayUi,
   resetRepeatInlinePayUi
 } from "./repeatInlinePayUiStore.js"
 import {
@@ -108,6 +110,18 @@ let resetTimer = null
 function clearResetTimer() {
   if (resetTimer) clearTimeout(resetTimer)
   resetTimer = null
+}
+
+/**
+ * Уход с Profile / OrderReceipt: не оставлять history:* в общем store —
+ * RepeatSection на `/` рендерит InlinePayFallback при любом activeKey.
+ * Идущую оплату (busy) не трогаем — её финал сам сбросит store.
+ */
+export function releaseHistoryRepeatUi() {
+  const ui = get(repeatInlinePayUi)
+  if (ui.busy || !String(ui.activeKey || "").startsWith("history:")) return
+  clearResetTimer()
+  resetRepeatInlinePayUi()
 }
 
 async function defaultNavigate(path) {
