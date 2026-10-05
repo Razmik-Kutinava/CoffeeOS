@@ -183,4 +183,26 @@ class Payments::StuckPaymentsCheckJobTest < ActiveSupport::TestCase
     assert_enqueued_jobs 3, only: TelegramAlertJob
     payments.each { |p| assert_equal "pending", p.reload.status }
   end
+
+  # RUBY-1P: N+1 `INSERT INTO solid_queue_jobs` — алерт на каждый stuck-платёж ставился отдельно
+  test "alerts for several stuck payments are enqueued in one bulk call" do
+    3.times do |i|
+      create_stuck_payment!(provider_payment_id: "pay-bulk-#{i}", created_at: 45.minutes.ago)
+    end
+    Payments::StuckPaymentsCheckJob.sync_adapter = fake_adapter("Status" => "NEW")
+
+    single = 0
+    bulk_sizes = []
+    on_single = ->(*, payload) { single += 1 if payload[:job].is_a?(TelegramAlertJob) }
+    on_bulk = ->(*, payload) { bulk_sizes << payload[:jobs].count { |j| j.is_a?(TelegramAlertJob) } }
+    ActiveSupport::Notifications.subscribed(on_single, "enqueue.active_job") do
+      ActiveSupport::Notifications.subscribed(on_bulk, "enqueue_all.active_job") do
+        Payments::StuckPaymentsCheckJob.perform_now
+      end
+    end
+
+    assert_equal 0, single
+    assert_equal [ 3 ], bulk_sizes
+    assert_enqueued_jobs 3, only: TelegramAlertJob
+  end
 end
