@@ -236,7 +236,7 @@
 - [x] GREEN `2f3d39de` — `resumePushAfterSettings` (lib) + `visibilitychange`/`pageshow` в аккордеоне, пока показан recovery UI · тест 34/0 · JS зона 183/1 (1 = legacy `order_action_buttons_cancel_test`, падает и без патча) · `vite build` OK
 - [x] `/regress` PASS (на `3bdc6b78`): JS весь `test/javascript` 671 — 60 fail = legacy (те же 3 набора: #71 email, sticky cancel #41, personal cabinet [RED]) · Rails push_register + order_status (sheet mount, acceptance CBR, meta canon) + profile offer 28/0 · `vite build` OK
 - [x] `/review`: bugbot 0 · security 0 · crit-audit CLEAN (TASK_90-only, журнал) · Entire `01M45J5ZBRMVT395VJPVB9BZNC` на `3f14dda9` · push · CI + Semgrep + CodeQL green [37283046314](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37283046314)
-- [ ] `COMPONENT_MAP.md` строка `ActiveOrdersAccordion` / `orderStatusNotifyActions.js` (re-entry TASK_90 Патч 1) — только после зелёного Review
+- [x] `COMPONENT_MAP.md` строки `ActiveOrdersAccordion` (номера строк + re-entry) / `orderStatusNotifyActions.js` (`resumePushAfterSettings`) — после принятия владельцем
 - [ ] Device: Android + Chrome «denied → настройки → разрешил → вернулся → подписка без повторного CTA» — после deploy по апруву
 
 ## Факт (до правок)
