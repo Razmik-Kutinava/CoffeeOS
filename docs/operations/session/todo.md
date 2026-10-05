@@ -69,7 +69,7 @@
 - [x] RED `8bb1b27a` — `payment_error_matrix_test.mjs` (нет экспортов) + 2 теста старого текста
 - [x] GREEN `efb05433` · Entire `01M45D9SXG53EDFVFDZ758KEP7` — `classifyPaymentError` / `resolvePaymentErrorUi` / `PAY_ERROR_CATEGORY`, тексты в i18n, `errorCta` в кнопку (close/retry/change_card), `showPayError` в Checkout (вкл. 3DS abort) · + обновлён `repeat_invalid_token_payment_test.mjs` (ждал inline = label кнопки — то самое «смешано») · GATES G1–G6 met (matrix 21/0 · JS зона 68/0 · Rails 4 файла 0F/0E · vite build OK)
 - [x] `/regress` PASS — найдена регрессия #79 (СБП NETWORK + `NET_ERROR` → общий fallback вместо «Нет связи») → RED `9aeb5ac8` → GREEN `060ef61f` · JS 640 (60 fail = legacy, 3 набора) · Rails shop 673/0 · G3 + `shop_sbp_autopay_checkout_ui_test.mjs`
-- [ ] `/review` (bugbot + security + crit-audit, push)
+- [x] `/review` — bugbot: 2 находки (error-кнопка застревает после закрытия шторки: через «Попробовать позже» и через крестик/фон) → RED `164d9b95` → GREEN `82a300b8`; RED `37854804` → GREEN `ebef66bf` · повторный bugbot 0 · security 0 · crit-audit CLEAN · push → CI
 
 ## Факт (до правок)
 

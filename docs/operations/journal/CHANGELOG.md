@@ -22,6 +22,14 @@
 - ТЗ 1:1 из Google Doc → `customer_tasks/TASK-101-Сумма-заказа-в-блоке-способов-оплаты.md`, строка #101 в CBR. Код не менялся.
 - /unlazy: ledger `artifacts/order_total_payment_methods/GATES.md` G1–G8, baseline G3–G6 met; открыт вопрос промо-скидки (cart.total vs Amount) → G7.
 
+## 2026-10-05 — feat: TASK_100 точные сообщения ошибки оплаты + отдельный CTA (REVIEW)
+
+- `shopPayFsm.js`: `classifyPaymentError` / `resolvePaymentErrorUi` / `PAY_ERROR_CATEGORY` — 1051 / 1014 / 119·2200 / карточный / общий fallback; NET и 5xx как были; старый общий текст удалён.
+- Тексты Матрицы — `paymentMethodI18n.js`; в шторке alert = сообщение, кнопка = CTA (`errorCta`: change_card / close / retry).
+- `Checkout.svelte`: `showPayError` (вкл. 3DS abort → общий), «Попробовать позже» закрывает шторку со сбросом, повторное открытие сбрасывает ошибку.
+- Фиксы по пути: регрессия СБП #79 (`060ef61f`), 2 находки bugbot (`82a300b8`, `ebef66bf`).
+- Local: JS 652 (60 legacy) · Rails shop 673/0 · GATES G1–G6 · bugbot/security 0 · crit-audit CLEAN. Deploy — по апруву.
+
 ## 2026-10-05 — docs: intake TASK_100 (сообщения ошибки оплаты + CTA)
 
 - ТЗ 1:1 из Google Doc → `customer_tasks/TASK-100-Точные-сообщения-при-ошибке-оплаты-и-отдельный-CTA.md` + строка #100 в CBR.
