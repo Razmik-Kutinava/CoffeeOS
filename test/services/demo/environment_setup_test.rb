@@ -141,6 +141,33 @@ class Demo::EnvironmentSetupTest < ActiveSupport::TestCase
     end
   end
 
+  test "aborts when SHOP_DEFAULT_TENANT_ID is a renamed point a — no duplicate point, demo logins stay" do
+    shop_point = create_tenant!(name: "napi x code_black", slug: "code-black-#{SecureRandom.hex(3)}")
+    barista = create_user!(tenant: shop_point, role_codes: %w[barista], email: "barista-a@demo.coffeeos.local")
+    old = ENV["SHOP_DEFAULT_TENANT_ID"]
+    ENV["SHOP_DEFAULT_TENANT_ID"] = shop_point.id
+
+    err = assert_raises(RuntimeError) { Demo::EnvironmentSetup.call(load_catalog: false) }
+
+    assert_match(/SHOP_DEFAULT_TENANT_ID/, err.message)
+    assert_not Tenant.exists?(slug: Demo::EnvironmentSetup::TENANT_A_SLUG)
+    assert_equal shop_point.id, barista.reload.tenant_id
+  ensure
+    old.nil? ? ENV.delete("SHOP_DEFAULT_TENANT_ID") : ENV["SHOP_DEFAULT_TENANT_ID"] = old
+  end
+
+  test "runs when SHOP_DEFAULT_TENANT_ID points to demo point a itself" do
+    first = Demo::EnvironmentSetup.call(load_catalog: false)
+    old = ENV["SHOP_DEFAULT_TENANT_ID"]
+    ENV["SHOP_DEFAULT_TENANT_ID"] = first.tenant_a.id
+
+    second = Demo::EnvironmentSetup.call(load_catalog: false)
+
+    assert_equal first.tenant_a.id, second.tenant_a.id
+  ensure
+    old.nil? ? ENV.delete("SHOP_DEFAULT_TENANT_ID") : ENV["SHOP_DEFAULT_TENANT_ID"] = old
+  end
+
   test "T-K2a production aborts seed when DEMO_AUTO_SEED is false" do
     old_seed = ENV["DEMO_AUTO_SEED"]
     ENV["DEMO_AUTO_SEED"] = "false"
