@@ -293,7 +293,7 @@
 - [x] GREEN — `resolveWaitingScreenTransition` + `hashchange` в `PaymentResult` (`applyWaitingTransition`, повторный `syncWaitingWithHash` после reconnect) · JS зона 71 → 70/1 (1 = legacy #71 `email_collection_test` по `Checkout.svelte`, не наш файл) · Rails 24/0 · `vite build` OK
 - [x] `/regress` PASS (на `bdfef83c`): JS весь `test/javascript` 664 — 60 fail = legacy (те же 3 набора: `email_collection` #71, `order_action_buttons_cancel`, `personal_cabinet` [RED]) · Rails `test/integration/shop` + `test/services/payments` 814/0 (1-й прогон — 1 разовый error, не воспроизвёлся на 2 прогонах) · `vite build` OK
 - [x] `/review`: bugbot 0 · security 0 · crit-audit CLEAN (TASK_86-only, журнал) · Entire `01M45JR1SGADBM4RF8EZZDQBZ7` на `bac0ddd9` (GREEN `e553a6a7` без трейлера — коммит из Windows; attach на docs-коммит) · GREEN уехал на origin пушем соседней сессии · **CI green** [37283046314](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37283046314) + Semgrep/CodeQL на `3f14dda9` (содержит `e553a6a7`)
-- [ ] `COMPONENT_MAP.md` строка `PaymentResult` — только после зелёного Review
+- [x] `COMPONENT_MAP.md` строка `PaymentResult` — после зелёного Review (связи `resolveWaitingScreenTransition` + `hashchange`, владелец TASK_86 Патч 1, граница перехода WAITING)
 - [ ] Device: Android/iOS «вернулся в открытый PWA → экран сам ушёл в результат» — после deploy по апруву
 
 ## Факт (до правок)
