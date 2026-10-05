@@ -16,7 +16,9 @@
     ctaSbpFastPay,
     ctaSbpAccountPay,
     paymentMethodLoadErrorMessage,
-    paymentMethodRetryLabel
+    paymentMethodRetryLabel,
+    labelOrderTotal,
+    formatRubAmount
   } from "../lib/paymentMethodI18n.js"
   import { SBP_LOADING_LABEL } from "../lib/shopSbpPay.js"
   import { PAY_FSM, shouldLockPaymentMethods } from "../lib/shopPayFsm.js"
@@ -53,6 +55,7 @@
     onChangeCard = undefined
   } = $props()
 
+  const orderTotalLabel = $derived(formatRubAmount(cartTotalRub))
   const locked = $derived(shouldLockPaymentMethods(fsmState))
   const payDisabled = $derived(!canPay || loading || locked)
   const hasSbpAccount = $derived(Array.isArray(sbpAccounts) && sbpAccounts.length > 0)
@@ -103,6 +106,13 @@
         ×
       </button>
     </header>
+
+    {#if orderTotalLabel}
+      <p class="pm-sheet__total" data-testid="payment-methods-order-total">
+        <span class="pm-sheet__total-label">{labelOrderTotal()}</span>
+        <span class="pm-sheet__total-amount">{orderTotalLabel}</span>
+      </p>
+    {/if}
 
     {#if loading}
       <p class="pm-sheet__loading">Загружаем карты…</p>
@@ -308,6 +318,24 @@
   }
 
   .pm-sheet__loading,
+  .pm-sheet__total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin: 0 0 1rem;
+    font-size: 0.875rem;
+    color: #a0a0a0;
+  }
+
+  .pm-sheet__total-amount {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
   .pm-sheet__hint {
     margin: 0 0 1rem;
     font-size: 0.875rem;

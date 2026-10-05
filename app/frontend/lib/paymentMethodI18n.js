@@ -81,6 +81,20 @@ export function promoNudgeInsteadOf(cartTotalRub, amountRub = 11) {
   return `Сохрани — счёт станет ${amount} ₽ вместо ${pretty} ₽.`
 }
 
+/** TASK_101: подпись строки суммы заказа в шторке способов оплаты. */
+export function labelOrderTotal() {
+  return "Итого"
+}
+
+/** TASK_101: 3245 → «3 245 ₽» (NBSP — сумма не переносится). Невалидная / ≤ 0 → "" (строку не показываем). */
+export function formatRubAmount(value) {
+  if (value === null || value === undefined || value === "") return ""
+  const n = Math.round(Number(value))
+  if (!Number.isFinite(n) || n <= 0) return ""
+  const digits = String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "\u00A0")
+  return `${digits}\u00A0₽`
+}
+
 function formatPromoAmountRub(amountRub) {
   const n = Number(amountRub)
   if (Number.isFinite(n)) return String(Math.round(n))
