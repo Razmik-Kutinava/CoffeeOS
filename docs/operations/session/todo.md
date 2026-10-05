@@ -13,7 +13,7 @@
 - [x] RED `f935fcdd` — 2 fail: SSR-HTML и исходник содержат `shop-header-support-chat`; badge narrow — зелёный сразу (охрана). В тесте заглушки `svelte-spa-router` / `lucide-svelte` (Node ESM их не резолвит)
 - [x] GREEN `440a686a` — из `Header.svelte` убраны кнопка, `MessageCircle`, `onSupportChatClick`, `supportSheetRef`, импорт и монтирование `SupportContactSheet` · тест 3/0 + `telegram_support` 17/0 · Rails b113/b114 7/0 · `vite build` OK · Entire: GREEN из Windows без трейлера, поверх лёг `c29c14a2` (TASK_94, соседняя сессия) → attach на docs-коммит
 - [x] `/regress` PASS — JS весь `test/javascript` 687 — 60 fail = legacy (те же 3 набора: `email_collection` 1, `order_action_buttons_cancel` 1, `personal_cabinet` 58) · Rails шапка/поддержка/ЛК (b113, b114, `shop_telegram_webview`, `profile_ui_contract`) 17/0 · `vite build` OK (на GREEN)
-- [x] `/review` — bugbot 0 · security 0 · crit-audit CLEAN (Патч 3 only; `last_audited_sha` не сдвинут из-за TASK_94) · push · CI
+- [x] `/review` — bugbot 0 · security 0 · crit-audit CLEAN (Патч 3 only; `last_audited_sha` не сдвинут из-за TASK_94) · push `0be4b906` · **CI green** [37309293243](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37309293243) + Semgrep/CodeQL
 - [ ] `COMPONENT_MAP.md` — запрещено в Spec/Build; после Review только если попросят
 - [ ] deploy по апруву → Fly MCP Point A (шапка без иконки, 320 и 390 px)
 
