@@ -1,7 +1,7 @@
 <script>
   import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
-  import { User, ChevronDown, MessageCircle } from "lucide-svelte"
+  import { User, ChevronDown } from "lucide-svelte"
   import { getOperatingHours, subscribeOperatingHours } from "../lib/shopOperatingHours.js"
   import { formatProfileIdShort } from "../lib/shopProfileHeader.js"
   import {
@@ -12,14 +12,12 @@
     selectTenant
   } from "../lib/shopTenantHeader.js"
   import { api } from "../lib/api.js"
-  import SupportContactSheet from "./SupportContactSheet.svelte"
 
   let hours = $state(getOperatingHours())
   let tenantHeader = $state(getTenantHeaderState())
   let profileId = $state(null)
   let narrow = $state(false)
   let rootEl = $state(null)
-  let supportSheetRef = $state(null)
 
   function profileLinkLabel() {
     if (!profileId) return "Профиль"
@@ -34,12 +32,6 @@
   function onDocClick(event) {
     if (!tenantHeader.dropdownOpen) return
     if (rootEl && !rootEl.contains(event.target)) closeTenantDropdown()
-  }
-
-  function onSupportChatClick() {
-    if (supportSheetRef) {
-      supportSheetRef.open()
-    }
   }
 
   onMount(() => {
@@ -134,16 +126,6 @@
     <div class="flex shrink-0 items-center gap-2">
       <button
         type="button"
-        data-testid="shop-header-support-chat"
-        class="border-none bg-transparent p-0 text-[#a0a0a0] hover:text-[#ff8c42] cursor-pointer transition"
-        onclick={onSupportChatClick}
-        aria-label="Связь с поддержкой"
-      >
-        <MessageCircle class="h-5 w-5" aria-hidden="true" />
-      </button>
-
-      <button
-        type="button"
         data-testid="shop-header-profile"
         class="flex shrink-0 items-center gap-1 border-none bg-transparent p-0 pt-0.5 text-xs text-[#a0a0a0] cursor-pointer"
         onclick={() => push("/profile")}
@@ -168,5 +150,3 @@
     </div>
   </div>
 </header>
-
-<SupportContactSheet bind:this={supportSheetRef} />
