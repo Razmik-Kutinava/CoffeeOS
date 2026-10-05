@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-05 — fix: Задача_2 (ЛК в PWA) Патч 3 — в шапке витрины нет иконки поддержки
+
+- Патч 1 (2026-09-17) не был выполнен: кнопка `shop-header-support-chat` в `Header.svelte` стояла вне `{#if narrow}` → видна на всех ширинах. Патч 3 (2026-10-02) из Google Doc вписан в ТЗ ЛК.
+- RED `f935fcdd` → GREEN `440a686a`: удалены кнопка, `MessageCircle`, `onSupportChatClick`, импорт и монтирование `SupportContactSheet`. «Профиль ID» без изменений. `SupportContactSheet.svelte` / `Profile.svelte` / `supportConfig.js` не тронуты (запрет ТЗ).
+- Тест `shop_header_no_support_chat_test.mjs`: SSR (обычная ширина) + исходник (узкая). /regress: JS 687 — 60 legacy · Rails шапка/ЛК 17/0 · vite OK. Review: bugbot 0 · security 0 · crit-audit CLEAN.
+
 ## 2026-10-05 — docs: TASK_94 Патч 1 — /patch (ЛК → Повторить: успех на `#/`, отказ на экран оплаты)
 
 - Патч 1 (2026-10-01) из Google Doc вписан 1:1 секцией в TASK-94 + аудит (файл:строка). Тип — ПАТЧ (Subtask 5, 6).
