@@ -118,3 +118,103 @@ describe("TASK_94 — historyRepeatAdapter", () => {
     assert.equal(body.defer_payment_init, true)
   })
 })
+
+describe("TASK_94 Патч 1 — результат оплаты ЛК → Repeat", () => {
+  const histOrder = {
+    id: "hist-1",
+    items: [
+      { product_id: "p1", quantity: 1, selected_modifiers: [] },
+      { product_id: "p2", quantity: 2, selected_modifiers: [] }
+    ]
+  }
+
+  function payOut(state, extra = {}) {
+    return {
+      fsm: { state },
+      state,
+      statusText: "",
+      errorText: state === "SUCCESS" ? "" : "Ошибка оплаты",
+      showFallbackMethods: state !== "SUCCESS",
+      showRetry: false,
+      openPaymentSheet: false,
+      savedCards: [ { id: "c1" }, { id: "c2" } ],
+      resetAfterMs: 3000,
+      error_code: state === "SUCCESS" ? "" : "1051",
+      ...extra
+    }
+  }
+
+  async function runWith(out) {
+    const mod = await import("../../app/frontend/lib/historyRepeatAdapter.js")
+    const store = await import("../../app/frontend/lib/repeatInlinePayUiStore.js")
+    const navigate = mock.fn(async () => {})
+    const openPaymentSheet = mock.fn(async () => {})
+    const setTimeoutFn = mock.fn(() => 0)
+    const result = await mod.runHistoryRepeatPayFlow({
+      order: histOrder,
+      api: async () => ({}),
+      createOrder: async () => ({ orderId: "new-99" }),
+      payFlow: async () => out,
+      navigate,
+      openPaymentSheet,
+      setTimeoutFn
+    })
+    let ui
+    const unsub = store.repeatInlinePayUi.subscribe((v) => { ui = v })
+    unsub()
+    return { result, navigate, openPaymentSheet, setTimeoutFn, ui }
+  }
+
+  it("CONFIRMED → главный экран `/`, таймеры не ставятся, inline UI сброшен", async () => {
+    const r = await runWith(payOut("SUCCESS"))
+    assert.equal(r.navigate.mock.callCount(), 1)
+    assert.equal(r.navigate.mock.calls[0].arguments[0], "/")
+    assert.equal(r.openPaymentSheet.mock.callCount(), 0)
+    assert.equal(r.setTimeoutFn.mock.callCount(), 0, "reset-таймер после CONFIRMED не должен жить")
+    assert.equal(r.ui.busy, false)
+    assert.equal(r.ui.activeKey, null)
+  })
+
+  it("REJECTED → существующий экран оплаты (карты/СБП), не `/`", async () => {
+    const r = await runWith(payOut("FALLBACK"))
+    assert.equal(r.navigate.mock.callCount(), 0)
+    assert.equal(r.openPaymentSheet.mock.callCount(), 1)
+    const [item, opts] = r.openPaymentSheet.mock.calls[0].arguments
+    assert.equal(item.product_id, "p1")
+    assert.equal(opts?.preferNewCard, false, "сохранённые карты остаются доступны")
+  })
+
+  it("CANCELED → те же гарантии, что REJECTED", async () => {
+    const r = await runWith(payOut("ERROR", { error_code: "CANCELED" }))
+    assert.equal(r.navigate.mock.callCount(), 0)
+    assert.equal(r.openPaymentSheet.mock.callCount(), 1)
+  })
+
+  it("нет карт (существующая ветка openPaymentSheet) → форма новой карты, не `/`", async () => {
+    const r = await runWith(payOut("FALLBACK", { openPaymentSheet: true, savedCards: [] }))
+    assert.equal(r.navigate.mock.callCount(), 0)
+    assert.equal(r.openPaymentSheet.mock.callCount(), 1)
+    assert.equal(r.openPaymentSheet.mock.calls[0].arguments[1]?.preferNewCard, true)
+  })
+
+  it("сеть/timeout (showRetry) → остаёмся с повтором, без навигации", async () => {
+    const r = await runWith(payOut("ERROR", { showRetry: true, showFallbackMethods: false }))
+    assert.equal(r.navigate.mock.callCount(), 0)
+    assert.equal(r.openPaymentSheet.mock.callCount(), 0)
+  })
+})
+
+describe("TASK_94 Патч 1 — regression: checkout и Quick Repeat вне ЛК", () => {
+  it("Checkout успех по-прежнему через /payment-result, отказ — status=fail", () => {
+    const src = readFileSync(join(root, "app/frontend/routes/Checkout.svelte"), "utf8")
+    assert.match(src, /push\(`\/payment-result\?status=ok&order_id=\$\{orderId\}`\)/)
+    assert.match(src, /push\(`\/payment-result\?status=fail&order_id=\$\{orderId\}`\)/)
+    assert.doesNotMatch(src, /historyRepeatAdapter/)
+  })
+
+  it("RepeatSection (Quick Repeat) не использует навигацию ЛК-повтора", () => {
+    const src = readFileSync(join(root, "app/frontend/components/RepeatSection.svelte"), "utf8")
+    assert.doesNotMatch(src, /historyRepeatAdapter/)
+    assert.match(src, /runRepeatWidgetPayFlow/)
+  })
+})
