@@ -9,6 +9,7 @@
   import {
     pollSbpPaymentStatus,
     isSbpReturnSuccessStatus,
+    resolveWaitingScreenTransition,
     checkOrderStatus,
     SBP_INCOMPLETE_MESSAGE,
     SBP_WAITING_FOR_BANK_MESSAGE,
@@ -29,6 +30,7 @@
   let prefillEmail = $state("")
   let askReceiptEmail = $state(true)
   let reconnectToken = $state("")
+  let transitionRunning = false
 
   /** После успешной оплаты: финализировать сессию, но остаться на экране с email-блоком. */
   async function prepareSuccessScreen() {
@@ -77,6 +79,44 @@
     }
   }
 
+  /** TASK_86 Патч 1: recovery сменил status на уже смонтированном WAITING-экране. */
+  async function applyWaitingTransition(action) {
+    if (transitionRunning) return
+    transitionRunning = true
+    err = null
+    try {
+      if (action === "success") {
+        const ok = await prepareSuccessScreen()
+        if (!ok) {
+          waitingForBank = false
+          return
+        }
+        await maybeAutoReturnToCatalog()
+        return
+      }
+      clearPendingOrder()
+      waitingForBank = false
+      status = "fail"
+      message = SBP_INCOMPLETE_MESSAGE
+    } catch (e) {
+      err = e.message || SBP_INCOMPLETE_MESSAGE
+    } finally {
+      transitionRunning = false
+    }
+  }
+
+  function syncWaitingWithHash() {
+    if (loading || !waitingForBank) return
+    const params = new URLSearchParams(window.location.hash.split("?")[1] || "")
+    const action = resolveWaitingScreenTransition({
+      currentStatus: status,
+      nextStatus: params.get("status"),
+      currentOrderId: orderId,
+      nextOrderId: params.get("order_id")
+    })
+    if (action !== "none") applyWaitingTransition(action)
+  }
+
   async function handleEmailSubmit({ email, marketing_consent }) {
     emailSubmitting = true
     try {
@@ -108,6 +148,11 @@
     if (askReceiptEmail) return
     await handleEmailSkip()
   }
+
+  onMount(() => {
+    window.addEventListener("hashchange", syncWaitingWithHash)
+    return () => window.removeEventListener("hashchange", syncWaitingWithHash)
+  })
 
   onMount(async () => {
     const query = window.location.hash.split("?")[1] || ""
@@ -143,6 +188,8 @@
       if (status === "waiting") {
         waitingForBank = true
         loading = false
+        // hash мог смениться, пока шёл reconnect/profile
+        syncWaitingWithHash()
         return
       }
 

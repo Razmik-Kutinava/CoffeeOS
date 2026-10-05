@@ -3,14 +3,14 @@
 | Поле | Значение |
 |------|----------|
 | **Основание** | [TASK_86 § Патч 1: 02.10.2026](../milestones/veha_2/requirements/customer_tasks/TASK-86-Восстановление%20PWA%20после%20оплаты%20СБП-EXT.md) · Subtask 4 и 5 (patch v2) · остальные Subtask #86 — контекст, не scope |
-| **Статус** | intake `[x]` · SPEC `[x]` → RED |
+| **Статус** | GREEN `[x]` → `/regress` → `/review` |
 
 ## SBR
 
-- [x] intake Патча 1 в `customer_tasks/TASK-86-…-EXT.md`
+- [x] intake Патча 1 в `customer_tasks/TASK-86-…-EXT.md` · `26615bfb`
 - [x] SPEC — факт ниже, файлы, Не ломать, Проверка
-- [ ] RED — unit `resolveWaitingScreenTransition` + исходник `PaymentResult` (hashchange-подписка)
-- [ ] GREEN — `PaymentResult` реагирует на смену `status` без remount
+- [x] RED `0e85e41d` — нет экспорта `resolveWaitingScreenTransition` (импорт падает)
+- [x] GREEN — `resolveWaitingScreenTransition` + `hashchange` в `PaymentResult` (`applyWaitingTransition`, повторный `syncWaitingWithHash` после reconnect) · JS зона 71 → 70/1 (1 = legacy #71 `email_collection_test` по `Checkout.svelte`, не наш файл) · Rails 24/0 · `vite build` OK
 - [ ] `/regress` → `/review` (bugbot + security + crit-audit, Entire, push, CI)
 - [ ] `COMPONENT_MAP.md` строка `PaymentResult` — только после зелёного Review
 - [ ] Device: Android/iOS «вернулся в открытый PWA → экран сам ушёл в результат» — после deploy по апруву

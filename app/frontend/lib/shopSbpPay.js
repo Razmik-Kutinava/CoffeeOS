@@ -30,6 +30,22 @@ export function isSbpReturnSuccessStatus(status) {
   return s === "success" || s === "ok"
 }
 
+/**
+ * TASK_86 Патч 1: смена query на уже смонтированном #/payment-result (тот же маршрут → нет remount).
+ * Переход только из waiting и только для того же orderId.
+ *
+ * @returns {"success"|"incomplete"|"none"}
+ */
+export function resolveWaitingScreenTransition({ currentStatus, nextStatus, currentOrderId, nextOrderId } = {}) {
+  if (String(currentStatus || "").toLowerCase() !== "waiting") return "none"
+  const id = String(currentOrderId || "").trim()
+  if (!id || String(nextOrderId || "").trim() !== id) return "none"
+  const next = String(nextStatus || "").toLowerCase()
+  if (next === "ok_sbp" || isSbpReturnSuccessStatus(next)) return "success"
+  if (next === "fail" || next === "cancel") return "incomplete"
+  return "none"
+}
+
 function isSbpTerminalFailure(res) {
   const status = String(res?.status || "").toLowerCase()
   if (SBP_TERMINAL_STATUSES.has(status)) return true
