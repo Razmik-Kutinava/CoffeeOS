@@ -4,7 +4,7 @@
  */
 import { addToCart } from "./shopCartAdd.js"
 import { loadGuestProfile } from "./shopGuestProfile.js"
-import { createWidgetPayFsm } from "./shopWidgetPayFsm.js"
+import { createWidgetPayFsm, WIDGET_FSM_STATES } from "./shopWidgetPayFsm.js"
 import {
   runRepeatWidgetPayFlow,
   resolveCardDeclineFallbackUi,
@@ -103,14 +103,42 @@ function markInvalidTokenFromPay(out) {
   }
 }
 
+let resetTimer = null
+
+function clearResetTimer() {
+  if (resetTimer) clearTimeout(resetTimer)
+  resetTimer = null
+}
+
+async function defaultNavigate(path) {
+  const { push } = await import("svelte-spa-router")
+  push(path)
+}
+
+async function defaultOpenPaymentSheet(item, opts) {
+  const { openRepeatPaymentSheet } = await import("./openRepeatPaymentSheet.js")
+  return openRepeatPaymentSheet(item, opts)
+}
+
 /**
  * Оркестрация как RepeatSection.onPayCardClick, источник состава — historical Order.
+ * TASK_94 Патч 1: CONFIRMED → главный экран `/` (статус через OrderStatusSheet);
+ * отказ карты → существующий экран оплаты (PaymentMethodsSheet), не `/`.
  * @param {object} opts
  * @param {object} opts.order — полный order JSON (с product_id в items)
  * @param {(path: string, opts?: object) => Promise<object>} opts.api
  * @returns {Promise<object>}
  */
-export async function runHistoryRepeatPayFlow({ order, api }) {
+export async function runHistoryRepeatPayFlow({
+  order,
+  api,
+  createOrder = createOrderFromHistoryOrder,
+  payFlow = runRepeatWidgetPayFlow,
+  navigate = defaultNavigate,
+  openPaymentSheet = defaultOpenPaymentSheet,
+  setTimeoutFn = setTimeout
+}) {
+  clearResetTimer()
   const activeKey = `history:${order?.id || "unknown"}`
   const fsm = createWidgetPayFsm()
   fsm.start()
@@ -127,15 +155,20 @@ export async function runHistoryRepeatPayFlow({ order, api }) {
   })
 
   try {
-    const { orderId } = await createOrderFromHistoryOrder(order, { api })
+    const { orderId } = await createOrder(order, { api })
     fsm.orderId = orderId
-    const out = await runRepeatWidgetPayFlow({
+    const out = await payFlow({
       orderId,
       api,
       fsm,
       onStatusText: (label) => patchRepeatInlinePayUi({ statusText: label })
     })
     markInvalidTokenFromPay(out)
+    if (out?.fsm?.state === WIDGET_FSM_STATES.SUCCESS) {
+      resetRepeatInlinePayUi()
+      await navigate("/")
+      return out
+    }
     patchRepeatInlinePayUi({
       fsm: out.fsm,
       statusText: out.statusText,
@@ -146,16 +179,18 @@ export async function runHistoryRepeatPayFlow({ order, api }) {
       showNewCardForm: false,
       savedCards: out.savedCards || []
     })
-    if (out.openPaymentSheet) {
+    if (out.openPaymentSheet || (out.showFallbackMethods && !out.showRetry)) {
       const first = historyOrderItemsToRepeatItems(order)[0]
       if (first) {
-        const { openRepeatPaymentSheet } = await import("./openRepeatPaymentSheet.js")
-        await openRepeatPaymentSheet(first, { preferNewCard: true })
+        await openPaymentSheet(first, { preferNewCard: !!out.openPaymentSheet })
       }
       return out
     }
     if (out.resetAfterMs) {
-      setTimeout(() => resetRepeatInlinePayUi(), out.resetAfterMs)
+      resetTimer = setTimeoutFn(() => {
+        resetTimer = null
+        resetRepeatInlinePayUi()
+      }, out.resetAfterMs)
     }
     return out
   } catch (e) {

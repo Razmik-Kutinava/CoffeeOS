@@ -62,13 +62,13 @@
 |------|----------|
 | **Основание** | [TASK_94 § Патч 1: 2026-10-01](../milestones/veha_2/requirements/customer_tasks/TASK-94-Повтор-покупки-из-истории-ЛК-с-one-click-оплатой.md) · Subtask 5, 6 (patch v1) · [Google Doc](https://docs.google.com/document/d/19QWNuRirU9jGkzFMY7sXXQV8xFTf2oEq_u3Yf0fo-6w/edit) |
 | **Тип** | патч (1-й к TASK_94) |
-| **Статус** | `/patch` `[x]` → ждёт `/sbr` |
+| **Статус** | `/patch` `05e35409` · RED `314bf518` · GREEN — см. коммит `[GREEN]` → ждёт `/regress` |
 
 ## SBR
 
-- [x] `/patch`: аудит + текст патча 1:1 в ТЗ
-- [ ] RED — failing-тесты CONFIRMED / REJECTED / CANCELED + regression
-- [ ] GREEN
+- [x] `/patch`: аудит + текст патча 1:1 в ТЗ `05e35409`
+- [x] RED `314bf518` — 5 fail (CONFIRMED / REJECTED / CANCELED / нет карт / сеть), regression 2/2 зелёные
+- [x] GREEN — `historyRepeatAdapter.runHistoryRepeatPayFlow`: SUCCESS → `resetRepeatInlinePayUi` + `navigate("/")` без reset-таймера; FALLBACK/ERROR без `showRetry` → `openRepeatPaymentSheet(first, { preferNewCard: false })`; NO_CARD → `preferNewCard: true`; сеть/timeout — inline retry как было · DI (`createOrder`/`payFlow`/`navigate`/`openPaymentSheet`/`setTimeoutFn`) для тестов
 - [ ] `/regress` · `/review` (bugbot + security + crit-audit, push)
 - [ ] `COMPONENT_MAP.md` (Profile / OrderReceipt / historyRepeatAdapter) — после Review
 - [ ] deploy по апруву → Fly MCP Point A (закрывает и G5 базовой TASK_94)
@@ -84,11 +84,11 @@
 - CONFIRMED → снять таймеры → `push("/")` (как Quick Repeat; не `/payment-result`) → статус через существующий `OrderStatusSheet`
 - REJECTED/CANCELED → `openRepeatPaymentSheet` (весь состав уже в корзине) → `#/checkout` fallback; не `#/`
 
-## Файлы (ожидаемо)
+## Файлы
 
-- `app/frontend/lib/historyRepeatAdapter.js` — orchestration результата
-- `app/frontend/routes/Profile.svelte`, `app/frontend/routes/OrderReceipt.svelte` — только если нужен вызов навигации на уровне экрана
-- `test/javascript/lk_history_repeat_one_click_test.mjs` · при необходимости `test/integration/shop/lk_history_repeat_one_click_test.rb`
+- `app/frontend/lib/historyRepeatAdapter.js` — orchestration результата (единственный файл кода)
+- `test/javascript/lk_history_repeat_one_click_test.mjs` — +7 тестов (5 поведенческих + 2 regression)
+- `Profile.svelte` / `OrderReceipt.svelte` / `widgetRepeatPayFlow.js` / `openRepeatPaymentSheet.js` — не тронуты
 
 ## Не ломать
 
@@ -99,18 +99,19 @@
 
 ## Проверка
 
-1. `node --test test/javascript/lk_history_repeat_one_click_test.mjs`
-2. Regression JS: quick repeat / widget pay / checkout pay тесты зоны
-3. `ruby bin/rails test test/integration/shop/lk_history_repeat_one_click_test.rb`
-4. `npx tsc --noEmit` (если применимо к проекту) · `vite build`
-5. Ручная: Profile → Повторить → PROCESSING → CONFIRMED → `#/` со статусом; отказ → `#/checkout` с картами/СБП
+1. `node --test test/javascript/lk_history_repeat_one_click_test.mjs` — 12/0
+2. Regression JS (21 файл `*repeat*|*widget*|*inline*|*checkout*|*order_status*|*cart_sheet*|*payment*`) — 247/0
+3. `ruby bin/rails test test/integration/shop/lk_history_repeat_one_click_test.rb` — 5/0
+4. `npx vite build` — OK · `npx tsc --noEmit` — н/п (в репо нет `tsconfig.json`)
+5. Ручная (после deploy): Profile → Повторить → PROCESSING → CONFIRMED → `#/` со статусом; отказ → `#/checkout` с картами/СБП
 
 ## DoD
 
-- [ ] CONFIRMED: polling/таймеры сняты, пользователь на `#/`, заказ в `OrderStatusSheet`
-- [ ] REJECTED и CANCELED: не `#/`, открыт существующий экран оплаты (повтор / другая карта / новая карта / СБП)
-- [ ] Обычный checkout и Quick Repeat вне ЛК без изменений (regression)
-- [ ] targeted + regression зелёные
+- [x] CONFIRMED: reset-таймер не ставится, polling завершён в flow, пользователь на `#/`, статус — существующий `OrderStatusSheet` (refresh на mount/poll)
+- [x] REJECTED и CANCELED: не `#/`, открыт существующий экран оплаты (повтор / другая карта / новая карта / СБП)
+- [x] Обычный checkout и Quick Repeat вне ЛК без изменений (regression)
+- [x] targeted + regression зелёные
+- [ ] Ручная проверка на Fly после deploy
 
 ---
 
