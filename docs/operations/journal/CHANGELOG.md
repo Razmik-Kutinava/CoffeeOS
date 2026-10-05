@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-05 — fix: #71 Патч_2 — email после оплаты в `receipt_email`, сервер первичен, чек как до Патч_1
+
+- **Intake** `5ebf03b0` — Патч_2 (Google Doc п.6) 1:1 в ТЗ #71. 2-й патч → следующий = переписать ТЗ.
+- **Причина регрессии чека:** Патч_1 писал неподтверждённый post-pay email в `MobileCustomer.email` → `TbankReceiptBuilder.for_order!` слал `Receipt.Email` вместо `Phone`; очистка стирала OTP-email.
+- **RED** `1123d987` → **GREEN** `ad6b448e`: колонка `mobile_customers.receipt_email` (миграция + перенос неподтверждённых email; у строк без телефона `email` не обнуляем) · `Orders::EmailService` пишет только `receipt_email` · `profile` API отдаёт `receipt_email` · `resolveReceiptEmailPrefill` (сервер → LS → guest profile) в `PaymentResult` · пустой submit чистит LS (`clearReceiptEmail`). `TbankReceiptBuilder` / payment / callcheck / `Checkout.svelte` не тронуты.
+- Тесты: новый `orders_email_patch2_test.rb` (receipt Phone, OTP-email цел, изоляция A/B, чужой order → 404, order#1 → profile → order#2) · P1-тесты переписаны под `receipt_email` · JS 6 кейсов приоритета.
+- **Local:** зона 39/0 · Rails shop+payments+jobs 1225/0 · JS 677 — 60 legacy · vite build OK · RuboCop 0.
+
 ## 2026-10-05 — fix: TASK_86 Патч 1 — WAITING-экран СБП переходит в результат без remount
 
 - Патч 1 (2026-10-02) из Google Doc вписан секцией в TASK-86-EXT.

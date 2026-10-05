@@ -1,3 +1,67 @@
+# todo — #71 Патч_2: server-first prefill email, `receipt_email`, Receipt contract
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [#71 § Патч_2: 2026-10-05](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md) · Subtask 1–15 Патч_2 · исходные Subtask и Патч_1 — контекст · [Google Doc](https://docs.google.com/document/d/1igng5OvrPOKMs5NkAZ8CAQYSufJBk3i3ZTI3bTgFLY8/edit?usp=sharing) п.6 |
+| **Тип** | патч (2-й к #71; 3-й → переписать ТЗ) |
+| **Статус** | RED `1123d987` · GREEN `ad6b448e` · `/regress` локально PASS → `/review` |
+| **Решение владельца** | хранение post-pay email — новая колонка `mobile_customers.receipt_email` (не `TbankReceiptBuilder`) |
+
+## SBR
+
+- [x] intake `5ebf03b0`
+- [x] Аудит: `email_service.rb:61-87` писал неподтверждённый email в `MobileCustomer.email` → `tbank_receipt_builder.rb:24-27` брал его в `Receipt.Email` вместо `Phone`; очистка стирала OTP-email (`:68`); `PaymentResult.svelte:185` — LS раньше сервера
+- [x] RED `1123d987` — Rails 25 runs 5F/12E · JS 9 новых fail (+1 legacy Checkout)
+- [x] GREEN `ad6b448e` — миграция `receipt_email` + перенос · `EmailService` → только `receipt_email` · `profile_json.receipt_email` · `resolveReceiptEmailPrefill` · `clearReceiptEmail` при пустом submit
+- [x] Регрессия локально: Rails `test/integration/shop` + `test/services/{payments,shop}` + `test/jobs` 1225/0 · JS 677 — 60 legacy · vite build OK · RuboCop 0
+- [ ] Entire attach на GREEN (сессия этого чата не видна CLI) — на `/review` до push
+- [ ] `/review`: bugbot + security + crit-audit → push → CI
+- [ ] `COMPONENT_MAP.md` строка `PaymentResult` (receipt_email, server-first) — после Review
+- [ ] deploy по апруву → миграция на проде → Fly MCP Point A
+
+## Файлы
+
+- `db/migrate/20261005120000_add_receipt_email_to_mobile_customers.rb` — новый (+ `db/schema.rb`: версия + колонка)
+- `app/services/orders/email_service.rb` — `persist_customer_contact!` → `receipt_email`
+- `app/controllers/shop/api/profile_controller.rb` — `receipt_email` в JSON
+- `app/frontend/lib/emailCollection.js` — `resolveReceiptEmailPrefill`
+- `app/frontend/lib/shopGuestProfile.js` — `clearReceiptEmail`
+- `app/frontend/routes/PaymentResult.svelte` — server-first prefill, очистка LS
+- `test/integration/shop/api/orders_email_patch2_test.rb` — новый · `orders_email_test.rb` (P1 → `receipt_email`) · `test/javascript/email_collection_test.mjs`
+
+## Не ломать
+
+- payment flow, callcheck / verified phone, `TbankReceiptBuilder`, `Receipt.Email/Receipt.Phone`, `OrderEmail`, `ActiveOrders`, `receiptView`, SMS, CRM consent
+- `Checkout.svelte` (общий #89/#90/#91) — не трогали
+- LS / guest-profile — только fallback
+- `PaymentResult`: `maybeAutoReturnToCatalog` (TASK_91), Continue → `handleEmailSkip` (#35), SBP waiting (#79/#86)
+
+## Проверка
+
+1. `ruby bin/rails test test/integration/shop/api/orders_email_patch2_test.rb test/integration/shop/api/orders_email_test.rb test/services/payments/tbank_receipt_builder_test.rb test/integration/shop/api/email_verify_customer_link_test.rb` — 39/0
+2. `node --test test/javascript/email_collection_test.mjs` — 26/1 (1 = legacy Checkout `identityReady`)
+3. `ruby bin/rubocop` по изменённым Ruby — 0
+4. Сквозной: P2 S4/S15 (order#1 → save → order#2 → `GET profile.receipt_email`) + JS S4/S15
+5. Изоляция: P2 S6/S7 · Чек: P2 S11/S12
+
+## DoD
+
+- [x] Server profile — primary source prefill
+- [x] LocalStorage — только fallback
+- [x] order#1 → save → order#2 → server prefill покрыт тестами (backend + resolver)
+- [x] Повторный запрос email на втором success не показывается (`ask: false` при server email)
+- [x] Email сохраняется только для customer текущего заказа (session/token ownership)
+- [x] Чужой order → 404, профиль A не меняется
+- [x] Изменение email обновляет `receipt_email`
+- [x] Очистка — `receipt_email` nil + LS очищен
+- [x] Повтор без дублей (OrderEmail / receipt job / contact)
+- [x] `Receipt.Email/Receipt.Phone` как до Патч_1 (тест)
+- [x] Ошибка profile API не блокирует success (catch → fallback)
+- [x] LS-hide regression зелёный
+- [ ] Fly MCP Point A — после deploy
+
+---
+
 # todo — TASK_37 Патч 1: CSP ответа `/firebase-messaging-sw.js` разрешает gstatic
 
 | Поле | Значение |
