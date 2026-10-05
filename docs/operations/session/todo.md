@@ -9,8 +9,8 @@
 
 - [x] intake `a8992dc9` · ledger `96fa9c9a`
 - [x] SPEC — факты + решение владельца по акции 11 ₽ (ниже)
-- [ ] RED — `payment_methods_order_total_test.mjs` + `cart_total_amount_test.rb`
-- [ ] GREEN
+- [x] RED `3b752e0a` — JS 8 fail (нет `labelOrderTotal` / `formatRubAmount` / строки) · Rails 3/0 сразу (контракт `total` = `Amount/100` уже есть — фиксирует, ожидаемо)
+- [x] GREEN `5fdefa93` (Entire `01M45FTHXKPJ8GNP4F47DNQX7Q`) — строка `Итого` под header шторки (`{#if orderTotalLabel}`), `labelOrderTotal` / `formatRubAmount` (NBSP) в i18n · GATES G1–G7 met (JS 10/0 · Rails 3/0 · scope OK · JS зона · Rails зона · vite build) · G8 manual
 - [ ] `/regress`
 - [ ] `/review` (bugbot + security + crit-audit, push) · БЛОК 4 `COMPONENT_MAP.md` (строка PaymentMethodsSheet + TASK_101)
 
