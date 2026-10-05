@@ -6,6 +6,7 @@
 
 | ID | Статус | Блокер |
 |----|--------|--------|
+| SBP webhook `RATE_LIMITED` | 🟡 | `SbpAccountTokenFromWebhook#call!` проверяет только `BLOCKED`; `SbpAccountTokenStore.persist!` при velocity возвращает `:rate_limited` → `stored.method_hash` → `NoMethodError` в callback (найдено на TASK_102, вне scope) |
 | UserCards / RebillId | 🟢 | v493 MIR RebillId+Charge PASS · new save_card FA не re-run |
 | Checkout UX (Фаза 2) | 🟡 | апрув заказчика |
 | SBP 3001 | 🟢 | live init ≠3001 · остаток: bind AccountToken (B) |

@@ -1,3 +1,70 @@
+# todo — TASK_102 (#75 Патч 1): промо 11 ₽ не повторяется при уже сохранённой карте/СБП
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [#75 «Привязка способа оплаты и промо 11₽» § Патч 1: 2026-10-05](../milestones/veha_2/requirements/customer_tasks/Привязка%20способа%20оплаты%20и%20промо%2011₽.md) · Subtask 1–18 (patch v1) · исходные сценарии #75 — контекст, не scope · [Google Doc TASK_102](https://docs.google.com/document/d/13FpCn2e2dCtJEoTUndzCTD6BU5teVvOYQWiKciQz-Pk/edit?usp=sharing) |
+| **Тип** | патч (1-й к #75): сценарий «Не показывать промо после использования» был, журнал не покрывал legacy / сохранение без промо |
+| **Статус** | intake `c8d52260` · RED `ea28c9fb` · GREEN `eb2d3d1d` → `/regress` → `/review` |
+| **Решение агента (делегировано владельцем 2026-10-05)** | Subtask 18: сохранение без промо тоже пишет growth-запись (`saved_without_promo`), иначе дыра открывается снова после backfill |
+
+## SBR
+
+- [x] `/patch`: аудит (файл:строка) + секция Патч 1 в ТЗ #75 `c8d52260` — отдельный SPEC не нужен, секция патча = SPEC (файлы, инварианты, Scope)
+- [x] RED `ea28c9fb` — 21 run: 16 E (нет `Payments::GrowthLedgerBackfill`, нет `card_binding_attempts.source`), 5 зелёных = 3 старых теста контроллера + 2 охранных (до backfill MPM не читается; повторное сохранение без новых записей)
+- [x] GREEN `eb2d3d1d` — миграция `source` + backfill в `up`, `GrowthLedgerBackfill` (батчи, preload покрытия), `CardBindingAttempt.growth_covered?`, `GrowthPromo.cover_saved_method!` (savepoint) после `consume_from_payment!` в `SavedCardStore` и `SbpAccountTokenFromWebhook`, rake `growth_ledger:backfill:{dry_run,apply}` · целевые 21/0 · зона 1489/0 · RuboCop 0
+- [ ] Entire — GREEN из Windows без трейлера → attach на REVIEW
+- [ ] `/regress` (оплата/промо/подписочный оффер)
+- [ ] `/review` — bugbot + security + crit-audit → push → CI
+- [ ] `COMPONENT_MAP.md` — после Review (строки `GrowthPromo` нет; добавить `growth_promo.rb` / `growth_ledger_backfill.rb`)
+- [ ] deploy по апруву: миграция запускает backfill на проде → `bin/rails growth_ledger:backfill:dry_run` должен дать `to_create: 0` → Fly MCP Point A
+
+## Факт (аудит)
+
+- Eligibility = только журнал `card_binding_attempts.is_growth_event` по `phone_digest` / `method_hash` (`growth_promo.rb:9-25`, `card_binding_attempt.rb:42-53`); `method_hash` в проде `nil`.
+- Growth-запись пишет только `consume_from_payment!` при `growth_promo_intent`; сохранение без промо — `is_growth_event: false` (`saved_card_store.rb:144-156`, `sbp_account_token_store.rb:129-140`).
+- Лимит акции = growth-записи по `point_id` (`card_binding_attempt.rb:56-60`) → новые записи только с `point_id = NULL`.
+- Телефон — HMAC-digest с pepper (`card_binding_attempt.rb:12-21`) → backfill только Ruby (образец `MobilePaymentMethodsCardHashMigration`).
+- RLS на `card_binding_attempts` / `mobile_payment_methods` / `mobile_customers` нет → обход не нужен.
+
+## Файлы
+
+1. `db/migrate/20261005140000_add_source_to_card_binding_attempts.rb` — новый: колонка `source` (string 32) + `GrowthLedgerBackfill.run!`; `down` удаляет `backfill_pre_promo` / `saved_without_promo` и колонку (+ `db/schema.rb`: версия + колонка)
+2. `app/services/payments/growth_ledger_backfill.rb` — новый: все `mobile_payment_methods` card/sbp (вкл. неактивные, без `ya_pay`), батчи по 500, покрытие preload-ом, `point_id = nil`, `dry_run`
+3. `app/models/card_binding_attempt.rb` — `record!` принимает `source`; `growth_covered?`
+4. `app/services/payments/growth_promo.rb` — `cover_saved_method!` (правило покрытия, savepoint, `rescue` → log); `eligible?` / `available?` / `price!` / `charge_amount` не менялись
+5. `app/services/payments/saved_card_store.rb`, `app/services/payments/sbp_account_token_from_webhook.rb` — один вызов `cover_saved_method!` сразу после `consume_from_payment!`
+6. `lib/tasks/growth_ledger_backfill.rake` — новый: `dry_run` / `apply`
+7. `test/services/payments/growth_ledger_backfill_test.rb` — новый (20 тестов) · `test/controllers/shop/api/user_cards_controller_test.rb` +1 (legacy карта + повторный вход)
+
+## Не ломать
+
+- Контракт `GrowthPromo` для `OfferPresentationService` / `SubscriptionOfferEligibility` (COMPONENT_MAP строка `OfferPresentationService`: «GrowthPromo только читать»)
+- Настоящий growth 11 ₽: запись с `point_id`, счётчик точки +1, `refresh_counter!` (Subtask 11 — тест)
+- «Не тратить право при отказе от чекбокса»: без `save_card` / `save_sbp_account` метод не сохраняется → журнал не пишется
+- `BindingVelocity`, `foreign_active_binding?`, unique-индексы, callback/webhook, банковский flow, OTP/auth, PWA `PaymentMethodsSheet`
+
+## Проверка
+
+1. `ruby bin/rails test test/services/payments/growth_ledger_backfill_test.rb test/controllers/shop/api/user_cards_controller_test.rb` — 21/0
+2. `ruby bin/rails test test/services/payments test/services/shop test/services/subscriptions test/models test/controllers/shop test/integration/shop test/jobs` — 1489/0
+3. `ruby bin/rubocop` по изменённым Ruby — 0
+4. Миграция: `bin/rails db:migrate` (dev + test) — backfill отработал без ошибок; повтор → `bin/rails growth_ledger:backfill:dry_run` → `to_create: 0`
+5. ТЗ `npm test` / `npx tsc --noEmit` — н/п (Rails, TypeScript в репо нет)
+
+## DoD
+
+- [x] `card_binding_attempts` — единый журнал права на промо
+- [x] legacy карты / СБП покрыты backfill-ом (`backfill_pre_promo`), без legacy-ветки в `GrowthPromo`
+- [x] backfill идемпотентен, не трогает лимит точки
+- [x] повторный вход не возвращает промо (API `growth_promo.eligible = false`)
+- [x] карта → СБП и СБП → карта не дают промо повторно
+- [x] `price!` с `bind_requested = true` берёт полную сумму, если журнал покрывает телефон
+- [x] сохранение без промо закрывает право (`saved_without_promo`)
+- [x] тесты зелёные
+- [ ] Review + CI · deploy (миграция) по апруву · Fly MCP Point A
+
+---
+
 # todo — Задача_2 (ЛК в PWA) Патч 3: убрать support-chat из шапки витрины
 
 | Поле | Значение |

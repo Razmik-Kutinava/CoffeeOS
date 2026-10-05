@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-05 — feat: TASK_102 (#75 Патч 1) — промо 11 ₽ не повторяется при уже сохранённом способе оплаты
+
+- Аудит: право на промо считалось только по growth-записям `card_binding_attempts`; карты/СБП, сохранённые до #75 или без промо, записей не имели → `growth_promo.eligible = true`.
+- **RED** `ea28c9fb` → **GREEN** `eb2d3d1d`: колонка `card_binding_attempts.source`; миграция запускает `Payments::GrowthLedgerBackfill` (все card/sbp, вкл. неактивные → `is_growth_event`, `backfill_pre_promo`, `point_id = NULL`); `GrowthPromo.cover_saved_method!` пишет `saved_without_promo` после `consume_from_payment!` в `SavedCardStore` и `SbpAccountTokenFromWebhook`; rake `growth_ledger:backfill:{dry_run,apply}`. Логика `eligible?` / `available?` / `price!` не менялась.
+- **Local:** целевые 21/0 · payments/shop/subscriptions/models/integration shop/jobs 1489/0 · RuboCop 0. Найдено вне scope: SBP webhook падает на `RATE_LIMITED` → ISSUES.
+
 ## 2026-10-05 — fix: Задача_2 (ЛК в PWA) Патч 3 — в шапке витрины нет иконки поддержки
 
 - Патч 1 (2026-09-17) не был выполнен: кнопка `shop-header-support-chat` в `Header.svelte` стояла вне `{#if narrow}` → видна на всех ширинах. Патч 3 (2026-10-02) из Google Doc вписан в ТЗ ЛК.
