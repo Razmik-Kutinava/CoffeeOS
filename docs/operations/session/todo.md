@@ -12,7 +12,9 @@
 - [x] RED `3b752e0a` — JS 8 fail (нет `labelOrderTotal` / `formatRubAmount` / строки) · Rails 3/0 сразу (контракт `total` = `Amount/100` уже есть — фиксирует, ожидаемо)
 - [x] GREEN `5fdefa93` (Entire `01M45FTHXKPJ8GNP4F47DNQX7Q`) — строка `Итого` под header шторки (`{#if orderTotalLabel}`), `labelOrderTotal` / `formatRubAmount` (NBSP) в i18n · GATES G1–G7 met (JS 10/0 · Rails 3/0 · scope OK · JS зона · Rails зона · vite build) · G8 manual
 - [x] `/regress` PASS (на `c7f0cff0`): JS весь `test/javascript` 650 — 60 fail = legacy (те же 3 набора: #71 email, sticky cancel, personal cabinet [RED]) · Rails `test/integration/shop` + `test/services/payments` 811/0 · `vite build` OK
-- [ ] `/review` (bugbot + security + crit-audit, push) · БЛОК 4 `COMPONENT_MAP.md` (строка PaymentMethodsSheet + TASK_101)
+- [x] `/review`: bugbot 0 · security 0 · crit-audit CLEAN (TASK_101-only, журнал) · Entire `01M45FTHXKPJ8GNP4F47DNQX7Q` на `5fdefa93` · push → CI
+- [ ] `COMPONENT_MAP.md` — новый компонент не создавался (строка внутри `PaymentMethodsSheet`) → БЛОК 4 не требуется; правка карты — только после принятия владельцем, если попросит
+- [ ] G8: 360 px локально / Telegram+Instagram In-App / Fly MCP Point A — после deploy по апруву
 
 ## Факт (до правок)
 

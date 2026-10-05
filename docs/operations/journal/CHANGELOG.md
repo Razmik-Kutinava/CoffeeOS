@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-05 — feat: TASK_101 «Итого» в шторке способов оплаты
+
+- Строка «Итого 3 245 ₽» под заголовком `PaymentMethodsSheet` (над картами / СБП / «Картой +»): серверный `total` корзины (`cartTotalRub`), видна при загрузке и ошибке оплаты, скрыта при 0 / незагруженной сумме; `labelOrderTotal` / `formatRubAmount` (NBSP) в `paymentMethodI18n.js`. Backend/оплата не менялись.
+- Решение владельца: «Итого» = сумма корзины и при акции привязки 11 ₽.
+- RED `3b752e0a` → GREEN `5fdefa93` · JS 10/0 · Rails `cart_total_amount_test` 3/0 (total = Amount/100) · /regress JS 650 (60 legacy) + Rails 811/0 · bugbot/security 0 · crit-audit CLEAN.
+
 ## 2026-10-05 — docs: intake TASK_101 (сумма заказа в блоке способов оплаты)
 
 - ТЗ 1:1 из Google Doc → `customer_tasks/TASK-101-Сумма-заказа-в-блоке-способов-оплаты.md`, строка #101 в CBR. Код не менялся.
