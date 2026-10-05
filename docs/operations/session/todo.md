@@ -69,7 +69,8 @@
 - [x] `/patch`: аудит + текст патча 1:1 в ТЗ `05e35409`
 - [x] RED `314bf518` — 5 fail (CONFIRMED / REJECTED / CANCELED / нет карт / сеть), regression 2/2 зелёные
 - [x] GREEN — `historyRepeatAdapter.runHistoryRepeatPayFlow`: SUCCESS → `resetRepeatInlinePayUi` + `navigate("/")` без reset-таймера; FALLBACK/ERROR без `showRetry` → `openRepeatPaymentSheet(first, { preferNewCard: false })`; NO_CARD → `preferNewCard: true`; сеть/timeout — inline retry как было · DI (`createOrder`/`payFlow`/`navigate`/`openPaymentSheet`/`setTimeoutFn`) для тестов
-- [ ] `/regress` · `/review` (bugbot + security + crit-audit, push)
+- [x] `/regress` PASS — JS 688 (60 fail = legacy, те же 3 набора) · Rails `test/integration/shop` + `test/services/payments` 825/0
+- [ ] `/review` (bugbot + security + crit-audit, push)
 - [ ] `COMPONENT_MAP.md` (Profile / OrderReceipt / historyRepeatAdapter) — после Review
 - [ ] deploy по апруву → Fly MCP Point A (закрывает и G5 базовой TASK_94)
 
