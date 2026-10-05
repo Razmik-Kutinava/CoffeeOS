@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [#71 § Патч_2: 2026-10-05](../milestones/veha_2/requirements/customer_tasks/Email-сбор%20после%20оплаты%20(Callcheck-флоу).md) · Subtask 1–15 Патч_2 · исходные Subtask и Патч_1 — контекст · [Google Doc](https://docs.google.com/document/d/1igng5OvrPOKMs5NkAZ8CAQYSufJBk3i3ZTI3bTgFLY8/edit?usp=sharing) п.6 |
 | **Тип** | патч (2-й к #71; 3-й → переписать ТЗ) |
-| **Статус** | RED `1123d987` · GREEN `ad6b448e` · `/regress` локально PASS → `/review` |
+| **Статус** | RED `1123d987` · GREEN `ad6b448e` · REVIEW fix `20138734` · bugbot/security 0 · crit-audit CLEAN → push/CI |
 | **Решение владельца** | хранение post-pay email — новая колонка `mobile_customers.receipt_email` (не `TbankReceiptBuilder`) |
 
 ## SBR
@@ -14,8 +14,8 @@
 - [x] RED `1123d987` — Rails 25 runs 5F/12E · JS 9 новых fail (+1 legacy Checkout)
 - [x] GREEN `ad6b448e` — миграция `receipt_email` + перенос · `EmailService` → только `receipt_email` · `profile_json.receipt_email` · `resolveReceiptEmailPrefill` · `clearReceiptEmail` при пустом submit
 - [x] Регрессия локально: Rails `test/integration/shop` + `test/services/{payments,shop}` + `test/jobs` 1225/0 · JS 677 — 60 legacy · vite build OK · RuboCop 0
-- [ ] Entire attach на GREEN (сессия этого чата не видна CLI) — на `/review` до push
-- [ ] `/review`: bugbot + security + crit-audit → push → CI
+- [x] `/review`: bugbot #1 — `CustomerProfileMerger` терял `receipt_email` донора → RED `d0e9d883` → GREEN `20138734` → bugbot 0 · security 0 · crit-audit CLEAN · Entire `01M45YZTD6Z31SD7MP9Q7KS21X` на `20138734`
+- [ ] push → CI green
 - [ ] `COMPONENT_MAP.md` строка `PaymentResult` (receipt_email, server-first) — после Review
 - [ ] deploy по апруву → миграция на проде → Fly MCP Point A
 

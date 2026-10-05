@@ -18,6 +18,7 @@
 - **RED** `1123d987` → **GREEN** `ad6b448e`: колонка `mobile_customers.receipt_email` (миграция + перенос неподтверждённых email; у строк без телефона `email` не обнуляем) · `Orders::EmailService` пишет только `receipt_email` · `profile` API отдаёт `receipt_email` · `resolveReceiptEmailPrefill` (сервер → LS → guest profile) в `PaymentResult` · пустой submit чистит LS (`clearReceiptEmail`). `TbankReceiptBuilder` / payment / callcheck / `Checkout.svelte` не тронуты.
 - Тесты: новый `orders_email_patch2_test.rb` (receipt Phone, OTP-email цел, изоляция A/B, чужой order → 404, order#1 → profile → order#2) · P1-тесты переписаны под `receipt_email` · JS 6 кейсов приоритета.
 - **Local:** зона 39/0 · Rails shop+payments+jobs 1225/0 · JS 677 — 60 legacy · vite build OK · RuboCop 0.
+- **REVIEW:** bugbot — `CustomerProfileMerger` терял `receipt_email` донора при слиянии → RED `d0e9d883` → GREEN `20138734` · повторный bugbot 0 · security 0 · crit-audit CLEAN · Entire `01M45YZTD6Z31SD7MP9Q7KS21X`.
 
 ## 2026-10-05 — fix: TASK_86 Патч 1 — WAITING-экран СБП переходит в результат без remount
 
