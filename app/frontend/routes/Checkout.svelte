@@ -457,6 +457,12 @@
     submitting = false
   }
 
+  function onPayErrorTryLater() {
+    payFsmState = PAY_FSM.DEFAULT
+    payErrorCategory = null
+    closePaymentSheet()
+  }
+
   function showPayError(error, category = classifyPaymentError(error, { httpStatus: error?.httpStatus })) {
     payErrorCategory = category
     sheetInlineError = resolveCheckoutSheetInlineError(error, payFsmState, category)
@@ -789,6 +795,7 @@
     loadError={cardsLoadError}
     inlineError={sheetInlineError}
     errorCta={sheetErrorCta}
+    onTryLater={onPayErrorTryLater}
     {selectedCardId}
     {selectionMode}
     bind:saveSbpAccount

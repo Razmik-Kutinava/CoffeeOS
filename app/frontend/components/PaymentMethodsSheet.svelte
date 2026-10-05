@@ -44,6 +44,8 @@
     fsmState = PAY_FSM.DEFAULT,
     newCardState = $bindable(undefined),
     onClose = undefined,
+    /** TASK_100: CTA too_many_attempts (action close) — закрыть шторку со сбросом ошибки */
+    onTryLater = undefined,
     onSelectCard = undefined,
     onSelectNewCard = undefined,
     onSelectSbp = undefined,
@@ -250,7 +252,7 @@
         onPay={() => onPay?.()}
         onRetry={() => onRetry?.()}
         onChangeCard={() => onChangeCard?.()}
-        onClose={() => onClose?.()}
+        onClose={() => (onTryLater ? onTryLater() : onClose?.())}
         {errorCta}
       />
     </div>
