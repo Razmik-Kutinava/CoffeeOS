@@ -14,8 +14,18 @@
     accent = "blue",
     onPay = () => {},
     onRetry = () => {},
-    onChangeCard = () => {}
+    onChangeCard = () => {},
+    onClose = () => {},
+    /** TASK_100: CTA ошибки оплаты `{ label, action: change_card | close | retry }` */
+    errorCta = null
   } = $props()
+
+  const isErrorState = $derived(
+    fsmState === PAY_FSM.CLIENT_ERROR ||
+      fsmState === PAY_FSM.BANK_ERROR ||
+      fsmState === PAY_FSM.NET_ERROR
+  )
+  const activeErrorCta = $derived(isErrorState && errorCta ? errorCta : null)
 
   let shake = $state(false)
   let prevFsm = PAY_FSM.DEFAULT
@@ -40,11 +50,19 @@
       ? loadingLabel
       : fsmState === PAY_FSM.DEFAULT && idleLabel
         ? idleLabel
-        : payFsmLabel(fsmState)
+        : activeErrorCta
+          ? activeErrorCta.label
+          : payFsmLabel(fsmState)
   )
 
   function handleClick() {
     if (disabled) return
+    if (activeErrorCta) {
+      if (activeErrorCta.action === "close") onClose()
+      else if (activeErrorCta.action === "retry") onRetry()
+      else onChangeCard()
+      return
+    }
     const action = resolvePayFsmCtaAction(fsmState)
     if (action === "retry") {
       onRetry()

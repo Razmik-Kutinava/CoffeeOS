@@ -34,10 +34,13 @@
     PAY_FSM,
     MIN_LOADER_MS,
     SUCCESS_REDIRECT_MS,
+    PAY_ERROR_CATEGORY,
     apiWithPayTimeout,
+    classifyPaymentError,
     fsmFromPaymentError,
     isPayFsmClickable,
     resolveCheckoutSheetInlineError,
+    resolvePaymentErrorUi,
     withMinLoaderMs
   } from "../lib/shopPayFsm.js"
   import { waitForOrderSettled } from "../lib/shopPaySettle.js"
@@ -111,6 +114,11 @@
   let showThreeDsOverlay = $state(false)
   let threeDsAborted = $state(false)
   let sheetInlineError = $state(null)
+  /** TASK_100: категория ошибки оплаты → CTA кнопки (виден только вместе с sheetInlineError). */
+  let payErrorCategory = $state(null)
+  const sheetErrorCta = $derived(
+    sheetInlineError ? (resolvePaymentErrorUi(payErrorCategory)?.cta ?? null) : null
+  )
   let cardsLoadError = $state(null)
 
   const phoneE164 = $derived(normalizePhoneToE164Ru(phoneDisplay))
@@ -445,7 +453,13 @@
     threeDsAborted = true
     showThreeDsOverlay = false
     payFsmState = PAY_FSM.CLIENT_ERROR
+    showPayError(null, PAY_ERROR_CATEGORY.PAYMENT_FAILED)
     submitting = false
+  }
+
+  function showPayError(error, category = classifyPaymentError(error, { httpStatus: error?.httpStatus })) {
+    payErrorCategory = category
+    sheetInlineError = resolveCheckoutSheetInlineError(error, payFsmState, category)
   }
 
   async function completePaySuccess(orderId, { wantedSave = false, savedCard = null } = {}) {
@@ -510,11 +524,13 @@
       showThreeDsOverlay = false
       if (threeDsAborted || e?.kind === "three_ds_abort") {
         payFsmState = PAY_FSM.CLIENT_ERROR
+        showPayError(null, PAY_ERROR_CATEGORY.PAYMENT_FAILED)
         return
       }
       if (payFsmState !== PAY_FSM.CLIENT_ERROR) {
         payFsmState = fsmFromPaymentError(e, { httpStatus: e.httpStatus })
       }
+      showPayError(e)
     }
   }
 
@@ -673,7 +689,7 @@
       }
       // #26 step5: inline friendly copy в шторке; сырой e.message не кладём.
       if (mapPaymentErrorSurface({ httpStatus: e.httpStatus, phase: "pay" }) === "inline") {
-        sheetInlineError = resolveCheckoutSheetInlineError(e, payFsmState)
+        showPayError(e)
       }
       if (/подтвердите email/i.test(e.message || "")) {
         emailVerified = false
@@ -772,6 +788,7 @@
     loading={cardsLoading}
     loadError={cardsLoadError}
     inlineError={sheetInlineError}
+    errorCta={sheetErrorCta}
     {selectedCardId}
     {selectionMode}
     bind:saveSbpAccount

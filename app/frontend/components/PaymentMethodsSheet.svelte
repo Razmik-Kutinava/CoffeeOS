@@ -31,6 +31,7 @@
     loading = false,
     loadError = null,
     inlineError = null,
+    errorCta = null,
     selectedCardId = null,
     selectionMode = "saved_card", // saved_card | new_card | sbp | sbp_account
     saveSbpAccount = $bindable(true),
@@ -239,6 +240,8 @@
         onPay={() => onPay?.()}
         onRetry={() => onRetry?.()}
         onChangeCard={() => onChangeCard?.()}
+        onClose={() => onClose?.()}
+        {errorCta}
       />
     </div>
   </section>

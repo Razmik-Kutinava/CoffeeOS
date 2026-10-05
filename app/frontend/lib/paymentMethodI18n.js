@@ -119,3 +119,36 @@ export function paymentMethodLoadErrorMessage() {
 export function paymentMethodRetryLabel() {
   return "Повторить"
 }
+
+/** TASK_100 Матрица: тексты ошибки оплаты — ключи по категориям, не по error_code. */
+export function payErrorInsufficientFunds() {
+  return "Недостаточно средств на карте"
+}
+
+export function payErrorCardExpired() {
+  return "Срок действия карты истёк"
+}
+
+export function payErrorTooManyAttempts() {
+  return "Слишком много попыток оплаты. Попробуйте позже"
+}
+
+export function payErrorCardDeclined() {
+  return "Не удалось списать деньги. Обратитесь в банк — этой картой нельзя оплатить заказ."
+}
+
+export function payErrorPaymentFailed() {
+  return "Не удалось выполнить оплату. Попробуйте ещё раз"
+}
+
+export function ctaChangeCard() {
+  return "Изменить карту"
+}
+
+export function ctaTryLater() {
+  return "Попробовать позже"
+}
+
+export function ctaRetryPayment() {
+  return "Повторить оплату"
+}

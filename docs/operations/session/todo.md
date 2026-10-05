@@ -9,8 +9,8 @@
 
 - [x] intake `f0fa419a` · ledger `a3059bd7`
 - [x] SPEC — классификация кодов + решения владельца (ниже)
-- [ ] RED — `payment_error_matrix_test.mjs` + обновить тесты старого текста
-- [ ] GREEN
+- [x] RED `8bb1b27a` — `payment_error_matrix_test.mjs` (нет экспортов) + 2 теста старого текста
+- [x] GREEN — `classifyPaymentError` / `resolvePaymentErrorUi` / `PAY_ERROR_CATEGORY`, тексты в i18n, `errorCta` в кнопку (close/retry/change_card), `showPayError` в Checkout (вкл. 3DS abort) · + обновлён `repeat_invalid_token_payment_test.mjs` (ждал inline = label кнопки — то самое «смешано») · GATES G1–G6 met (matrix 21/0 · JS зона 68/0 · Rails 4 файла 0F/0E · vite build OK)
 - [ ] `/regress`
 - [ ] `/review` (bugbot + security + crit-audit, push)
 

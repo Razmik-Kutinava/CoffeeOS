@@ -1,6 +1,16 @@
 /** FSM кнопки «Оплатить» (состояния 0–7) — UserCards / nonPCI. */
 
 import { isOfflineError } from "./shopNetwork.js"
+import {
+  ctaChangeCard,
+  ctaRetryPayment,
+  ctaTryLater,
+  payErrorCardDeclined,
+  payErrorCardExpired,
+  payErrorInsufficientFunds,
+  payErrorPaymentFailed,
+  payErrorTooManyAttempts
+} from "./paymentMethodI18n.js"
 
 export const PAY_FSM = {
   DEFAULT: 0,
@@ -23,8 +33,7 @@ export const PAY_FSM_LABELS = {
   [PAY_FSM.PROCESSING]: "Обработка банком…",
   [PAY_FSM.THREE_DS]: "Подтвердите по СМС",
   [PAY_FSM.SUCCESS]: "Оплачено ✔",
-  [PAY_FSM.CLIENT_ERROR]:
-    "Недостаточно средств, или карта заблокирована банком, или истёк срок действия карты",
+  [PAY_FSM.CLIENT_ERROR]: ctaChangeCard(),
   [PAY_FSM.BANK_ERROR]: "Сбой банка: позже",
   [PAY_FSM.NET_ERROR]: "Нет связи. Повторить"
 }
@@ -91,22 +100,82 @@ export function shouldAutoOpenNewCardOnClientError(_state) {
   return false
 }
 
+/** TASK_100 Матрица: категории ошибки оплаты. */
+export const PAY_ERROR_CATEGORY = {
+  INSUFFICIENT_FUNDS: "insufficient_funds",
+  CARD_EXPIRED: "card_expired",
+  TOO_MANY_ATTEMPTS: "too_many_attempts",
+  CARD_DECLINED: "card_declined",
+  PAYMENT_FAILED: "payment_failed"
+}
+
+const TOO_MANY_ATTEMPTS_CODES = new Set(["119", "2200"])
+const BANK_MESSAGE_RE = /сервер|шлюз|банк|инфра|позже|недоступн/i
+
+/**
+ * Категория Матрицы TASK_100. null — сеть / 5xx / сбой банка (вне Матрицы, тексты FSM как были).
+ * Неизвестный код без карточной семантики → PAYMENT_FAILED, не карта.
+ */
+export function classifyPaymentError(error, { httpStatus } = {}) {
+  if (error?.kind === "three_ds_abort") return PAY_ERROR_CATEGORY.PAYMENT_FAILED
+
+  const fsm = fsmFromPaymentError(error, { httpStatus })
+  if (fsm === PAY_FSM.NET_ERROR) return null
+
+  const code = String(error?.error_code || "").trim()
+  if (code === "1051") return PAY_ERROR_CATEGORY.INSUFFICIENT_FUNDS
+  if (code === "1014") return PAY_ERROR_CATEGORY.CARD_EXPIRED
+  if (TOO_MANY_ATTEMPTS_CODES.has(code)) return PAY_ERROR_CATEGORY.TOO_MANY_ATTEMPTS
+  if (fsm === PAY_FSM.CLIENT_ERROR) return PAY_ERROR_CATEGORY.CARD_DECLINED
+
+  const status = Number(httpStatus || error?.httpStatus || 0)
+  if (status >= 500) return null
+  if (BANK_MESSAGE_RE.test(String(error?.message || error || ""))) return null
+
+  return PAY_ERROR_CATEGORY.PAYMENT_FAILED
+}
+
+/**
+ * Текст ошибки и CTA — раздельно (alert ≠ кнопка).
+ * @returns {{ message: string, cta: { label: string, action: "change_card"|"close"|"retry" } }|null}
+ */
+export function resolvePaymentErrorUi(category) {
+  switch (category) {
+    case PAY_ERROR_CATEGORY.INSUFFICIENT_FUNDS:
+      return { message: payErrorInsufficientFunds(), cta: { label: ctaChangeCard(), action: "change_card" } }
+    case PAY_ERROR_CATEGORY.CARD_EXPIRED:
+      return { message: payErrorCardExpired(), cta: { label: ctaChangeCard(), action: "change_card" } }
+    case PAY_ERROR_CATEGORY.TOO_MANY_ATTEMPTS:
+      return { message: payErrorTooManyAttempts(), cta: { label: ctaTryLater(), action: "close" } }
+    case PAY_ERROR_CATEGORY.CARD_DECLINED:
+      return { message: payErrorCardDeclined(), cta: { label: ctaChangeCard(), action: "change_card" } }
+    case PAY_ERROR_CATEGORY.PAYMENT_FAILED:
+      return { message: payErrorPaymentFailed(), cta: { label: ctaRetryPayment(), action: "retry" } }
+    default:
+      return null
+  }
+}
+
 /**
  * Текст в PaymentMethodsSheet (alert) при отказе оплаты.
- * Friendly FSM labels; сырой `Failed to fetch` / ErrorCode не кладём.
- * @param {{ message?: string }|Error|null} _error
+ * Friendly copy; сырой `Failed to fetch` / ErrorCode не кладём.
+ * @param {{ message?: string }|Error|null} error
  * @param {number} fsmState
+ * @param {string|null} [category] — явная категория (3DS abort); иначе из error
  * @returns {string|null}
  */
-export function resolveCheckoutSheetInlineError(_error, fsmState) {
+export function resolveCheckoutSheetInlineError(error, fsmState, category = undefined) {
   if (
-    fsmState === PAY_FSM.NET_ERROR ||
-    fsmState === PAY_FSM.CLIENT_ERROR ||
-    fsmState === PAY_FSM.BANK_ERROR
+    fsmState !== PAY_FSM.NET_ERROR &&
+    fsmState !== PAY_FSM.CLIENT_ERROR &&
+    fsmState !== PAY_FSM.BANK_ERROR
   ) {
-    return payFsmLabel(fsmState)
+    return null
   }
-  return null
+  let cat = category === undefined ? classifyPaymentError(error) : category
+  if (!cat && fsmState === PAY_FSM.CLIENT_ERROR) cat = PAY_ERROR_CATEGORY.CARD_DECLINED
+  const ui = resolvePaymentErrorUi(cat)
+  return ui ? ui.message : payFsmLabel(fsmState)
 }
 
 /** ErrorCode / HTTP / сеть → FSM 5–7. */
@@ -131,7 +200,7 @@ export function fsmFromPaymentError(error, { httpStatus } = {}) {
     return PAY_FSM.CLIENT_ERROR
   }
   if (/сеть|network|offline|повторить/i.test(msg)) return PAY_FSM.NET_ERROR
-  if (/сервер|шлюз|банк|инфра|позже|недоступн/i.test(msg)) return PAY_FSM.BANK_ERROR
+  if (BANK_MESSAGE_RE.test(msg)) return PAY_FSM.BANK_ERROR
 
   return PAY_FSM.BANK_ERROR
 }

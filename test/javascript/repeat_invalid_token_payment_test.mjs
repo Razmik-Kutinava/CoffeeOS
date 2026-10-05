@@ -199,14 +199,13 @@ describe("shopPayFsm — G7 CLIENT_ERROR CTA → open_new_card [TDD]", () => {
     assert.equal(shouldAutoOpenNewCardOnClientError(PAY_FSM.NET_ERROR), false)
   })
 
-  it("resolveCheckoutSheetInlineError surfaces card copy on CLIENT_ERROR", async () => {
+  it("resolveCheckoutSheetInlineError surfaces card copy on CLIENT_ERROR (TASK_100: ≠ CTA)", async () => {
     const { PAY_FSM, resolveCheckoutSheetInlineError, PAY_FSM_LABELS } = await import(
       "../../app/frontend/lib/shopPayFsm.js"
     )
-    assert.equal(
-      resolveCheckoutSheetInlineError({ error_code: "1051" }, PAY_FSM.CLIENT_ERROR),
-      PAY_FSM_LABELS[PAY_FSM.CLIENT_ERROR]
-    )
+    const msg = resolveCheckoutSheetInlineError({ error_code: "1051" }, PAY_FSM.CLIENT_ERROR)
+    assert.equal(msg, "Недостаточно средств на карте")
+    assert.notEqual(msg, PAY_FSM_LABELS[PAY_FSM.CLIENT_ERROR])
   })
 })
 
