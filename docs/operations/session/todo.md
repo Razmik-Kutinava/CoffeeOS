@@ -56,6 +56,64 @@
 
 ---
 
+# todo — TASK_94 Патч 1: ЛК → Повторить → CONFIRMED на `#/`, отказ → экран оплаты
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_94 § Патч 1: 2026-10-01](../milestones/veha_2/requirements/customer_tasks/TASK-94-Повтор-покупки-из-истории-ЛК-с-one-click-оплатой.md) · Subtask 5, 6 (patch v1) · [Google Doc](https://docs.google.com/document/d/19QWNuRirU9jGkzFMY7sXXQV8xFTf2oEq_u3Yf0fo-6w/edit) |
+| **Тип** | патч (1-й к TASK_94) |
+| **Статус** | `/patch` `[x]` → ждёт `/sbr` |
+
+## SBR
+
+- [x] `/patch`: аудит + текст патча 1:1 в ТЗ
+- [ ] RED — failing-тесты CONFIRMED / REJECTED / CANCELED + regression
+- [ ] GREEN
+- [ ] `/regress` · `/review` (bugbot + security + crit-audit, push)
+- [ ] `COMPONENT_MAP.md` (Profile / OrderReceipt / historyRepeatAdapter) — после Review
+- [ ] deploy по апруву → Fly MCP Point A (закрывает и G5 базовой TASK_94)
+
+## Факт (аудит)
+
+- CONFIRMED: навигации нет, остаётся `#/profile` / receipt (`historyRepeatAdapter.js:139-160`); `setTimeout(reset…)` живёт (`:157-159`)
+- REJECTED/CANCELED: fallback-флаги в store, `Profile`/`OrderReceipt` рендерят только текст ошибки (`Profile.svelte:144-146`, `OrderReceipt.svelte:170-173`)
+- Существующий fallback-экран: `openRepeatPaymentSheet` → `#/checkout` + `PaymentMethodsSheet`, корзина уже = состав повтора
+
+## Решение для билда
+
+- CONFIRMED → снять таймеры → `push("/")` (как Quick Repeat; не `/payment-result`) → статус через существующий `OrderStatusSheet`
+- REJECTED/CANCELED → `openRepeatPaymentSheet` (весь состав уже в корзине) → `#/checkout` fallback; не `#/`
+
+## Файлы (ожидаемо)
+
+- `app/frontend/lib/historyRepeatAdapter.js` — orchestration результата
+- `app/frontend/routes/Profile.svelte`, `app/frontend/routes/OrderReceipt.svelte` — только если нужен вызов навигации на уровне экрана
+- `test/javascript/lk_history_repeat_one_click_test.mjs` · при необходимости `test/integration/shop/lk_history_repeat_one_click_test.rb`
+
+## Не ломать
+
+- `Checkout.svelte`, `PaymentResult.svelte` (TASK_91 auto `#/`, #71 email), `PaymentMethodsSheet`, СБП
+- `widgetRepeatPayFlow.js` / `RepeatSection` (Quick Repeat вне ЛК), `frequentRepeatStore.hasActiveOrder`
+- `OrderStatusSheet`, `/orders/active`, `cartSheetStore` (`clearCartAfterSuccessfulPay`) — см. `COMPONENT_MAP.md` строки TASK_94
+- `/payments/widget_init`, `/payments/status/:orderId`, webhook
+
+## Проверка
+
+1. `node --test test/javascript/lk_history_repeat_one_click_test.mjs`
+2. Regression JS: quick repeat / widget pay / checkout pay тесты зоны
+3. `ruby bin/rails test test/integration/shop/lk_history_repeat_one_click_test.rb`
+4. `npx tsc --noEmit` (если применимо к проекту) · `vite build`
+5. Ручная: Profile → Повторить → PROCESSING → CONFIRMED → `#/` со статусом; отказ → `#/checkout` с картами/СБП
+
+## DoD
+
+- [ ] CONFIRMED: polling/таймеры сняты, пользователь на `#/`, заказ в `OrderStatusSheet`
+- [ ] REJECTED и CANCELED: не `#/`, открыт существующий экран оплаты (повтор / другая карта / новая карта / СБП)
+- [ ] Обычный checkout и Quick Repeat вне ЛК без изменений (regression)
+- [ ] targeted + regression зелёные
+
+---
+
 # todo — #71 Патч_2: server-first prefill email, `receipt_email`, Receipt contract
 
 | Поле | Значение |
