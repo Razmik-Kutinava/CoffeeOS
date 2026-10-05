@@ -11,7 +11,8 @@
 - [x] intake Патча 1 в TASK-37 (секция в конце файла)
 - [x] RED `46de7f82` — `firebase_sw_csp_test.rb`: 2 fail (нет `https://www.gstatic.com` в `script-src` ответа SW), охранный тест «глобальная CSP без gstatic» зелёный сразу
 - [x] GREEN `9608d9f2` — `content_security_policy` в `Shop::FirebaseSwController`: глобальный `script-src` + `https://www.gstatic.com`
-- [ ] `/regress` → `/review` (bugbot + security + crit-audit, Entire, push, CI)
+- [x] `/regress` PASS — Rails 10 файлов (firebase_sw_csp, push_register, push_pipeline, order_status CBR, profile offer, wallet_pass, pwa_manifest, pwa LK, offer funnel, marketing events) 57/0 · JS 7 файлов push/notify/sw/wallet/offer 112/0
+- [ ] `/review` (bugbot + security + crit-audit, Entire, push, CI)
 - [ ] Device: Android Chrome / desktop — SW регистрируется, `getToken()` проходит — после deploy по апруву · Fly MCP Point A
 
 ## Файлы
