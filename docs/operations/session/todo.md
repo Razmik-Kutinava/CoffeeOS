@@ -1,3 +1,44 @@
+# todo — УК «Code Black»: организации → точки, модули, команда и ТВ из УК
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | запрос владельца 2026-10-06 (чат): УК = компания «Code Black» → организации (франчайзи) → точки; УК видит всё; галочки модулей работают; владелец франшизы на уровне организации; команда и ТВ создаются из карточки точки; уборка прода |
+| **Решения владельца** | Т-Банк — один терминал на все точки (не трогаем) · витрина/киоск — не трогаем · «QR/офферы» = оффер абонемента на витрине + воронка у менеджера · организация точки A = «Тестовая франшиза», точка = «Витрина А» (slug `code_black` и id не меняем) |
+| **Статус** | SPEC → RED |
+
+## SBR
+
+- [x] SPEC
+- [ ] RED
+- [ ] GREEN
+- [ ] REVIEW → push → CI
+- [ ] deploy по апруву → прод-уборка (пустые орг-ции, тест-киоски, переименование) → проверка
+
+## Файлы (ожидаемо)
+
+1. `app/services/platform/uk_catalog_scope.rb` — все точки (вкл. цеха, inactive) и все организации, без single-point
+2. `app/views/platform/{dashboard/show,tenants/index,organizations/index}.html.erb`, `layouts/platform.html.erb`, `shared/_nav.html.erb` — без скрытия «Новая», колонки тип/статус, бренд «Code Black»
+3. `app/models/tenant_module_flags.rb` + `app/policies/policy_context.rb` — `enabled?(tenant_id, mod)`, флаги tv_board/menu/qr_offers
+4. `app/controllers/tv_boards_controller.rb`, `manager/{devices,tv_board_settings,menu,subscription_offer_funnel}_controller.rb`, `manager/shared/_sidebar.html.erb` — проверки модулей
+5. `app/services/subscriptions/offer_presentation_service.rb` — qr_offers выкл → всё false
+6. `app/controllers/platform/franchise_owners_controller.rb` + `app/models/{user,user_role}.rb` — роль franchise_manager на уровне организации (tenant_id NULL), владелец без точек
+7. новые `app/services/platform/tenant_team_provision.rb`, `app/controllers/platform/{tenant_teams,tenant_devices}_controller.rb` + views + routes — команда и ТВ из УК
+8. `fly.toml` — `DEMO_SINGLE_POINT = "false"`
+
+## Не ломать
+
+- Вход бариста/менеджера/цеха, табло бариста, ТВ при включённом модуле
+- Витрина Point A (`SHOP_DEFAULT_TENANT_ID`), оплата Т-Банк
+- Франчайзи видит только точки своей организации
+- Создание точки (Provision, API-ключ, расписание)
+
+## Проверка
+
+1. `ruby bin/rails test test/services/platform test/controllers/platform test/integration/platform test/integration/tv_board_test.rb test/integration/manager test/integration/auth test/services/subscriptions test/integration/shop/api/subscription_offer_state_api_test.rb test/integration/shop/api/profile_subscription_offer_test.rb`
+2. `ruby bin/rubocop` по изменённым файлам
+
+---
+
 # todo — Quick Repeat Патч 1: гонка кэша `frequent_products` / COMMIT оплаты
 
 | Поле | Значение |
