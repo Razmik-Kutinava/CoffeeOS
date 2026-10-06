@@ -52,6 +52,7 @@ class Platform::FranchiseOwnersControllerTest < ActionDispatch::IntegrationTest
     post platform_franchise_owners_path, params: owner_params(org, email)
 
     owner = User.find_by!(email: email)
+    assert_nil owner.tenant_id, "владелец не привязан к одной точке — иначе удаление точки удалит владельца"
     role = UserRole.joins(:role).find_by!(user_id: owner.id, roles: { code: "franchise_manager" })
     assert_nil role.tenant_id
     assert_equal [ first.id, second.id ].sort, owner.accessible_manager_tenants.pluck(:id).sort
