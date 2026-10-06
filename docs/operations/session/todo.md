@@ -12,7 +12,7 @@
 - [x] RED `6e4c2537` — 14 runs: 2 F (stale `false` после COMMIT при GET между bust и COMMIT; поздняя запись GET поверх оплаты), 12 зелёных (вкл. уточнённый старый тест «оплата → кэш не stale» и «после issued повтор снова есть»)
 - [x] GREEN `394ff4f8` — `mark_order_active_after_commit!` + `unless_exist` в `cached_payload`; `PaymentStatusUpdater` вызывает его вместо `bust_cache!` · Quick Repeat 43/0 · RuboCop 0
 - [x] `/regress` зона: `test/services/{callbacks,payments,shop,barista}` + `test/controllers/{shop,callbacks}` + `test/integration/shop` + `test/jobs` 1410 — 1 F флак `shop_usercards_phase1_persist_test:273` (отдельно 4/0 до и после патча; `integration/shop --seed 7965` 688/0) → ISSUES
-- [x] `/review`: bugbot 0 · security 0 · crit-audit CLEAN (`last_audited_sha` = `394ff4f8`) · Entire `01M47YYBMSYYJGHGJ1WW0P3TTF` на `0161086` (attach, GREEN из Windows без трейлера) · push → CI
+- [x] `/review`: bugbot 0 · security 0 · crit-audit CLEAN (`last_audited_sha` = `394ff4f8`) · Entire `01M47YYBMSYYJGHGJ1WW0P3TTF` на `0161086` (attach, GREEN из Windows без трейлера) · **CI green** [37425105481](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37425105481) + Semgrep/CodeQL на `d16c3d29`
 - [ ] deploy по апруву → Fly MCP Point A (оплата → «повторить» скрыта в hidden/peek/expanded; после issued — снова видна)
 - [ ] `COMPONENT_MAP.md` — после Review (строки `CustomerFrequentProductsService` нет; `PaymentStatusUpdater` — проверить)
 
@@ -43,7 +43,7 @@
 - [x] после COMMIT кэш = `has_active_order=true`, `cached_payload` → `true`
 - [x] после `issued` Quick Repeat снова отдаёт товары (существующая логика)
 - [x] существующие Quick Repeat и payment/cache тесты зелёные
-- [x] REVIEW (bugbot/security 0, crit-audit CLEAN) · [ ] CI green
+- [x] REVIEW (bugbot/security 0, crit-audit CLEAN) · **CI green** [37425105481](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37425105481) + Semgrep/CodeQL на `d16c3d29`
 - [ ] Fly MCP Point A после deploy по апруву
 
 ---
