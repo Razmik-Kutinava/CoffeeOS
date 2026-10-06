@@ -1,0 +1,104 @@
+# Ежедневный логический бэкап прод-БД (Neon `coffeeos`, branch `production`).
+# Дамп pg_dump -Fc → проверка восстановлением в чистый Postgres → GPG AES256 → artifact (90 дней).
+# Репозиторий публичный: artifact без шифрования не выкладывать, URL/данные в лог не печатать.
+# Секреты: NEON_BACKUP_DATABASE_URL, BACKUP_GPG_PASSPHRASE. Runbook: docs/operations/dev/INFRA_STACK.md § Бэкапы.
+
+name: DB backup (Neon)
+
+on:
+  schedule:
+    - cron: "17 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: db-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      SOURCE_URL: ${{ secrets.NEON_BACKUP_DATABASE_URL }}
+      GPG_PASSPHRASE: ${{ secrets.BACKUP_GPG_PASSPHRASE }}
+    steps:
+      - name: Check secrets
+        run: |
+          if [ -z "$SOURCE_URL" ] || [ -z "$GPG_PASSPHRASE" ]; then
+            echo "::error::NEON_BACKUP_DATABASE_URL / BACKUP_GPG_PASSPHRASE not set"
+            exit 1
+          fi
+
+      - name: Resolve direct connection and server version
+        id: pg
+        run: |
+          # pg_dump через PgBouncer (pooler) Neon не рекомендует — берём direct host.
+          direct="${SOURCE_URL/-pooler./.}"
+          echo "::add-mask::$direct"
+          echo "DIRECT_URL=$direct" >> "$GITHUB_ENV"
+          major=$(psql "$direct" -tAc "select current_setting('server_version_num')::int / 10000")
+          echo "major=$major" >> "$GITHUB_OUTPUT"
+          echo "Server major: $major"
+
+      - name: Install matching PostgreSQL client
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-common >/dev/null
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y >/dev/null
+          sudo apt-get install -y -qq "postgresql-client-${{ steps.pg.outputs.major }}" >/dev/null
+          echo "/usr/lib/postgresql/${{ steps.pg.outputs.major }}/bin" >> "$GITHUB_PATH"
+
+      - name: Dump
+        run: |
+          stamp=$(date -u +%Y-%m-%dT%H%MZ)
+          echo "STAMP=$stamp" >> "$GITHUB_ENV"
+          pg_dump --version
+          pg_dump "$DIRECT_URL" \
+            --format=custom --compress=9 --no-owner --no-privileges \
+            --exclude-table-data=solid_cache_entries \
+            --exclude-table-data=solid_cable_messages \
+            --file=coffeeos.dump
+          ls -lh coffeeos.dump
+
+      - name: Verify by restoring into clean Postgres
+        run: |
+          docker run -d --name verify -e POSTGRES_PASSWORD=verify -p 5433:5432 \
+            "postgres:${{ steps.pg.outputs.major }}" >/dev/null
+          for _ in $(seq 1 30); do
+            pg_isready -h localhost -p 5433 -U postgres -q && break
+            sleep 2
+          done
+          export PGPASSWORD=verify
+          pg_restore --no-owner --no-privileges --exit-on-error \
+            -h localhost -p 5433 -U postgres -d postgres coffeeos.dump
+          tables=$(psql -h localhost -p 5433 -U postgres -d postgres -tAc \
+            "select count(*) from pg_tables where schemaname = 'public'")
+          echo "Restored public tables: $tables"
+          if [ "$tables" -lt 50 ]; then
+            echo "::error::Too few tables restored ($tables)"
+            exit 1
+          fi
+
+      - name: Encrypt
+        run: |
+          gpg --batch --yes --pinentry-mode loopback \
+            --passphrase-file <(printf '%s' "$GPG_PASSPHRASE") \
+            --symmetric --cipher-algo AES256 \
+            --output "coffeeos-${STAMP}.dump.gpg" coffeeos.dump
+          shred -u coffeeos.dump
+          sha256sum "coffeeos-${STAMP}.dump.gpg" > "coffeeos-${STAMP}.dump.gpg.sha256"
+          ls -lh coffeeos-*
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: coffeeos-db-${{ env.STAMP }}
+          path: |
+            coffeeos-*.dump.gpg
+            coffeeos-*.dump.gpg.sha256
+          retention-days: 90
+          compression-level: 0
+          if-no-files-found: error

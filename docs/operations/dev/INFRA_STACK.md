@@ -44,6 +44,33 @@
 
 ---
 
+## Бэкапы БД
+
+| Слой | Что | Срок |
+|------|-----|------|
+| **Neon PITR** (instant restore) | встроено в Neon, откат ветки на момент времени | окно — Neon Console → Settings → Instant restore (Launch: до 7 дней) |
+| **Логический дамп** | `.github/workflows/db-backup.yml` — каждый день 01:17 UTC (+ ручной запуск) | artifact 90 дней |
+
+Дамп: `pg_dump -Fc` через direct host (не pooler) → проверка восстановлением в чистый `postgres:<major>` (`--exit-on-error`) → шифрование **GPG AES256** → artifact `coffeeos-db-<UTC>`. Данные `solid_cache_entries` / `solid_cable_messages` не выгружаются (только схема).
+
+**Секреты GitHub Actions:** `NEON_BACKUP_DATABASE_URL` (= `DATABASE_URL` с Fly), `BACKUP_GPG_PASSPHRASE`. Репозиторий **публичный** — без парольной фразы artifact бесполезен; фразу хранить у владельца (менеджер паролей), не в репо. Сменили `DATABASE_URL` → обновить и `NEON_BACKUP_DATABASE_URL`.
+
+Workflow `schedule` срабатывает только из **ветки по умолчанию** — файл должен лежать и там.
+
+### Восстановление из дампа
+
+```bash
+gh run list -w "DB backup (Neon)" -L 5
+gh run download <run_id> -D backup
+gpg --decrypt --output coffeeos.dump backup/*/coffeeos-*.dump.gpg   # спросит парольную фразу
+pg_restore --list coffeeos.dump | head                               # содержимое
+pg_restore --no-owner --no-privileges -d "$TARGET_URL" coffeeos.dump  # в ПУСТУЮ БД / новую Neon-ветку
+```
+
+Прод не перезаписывать поверх: восстанавливать в новую Neon-ветку, проверить, затем переключать `DATABASE_URL` (§ Смена DATABASE_URL, апрув). Откат «на час назад» быстрее делать через Neon PITR.
+
+---
+
 ## Запрещено без апрува
 
 | Сервис | Статус |
