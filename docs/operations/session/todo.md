@@ -13,7 +13,7 @@
 - [x] GREEN — новые 26/0 · регрессия platform/manager/auth/subscriptions/shop/models/policies/tv 895 (1 F — редирект владельца, исправлен) · RuboCop 0
 - [x] REVIEW: bugbot 1 + security 2 medium → RED `d0fa90e8` → GREEN `aa71cb64` · crit-audit CLEAN (`aa71cb64`)
 - [x] прод-уборка 08:38 UTC (PITR `2026-10-06T08:38:57Z`): «Тестовая франшиза» / «Витрина А», 7 пустых орг-ций, 4 киоска
-- [ ] push → CI
+- [x] Entire `01M485Z1YG7G6NTDC8K5C227A9` на `68fc470a` · push · **CI green** [37437927917](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37437927917) + Semgrep/CodeQL
 - [ ] deploy по апруву → проверка УК на проде
 
 ## Файлы (ожидаемо)
