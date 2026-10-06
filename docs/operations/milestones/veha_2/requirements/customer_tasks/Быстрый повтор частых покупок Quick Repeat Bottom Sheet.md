@@ -222,3 +222,181 @@ hidden, один напиток
 1. Переиспользовать `Shop::CustomerFrequentProductsService` + `GET /shop/api/frequent_products` vs полный rewrite — предпочтительно минимальный дифф поверх существующего.
 2. Инвалидация кэша: уже есть bust в OrderCreator / PaymentStatusUpdater — дополнить всеми переходами ACTIVE↔completed/cancelled.
 3. UI: секция повтора vs OrderStatusSheet #35 — кто побеждает в peek при активном заказе (ТЗ: скрыть повтор, показать статус).
+
+---
+
+## Патч 1: 2026-10-05 — race condition Quick Repeat после оплаты
+
+**Источник:** [Google Doc «Глюк патч_1»](https://docs.google.com/document/d/19cdAWN5Djobb2dUTmsana2uHctLUVk-uhrWsCXRRUUI/edit?usp=drivesdk) · intake 2026-10-06 · текст ниже — дословно.
+
+Основание: runtime-аудит от 2026-10-05; подтверждённая гонка cache/payment в
+`app/services/callbacks/payment_status_updater.rb:104`.
+
+### Расхождение
+
+Subtask: Quick Repeat должен быть скрыт при активном заказе.
+
+Given:
+у клиента есть история покупок, текущий заказ находится в `pending_payment`,
+а `/frequent_products` может опрашиваться параллельно с обработкой оплаты.
+
+When:
+`PaymentStatusUpdater` переводит заказ в `accepted` и выполняет `bust_cache!`
+внутри `@payment.with_lock` до завершения транзакции.
+
+Параллельный `GET /frequent_products` может попасть между удалением cache и
+COMMIT транзакции.
+
+Then:
+Quick Repeat должен быть скрыт, поскольку заказ уже становится активным.
+
+Фактически:
+`/orders/active` после COMMIT возвращает активный заказ, но
+`/frequent_products` может записать в Rails.cache устаревшее
+`has_active_order=false`.
+
+Это значение затем отдаётся из cache до следующего изменения статуса
+баристой либо до истечения TTL 30 минут.
+
+Runtime подтверждение:
+- гонка воспроизведена на реальном коде приложения;
+- в тесте с инструментированной паузой `GET /frequent_products` записал
+  `has_active_order=false` до COMMIT оплаты;
+- после COMMIT cache содержал `has_active_order=false`, хотя заказ уже
+  `accepted`;
+- в естественной гонке без паузы stale `false` остался после COMMIT в
+  12 из 23 прогонов;
+- защитного теста на race delete-before-commit не было.
+
+Фактические точки расхождения:
+- `app/services/callbacks/payment_status_updater.rb:104`
+  — `bust_cache!` выполняется внутри транзакции оплаты;
+- `app/services/shop/customer_frequent_products_service.rb:41-45`
+  — `cached_payload` после cache miss вычисляет `has_active_order` и
+  записывает результат в cache;
+- `app/frontend/components/CartSheet.svelte:99`
+  — `showRepeat` зависит от `hasActiveOrderFlag` из `/frequent_products`.
+
+### Исправленный сценарий
+
+- [ ] Subtask: Quick Repeat скрывается при активном заказе
+  (patch v[X])
+
+  Given:
+  у клиента есть история покупок;
+  заказ переходит из `pending_payment` в `accepted`.
+
+  When:
+  параллельный `GET /frequent_products` выполняется во время транзакции
+  оплаты, включая окно между инвалидированием cache и COMMIT.
+
+  Then:
+  результат `frequent_products` не должен после COMMIT фиксировать в cache
+  состояние `has_active_order=false`, если заказ уже стал `accepted`.
+
+  And:
+  после успешной оплаты любой последующий `/frequent_products` должен
+  получать согласованное состояние `has_active_order=true`.
+
+  And:
+  Quick Repeat должен оставаться скрытым во всех режимах
+  `hidden / peek / expanded`, пока существует активный заказ.
+
+  And:
+  после перехода заказа в статус, при котором Quick Repeat снова разрешён,
+  существующая логика Quick Repeat должна продолжить работать без изменений.
+
+- [ ] Subtask: защитный тест на race condition
+  (patch v[X])
+
+  Given:
+  оплата переводит заказ `pending_payment → accepted`.
+
+  When:
+  `frequent_products` вычисляется параллельно с транзакцией оплаты.
+
+  Then:
+  stale cache с `has_active_order=false` не должен переживать COMMIT
+  принятого заказа.
+
+  And:
+  после COMMIT повторный вызов `cached_payload` должен вернуть
+  `has_active_order=true`.
+
+### Не трогать
+
+См. COMPONENT_MAP.md:
+
+- `CartSheet` — общий файл с TASK_91, TASK_89-UI-EXT, #80, #67, #63.
+  Не менять layout, высоту, режимы `hidden / peek / expanded`,
+  порядок `RepeatSection` и checkout bar.
+- `frequentRepeatStore.js` — общий файл с TASK_94.
+  Не менять клиентскую модель Quick Repeat без необходимости.
+- `OrderStatusSheet` — не менять визуальную/DOM-структуру статусной модели.
+- `RepeatSection.svelte` — не менять внешний вид, карточки, порядок top-3
+  или UX Quick Repeat.
+- `CustomerFrequentProductsService` — не менять критерии frequent products,
+  окно 45 дней, сортировку и набор статусов, кроме необходимой синхронизации
+  cache с commit оплаты.
+- Не добавлять второй клиентский gate вида
+  `showRepeat && !statusWidgetVisible` как замену исправлению серверной
+  гонки.
+- Не менять `/orders/active`.
+- Не менять polling 8 секунд.
+- Не менять TTL 30 минут как способ маскировки проблемы.
+- Не менять бизнес-правило Quick Repeat: при активном заказе он скрыт.
+
+### Scope
+
+Разрешено:
+
+- исправить момент/механизм инвалидирования или обновления
+  `frequent_products` cache относительно COMMIT оплаты;
+- использовать существующий паттерн безопасного обновления cache после
+  завершения транзакции, если он уже принят в проекте;
+- добавить regression test, воспроизводящий
+  `delete/read-before-commit/write-stale-cache`;
+- добавить тест, подтверждающий согласованность
+  `accepted → has_active_order=true`;
+- затронуть только необходимые backend/service/test файлы.
+
+Запрещено:
+
+- переписывать Quick Repeat;
+- менять UI/UX;
+- менять статусную модель;
+- менять структуру `CartSheet`;
+- менять критерии frequent products;
+- добавлять новый источник истины для active order;
+- решать проблему только клиентским таймаутом, polling или принудительным
+  скрытием UI;
+- удалять существующий `has_active_order` gate;
+- увеличивать/уменьшать TTL как исправление;
+- менять поведение для `ready`, `issued`, `closed`, если это не требуется
+  существующей логикой.
+
+### Критерий готовности патча
+
+После исправления необходимо доказать:
+
+1. заказ `pending_payment → accepted`;
+2. параллельный `/frequent_products` не оставляет stale
+   `has_active_order=false` после COMMIT;
+3. после COMMIT cache содержит согласованное состояние;
+4. последующий `/frequent_products` возвращает `has_active_order=true`;
+5. Quick Repeat скрыт при активном заказе;
+6. после разрешённого статуса Quick Repeat снова появляется по существующей
+   логике;
+7. существующие Quick Repeat tests проходят;
+8. существующие payment/cache tests проходят.
+
+### Заметки агента к Патчу 1 (не текст заказчика) — SPEC
+
+- `patch v[X]` = **v1** (первый патч к этому ТЗ). Классификация: ПАТЧ (сценарий «скрыт при активном заказе» был, кэш его нарушает).
+- Отдельный SPEC не нужен — секция патча = SPEC; механизм выбран агентом (делегировано владельцем):
+  1. `PaymentStatusUpdater`: `bust_cache!` внутри `with_lock` убран → `CustomerFrequentProductsService.mark_order_active_after_commit!(order:)`.
+  2. Запись через `ActiveRecord.after_all_transactions_commit` (Rails 8.1): срабатывает после COMMIT **самой внешней** транзакции (job `with_order_tenant!`, controller tenant-txn), при rollback — не срабатывает.
+  3. После COMMIT пишется `{ has_active_order: true, frequent_items: [] }` **без SQL** — `SET LOCAL app.current_tenant_id` после COMMIT уже снят (RLS на `orders`), пересчёт мог бы дать ложный `false`. Это ровно то, что вернул бы `payload` для `accepted` в окне `ACTIVE_ORDERS_WINDOW`; заказ старше окна → просто `bust_cache!` (существующая логика).
+  4. `cached_payload` при cache miss пишет с `unless_exist: true` — GET, начавший расчёт до COMMIT, не перезапишет свежую post-commit запись. Явные записи (`refresh_cache!`, post-commit) по-прежнему перезаписывают.
+- Не меняются: окно 45 дней, `COUNTED_STATUSES`, `HIDE_REPEAT_STATUSES`, TTL 30 мин, ключ v3, `/orders/active`, frontend.
+- Тесты: Minitest (`test/services/shop/customer_frequent_products_cache_test.rb`), не RSpec из текста ТЗ.
