@@ -8,6 +8,7 @@
 |----|--------|--------|
 | Telegram-алерты не уходят | 🟡 | на Fly есть `TELEGRAM_BOT_TOKEN`, нет `TELEGRAM_CHAT_ID` → `TelegramAlertJob#perform` выходит сразу (1–3 мс на prod 2026-10-05 15:45 UTC), алерты о зависших платежах теряются · нужен chat_id от владельца → `fly secrets set TELEGRAM_CHAT_ID=…` |
 | SBP webhook `RATE_LIMITED` | 🟡 | `SbpAccountTokenFromWebhook#call!` проверяет только `BLOCKED`; `SbpAccountTokenStore.persist!` при velocity возвращает `:rate_limited` → `stored.method_hash` → `NoMethodError` в callback (найдено на TASK_102, вне scope) |
+| Флак `shop_usercards_phase1_persist_test` | 🟡 | `test_P1_FA_CONFIRMED_without_RebillId_GetState_retry_persists_UserCards` (`:273`) упал 1 раз в общем прогоне 1410 тестов (seed `7965`, 2026-10-06, Quick Repeat Патч 1) · отдельно 4/0 до и после патча · `test/integration/shop --seed 7965` 688/0 → зависимость от порядка/таймингов, не от патча · чинить отдельно |
 | UserCards / RebillId | 🟢 | v493 MIR RebillId+Charge PASS · new save_card FA не re-run |
 | Checkout UX (Фаза 2) | 🟡 | апрув заказчика |
 | SBP 3001 | 🟢 | live init ≠3001 · остаток: bind AccountToken (B) |

@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-06 — fix: Quick Repeat Патч 1 — «повторить» не всплывает после оплаты из-за гонки кэша
+
+- **Баг:** `PaymentStatusUpdater` удалял кэш `shop/freq/v3` внутри транзакции оплаты (до COMMIT); параллельный `GET /frequent_products` успевал записать `has_active_order=false` → «повторить» видна при активном заказе до 30 мин.
+- **Фикс:** `CustomerFrequentProductsService.mark_order_active_after_commit!` — запись `{ has_active_order: true, frequent_items: [] }` через `ActiveRecord.after_all_transactions_commit` (без SQL — после COMMIT RLS-тенант снят; заказ старше 24 ч → обычный bust) · `cached_payload` на cache miss пишет с `unless_exist: true` — поздний GET не перетирает.
+- Не менялись: окно 45 дней, статусы, TTL, ключ v3, `/orders/active`, frontend.
+- Коммиты: intake `2aee74a1` · RED `6e4c2537` (2 fail) · GREEN `394ff4f8` · Local Quick Repeat 43/0 · зона 1410 (1 флак → ISSUES) · RuboCop 0.
+
 ## 2026-10-05 — fix: просроченные платежи Т-Банка больше не висят в pending (Fly v510)
 
 - 4 тестовых СБП-платежа по 11 ₽ с сентября висели `pending`: Т-Банк возвращал `DEADLINE_EXPIRED`, наш маппинг статусов его не знал → джоб зависших платежей каждые 15 минут гонял их заново (источник N+1 в Sentry и алертов).

@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-09-30 (/patch TASK_83 + TASK_84-RECEIPT-DISPLAY-EXT)  
+**Дата:** 2026-10-06 (/patch Quick Repeat Патч 1)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Quick Repeat Патч 1** (2026-10-06) — «повторить» больше не залипает видимой после оплаты: кэш `frequent_products` пишется после COMMIT (`has_active_order=true`), поздний GET не перетирает (`unless_exist`) · intake `2aee74a1` · RED `6e4c2537` → GREEN `394ff4f8` · 43/0 · зона 1410 (1 флак → ISSUES) · [todo](todo.md) | `/review` → push → CI → deploy по апруву → Fly MCP Point A |
 | **Fly v510** (2026-10-05, `b58fe367`) — причина вечных 4 stuck 11 ₽: Т-Банк отдаёт `DEADLINE_EXPIRED`, а `TBANK_STATUS_MAP` его не знал → `pending` навсегда, джоб каждые 15 мин (N+1 в Sentry, алерты) · RED `05c83aef` → GREEN `b58fe367`: `DEADLINE_EXPIRED`/`AUTH_FAIL` → `failed` (как `REJECTED`: заказ `cancelled` через `PaymentFailureJournal`, без пушей/склада) · payments+callback+§2.3 216/0 · CI green · prod: 4 платежа `failed`, заказы `cancelled`, stuck = 0 | `TELEGRAM_CHAT_ID` · push Android |
 | **Fly v509** (2026-10-05, `b784c934`) — Sentry MCP подключён (`user-sentry`, `~/.cursor/mcp.json`) · 24h: RUBY-1P (N+1 INSERT solid_queue_jobs в `StuckPaymentsCheckJob`) → RED `93f01b59` / GREEN `b784c934` `perform_all_later` · CI green · prod лог: 1 bulk enqueue на 4 алерта · RUBY-1P resolved, 24h = 0 · live: TASK_101 «Итого 10 ₽» PASS · TASK_100 (1051/119 через подмену ответа, без списания) PASS · TASK_94 реальная оплата 10 ₽ → `#202610-0004` статус + табло PASS · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v508_2026-10-05/MCP_RESULT.md) | push Android на устройстве (новых подписок 0) · `TELEGRAM_CHAT_ID` на Fly нет → алерты не уходят (ISSUES) · `#202610-0004` отменить/оставить |
 | **Fly v508 задеплоен** (2026-10-05, `c878c8bf`) — 9 патчей разом: TASK_100, TASK_101, TASK_86 П1, TASK_90 П1, TASK_37 П1, #71 Патч_2, ЛК Патч 3, TASK_94 П1, TASK_102 (#75 П1) · CI green [37329291576](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37329291576) · сводный crit-audit `47be43cc..c878c8bf` CLEAN · миграции receipt_email + card_binding_attempts.source применены, backfill 4, dry_run 0, непокрытых сохранённых методов 0 · MCP Point A PASS (TASK_86/37/ЛК П3 live, остальное bundle+данные), табло barista-a PASS · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v508_2026-10-05/MCP_RESULT.md) | Sentry 24h вручную (MCP недоступен) · глазами заказчика: TASK_100/101/94 (one-click — live не трогали), WebPush Android (TASK_37/90) |

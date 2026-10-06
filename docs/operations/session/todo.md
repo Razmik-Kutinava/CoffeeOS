@@ -1,3 +1,53 @@
+# todo — Quick Repeat Патч 1: гонка кэша `frequent_products` / COMMIT оплаты
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [ТЗ Quick Repeat § Патч 1: 2026-10-05](../milestones/veha_2/requirements/customer_tasks/Быстрый%20повтор%20частых%20покупок%20Quick%20Repeat%20Bottom%20Sheet.md) · «Исправленный сценарий» (2 Subtask, patch v1) · остальные Subtask ТЗ — контекст, не scope · [Google Doc «Глюк патч_1»](https://docs.google.com/document/d/19cdAWN5Djobb2dUTmsana2uHctLUVk-uhrWsCXRRUUI/edit?usp=drivesdk) |
+| **Тип** | ПАТЧ (1-й к ТЗ): сценарий «скрыт при активном заказе» был, серверный кэш его нарушал |
+| **Статус** | intake `2aee74a1` · RED `6e4c2537` · GREEN `394ff4f8` · регрессия зоны PASS (1 флак вне scope) → `/review` |
+
+## SBR
+
+- [x] `/patch` intake: текст патча 1:1 + заметка агента (механизм) в ТЗ `2aee74a1` — отдельный SPEC не нужен, секция патча = SPEC
+- [x] RED `6e4c2537` — 14 runs: 2 F (stale `false` после COMMIT при GET между bust и COMMIT; поздняя запись GET поверх оплаты), 12 зелёных (вкл. уточнённый старый тест «оплата → кэш не stale» и «после issued повтор снова есть»)
+- [x] GREEN `394ff4f8` — `mark_order_active_after_commit!` + `unless_exist` в `cached_payload`; `PaymentStatusUpdater` вызывает его вместо `bust_cache!` · Quick Repeat 43/0 · RuboCop 0
+- [x] `/regress` зона: `test/services/{callbacks,payments,shop,barista}` + `test/controllers/{shop,callbacks}` + `test/integration/shop` + `test/jobs` 1410 — 1 F флак `shop_usercards_phase1_persist_test:273` (отдельно 4/0 до и после патча; `integration/shop --seed 7965` 688/0) → ISSUES
+- [ ] `/review`: bugbot + security + crit-audit → Entire → push → CI
+- [ ] deploy по апруву → Fly MCP Point A (оплата → «повторить» скрыта в hidden/peek/expanded; после issued — снова видна)
+- [ ] `COMPONENT_MAP.md` — после Review (строки `CustomerFrequentProductsService` нет; `PaymentStatusUpdater` — проверить)
+
+## Файлы
+
+1. `app/services/shop/customer_frequent_products_service.rb` — `cached_payload`: read → payload → `write(unless_exist: true)`; новый `mark_order_active_after_commit!(order:)` (`ActiveRecord.after_all_transactions_commit`, запись `{ has_active_order: true, frequent_items: [] }` без SQL; заказ старше `ACTIVE_ORDERS_WINDOW` → `bust_cache!`; `rescue` → log)
+2. `app/services/callbacks/payment_status_updater.rb` — в `accept_order_if_paid!` `bust_cache!` → `mark_order_active_after_commit!`
+3. `test/services/shop/customer_frequent_products_cache_test.rb` — +3 теста Патча 1, старый тест оплаты: «кэш nil или true» вместо «nil»
+
+## Не ломать
+
+- Зона `COMPONENT_MAP`: `CartSheet` (общий с TASK_91, TASK_89-UI-EXT, #80, #67, #63), `frequentRepeatStore.js` (общий с TASK_94), `OrderStatusSheet`, `RepeatSection.svelte` — **не тронуты** (frontend вне scope)
+- Критерии frequent products: окно 45 дней, `COUNTED_STATUSES`, `HIDE_REPEAT_STATUSES`, сортировка, top-3, TTL 30 мин, ключ `shop/freq/v3`
+- `bust_cache!` / `refresh_cache!` для OrderCreator, Barista::OrderStatusUpdateService, GuestOrderCancellationService — без изменений
+- `/orders/active`, polling 8 с, gate `has_active_order` на клиенте
+- Оплата: `with_lock`, статусы payment/order, broadcast, списание склада после commit
+
+## Проверка
+
+1. `ruby bin/rails test test/services/shop/customer_frequent_products_cache_test.rb test/services/shop/customer_frequent_products_service_test.rb test/integration/shop/api/frequent_products_test.rb` — 43/0
+2. `ruby bin/rails test test/services/callbacks test/services/payments test/services/shop test/services/barista test/controllers/shop test/controllers/callbacks test/integration/shop test/jobs` — 1410, 1 флак (ISSUES)
+3. `ruby bin/rubocop` по 3 изменённым файлам — 0
+4. ТЗ `RSpec` / `Vitest` — н/п (стек репо Minitest; frontend не менялся)
+
+## DoD
+
+- [x] `pending_payment → accepted`: параллельный GET не оставляет stale `has_active_order=false` после COMMIT (тест между bust и COMMIT + тест поздней записи)
+- [x] после COMMIT кэш = `has_active_order=true`, `cached_payload` → `true`
+- [x] после `issued` Quick Repeat снова отдаёт товары (существующая логика)
+- [x] существующие Quick Repeat и payment/cache тесты зелёные
+- [ ] REVIEW + CI green
+- [ ] Fly MCP Point A после deploy по апруву
+
+---
+
 # todo — TASK_102 (#75 Патч 1): промо 11 ₽ не повторяется при уже сохранённой карте/СБП
 
 | Поле | Значение |
