@@ -62,4 +62,18 @@ namespace :platform do
     abort("[platform:prod_data_cleanup] verification FAILED — rolled back") unless result.verification[:pass]
     puts(dry_run ? "[platform:prod_data_cleanup] DRY_RUN=1 — rolled back, no changes." : "[platform:prod_data_cleanup] OK — applied.")
   end
+
+  desc "Сброс к одной точке: только владелец (УК), без сотрудников/смен/тест-точек/тест-гостей. OWNER_EMAIL обязателен, PROTECT_PHONES — через запятую. DRY_RUN=1 по умолчанию."
+  task prod_single_point_reset: :environment do
+    dry_run = ENV.fetch("DRY_RUN", "1") != "0"
+    owner_email = ENV.fetch("OWNER_EMAIL") { abort("[platform:prod_single_point_reset] OWNER_EMAIL required") }
+    phones = ENV["PROTECT_PHONES"].to_s.split(/[\s,]+/)
+
+    result = Platform::ProdSinglePointReset.call(owner_email: owner_email, dry_run: dry_run, protect_phones: phones)
+    puts JSON.pretty_generate(task: "platform:prod_single_point_reset", dry_run: result.dry_run,
+                              steps: result.steps, verification: result.verification, at: Time.current.iso8601)
+
+    abort("[platform:prod_single_point_reset] verification FAILED — rolled back") unless result.verification[:pass]
+    puts(dry_run ? "[platform:prod_single_point_reset] DRY_RUN=1 — rolled back, no changes." : "[platform:prod_single_point_reset] OK — applied.")
+  end
 end

@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-06 (чистка прода — dry-run)  
+**Дата:** 2026-10-06 (одна боевая точка — применено)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Одна точка `code_black`** — `platform:prod_single_point_reset` APPLY 07:19 UTC (PITR `2026-10-06T07:19:32Z`), verification PASS · единственный вход — `razmikg1988@gmail.com` (УК, `/admin`) · демо-логины `barista-a`/`gm-a`/`shift-a`/`uk@demo`/`franchise` удалены · смен нет · Demo B и test-cafe удалены · цех `demo-prep-kitchen` оставлен (его демо-логины `pk-*` активны) · не задеплоено | завести бариста/менеджера через админку → смена → заказ на табло · ТВ-колонки (ISSUES) · цех — когда скажет владелец |
 | **Чистка прода от демо/мок** — `platform:prod_data_cleanup` (`Platform::ProdDataCleanup`, DRY_RUN по умолчанию = ROLLBACK) · prod dry-run PASS: табло `code_black` очищается (17 → issued, 1 → cancelled), 17 тест-точек, 330 заказов без банка, 144 тест-гостя, 27 тест-бариста blocked, 15 ключей revoked, W12 off; банк-платежи 212 сохранены · **APPLY 07:04 UTC** (апрув; откат — Neon PITR `2026-10-06T07:04:43Z`) PASS · после: на табло 0, платежи только tbank, `/up` 200, Sentry 0 · код не задеплоен (прогон stdin-раннером) | живой заказ → табло · после: аккаунты заказчику → блок `*@demo.coffeeos.local` · тестовая точка MCP · ТВ-колонки без фильтра смены (ISSUES) |
 | **Quick Repeat Патч 1** (2026-10-06) — «повторить» больше не залипает видимой после оплаты: кэш `frequent_products` пишется после COMMIT (`has_active_order=true`), поздний GET не перетирает (`unless_exist`) · intake `2aee74a1` · RED `6e4c2537` → GREEN `394ff4f8` · 43/0 · зона 1410 (1 флак → ISSUES) · [todo](todo.md) · REVIEW bugbot/security 0 · crit-audit CLEAN · Entire `01M47YYBMSYYJGHGJ1WW0P3TTF` · **CI green** [37425105481](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37425105481) + Semgrep/CodeQL на `d16c3d29` | deploy по апруву → Fly MCP Point A |
 | **Fly v510** (2026-10-05, `b58fe367`) — причина вечных 4 stuck 11 ₽: Т-Банк отдаёт `DEADLINE_EXPIRED`, а `TBANK_STATUS_MAP` его не знал → `pending` навсегда, джоб каждые 15 мин (N+1 в Sentry, алерты) · RED `05c83aef` → GREEN `b58fe367`: `DEADLINE_EXPIRED`/`AUTH_FAIL` → `failed` (как `REJECTED`: заказ `cancelled` через `PaymentFailureJournal`, без пушей/склада) · payments+callback+§2.3 216/0 · CI green · prod: 4 платежа `failed`, заказы `cancelled`, stuck = 0 | `TELEGRAM_CHAT_ID` · push Android |

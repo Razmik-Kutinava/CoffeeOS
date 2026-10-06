@@ -113,35 +113,9 @@ module Platform
       ids = tenants.map(&:id)
       @steps[:tenants_deleted] = tenants.map(&:slug)
       @steps[:tenants_kept] = Tenant.where(id: @keep_tenant_ids).order(:slug).pluck(:slug)
-      return if ids.empty?
-
-      order_ids = Order.where(tenant_id: ids).pluck(:id)
-      delete_order_dependents!(order_ids)
-      Subscription.where(purchase_point_id: ids).delete_all
-      Subscription.where(payment_id: Payment.where(tenant_id: ids).select(:id)).delete_all
-      %w[shop_email_verifications tenant_weekday_schedules order_wallet_passes order_notification_logs].each do |t|
-        conn.exec_delete("DELETE FROM #{t} WHERE tenant_id IN (#{quoted(ids)})")
-      end
-      %w[point_campaign_settings subscription_offer_settings subscription_usage_events].each do |t|
-        conn.exec_delete("DELETE FROM #{t} WHERE point_id IN (#{quoted(ids)})")
-      end
-
-      CashShift.where(tenant_id: ids).delete_all
-      Shift.where(tenant_id: ids).delete_all
-      ShiftStaff.where(tenant_id: ids).delete_all
-      delete_or_block_users!(User.where(tenant_id: ids))
-      Tenant.where(id: ids).delete_all
-    end
-
-    # cash_shifts/shifts/shift_staffs ссылаются на users с ON DELETE RESTRICT — такие только блокируем.
-    def delete_or_block_users!(users)
-      user_ids = users.pluck(:id)
-      referenced = (CashShift.where(opened_by_id: user_ids).pluck(:opened_by_id) |
-                    Shift.where(opened_by_id: user_ids).pluck(:opened_by_id) |
-                    ShiftStaff.where(user_id: user_ids).pluck(:user_id))
-      User.where(id: referenced).update_all(status: "blocked", updated_at: Time.current)
-      @steps[:users_blocked_referenced] = referenced.size
-      @steps[:users_deleted_with_tenants] = User.where(id: user_ids - referenced).delete_all
+      counts = ProdPurge.delete_tenants!(ids)
+      @steps[:users_blocked_referenced] = counts[:users_blocked]
+      @steps[:users_deleted_with_tenants] = counts[:users_deleted]
     end
 
     # Заказы без единого похода в банк (имитация оплаты, брошенные оформления, ручные/кассовые прогоны).
@@ -150,18 +124,9 @@ module Platform
       scope = Order.where(tenant_id: @keep_tenant_ids).where.not(bank_touched_sql)
                    .where("orders.created_at < ?", Time.current.beginning_of_month)
       by_tenant = scope.joins(:tenant).group("tenants.slug").count
-      delete_order_dependents!(scope.pluck(:id))
+      ProdPurge.delete_order_dependents!(scope.pluck(:id))
       @steps[:unbanked_orders_deleted] = by_tenant
       scope.delete_all
-    end
-
-    def delete_order_dependents!(order_ids)
-      return if order_ids.empty?
-
-      Subscription.where(payment_id: Payment.where(order_id: order_ids).select(:id)).delete_all
-      %w[order_emails order_notification_logs order_wallet_passes subscription_usage_events].each do |t|
-        conn.exec_delete("DELETE FROM #{t} WHERE order_id IN (#{quoted(order_ids)})")
-      end
     end
 
     def block_test_staff!
@@ -197,12 +162,7 @@ module Platform
       ids = scope.where.not(id: protected_ids).pluck(:id)
       @steps[:test_customers_deleted] = ids.size
       @steps[:test_customers_protected] = scope.where(id: protected_ids).count
-      return if ids.empty?
-
-      Subscription.where(customer_id: ids).delete_all
-      SubscriptionOfferState.where(customer_id: ids).delete_all
-      MarketingEvent.where(customer_id: ids).delete_all
-      MobileCustomer.where(id: ids).delete_all
+      ProdPurge.delete_customers!(ids)
     end
 
     def deactivate_test_products!
@@ -236,10 +196,6 @@ module Platform
 
     def ilike_any(column, patterns)
       [ "#{column} ILIKE ANY (ARRAY[?])", patterns ]
-    end
-
-    def quoted(ids)
-      ids.map { |id| conn.quote(id.to_s) }.join(",")
     end
   end
 end

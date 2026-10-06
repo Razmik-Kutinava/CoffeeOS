@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-06 — ops: одна боевая точка `code_black` (`platform:prod_single_point_reset`)
+
+- **Код:** `Platform::ProdSinglePointReset` + rake `platform:prod_single_point_reset` (`OWNER_EMAIL` обязателен, `PROTECT_PHONES`, DRY_RUN=1 по умолчанию) · общий `Platform::ProdPurge` (удаление точек/юзеров/зависимостей заказов/гостей) — `ProdDataCleanup` переведён на него · роль УК владельцу — `insert_all` (в проде `ensure_tenant_id` не даёт create глобальной роли без тенанта) · тест `prod_single_point_reset_test` + `prod_data_cleanup_test` 4/0.
+- **APPLY 2026-10-06 07:19 UTC** (апрув; откат — Neon PITR `2026-10-06T07:19:32Z`), verification PASS: на `code_black` один пользователь — `razmikg1988@gmail.com` (`ук_global_admin` + `franchise_manager`) · удалены 16 демо/тест-сотрудников (`barista-a`, `gm-a`, `shift-a`, `franchise`, `uk@demo`, `@prog10.local`) · 15 демо-смен удалены, открытых 0 · `demo-point-b` и `test-cafe` удалены (+22 юзера); цех `demo-prep-kitchen` не тронут · 20 тест-гостей удалены · ключ `mcp-v500-retry` отозван (активных 0).
+- **Удалённые успешные оплаты Т-Банка (Demo B, для сверки):** `#202606-0055` 1.79 ₽ PaymentId `8638798951` · `#202606-0056` 3.35 ₽ PaymentId `8638801971`. Платежи `code_black` — 212 = 212.
+- `cancel_reason` у `#202606-0291` исправлен на «Ops cleanup: оплата не прошла» (кракозябры из-за кодировки stdin).
+- **Проверка после:** точки 2 · юзеров 11 (10 — цех) · платежи tbank 35 succeeded / 143 failed / 40 refunded · Арам 138 заказов (18 issued) · меню 22 · гостей 283 · открытых заказов на табло 0 · `/`, `/up`, `/login` 200 · Sentry unresolved 1h — 0.
+
 ## 2026-10-06 — ops: чистка прода от демо/мок-данных (`platform:prod_data_cleanup`, dry-run)
 
 - **Аудит (read-only):** Sentry 7d — 0 unresolved; stuck tbank — 0; смена `code_black` открыта с 21.06 (demo `barista-a`) → на табло 2 теста по 10 ₽, на ТВ «Готово» старые тестовые `ready`; 13 брошенных оформлений `shop`; 143 заказа с имитацией оплаты; 17 тест-точек; ~190 тест-гостей; тест-бариста и `mcp-*` ключи на боевой точке; товары `W12-*`.
