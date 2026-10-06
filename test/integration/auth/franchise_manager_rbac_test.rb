@@ -101,8 +101,37 @@ class Auth::FranchiseManagerRbacTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "franchise_manager cannot open staff management" do
+  test "franchise_manager manages staff of selected own point" do
+    post manager_switch_tenant_path, params: { tenant_id: @tenant_b.id }
+    follow_redirect!
+
     get manager_staff_members_path
-    assert_redirected_to manager_dashboard_path
+    assert_response :success
+    assert_includes response.body, "Персонал"
+
+    email = "fm-barista-#{SecureRandom.hex(3)}@test.local"
+    post manager_staff_members_path, params: {
+      user: { name: "Бариста Б", email: email, password: "secret123" },
+      role_codes: %w[barista]
+    }
+    assert_redirected_to manager_staff_members_path
+
+    user = User.find_by!(email: email)
+    assert_equal @tenant_b.id, user.tenant_id
+    assert UserRole.joins(:role).exists?(user_id: user.id, tenant_id: @tenant_b.id, roles: { code: "barista" })
+  end
+
+  test "franchise_manager cannot edit UK admin anchored to own point" do
+    uk = create_user!(tenant: @tenant_a, role_codes: %w[ук_global_admin], email: "uk-anch-#{SecureRandom.hex(3)}@test.local")
+    post manager_switch_tenant_path, params: { tenant_id: @tenant_a.id }
+    follow_redirect!
+
+    get manager_staff_members_path
+    assert_not_includes response.body, uk.email
+
+    get edit_manager_staff_member_path(uk)
+    assert_response :redirect
+    patch manager_staff_member_path(uk), params: { user: { name: uk.name, email: "pwn-#{uk.email}", password: "" } }
+    assert_equal uk.email, uk.reload.email
   end
 end
