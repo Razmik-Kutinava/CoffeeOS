@@ -44,4 +44,22 @@ namespace :platform do
       puts "[platform:prod_single_point] OK — applied."
     end
   end
+
+  desc "Чистка прода от демо/мок-данных (Platform::ProdDataCleanup). DRY_RUN=1 по умолчанию (транзакция + ROLLBACK)."
+  task prod_data_cleanup: :environment do
+    dry_run = ENV.fetch("DRY_RUN", "1") != "0"
+    keep_keys = ENV["KEEP_API_KEY_IDS"]&.split(/[\s,]+/)&.presence
+
+    result = Platform::ProdDataCleanup.call(dry_run: dry_run, keep_api_key_ids: keep_keys)
+    puts JSON.pretty_generate(
+      task: "platform:prod_data_cleanup",
+      dry_run: result.dry_run,
+      steps: result.steps,
+      verification: result.verification,
+      at: Time.current.iso8601
+    )
+
+    abort("[platform:prod_data_cleanup] verification FAILED — rolled back") unless result.verification[:pass]
+    puts(dry_run ? "[platform:prod_data_cleanup] DRY_RUN=1 — rolled back, no changes." : "[platform:prod_data_cleanup] OK — applied.")
+  end
 end
