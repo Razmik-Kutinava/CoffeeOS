@@ -44,6 +44,7 @@
 
 > Новые resolved с 2026-09 — ≤10 строк; при >30 или конце месяца — `/ctx-trim`.
 
+- **2026-10-06 — «Персонал» точки показывал УК-аккаунт**: УК с `tenant_id` точки виден управляющему, edit/update (email/пароль) доступны. Fix `38f20b60` (`point_staff_scope`), deploy [37454878368](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37454878368), prod PASS.
 - **2026-10-06 — вход без точки = 500** (RUBY-1Q): УК / владелец франшизы с `tenant_id` NULL → `Current.tenant_id not set for Session`. Fix `ca8f5a2e`, deploy [37451853550](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37451853550), prod PASS.
 
 | ID | Когда | Итог |

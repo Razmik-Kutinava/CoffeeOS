@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-06 — feat: владелец франшизы управляет персоналом точки
+
+- Решение владельца: франчайзи заводит сотрудников (отмена решения 2026-06-04, `STAFF_RBAC_MATRIX.md` обновлён).
+- RED `ae952c1d` → GREEN `38f20b60`: `Manager::BaseController#staff_management_visible?` = GM | franchise | UK; `Manager::StaffController#point_staff_scope` — только юзеры с `UserRole` на `Current.tenant_id` и без ролей `ук_global_admin`/`franchise_manager` (index/edit/update). Устранено: управляющий точки видел и мог править УК-аккаунт с `tenant_id` точки.
+- Обновлены legacy-тесты `block_d_panel_screens_test`, `franchise_platform_admin_test` (фиксировали старое решение).
+- Тесты: auth/staff/platform/policies 216 + 12/0 · RuboCop 0 · security-review 0 · CI green [37454498698](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37454498698) + Semgrep/CodeQL.
+- Deploy [37454878368](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37454878368). Prod: владелец → `/manager/staff` 200, `/new` 200, УК скрыт, edit УК → redirect; УК (open_as_manager) — УК скрыт; `razmikg1988@` не изменён; временные юзеры удалены; Sentry 1h 0.
+
 ## 2026-10-06 — fix + deploy: вход без точки (УК / владелец франшизы), УК на проде
 
 - Deploy v511 [37439927427](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37439927427) → prod-проверка: `POST /login` = 500 для пользователя без `tenant_id` (`ApplicationRecord#ensure_tenant_id` на `Session`, Sentry RUBY-1Q).
