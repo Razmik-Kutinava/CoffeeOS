@@ -134,7 +134,74 @@ class Shop::CustomerFrequentProductsCacheTest < ActiveSupport::TestCase
 
     Callbacks::PaymentStatusUpdater.new(payment: payment, new_status: "succeeded").call!
 
-    assert_nil Rails.cache.read(key), "подтверждение оплаты должно сбрасывать кэш shop/freq"
+    cached = Rails.cache.read(key)
+    assert cached.nil? || cached[:has_active_order] == true,
+      "подтверждение оплаты не должно оставлять в кэше shop/freq состояние до оплаты"
+  end
+
+  # --- Патч 1 (2026-10-05): гонка cache / COMMIT оплаты ---
+
+  test "Патч 1: GET между инвалидацией и COMMIT оплаты не оставляет stale has_active_order=false" do
+    create_paid_order!(created_at: 2.days.ago, status: :issued)
+    order = create_paid_order!(created_at: 10.minutes.ago, status: :pending_payment)
+    payment = create_pending_payment!(order)
+
+    stale = cached_payload
+    assert_equal false, stale[:has_active_order]
+
+    # Внешняя транзакция = tenant-txn джоба/контроллера вокруг PaymentStatusUpdater
+    ActiveRecord::Base.transaction do
+      Callbacks::PaymentStatusUpdater.new(payment: payment, new_status: "succeeded").call!
+      # Параллельный GET со снимком до COMMIT: заказ ещё pending_payment
+      with_payload_stub(-> { stale }) { cached_payload }
+    end
+
+    assert_equal "accepted", order.reload.status
+    assert_not_equal false, Rails.cache.read(frequent_key)&.dig(:has_active_order),
+      "stale has_active_order=false не должен пережить COMMIT оплаты"
+    assert_equal true, cached_payload[:has_active_order]
+    assert_equal [], cached_payload[:frequent_items]
+  end
+
+  test "Патч 1: GET, посчитавший payload до COMMIT, не перезаписывает кэш после оплаты" do
+    create_paid_order!(created_at: 2.days.ago, status: :issued)
+    order = create_paid_order!(created_at: 10.minutes.ago, status: :pending_payment)
+    payment = create_pending_payment!(order)
+
+    stale = cached_payload
+    Rails.cache.delete(frequent_key)
+
+    # GET: cache miss → считает payload (снимок pending_payment), пока оплата коммитится
+    result = with_payload_stub(lambda {
+      Callbacks::PaymentStatusUpdater.new(payment: payment, new_status: "succeeded").call!
+      stale
+    }) { cached_payload }
+
+    assert_equal false, result[:has_active_order], "сам запрос отдаёт свой снимок"
+    assert_equal "accepted", order.reload.status
+    assert_equal true, Rails.cache.read(frequent_key)&.dig(:has_active_order),
+      "после COMMIT кэш = has_active_order=true, поздняя запись GET не перетирает"
+    assert_equal true, cached_payload[:has_active_order]
+  end
+
+  test "Патч 1: после оплаты и выдачи заказа Quick Repeat снова доступен" do
+    user = create_user!(tenant: @tenant, role_codes: %w[barista])
+    shift = open_cash_shift!(tenant: @tenant, opened_by: user)
+    create_paid_order!(created_at: 2.days.ago, status: :issued)
+    order = create_paid_order!(created_at: 10.minutes.ago, status: :pending_payment)
+    order.update!(cash_shift: shift)
+    payment = create_pending_payment!(order)
+
+    Callbacks::PaymentStatusUpdater.new(payment: payment, new_status: "succeeded").call!
+    assert_equal true, cached_payload[:has_active_order]
+
+    %w[preparing ready issued].each do |status|
+      Barista::OrderStatusUpdateService.new(order: order.reload, new_status: status, user_id: user.id).call!
+    end
+
+    data = cached_payload
+    assert_equal false, data[:has_active_order]
+    assert_equal [ @product.id ], data[:frequent_items].map { |i| i[:product_id] }
   end
 
   # --- Ревизия 2026-07-31: B3 cache v3 + B4 barista bust ---
@@ -205,6 +272,35 @@ class Shop::CustomerFrequentProductsCacheTest < ActiveSupport::TestCase
 
   def cached_call
     Shop::CustomerFrequentProductsService.cached_call(customer_id: @customer.id, tenant_id: @tenant.id)
+  end
+
+  def cached_payload
+    Shop::CustomerFrequentProductsService.cached_payload(customer_id: @customer.id, tenant_id: @tenant.id)
+  end
+
+  def frequent_key
+    Shop::CustomerFrequentProductsService.cache_key(tenant_id: @tenant.id, customer_id: @customer.id)
+  end
+
+  # Подменяет расчёт payload (снимок другого соединения до COMMIT)
+  def with_payload_stub(compute)
+    svc = Shop::CustomerFrequentProductsService
+    original = svc.method(:payload)
+    svc.define_singleton_method(:payload) { |customer_id:, tenant_id:| compute.call }
+    yield
+  ensure
+    svc.define_singleton_method(:payload, original)
+  end
+
+  def create_pending_payment!(order)
+    Payment.create!(
+      order_id: order.id,
+      tenant_id: @tenant.id,
+      amount: order.final_amount,
+      method: :card,
+      provider: "shop",
+      status: :pending
+    )
   end
 
   def create_paid_order!(product: @product, created_at: Time.current, status: :issued)
