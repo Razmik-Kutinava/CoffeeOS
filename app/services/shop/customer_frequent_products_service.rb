@@ -38,13 +38,43 @@ module Shop
       cached_payload(customer_id: customer_id, tenant_id: tenant_id)[:frequent_items]
     end
 
+    # Miss → unless_exist: расчёт мог стартовать до COMMIT оплаты; явную
+    # post-commit запись (mark_order_active_after_commit!) поздний GET не перетирает.
     def self.cached_payload(customer_id:, tenant_id:)
-      Rails.cache.fetch(cache_key(tenant_id: tenant_id, customer_id: customer_id), expires_in: CACHE_TTL) do
-        payload(customer_id: customer_id, tenant_id: tenant_id)
+      key = cache_key(tenant_id: tenant_id, customer_id: customer_id)
+      cached = Rails.cache.read(key)
+      return cached unless cached.nil?
+
+      data = payload(customer_id: customer_id, tenant_id: tenant_id)
+      Rails.cache.write(key, data, expires_in: CACHE_TTL, unless_exist: true)
+      data
+    end
+
+    # Оплата → accepted (Патч 1): запись только после COMMIT внешней транзакции.
+    # Без SQL: после COMMIT SET LOCAL тенанта (RLS orders) уже снят; для accepted
+    # в ACTIVE_ORDERS_WINDOW payload всегда { true, [] }, старше окна — обычный bust.
+    def self.mark_order_active_after_commit!(order:)
+      tenant_id = order.tenant_id
+      customer_id = order.customer_id
+      created_at = order.created_at
+      return if customer_id.blank?
+
+      ActiveRecord.after_all_transactions_commit do
+        if created_at >= ACTIVE_ORDERS_WINDOW.ago
+          Rails.cache.write(
+            cache_key(tenant_id: tenant_id, customer_id: customer_id),
+            { has_active_order: true, frequent_items: [] },
+            expires_in: CACHE_TTL
+          )
+        else
+          bust_cache!(tenant_id: tenant_id, customer_id: customer_id)
+        end
+      rescue StandardError => e
+        Rails.logger.warn("[Shop::FrequentProducts] mark_order_active_after_commit! failed: #{e.class}: #{e.message}")
       end
     end
 
-    # Сброс: OrderCreator, PaymentStatusUpdater, Barista::OrderStatusUpdateService,
+    # Сброс: OrderCreator, PaymentStatusUpdater (вне окна активных), Barista::OrderStatusUpdateService,
     # GuestOrderCancellationService (A6 — иначе has_active_order залипает после cancel).
     # Hot-path: деградация кэша не роняет заказ/оплату/смену статуса.
     def self.bust_cache!(tenant_id:, customer_id:)

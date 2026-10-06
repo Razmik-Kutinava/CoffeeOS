@@ -100,8 +100,8 @@ module Callbacks
       @order_for_deduction = order
       @guest_broadcast_order = order
       Barista::OrderBoardBroadcaster.call(order: order, old_status: "pending_payment")
-      # Quick Repeat: оплаченный заказ меняет частоту покупок — сбрасываем кэш секции «повторить»
-      Shop::CustomerFrequentProductsService.bust_cache!(tenant_id: order.tenant_id, customer_id: order.customer_id)
+      # Quick Repeat: кэш «повторить» обновляется после COMMIT (Патч 1 — delete внутри txn давал stale false)
+      Shop::CustomerFrequentProductsService.mark_order_active_after_commit!(order: order)
     end
 
     def deduct_inventory_if_needed!
