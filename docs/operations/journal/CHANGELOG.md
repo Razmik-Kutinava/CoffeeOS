@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-06 — fix + deploy: вход без точки (УК / владелец франшизы), УК на проде
+
+- Deploy v511 [37439927427](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37439927427) → prod-проверка: `POST /login` = 500 для пользователя без `tenant_id` (`ApplicationRecord#ensure_tenant_id` на `Session`, Sentry RUBY-1Q).
+- RED `606e3005` → GREEN `ca8f5a2e`: `Session#ensure_tenant_id` — no-op (колонка nullable, `belongs_to :tenant, optional`); `Auth::LoginJournal` пропускает `AdminAuditLog` без точки (лог привязан к точке).
+- Тесты: `test/integration/auth/login_without_tenant_test.rb` 3/0 · auth + platform 184/0 · RuboCop 0 · CI green [37451452958](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37451452958) + Semgrep/CodeQL.
+- Deploy [37451853550](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37451853550). Prod: УК → `/admin` + 8 экранов 200, `open_as_manager` → `/manager`, menu/devices/tv_board_settings/staff 200; владелец франшизы без точки → `/manager` 200. Временные юзеры удалены. RUBY-1Q resolved.
+- Открыт вопрос: «Персонал» у `franchise_manager` закрыт решением 2026-06-04 (`STAFF_RBAC_MATRIX.md`).
+
 ## 2026-10-06 — feat: УК «Code Black» — организации → точки, рабочие модули, команда и ТВ из УК
 
 - **Модель:** УК = компания «Code Black» (платформа, `/admin`) → организации (франчайзи) → точки. Т-Банк — один терминал на все точки (решение владельца, без изменений).

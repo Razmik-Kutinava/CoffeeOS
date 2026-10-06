@@ -44,6 +44,8 @@
 
 > Новые resolved с 2026-09 — ≤10 строк; при >30 или конце месяца — `/ctx-trim`.
 
+- **2026-10-06 — вход без точки = 500** (RUBY-1Q): УК / владелец франшизы с `tenant_id` NULL → `Current.tenant_id not set for Session`. Fix `ca8f5a2e`, deploy [37451853550](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37451853550), prod PASS.
+
 | ID | Когда | Итог |
 |----|-------|------|
 | #93 Critical path hardening | 2026-09-18 | Fly v499 · MCP 20/20 PASS · device pay = апрув |
