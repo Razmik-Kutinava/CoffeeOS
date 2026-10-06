@@ -11,6 +11,18 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-06 — feat: УК «Code Black» — организации → точки, рабочие модули, команда и ТВ из УК
+
+- **Модель:** УК = компания «Code Black» (платформа, `/admin`) → организации (франчайзи) → точки. Т-Банк — один терминал на все точки (решение владельца, без изменений).
+- **УК видит всё:** `UkCatalogScope` — все организации (в т.ч. без точек) и все точки (продажи, цеха, неактивные); колонки «Тип»/«Статус»; кнопки «Новая» всегда; `DEMO_SINGLE_POINT = "false"` в `fly.toml`; бренд «Code Black — УК».
+- **Модули работают:** `TenantModuleFlags.enabled?` (нет записи = вкл.) · ТВ-борд выкл → `/tv_board` 403 «TV-борд отключён», рассылка на открытые ТВ не идёт, ТВ не создать, пункт «TV» скрыт · Меню выкл → `/manager/menu` недоступно, пункт скрыт · QR/офферы выкл → оффер абонемента (баннер/push/ЛК, eligibility) скрыт, воронка `/manager/subscription_offer_funnel` 403 · киоск/витрина без изменений.
+- **Владелец франшизы** = `franchise_manager` на уровне организации (`user_roles.tenant_id` NULL, `users.tenant_id` NULL) — все текущие и будущие точки; создаётся и до первой точки. `UserRole` пропускает tenant-guard для `ук_global_admin`/`franchise_manager`, `User` — tenant опционален.
+- **Команда из УК:** карточка точки → «Создать команду» (`Platform::TenantTeamProvision`): реальные аккаунты (менеджер/бариста/менеджер смены; у цеха — менеджер/работник цеха), пароли генерируются и показываются один раз; всё-или-ничего.
+- **ТВ из УК:** карточка точки → блок «ТВ-табло»: создать (ссылка `/tv_board?token=…`), отключить.
+- **SBR:** RED `de09a920` → GREEN `417d1bbf` · REVIEW: bugbot 1 (владелец с `tenant_id` первой точки удалялся бы чисткой) + security 2 medium (список ТВ без tenant-RLS, рассылка ТВ при выкл. модуле) → RED `d0fa90e8` → GREEN `aa71cb64` · crit-audit CLEAN · тесты: новые 28/0, зона 895 + 223/0, RuboCop 0.
+- **Прод-уборка 2026-10-06 08:38 UTC** (PITR `2026-10-06T08:38:57Z`): организация точки `napi_x_codeBlack`/`demo-coffeeos` → «Тестовая франшиза»/`test-franchise`; точка `code_black` → «Витрина А» (slug и id те же); у `razmikg1988@gmail.com` снята пустая организация (УК над организациями); удалены 7 пустых тест-организаций и 4 киоска (`Smoke QA6`, `Smoke QA6b`, `Prog10 Kiosk MCP`, `зал`); ТВ «зал» оставлен · `/`, `/up`, `/login`, `/shop/api/categories` 200.
+- Код не задеплоен — deploy по апруву.
+
 ## 2026-10-06 — ops: одна боевая точка `code_black` (`platform:prod_single_point_reset`)
 
 - **Код:** `Platform::ProdSinglePointReset` + rake `platform:prod_single_point_reset` (`OWNER_EMAIL` обязателен, `PROTECT_PHONES`, DRY_RUN=1 по умолчанию) · общий `Platform::ProdPurge` (удаление точек/юзеров/зависимостей заказов/гостей) — `ProdDataCleanup` переведён на него · роль УК владельцу — `insert_all` (в проде `ensure_tenant_id` не даёт create глобальной роли без тенанта) · тест `prod_single_point_reset_test` + `prod_data_cleanup_test` 4/0.
