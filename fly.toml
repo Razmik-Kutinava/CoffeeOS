@@ -21,8 +21,8 @@ primary_region = "ams"
   # Security harden 2026-09-16: не сидить demo123456 на публичный fly.dev при каждом deploy.
   # Ручной seed: fly ssh console -C "bin/rails demo:seed" (см. FLY_DEMO_STAND.md).
   DEMO_AUTO_SEED    = "false"
-  # Одна боевая точка для заказчика (Point A); B/C и мусор — inactive после seed/cleanup.
-  DEMO_SINGLE_POINT = "true"
+  # УК видит все организации и точки; single-point больше не скрывает их (только demo-seed).
+  DEMO_SINGLE_POINT = "false"
   SHOP_DEFAULT_TENANT_ID = "2fdee1ac-4674-41ee-b89e-87b45643f789"
   # Solid Queue на web — fallback если worker machine stopped (UserCards webhook RebillId).
   SOLID_QUEUE_IN_PUMA = "true"

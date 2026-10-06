@@ -1,5 +1,5 @@
-<h1>Владелец сети (franchise_manager)</h1>
-<p style="color: #94a3b8;">Нужна организация и минимум одна точка.</p>
+<h1>Владелец франшизы (franchise_manager)</h1>
+<p style="color: #94a3b8;">Доступ ко всем точкам выбранной организации — текущим и будущим. Точки можно создать до или после.</p>
 <%= form_with model: @user, url: platform_franchise_owners_path, local: true, style: "max-width: 420px;" do |f| %>
   <% if @user.errors.any? %>
     <p style="color: #fca5a5;"><%= @user.errors.full_messages.to_sentence %></p>

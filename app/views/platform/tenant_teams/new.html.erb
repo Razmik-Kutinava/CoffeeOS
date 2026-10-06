@@ -1,0 +1,43 @@
+<h1>Команда точки: <%= @tenant.name %></h1>
+
+<p style="margin-bottom: 16px;">
+  <%= link_to "← Карточка точки", platform_tenant_path(@tenant), style: "color: #93c5fd;" %>
+</p>
+
+<p style="color: #94a3b8; font-size: 13px; max-width: 640px;">
+  Аккаунты создаются сразу, пароль генерируется и показывается <strong>один раз</strong> после сохранения.
+  Пустые строки (без email и телефона) пропускаются. Вход сотрудников — <code>/login</code>.
+</p>
+
+<% if @error %>
+  <p style="color: #fca5a5;"><%= @error %></p>
+<% end %>
+
+<%= form_with url: platform_tenant_team_path(@tenant), method: :post, local: true do %>
+  <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+    <thead>
+      <tr style="text-align: left; border-bottom: 1px solid #334155;">
+        <th style="padding: 8px;">Роль</th>
+        <th style="padding: 8px;">Имя</th>
+        <th style="padding: 8px;">Email</th>
+        <th style="padding: 8px;">Телефон</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% roles = Platform::TenantTeamProvision.allowed_roles(@tenant) %>
+      <% @rows.each_with_index do |row, i| %>
+        <% row = row.to_h.stringify_keys %>
+        <tr style="border-bottom: 1px solid #1e293b;">
+          <td style="padding: 8px;">
+            <%= select_tag "members[#{i}][role]",
+                  options_for_select(roles.map { |r| [ "#{Platform::TenantTeamProvision::ROLE_LABELS[r]} (#{r})", r ] }, row["role"]) %>
+          </td>
+          <td style="padding: 8px;"><%= text_field_tag "members[#{i}][name]", row["name"], style: "width: 100%;" %></td>
+          <td style="padding: 8px;"><%= email_field_tag "members[#{i}][email]", row["email"], style: "width: 100%;" %></td>
+          <td style="padding: 8px;"><%= text_field_tag "members[#{i}][phone]", row["phone"], style: "width: 100%;" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <p style="margin-top: 16px;"><%= submit_tag "Создать команду" %></p>
+<% end %>

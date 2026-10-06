@@ -2,6 +2,7 @@ module Manager
   class MenuController < BaseController
     skip_before_action :skip_authorization
     after_action :verify_authorized
+    before_action -> { require_point_module!(:menu) }
 
     def index
       authorize ProductTenantSetting, :index?

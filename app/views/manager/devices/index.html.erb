@@ -22,12 +22,16 @@
   <div style="display: flex; gap: 14px; margin-bottom: 14px; flex-wrap: wrap;">
     <div class="card" style="flex: 1; min-width: 260px;">
       <div class="card-title">Добавить TV-борд</div>
-      <%= form_with model: @new_device, url: manager_devices_path, method: :post, class: "filters-form" do |f| %>
-        <label class="label">
-          Название на ТВ
-          <%= f.text_field :name, class: "input", placeholder: "Например: ТВ зал", required: true %>
-        </label>
-        <%= f.submit "Создать TV + токен", class: "btn" %>
+      <% if point_module_enabled?(:tv_board) %>
+        <%= form_with model: @new_device, url: manager_devices_path, method: :post, class: "filters-form" do |f| %>
+          <label class="label">
+            Название на ТВ
+            <%= f.text_field :name, class: "input", placeholder: "Например: ТВ зал", required: true %>
+          </label>
+          <%= f.submit "Создать TV + токен", class: "btn" %>
+        <% end %>
+      <% else %>
+        <div class="card-muted">Модуль «TV-борд» отключён для этой точки (включает УК).</div>
       <% end %>
     </div>
 

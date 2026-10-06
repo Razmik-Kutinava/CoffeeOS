@@ -126,6 +126,10 @@ Rails.application.routes.draw do
       end
       resource :subscription_offer_setting, only: %i[show edit update],
                controller: "subscription_offer_settings"
+      resource :team, only: %i[new create], controller: "tenant_teams"
+      resources :tv_devices, only: %i[create], controller: "tenant_devices" do
+        member { patch :revoke }
+      end
     end
     resources :franchise_owners, only: %i[new create], path: "franchise_owners"
     get "monitoring", to: "monitoring#index", as: :monitoring

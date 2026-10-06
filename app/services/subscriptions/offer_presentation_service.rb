@@ -18,7 +18,9 @@ module Subscriptions
     end
 
     def call
-      return { should_show_banner: false, should_show_push: false, has_unread_offer_in_lk: false } if subscribed?
+      hidden = { should_show_banner: false, should_show_push: false, has_unread_offer_in_lk: false }
+      return hidden unless TenantModuleFlags.enabled?(@point.id, :qr_offers)
+      return hidden if subscribed?
 
       state = current_state
       banner = banner?(state)

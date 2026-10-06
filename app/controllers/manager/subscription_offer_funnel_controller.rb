@@ -8,6 +8,10 @@ module Manager
 
     def show
       authorize :report, :index?, policy_class: Manager::ReportPolicy
+      unless point_module_enabled?(:qr_offers)
+        return render json: { error: "Модуль «QR / офферы» отключён для этой точки" }, status: :forbidden
+      end
+
       from = params[:from].present? ? Time.zone.parse(params[:from]) : 7.days.ago.beginning_of_day
       to = params[:to].present? ? Time.zone.parse(params[:to]) : Time.zone.now
 

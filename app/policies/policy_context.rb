@@ -35,7 +35,7 @@ class PolicyContext
   def self.load_module_flags(tenant_id)
     return {} if tenant_id.blank?
 
-    flags = FeatureFlag.where(tenant_id: tenant_id, module: %w[barista prep_kitchen kiosk])
+    flags = FeatureFlag.where(tenant_id: tenant_id, module: TenantModuleFlags.modules)
     flags.each_with_object({}) do |ff, hash|
       hash[ff.module.to_sym] = ff.enabled?
     end

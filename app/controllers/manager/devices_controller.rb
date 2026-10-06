@@ -3,6 +3,7 @@ module Manager
     skip_before_action :skip_authorization
     after_action :verify_authorized
     before_action :require_privileged_manager!
+    before_action -> { require_point_module!(:tv_board) }, only: %i[create update_tv_mode]
 
     def index
       authorize Device, :index?

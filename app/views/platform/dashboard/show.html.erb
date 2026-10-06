@@ -1,25 +1,15 @@
-<h1 style="font-size: 1.5rem; margin-bottom: 16px;">Дашборд УК</h1>
-
-<% if single_point_mode? %>
-  <p style="color: #94a3b8; font-size: 13px; margin-bottom: 16px;">
-    Боевая точка: <strong>Demo Coffee Point A</strong> (ул. Ленина, 10). Прочие точки скрыты (inactive / тест).
-  </p>
-<% end %>
+<h1 style="font-size: 1.5rem; margin-bottom: 16px;">Code Black — дашборд УК</h1>
 
 <section style="margin-bottom: 24px;">
-  <h2 style="font-size: 1.1rem;">Организации</h2>
+  <h2 style="font-size: 1.1rem;">Организации (франчайзи)</h2>
   <%= link_to "Все организации", platform_organizations_path, style: "color: #93c5fd;" %>
-  <% unless single_point_mode? %>
-    · <%= link_to "Новая", new_platform_organization_path, style: "color: #93c5fd;" %>
-  <% end %>
+  · <%= link_to "Новая", new_platform_organization_path, style: "color: #93c5fd;" %>
 </section>
 
 <section style="margin-bottom: 24px;">
   <h2 style="font-size: 1.1rem;">Точки</h2>
   <%= link_to "Все точки", platform_tenants_path, style: "color: #93c5fd;" %>
-  <% unless single_point_mode? %>
-    · <%= link_to "Новая точка", new_platform_tenant_path, style: "color: #93c5fd;" %>
-  <% end %>
+  · <%= link_to "Новая точка", new_platform_tenant_path, style: "color: #93c5fd;" %>
 </section>
 
 <section style="margin-bottom: 24px;">
@@ -30,16 +20,20 @@
 <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
   <thead>
     <tr style="text-align: left; border-bottom: 1px solid #334155;">
-      <th style="padding: 8px;">Точка</th>
       <th style="padding: 8px;">Организация</th>
+      <th style="padding: 8px;">Точка</th>
+      <th style="padding: 8px;">Тип</th>
+      <th style="padding: 8px;">Статус</th>
       <th style="padding: 8px;"></th>
     </tr>
   </thead>
   <tbody>
     <% @tenants.each do |t| %>
       <tr style="border-bottom: 1px solid #1e293b;">
-        <td style="padding: 8px;"><%= t.name %></td>
         <td style="padding: 8px;"><%= t.organization&.name || "—" %></td>
+        <td style="padding: 8px;"><%= t.name %></td>
+        <td style="padding: 8px;"><%= uk_tenant_type_label(t) %></td>
+        <td style="padding: 8px;"><%= uk_tenant_status_label(t) %></td>
         <td style="padding: 8px;">
           <%= link_to "Карточка", platform_tenant_path(t), style: "color: #93c5fd;" %> ·
           <%= button_to "Панель менеджера", open_as_manager_platform_tenant_path(t), method: :post, form: { style: "display:inline;" } %>

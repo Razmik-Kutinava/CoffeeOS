@@ -15,6 +15,13 @@ class TenantModuleFlags
     LABELS.keys
   end
 
+  # Нет записи — модуль включён (так же, как PolicyContext#module_enabled?).
+  def self.enabled?(tenant_id, mod)
+    return true if tenant_id.blank?
+
+    !FeatureFlag.exists?(tenant_id: tenant_id, module: mod.to_s, enabled: false)
+  end
+
   # raw: хэш "module" => "0"|"1"|true|false; отсутствующие ключи для новых записей → enabled true.
   def self.sync!(tenant, raw)
     bool = ActiveModel::Type::Boolean.new

@@ -71,6 +71,7 @@ module Platform
       )
       load_card_binding_promo!
       load_prep_kitchen_links if @tenant.production_kitchen?
+      load_tv_devices if @tenant.sales_point?
     end
 
     def edit
@@ -215,6 +216,11 @@ module Platform
 
     def entry_points_host
       ENV.fetch("APP_HOST", request.host_with_port)
+    end
+
+    def load_tv_devices
+      @tv_enabled = TenantModuleFlags.enabled?(@tenant.id, :tv_board)
+      @tv_devices = Device.where(tenant_id: @tenant.id, device_type: "tv_board").order(:created_at).to_a
     end
 
     def load_prep_kitchen_links

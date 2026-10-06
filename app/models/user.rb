@@ -100,6 +100,9 @@ class User < ApplicationRecord
 
   private
 
+  # УК и владельцы франшизы стоят над точками: tenant_id у них может быть NULL (staff создаётся с tenant_id явно).
+  def ensure_tenant_id; end
+
   def organization_context_match?(organization_id)
     oid = organization_id || self.organization_id
     oid.present? && self.organization_id&.to_s == oid.to_s

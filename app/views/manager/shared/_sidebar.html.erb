@@ -49,8 +49,10 @@
         <span class="emoji">📦</span><span>Склад</span>
       <% end %>
     <% end %>
-    <%= link_to manager_menu_path, class: "nav-item #{'active' if request.path == manager_menu_path}" do %>
-      <span class="emoji">🍽️</span><span>Меню</span>
+    <% if point_module_enabled?(:menu) %>
+      <%= link_to manager_menu_path, class: "nav-item #{'active' if request.path == manager_menu_path}" do %>
+        <span class="emoji">🍽️</span><span>Меню</span>
+      <% end %>
     <% end %>
     <%= link_to manager_reports_path, class: "nav-item #{'active' if request.path == manager_reports_path}" do %>
       <span class="emoji">📈</span><span>Отчёты</span>
@@ -63,8 +65,10 @@
         <span class="emoji">📟</span><span>Устройства</span>
       <% end %>
 
-      <%= link_to manager_tv_board_settings_path, class: "nav-item #{'active' if request.path == manager_tv_board_settings_path}" do %>
-        <span class="emoji">📺</span><span>TV</span>
+      <% if point_module_enabled?(:tv_board) %>
+        <%= link_to manager_tv_board_settings_path, class: "nav-item #{'active' if request.path == manager_tv_board_settings_path}" do %>
+          <span class="emoji">📺</span><span>TV</span>
+        <% end %>
       <% end %>
     <% end %>
     <%= link_to manager_incidents_path, class: "nav-item #{'active' if request.path == manager_incidents_path}" do %>

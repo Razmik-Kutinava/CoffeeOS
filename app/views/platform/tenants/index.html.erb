@@ -1,7 +1,5 @@
 <h1>Точки</h1>
-<% unless single_point_mode? %>
-  <p><%= link_to "Новая", new_platform_tenant_path, style: "color: #93c5fd;" %></p>
-<% end %>
+<p><%= link_to "Новая", new_platform_tenant_path, style: "color: #93c5fd;" %></p>
 
 <%= render "tenants_index_map", map_pins: @map_pins %>
 
@@ -9,6 +7,8 @@
   <thead>
     <tr style="text-align: left; border-bottom: 1px solid #334155;">
       <th style="padding: 8px;">Название</th>
+      <th style="padding: 8px;">Тип</th>
+      <th style="padding: 8px;">Статус</th>
       <th style="padding: 8px;">Slug</th>
       <th style="padding: 8px;">Орг.</th>
       <th></th>
@@ -18,6 +18,8 @@
     <% @tenants.each do |t| %>
       <tr style="border-bottom: 1px solid #1e293b;">
         <td style="padding: 8px;"><%= t.name %></td>
+        <td style="padding: 8px;"><%= uk_tenant_type_label(t) %></td>
+        <td style="padding: 8px;"><%= uk_tenant_status_label(t) %></td>
         <td style="padding: 8px;"><%= t.slug %></td>
         <td style="padding: 8px;"><%= t.organization&.name || "—" %></td>
         <td style="padding: 8px;">

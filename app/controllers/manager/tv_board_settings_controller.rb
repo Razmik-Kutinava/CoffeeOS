@@ -1,6 +1,7 @@
 module Manager
   class TvBoardSettingsController < BaseController
     before_action :require_privileged_manager!
+    before_action -> { require_point_module!(:tv_board) }
 
     def edit
       @tv_setting = tv_board_setting_for_current_tenant

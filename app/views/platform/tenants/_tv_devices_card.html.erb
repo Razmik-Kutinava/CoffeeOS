@@ -1,0 +1,29 @@
+<section style="margin: 1.25rem 0; padding: 1rem; border: 1px solid #334155; border-radius: 8px; max-width: 760px;">
+  <h2 style="font-size: 1rem; margin: 0 0 0.5rem;">ТВ-табло</h2>
+  <% if tv_enabled %>
+    <% if tv_devices.any? %>
+      <ul style="margin: 0 0 12px; padding-left: 18px;">
+        <% tv_devices.each do |d| %>
+          <li style="margin: 6px 0;">
+            <strong><%= d.name %></strong> —
+            <% if d.is_active %>
+              <code>/tv_board?token=<%= d.device_token %></code>
+              <%= button_to "Отключить", revoke_platform_tenant_tv_device_path(tenant, d), method: :patch,
+                    form: { style: "display:inline;" }, data: { turbo_confirm: "Отключить ТВ «#{d.name}»?" } %>
+            <% else %>
+              <span style="color: #94a3b8;">отключён</span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p style="color: #94a3b8; margin: 0 0 12px;">ТВ ещё нет.</p>
+    <% end %>
+    <%= form_with url: platform_tenant_tv_devices_path(tenant), method: :post, local: true do %>
+      <%= text_field_tag "device[name]", nil, placeholder: "Название (например, Зал)", required: true %>
+      <%= submit_tag "Создать ТВ" %>
+    <% end %>
+  <% else %>
+    <p style="color: #94a3b8; margin: 0;">Модуль «TV-борд» выключен — включите его в «Правка».</p>
+  <% end %>
+</section>

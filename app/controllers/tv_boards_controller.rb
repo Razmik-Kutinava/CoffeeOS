@@ -8,6 +8,9 @@ class TvBoardsController < ApplicationController
 
     device = policy.device
     @device = device
+    unless TenantModuleFlags.enabled?(device.tenant_id, :tv_board)
+      return render plain: "TV-борд отключён для этой точки", status: :forbidden
+    end
 
     # Нужен токен для ActionCable соединения (без user login).
     cookies[:tv_device_token] = {

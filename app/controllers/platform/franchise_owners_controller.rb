@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module Platform
+  # Владелец франшизы = franchise_manager на уровне организации (UserRole.tenant_id NULL):
+  # видит и ведёт все текущие и будущие точки своей организации.
   class FranchiseOwnersController < BaseController
     def new
       @user = User.new(organization_id: params[:organization_id])
@@ -15,20 +17,19 @@ module Platform
       end
 
       anchor = org.tenants.order(:created_at).first
-      unless anchor
-        @user = User.new(user_params)
-        @user.errors.add(:base, "Сначала создайте хотя бы одну точку для организации")
-        return render :new, status: :unprocessable_entity
-      end
-
-      @user = User.new(
-        user_params.merge(tenant_id: anchor.id, organization_id: org.id, status: "active")
-      )
+      @user = User.new(user_params.merge(tenant_id: anchor&.id, organization_id: org.id, status: "active"))
       role = Role.find_or_create_by!(code: "franchise_manager") { |r| r.name = "Franchise manager" }
 
-      if @user.save
-        UserRole.find_or_create_by!(user: @user, role: role, tenant: anchor)
-        redirect_to platform_root_path, notice: "Владелец (franchise_manager) создан"
+      saved = false
+      ActiveRecord::Base.transaction do
+        raise ActiveRecord::Rollback unless @user.save
+
+        UserRole.find_or_create_by!(user: @user, role: role, tenant_id: nil)
+        saved = true
+      end
+
+      if saved
+        redirect_to platform_root_path, notice: "Владелец франшизы «#{org.name}» создан"
       else
         render :new, status: :unprocessable_entity
       end

@@ -17,6 +17,7 @@ module Shop
 
     def check
       return false unless @customer && @point
+      return false unless TenantModuleFlags.enabled?(@point.id, :qr_offers)
       # Патч 1: пока 11₽ доступно — оффер подписки не eligible (единый GrowthPromo.available?).
       return false if Payments::GrowthPromo.available?(@customer, @point)
 

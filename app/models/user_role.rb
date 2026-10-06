@@ -8,12 +8,26 @@ class UserRole < ApplicationRecord
   ].freeze
 
   GLOBAL_ROLE_CODES = User::GLOBAL_ROLE_CODES
+  # Роли над точками: tenant_id NULL (УК — вся платформа, franchise_manager — вся организация).
+  ABOVE_POINT_ROLE_CODES = (GLOBAL_ROLE_CODES + %w[franchise_manager]).freeze
 
   validates :user_id, uniqueness: { scope: [ :role_id, :tenant_id ] }
   validate :tenant_required_for_point_staff_role
   validate :tenant_forbidden_for_global_role
 
   private
+
+  def above_point_role?
+    role.present? && ABOVE_POINT_ROLE_CODES.include?(role.code)
+  end
+
+  def set_tenant_id
+    super unless above_point_role?
+  end
+
+  def ensure_tenant_id
+    super unless above_point_role?
+  end
 
   def tenant_required_for_point_staff_role
     return unless role

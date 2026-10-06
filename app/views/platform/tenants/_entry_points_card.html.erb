@@ -57,7 +57,7 @@
     <% end %>
   </ul>
 
-  <h3 style="font-size: 0.95rem; margin: 16px 0 8px;">Staff — создайте в manager → staff</h3>
+  <h3 style="font-size: 0.95rem; margin: 16px 0 8px;">Команда точки</h3>
   <ul style="margin: 0;">
     <% entry_points[:staff_items].each do |item| %>
       <li>
@@ -70,21 +70,9 @@
       </li>
     <% end %>
   </ul>
-  <h3 style="font-size: 0.95rem; margin: 16px 0 8px;">Wizard: первая команда точки</h3>
-  <p style="margin: 0 0 8px; color: #94a3b8; font-size: 12px;">
-    Шаблон логинов для новой org (замените `org.local` на ваш домен/почту, пароль задайте в manager).
-  </p>
-  <ul style="margin: 0;">
-    <% entry_points[:team_template].each do |item| %>
-      <li>
-        <code><%= item.email %></code> — <%= item.role %> → <code><%= item.panel %></code>
-      </li>
-    <% end %>
-  </ul>
   <p style="font-size: 12px; color: #94a3b8; margin-top: 12px;">
-    УК:
-    <%= button_to "Создать staff →", open_as_manager_platform_tenant_path(tenant, to: "staff"), method: :post, form: { style: "display:inline;" } %>
-    или <%= button_to "Открыть manager", open_as_manager_platform_tenant_path(tenant), method: :post, form: { style: "display:inline;" } %>
-    → staff → назначить роли. Пароль — см. STAFF_ACCESS.
+    <%= link_to "Создать команду →", new_platform_tenant_team_path(tenant), style: "color: #93c5fd;" %>
+    (аккаунты и пароли сразу) · править сотрудников:
+    <%= button_to "Персонал точки", open_as_manager_platform_tenant_path(tenant, to: "staff"), method: :post, form: { style: "display:inline;" } %>
   </p>
 </section>

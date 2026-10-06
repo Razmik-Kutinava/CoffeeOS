@@ -16,7 +16,17 @@ module Manager
 
     helper_method :franchise_manager?, :general_manager?, :general_or_franchise_manager?, :shift_manager?,
                   :accessible_manager_tenants, :current_tenant, :uk_in_manager?, :current_cash_shift,
-                  :staff_management_visible?, :inventory_management_visible?
+                  :staff_management_visible?, :inventory_management_visible?, :point_module_enabled?
+
+    def point_module_enabled?(mod)
+      TenantModuleFlags.enabled?(Current.tenant_id, mod)
+    end
+
+    def require_point_module!(mod)
+      return if point_module_enabled?(mod)
+
+      redirect_to manager_dashboard_path, alert: "Модуль «#{TenantModuleFlags::LABELS[mod.to_s]}» отключён для этой точки"
+    end
 
     def staff_management_visible?
       general_manager? || uk_in_manager?
