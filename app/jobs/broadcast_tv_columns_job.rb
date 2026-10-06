@@ -12,6 +12,8 @@ class BroadcastTvColumnsJob < ApplicationJob
   private
 
   def perform_for_tenant(tenant_id)
+    return unless TenantModuleFlags.enabled?(tenant_id, :tv_board)
+
     tv_setting = TvBoardSetting.find_by(tenant_id: tenant_id) ||
       TvBoardSetting.create!(
         tenant_id: tenant_id,

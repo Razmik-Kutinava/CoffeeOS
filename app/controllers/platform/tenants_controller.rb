@@ -220,7 +220,10 @@ module Platform
 
     def load_tv_devices
       @tv_enabled = TenantModuleFlags.enabled?(@tenant.id, :tv_board)
-      @tv_devices = Device.where(tenant_id: @tenant.id, device_type: "tv_board").order(:created_at).to_a
+      @tv_devices = ActiveRecord::Base.transaction do
+        set_pg_context(tenant_id: @tenant.id, user_id: current_user.id)
+        Device.where(tenant_id: @tenant.id, device_type: "tv_board").order(:created_at).to_a
+      end
     end
 
     def load_prep_kitchen_links
