@@ -25,11 +25,15 @@ module Auth
     end
 
     def call!
+      tenant_id = @context_tenant_id || @user.tenant_id
+      # AdminAuditLog привязан к точке; вход УК без точки в журнал точки не пишем.
+      return if tenant_id.blank?
+
       AdminAuditLog.log(
         action: @action,
         actor: @user,
         entity: @user,
-        tenant_id: @context_tenant_id || @user.tenant_id,
+        tenant_id: tenant_id,
         details: {
           user_id: @user.id,
           email: @user.email,

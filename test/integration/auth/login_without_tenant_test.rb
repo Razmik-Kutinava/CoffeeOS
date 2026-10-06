@@ -36,6 +36,9 @@ class Auth::LoginWithoutTenantTest < ActionDispatch::IntegrationTest
     assert_equal user.id.to_s, session[:user_id].to_s
     db_session = Session.find(session[:db_session_id])
     assert_nil db_session.tenant_id
+
+    with_rails_env("production") { get "/admin" }
+    assert_response :success
   end
 
   test "franchise owner of organization without points logs in under production guard" do

@@ -13,4 +13,9 @@ class Session < ApplicationRecord
   def revoke!
     update!(revoked_at: Time.current)
   end
+
+  private
+
+  # УК и владелец франшизы входят без точки — tenant_id у сессии может быть NULL.
+  def ensure_tenant_id; end
 end
