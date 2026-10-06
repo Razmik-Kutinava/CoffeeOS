@@ -128,7 +128,7 @@ Baseline-матрица staff RBAC: роль → панель → tenant → м�
 | Topic | Question to owner |
 |-------|-------------------|
 | shift_manager + `/manager/inventory` | **Нет** — только GM/franchise; URL redirect + Pundit + sidebar скрыт | ✅ FIXED 2026-08-30 |
-| franchise_manager + staff | Нужен ли франчайзи доступ к персоналу своих точек? Сейчас `staff_management_visible?` = GM \| UK only. |
+| franchise_manager + staff | **Да** (владелец, 2026-10-06): франчайзи заводит персонал выбранной своей точки; `staff_management_visible?` = GM \| franchise \| UK. Аккаунты УК/франчайзи в «Персонале» точки не видны и не редактируются | ✅ 2026-10-06 |
 | `has_role?` без tenant | **Phase 2:** `has_role_in_context?` в staff gates; `has_role?` legacy | ✅ Phase 2 |
 | blog_editor в staff matrix | **Phase 2 skipped — backlog** (отдельный blog CMS) | backlog |
 | Manager Pundit rollout | Phase 2 + 5b: devices, finance, orders, shifts, menu, prep_kitchen panel, platform, manager dashboard | ✅ done |

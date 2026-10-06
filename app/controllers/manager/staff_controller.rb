@@ -12,9 +12,7 @@ module Manager
 
     def index
       authorize User, :index?
-      tid = Current.tenant_id
-      uids = UserRole.where(tenant_id: tid).distinct.pluck(:user_id)
-      @users = User.where(tenant_id: tid).or(User.where(id: uids)).distinct.includes(:roles).order(:name).limit(500)
+      @users = point_staff_scope.distinct.includes(:roles).order(:name).limit(500)
       @roles = Role.order(:code)
     end
 
@@ -57,9 +55,17 @@ module Manager
     private
 
     def set_staff_user
+      @user = point_staff_scope.find_by(id: params[:id])
+      redirect_to manager_staff_members_path, alert: "Сотрудник не найден" unless @user
+    end
+
+    # УК и владельцы франшизы могут иметь tenant_id точки, но управляются только из УК.
+    # Их роли с tenant_id NULL под RLS не видны — поэтому требуем роль именно на этой точке.
+    def point_staff_scope
       tid = Current.tenant_id
-      uids = UserRole.where(tenant_id: tid).pluck(:user_id)
-      @user = User.where(tenant_id: tid).or(User.where(id: uids)).find(params[:id])
+      point_role_uids = UserRole.where(tenant_id: tid).select(:user_id)
+      above_point_uids = UserRole.joins(:role).where(roles: { code: UserRole::ABOVE_POINT_ROLE_CODES }).select(:user_id)
+      User.where(id: point_role_uids).where.not(id: above_point_uids)
     end
 
     def staff_user_params

@@ -62,17 +62,21 @@ class FranchisePlatformAdminTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_response :success
 
-    assert_no_difference -> { User.count } do
+    email = "om-#{SecureRandom.hex(4)}@test.local"
+    assert_difference -> { User.count }, +1 do
       post manager_staff_members_path, params: {
         user: {
           name: "Офис",
-          email: "om-#{SecureRandom.hex(4)}@test.local",
+          email: email,
           password: "pass123"
         },
         role_codes: [ "general_manager" ]
       }
     end
-    assert_redirected_to manager_dashboard_path
+    assert_redirected_to manager_staff_members_path
+    om = User.find_by!(email: email)
+    assert_equal t2.id, om.tenant_id
+    assert UserRole.joins(:role).exists?(user_id: om.id, tenant_id: t2.id, roles: { code: "general_manager" })
   end
 
   test "general manager cannot keep general_manager role when creating staff" do

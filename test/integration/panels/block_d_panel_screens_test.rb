@@ -67,7 +67,7 @@ class BlockDPanelScreensTest < ActionDispatch::IntegrationTest
     end
 
     get manager_staff_members_path
-    assert_redirected_to manager_dashboard_path
+    assert_response :success
   end
 
   test "shift_manager operational screens open" do

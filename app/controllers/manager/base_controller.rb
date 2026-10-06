@@ -29,7 +29,7 @@ module Manager
     end
 
     def staff_management_visible?
-      general_manager? || uk_in_manager?
+      general_or_franchise_manager? || uk_in_manager?
     end
 
     def inventory_management_visible?
