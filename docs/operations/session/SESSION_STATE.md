@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-07 (толстый отступ у Home Indicator — исправлен локально)  
+**Дата:** 2026-10-07 (Home Indicator fix — на проде v514)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Fly v514** (2026-10-07, `897987c3`) — фикс Home Indicator на проде по апруву · CI [37581326337](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37581326337) + CodeQL/Semgrep green · deploy [37581666905](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37581666905) · Point A iPhone 390×844 safe 34: шторка низ 844/844, зазор 0, `padding-bottom` 34px · `/up` 200 · Fly logs без 5xx (только известные `/uploads` 404) · Sentry 24h 0 · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v514_2026-10-07/MCP_RESULT.md) | заказчик смотрит на своём iPhone · шторка статуса с активным заказом live не проверена |
 | **Толстый отступ у Home Indicator** (2026-10-07, жалоба заказчика) · TASK_SAFE-BOTTOM-MIN дал только минимум 8px, а пустую полосу на iPhone не убрал: `CartSheet` стояла на `bottom: var(--shop-safe-bottom)` (34px), и под ней была прозрачная полоса, через которую видна страница · RED `d151e8d7` → GREEN `9a7a62d4`: шторка стоит на `bottom: 0`, safe-area = её `padding-bottom`, высота = `heightPx + safe` (верх шторки, `--cart-sheet-h` и резервы экранов не изменились; pay-stack не тронут) · JS зона шторки 209/0 · Rails cart_sheet/peek/active_orders 31/0 · vite build OK · браузер не проверен (локальный сервер не запущен) | глазами iPhone 390×844 safe 34 → push/CI → deploy по апруву → Fly MCP Point A |
 | **Бэкапы БД** (2026-10-06) · раньше только Neon PITR · `.github/workflows/db-backup.yml`: 01:17 UTC + ручной запуск, `pg_dump -Fc` через direct host (PG 17) → проверка восстановлением в `postgres:17` → GPG AES256 → artifact 90 дней · секреты `NEON_BACKUP_DATABASE_URL` + `BACKUP_GPG_PASSPHRASE` · файл и в `main` (`958e0614`, нужен для schedule) · прогон [37485746707](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37485746707): 98 таблиц, 316K, в логе нет URL, локальная расшифровка PASS | фраза → менеджер паролей · окно PITR в Neon Console · при смене `DATABASE_URL` обновить секрет |
 | **Доступы «Витрины А»** (2026-10-06) · пароль УК `razmikg1988@` сброшен (передан владельцу в чате) · бариста `barista-code-black@codeblack.coffee` создан · оба входа prod PASS (`/admin`, `/barista` 200) · смен открыто 0 | открыть смену → живой заказ на табло |

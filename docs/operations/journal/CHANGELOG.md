@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-07 — deploy Fly v514 (Home Indicator)
+
+- По апруву владельца: CI + CodeQL + Semgrep green на `897987c3` → deploy [37581666905](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37581666905). С прошлого деплоя в коде только `CartSheet.svelte`.
+- Prod Point A, iPhone 390×844 safe 34: шторка низ 844/844, зазор 0, `padding-bottom` 34px · `/up` 200 · логи без 5xx · Sentry 24h 0 · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v514_2026-10-07/MCP_RESULT.md).
+
 ## 2026-10-07 — fix: толстый отступ у Home Indicator (CartSheet)
 
 - Жалоба заказчика: на iPhone под корзиной/шторкой статуса пустая полоса ~34px, через неё видна страница. TASK_SAFE-BOTTOM-MIN это не исправил: `CartSheet` поднималась на `bottom: var(--shop-safe-bottom)`.
