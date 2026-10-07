@@ -50,7 +50,8 @@
     CART_SHEET_BUILD,
     CHECKOUT_PAY_STACK_VH,
     CHECKOUT_PEEK_VH,
-    CHECKOUT_PHONE_AUTH_VH
+    CHECKOUT_PHONE_AUTH_VH,
+    GESTURE_ZONE_SAVED_PX
   } from "../lib/cartSheetThresholds.js"
   import {
     sheetHeightPx,
@@ -128,7 +129,10 @@
   })
   let vvh = $state(typeof window !== "undefined" ? shopVisualViewportHeight() : 0)
   let stackBottomVh = $derived(CHECKOUT_PAY_STACK_VH - CHECKOUT_PEEK_VH)
-  let heightPx = $derived(sheetHeightPx(heightVh, { visualViewport: { height: vvh } }))
+  let heightPx = $derived(
+    sheetHeightPx(heightVh, { visualViewport: { height: vvh } }) -
+      (payStackActive || phoneAuthSlim ? 0 : GESTURE_ZONE_SAVED_PX)
+  )
   let stackBottomPx = $derived(sheetHeightPx(stackBottomVh, { visualViewport: { height: vvh } }))
   let singleItem = $derived(count === 1 ? items[0] : null)
 
@@ -453,7 +457,7 @@
       bind:this={gestureZoneEl}
       data-testid="shop-cart-sheet-gesture-zone"
       data-gesture-hit-area="full-strip"
-      class="cart-sheet-gesture-zone flex w-full min-h-20 shrink-0 touch-none select-none flex-col items-center justify-center border-b border-[#3a3a3a]/60"
+      class="cart-sheet-gesture-zone flex w-full min-h-6 shrink-0 touch-none select-none flex-col items-center justify-center border-b border-[#3a3a3a]/60"
       style:touch-action="none"
       role="button"
       tabindex="-1"

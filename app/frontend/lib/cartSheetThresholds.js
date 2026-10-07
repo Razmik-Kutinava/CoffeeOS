@@ -48,6 +48,9 @@ export const SCROLL_TO_HIDDEN_PX = 200
 /** Минимальный сдвиг пальца на gesture-zone для засчёта свайпа (px); 20 — чувствительнее (заказчик 2026-07-23) */
 export const SWIPE_UP_PX = 20
 
+/** Gesture-zone тонкая (min-h-6 = 24px вместо 80px, заказчик 2026-10-07) — шторка ниже на эту разницу */
+export const GESTURE_ZONE_SAVED_PX = 56
+
 export const SHEET_TRANSITION_MS = 300
 /** 0 — прижать к низу экрана (бар навигации убран B1.13-CR; 3.5rem оставлял «воздух») */
 export const CART_SHEET_BOTTOM_REM = 0
