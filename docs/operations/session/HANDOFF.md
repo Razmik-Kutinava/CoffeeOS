@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-07 (Home Indicator fix — на проде v514)  
+**Дата:** 2026-10-07 (тонкая полоса шторки — на проде v515)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Fly v515** — полоса с ручкой у шторки 80 → 24px на всех экранах, шторка ниже на 56px · `82335d04` · prod PASS · Sentry 0 · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v515_2026-10-07/MCP_RESULT.md) | заказчик проверяет на телефоне |
 | **Fly v514** — фикс Home Indicator задеплоен · Point A iPhone: шторка у края, зазор 0 · Sentry 0 · логи OK · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v514_2026-10-07/MCP_RESULT.md) | заказчик проверяет на своём iPhone |
 | **Толстый отступ у Home Indicator** (2026-10-07) — `CartSheet` больше не висит на 34px над краем iPhone: стоит у края, полоса Home Indicator залита фоном шторки, контент выше полосы как раньше · RED `d151e8d7` → GREEN `9a7a62d4` · JS 209/0 · Rails 31/0 · vite OK · браузер не проверен | глазами iPhone → push/CI → deploy по апруву → Fly MCP Point A |
 | **Бэкапы БД** (2026-10-06) — ежедневный зашифрованный `pg_dump` Neon → artifact 90 дней (`db-backup.yml`, 01:17 UTC, есть и в `main`) · первый прогон [37485746707](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37485746707) PASS, расшифровка PASS · runbook `INFRA_STACK.md` § Бэкапы БД | владельцу: перенести парольную фразу в менеджер паролей · проверить окно PITR в Neon Console |

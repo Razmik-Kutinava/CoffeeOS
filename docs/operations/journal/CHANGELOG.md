@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-07 — fix + deploy Fly v515: тонкая полоса с ручкой у CartSheet
+
+- По скрину заказчика «толстое» — верхняя полоса шторки с ручкой (`gesture-zone`, `min-h-20` = 80px), не зазор у Home Indicator (v514).
+- `CartSheet.svelte`: `min-h-6` (24px); высота шторки минус `GESTURE_ZONE_SAVED_PX = 56` (`cartSheetThresholds.js`), кроме pay-stack/phone-auth — контент не меняет размер, пустоты снизу нет. Одна шторка → все экраны.
+- RED `d812c3be` → GREEN `82335d04` · Rails 185/0 · JS 209/0 · CI green · deploy [37585425885](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37585425885) · prod полоса 24px · Sentry 0 · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v515_2026-10-07/MCP_RESULT.md).
+
 ## 2026-10-07 — deploy Fly v514 (Home Indicator)
 
 - По апруву владельца: CI + CodeQL + Semgrep green на `897987c3` → deploy [37581666905](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37581666905). С прошлого деплоя в коде только `CartSheet.svelte`.
