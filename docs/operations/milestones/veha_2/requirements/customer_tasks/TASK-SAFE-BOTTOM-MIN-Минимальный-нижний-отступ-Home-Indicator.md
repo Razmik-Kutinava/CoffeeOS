@@ -46,6 +46,10 @@
 
 **RED** `e6a57efb` (9 fail) → **GREEN** `1c21dbda` · REVIEW · CI green [36837366924](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/36837366924) · визуально на устройстве не проверено (Android: CartSheet в peek поднимается на 8px от края)
 
+## Патч 2026-10-07 — пустая полоса под CartSheet
+
+Заказчик: «толстый отступ возле Home Indicator — не сделано». На iPhone `CartSheet` висела на `bottom: 34px`, под ней прозрачная полоса. Фикс: шторка у края экрана (`bottom: 0`), safe-area — её внутренний `padding-bottom`, высота `heightPx + safe`. RED `d151e8d7` → GREEN `9a7a62d4`.
+
 ## Scope
 
 Разрешено: `app/frontend/styles/app.css`, `app/frontend/lib/shopWebViewLayout.js`, 5 экранов (только нижний отступ), тесты.  

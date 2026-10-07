@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-06 (УК Code Black — задеплоено, prod PASS)  
+**Дата:** 2026-10-07 (толстый отступ у Home Indicator — исправлен локально)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Толстый отступ у Home Indicator** (2026-10-07, жалоба заказчика) · TASK_SAFE-BOTTOM-MIN дал только минимум 8px, а пустую полосу на iPhone не убрал: `CartSheet` стояла на `bottom: var(--shop-safe-bottom)` (34px), и под ней была прозрачная полоса, через которую видна страница · RED `d151e8d7` → GREEN `9a7a62d4`: шторка стоит на `bottom: 0`, safe-area = её `padding-bottom`, высота = `heightPx + safe` (верх шторки, `--cart-sheet-h` и резервы экранов не изменились; pay-stack не тронут) · JS зона шторки 209/0 · Rails cart_sheet/peek/active_orders 31/0 · vite build OK · браузер не проверен (локальный сервер не запущен) | глазами iPhone 390×844 safe 34 → push/CI → deploy по апруву → Fly MCP Point A |
 | **Бэкапы БД** (2026-10-06) · раньше только Neon PITR · `.github/workflows/db-backup.yml`: 01:17 UTC + ручной запуск, `pg_dump -Fc` через direct host (PG 17) → проверка восстановлением в `postgres:17` → GPG AES256 → artifact 90 дней · секреты `NEON_BACKUP_DATABASE_URL` + `BACKUP_GPG_PASSPHRASE` · файл и в `main` (`958e0614`, нужен для schedule) · прогон [37485746707](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37485746707): 98 таблиц, 316K, в логе нет URL, локальная расшифровка PASS | фраза → менеджер паролей · окно PITR в Neon Console · при смене `DATABASE_URL` обновить секрет |
 | **Доступы «Витрины А»** (2026-10-06) · пароль УК `razmikg1988@` сброшен (передан владельцу в чате) · бариста `barista-code-black@codeblack.coffee` создан · оба входа prod PASS (`/admin`, `/barista` 200) · смен открыто 0 | открыть смену → живой заказ на табло |
 | **Персонал у владельца франшизы** (2026-10-06, решение владельца — отмена решения 2026-06-04) · RED `ae952c1d` → GREEN `38f20b60`: `staff_management_visible?` += franchise; `point_staff_scope` — только юзеры с ролью на этой точке и без ролей УК/франчайзи (до фикса управляющий видел и мог править УК-аккаунт `razmikg1988@`, привязанный к «Витрине А») · RBAC/staff/platform 216 + 12/0 · RuboCop 0 · security-review 0 · **CI green** [37454498698](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37454498698) + Semgrep/CodeQL · deploy [37454878368](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37454878368) · prod: владелец → «Персонал» 200, форма 200, УК скрыт, правка УК → redirect; УК через «открыть как менеджер» — то же · Sentry 1h 0 | владелец заводит реальную команду «Витрины А» → смена → живой заказ на табло |

@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-07 — fix: толстый отступ у Home Indicator (CartSheet)
+
+- Жалоба заказчика: на iPhone под корзиной/шторкой статуса пустая полоса ~34px, через неё видна страница. TASK_SAFE-BOTTOM-MIN это не исправил: `CartSheet` поднималась на `bottom: var(--shop-safe-bottom)`.
+- `CartSheet.svelte`: `bottom: 0`, `padding-bottom: var(--shop-safe-bottom)`, высота `heightPx + var(--shop-safe-bottom)` → фон шторки уходит под Home Indicator, верх шторки и контент на прежнем месте. Pay-stack (`stackBottomPx`) без изменений.
+- RED `d151e8d7` → GREEN `9a7a62d4` · JS зона шторки 209/0 · Rails 31/0 · vite build OK · браузер не проверен.
+
 ## 2026-10-06 — ops: ежедневный бэкап прод-БД (Neon)
 
 - До этого был только встроенный Neon PITR (короткое окно, внутри того же аккаунта Neon). Своих дампов не было.
