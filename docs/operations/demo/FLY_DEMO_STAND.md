@@ -49,7 +49,7 @@ UUID — см. ниже § «Узнать URL без SSH».
 4. Если снова 401 на registry: `fly auth docker`, затем повтор.
 5. Запасной вариант (нужен локальный Docker): `fly deploy -a coffeeos --local-only`
 
-**Проверка после деплоя:** `/up` → 200; в логах release — `Shop A:` / `Shop B:`.
+**Проверка после деплоя:** `/up` → 200; витрина «Витрины А» открывается (URL ниже).
 
 **Transient warning** `not listening on 0.0.0.0:3000` во время rolling update — обычно Puma ещё поднимается; если `/up` зелёный через 1–2 мин — ок.
 
@@ -99,37 +99,30 @@ UUID — см. ниже § «Узнать URL без SSH».
 - `SHOP_BASE_DOMAIN` **не задан** — витрина `?tenant_id=` (режим B)
 - `DEMO_AUTO_SEED=false` (с 2026-09-16) — автосид на публичном fly.dev выключен; ручной `demo:seed` по SSH при необходимости
 
-В логах release после сида есть строки **`Shop A:`** / **`Shop B:`** / **`Shop C:`** с полным URL.
-
 **Чеклист:** [`../milestones/veha_1/checklists/CHECKLIST.md`](../milestones/veha_1/checklists/CHECKLIST.md) § H.0.
 
 ---
 
-## Узнать URL витрин (без SSH)
+## Актуальные ссылки (прод, с 2026-10-06 — одна точка)
 
-### A. Логи Fly (удобнее всего)
+| Что | URL | Логин |
+|-----|-----|-------|
+| Вход | https://coffeeos.fly.dev/login | — |
+| УК | https://coffeeos.fly.dev/admin | `razmikg1988@gmail.com` |
+| Табло бариста | https://coffeeos.fly.dev/barista | `barista-code-black@codeblack.coffee` |
+| Витрина «Витрины А» | https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789 | гость |
 
-```bash
-fly logs -a coffeeos | grep -E "Shop A:|Shop B:|Точка A:"
-```
+Пароли — у владельца, в репо не пишем. Демо-логины `*@demo.coffeeos.local` точек и `demo123456` удалены 2026-10-06.
 
-Или в браузере: [Fly dashboard → coffeeos → Logs](https://fly.io/apps/coffeeos/monitoring), фильтр `Shop A`.
+## Узнать URL витрин
 
-После последнего деплоя ищи:
+### A. УК в браузере
 
-```
-Shop A: https://coffeeos.fly.dev/shop?tenant_id=...
-Shop B: https://coffeeos.fly.dev/shop?tenant_id=...
-```
+1. https://coffeeos.fly.dev/login → вход УК  
+2. Админка → точки → открыть **«Витрина А»** → скопировать **id** (UUID).  
+3. Витрина: `https://coffeeos.fly.dev/shop?tenant_id=<этот-uuid>`
 
-### B. УК в браузере
-
-1. https://coffeeos.fly.dev/login  
-2. `uk@demo.coffeeos.local` / `demo123456`  
-3. Админка → точки → открыть **demo-point-a** → в адресе или карточке скопировать **id** (UUID).  
-4. Витрина: `https://coffeeos.fly.dev/shop?tenant_id=<этот-uuid>`
-
-### C. SSH (если туннель заработал)
+### B. SSH (если туннель заработал)
 
 ```bash
 fly ssh console -a coffeeos
@@ -146,25 +139,22 @@ bin/rails demo:shop_urls
 
 ## Ручной прогон (если автосид не сработал)
 
-Только если в логах release **нет** `Shop A:` или витрина пустая — и **SSH доступен**:
+**На проде не запускать** — прод очищен от демо-данных 2026-10-06 (`DEMO_AUTO_SEED=false`). Только для отдельного demo-стенда, по апруву:
 
 ```bash
 fly ssh console -a coffeeos
 cd /rails && bin/rails demo:seed
 ```
 
-Пароль и логины: [`../milestones/veha_1/reference/DEMO_LOGINS.md`](../milestones/veha_1/reference/DEMO_LOGINS.md) (`demo123456`).
-
 ---
 
 ## Витрины (режим B)
 
-| Slug | Как открыть |
-|------|-------------|
-| `demo-point-a` | URL из логов / УК с `tenant_id` |
-| `demo-point-b` | то же |
+| Точка | Slug | Как открыть |
+|-------|------|-------------|
+| «Витрина А» | `code_black` | https://coffeeos.fly.dev/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789 |
 
-Slug в БД **не меняется** — при своём домене будет `https://demo-point-a.shop.бренд.ru/shop`.
+Slug в БД **не меняется** — при своём домене витрина по slug, см. режим A ниже.
 
 ---
 

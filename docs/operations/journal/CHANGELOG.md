@@ -11,6 +11,11 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-07 — docs: актуальные доступы стенда
+
+- Доки заказчика вели на удалённые 2026-10-06 демо-логины (`uk@demo`, `barista-a`, `gm-a`, `demo123456`) и витрину B.
+- `demo/CUSTOMER_HANDOFF.md`, `demo/FLY_DEMO_STAND.md`, `veha_2/reference/DEMO_LOGINS.md`: вход https://coffeeos.fly.dev/login · УК `razmikg1988@gmail.com` → `/admin` · бариста `barista-code-black@codeblack.coffee` → `/barista` · витрина `?tenant_id=2fdee1ac-…`. `veha_1/reference/DEMO_LOGINS.md` — ссылка на прод-логины. Пароли в репо не пишем.
+
 ## 2026-10-07 — fix + deploy Fly v515: тонкая полоса с ручкой у CartSheet
 
 - По скрину заказчика «толстое» — верхняя полоса шторки с ручкой (`gesture-zone`, `min-h-20` = 80px), не зазор у Home Indicator (v514).

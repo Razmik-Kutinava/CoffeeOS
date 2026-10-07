@@ -1,6 +1,7 @@
 # Demo-логины (единый источник правды)
 
-> **Не для prod.** Пароли и сиды только для local / demo-стенда. На Fly `DEMO_AUTO_SEED=false`; ручной `demo:seed` в production — только с явным `DEMO_AUTO_SEED=true`.
+> **Не для prod.** Пароли и сиды только для local / demo-стенда. На Fly `DEMO_AUTO_SEED=false`; ручной `demo:seed` в production — только с явным `DEMO_AUTO_SEED=true`.  
+> **Прод-логины (с 2026-10-06):** [`../../veha_2/reference/DEMO_LOGINS.md`](../../veha_2/reference/DEMO_LOGINS.md) — эти демо-аккаунты на проде удалены.
 
 **Код:** `app/services/demo/environment_setup.rb`  
 **Задачи:** `bin/rails demo:seed`, `bin/rails test:create_test_users` (дубль, те же данные)

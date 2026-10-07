@@ -7,6 +7,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Доступы в доках обновлены** (2026-10-07) — `CUSTOMER_HANDOFF.md`, `FLY_DEMO_STAND.md`, `veha_2/reference/DEMO_LOGINS.md`: убраны удалённые `*@demo` логины, `demo123456`, точка B; вписаны вход `/login`, УК `/admin`, табло `/barista`, витрина Point A · пароли в репо не пишем | заказчик проверяет входы |
 | **Fly v515** — полоса с ручкой у шторки 80 → 24px на всех экранах, шторка ниже на 56px · `82335d04` · prod PASS · Sentry 0 · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v515_2026-10-07/MCP_RESULT.md) | заказчик проверяет на телефоне |
 | **Fly v514** — фикс Home Indicator задеплоен · Point A iPhone: шторка у края, зазор 0 · Sentry 0 · логи OK · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v514_2026-10-07/MCP_RESULT.md) | заказчик проверяет на своём iPhone |
 | **Толстый отступ у Home Indicator** (2026-10-07) — `CartSheet` больше не висит на 34px над краем iPhone: стоит у края, полоса Home Indicator залита фоном шторки, контент выше полосы как раньше · RED `d151e8d7` → GREEN `9a7a62d4` · JS 209/0 · Rails 31/0 · vite OK · браузер не проверен | глазами iPhone → push/CI → deploy по апруву → Fly MCP Point A |
