@@ -50,8 +50,11 @@ describe("TASK_SAFE-BOTTOM-MIN — минимальный нижний отст�
     })
   }
 
-  it("CartSheet (и встроенная шторка статуса) — bottom из var(--shop-safe-bottom)", () => {
-    assert.match(read("app/frontend/components/CartSheet.svelte"), /"var\(--shop-safe-bottom, 0px\)"/)
+  it("CartSheet стоит у края экрана: safe-area — фон шторки, а не пустая полоса под ней", () => {
+    const src = read("app/frontend/components/CartSheet.svelte")
+    assert.match(src, /style:bottom=\{payStackActive \? `\$\{stackBottomPx\}px` : "0px"\}/)
+    assert.match(src, /style:padding-bottom=\{payStackActive \? null : "var\(--shop-safe-bottom, 0px\)"\}/)
+    assert.match(src, /style:height=\{payStackActive \? `\$\{heightPx\}px` : `calc\(\$\{heightPx\}px \+ var\(--shop-safe-bottom, 0px\)\)`\}/)
   })
 
   it("bugbot: резерв под CartSheet учитывает её подъём на --shop-safe-bottom", () => {
