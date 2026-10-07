@@ -430,8 +430,9 @@
     data-checkout-phone-auth={phoneAuthSlim ? "true" : "false"}
     class="cart-sheet fixed left-0 right-0 z-50 mx-auto flex flex-col overflow-hidden border-t border-[#3a3a3a] bg-[#2a2a2a]/98 backdrop-blur transition-[height,bottom] ease-out"
     class:cart-sheet--pay-stack-peek={payStackActive}
-    style:height="{heightPx}px"
-    style:bottom={payStackActive ? `${stackBottomPx}px` : "var(--shop-safe-bottom, 0px)"}
+    style:height={payStackActive ? `${heightPx}px` : `calc(${heightPx}px + var(--shop-safe-bottom, 0px))`}
+    style:bottom={payStackActive ? `${stackBottomPx}px` : "0px"}
+    style:padding-bottom={payStackActive ? null : "var(--shop-safe-bottom, 0px)"}
     style:max-width="{CART_SHEET_MAX_WIDTH_PX}px"
     style:transition-duration="{SHEET_TRANSITION_MS}ms"
     style:z-index={payStackActive ? 52 : 50}
