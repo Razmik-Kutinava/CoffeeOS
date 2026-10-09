@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-09 — feat TASK_103: скролл списка активных заказов в статусной шторке
+
+- Было: при 2 активных заказах список в peek-шторке не листался — скролл появлялся только с раскрытым «Составом».
+- Стало: строки обёрнуты в `.oss__list` (`data-oss-scroll-root`), он скроллится всегда; `.oss__panel` — рамка фиксированной высоты (`overflow: hidden`); подгонка чека (`measureReceiptFit`) двигает только `.oss__list` и только при раскрытии чека (опрос 8 с и resize список не дёргают); подсказка `↕` с 2 заказов.
+- RED `3bfc86eb` `9406b2df` `8da3d1b8` → GREEN `d2f1b15d` · браузер 390×844 Subtask 1–5 PASS ([MEASURE](../milestones/veha_2/artifacts/active_orders_list_scroll/MEASURE.md)) · /regress JS 193/1 (legacy) + Rails 20/0 · REVIEW bugbot 0 · security 0 · crit-audit CLEAN (`aa71cb64..3b626256`, CA-001 `rejected: no-repro`) · Entire `01M4G9DHJRVD55PATA6V8DM3RT`.
+- Скрин заказчика (форма оплаты на Android при открытой клавиатуре накрывает корзину) — отдельная задача, `05_customer_android_pay_form_keyboard.png`.
+
 ## 2026-10-07 — docs: актуальные доступы стенда
 
 - Доки заказчика вели на удалённые 2026-10-06 демо-логины (`uk@demo`, `barista-a`, `gm-a`, `demo123456`) и витрину B.

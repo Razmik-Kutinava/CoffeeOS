@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK_103](../milestones/veha_2/requirements/customer_tasks/TASK-103-Вертикальный-скролл-списка-активных-заказов-в-статусной-шторке.md) · новая задача, семья TASK_84 · [Google Doc](https://docs.google.com/document/d/1TA-TSjes-cJc14BADMetvDNUqynS6Ihs6sE1en5ndLc/edit?usp=drivesdk) · Subtask 1–5 |
 | **Решение владельца (2026-10-09)** | `fitReceiptInView` / `measureReceiptFit` скроллят **только** новый внутренний контейнер списка `.oss__list`, не `.oss__panel` и не основной экран → блокер «не готов к Build» снят |
-| **Статус** | regress PASS · ждёт `/review` |
+| **Статус** | REVIEW: bugbot 0 · security 0 · crit-audit CLEAN · push → CI · deploy по апруву |
 
 ## SBR
 
@@ -13,7 +13,7 @@
 - [x] RED `3bfc86eb` (+ `9406b2df`, `8da3d1b8` — якорение fit) — Node: SSR-разметка `.oss__list` + контракт scroll-root в аккордеоне + порог `> 1`; браузер-скрипт замера (MEASURE) **до** правок фиксирует дефект (2 заказа: `.oss__list` нет / scroll не двигается)
 - [x] GREEN — `.oss__list` + CSS + `closest("[data-oss-scroll-root]")` + порог + якорение fit только при раскрытии чека; браузер-скрипт: Subtask 1–5 PASS ([MEASURE](../milestones/veha_2/artifacts/active_orders_list_scroll/MEASURE.md)) · Node 84/0 · Rails 20/0 · vite build OK
 - [x] `/regress` PASS — JS зона 16 файлов 193/1 (1 = legacy `order_action_buttons_cancel_test` «422/500», в ISSUES, падает с `0fe747a0` no-tips) · Rails шторка 4 файла 20/0 · vite build OK
-- [ ] `/review` — bugbot + security + crit-audit · Entire · push · CI
+- [x] `/review` — bugbot 0 (1 находка снята валидатором) · security 0 · crit-audit CLEAN `aa71cb64..3b626256` (CA-001 C3 `rejected: no-repro`) · Entire `01M4G9DHJRVD55PATA6V8DM3RT` на `d2f1b15d` · сверка с ТЗ: Subtask 1–5 ок · push → CI
 - [ ] `COMPONENT_MAP.md` строки `OrderStatusSheet` / `ActiveOrdersAccordion` / `orderStatusSheet.js` — после Review
 - [ ] deploy по апруву → ручная проверка на телефоне (iOS + Android) · Fly MCP Point A
 
