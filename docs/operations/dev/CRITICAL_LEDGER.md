@@ -8,7 +8,7 @@
 
 **last_audited_sha:** `4a5c67a3` (TASK_106 шторка: без «повторить» на товаре, одна кнопка с суммой, пустая корзина по содержимому)  
 **last_audit_date:** 2026-10-09  
-**last_verdict:** `CLEAN` (CI pending до push)
+**last_verdict:** `CLEAN` (CI green `5b2ecb6e`)
 
 ## Статусы
 
