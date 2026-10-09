@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK_104](../milestones/veha_2/requirements/customer_tasks/TASK-104-Минималистичный-переключатель-состава-заказа-только-стрелка.md) · новая задача, семья TASK_84 · [Google Doc](https://docs.google.com/document/d/1VeEupfhH3wkqnRhjgVXPAgIXi2Bext1kCFbAOpQpoDw/edit?usp=drivesdk) · Subtask 1–5 · владелец: «заливку убрать и кнопку оставить только "> / v" под статусной моделью» |
 | **Открытый вопрос** | точное положение стрелки (ТЗ требует подтвердить до Build) — предложение ниже, § Решение п.1 |
-| **Статус** | GREEN → `/regress` |
+| **Статус** | REVIEW: bugbot 0 · security 0 · crit-audit CLEAN · push → CI · deploy по апруву |
 
 ## SBR
 
@@ -14,7 +14,7 @@
 - [x] RED `e7709e13` — 7 fail (текст, заливка, ширина, focus-visible, справа, область 44×36); браузер до: 372×29 оранжевая «Состав заказа >»
 - [x] GREEN — разметка + CSS `.aoa__receipt-cta`; тест 9/0 · Проверка п.1 102/0 · JS зона 15 файлов 190/1 (1 = legacy `order_action_buttons_cancel_test`, падает и без правки, в ISSUES) · Rails 12/0 · vite OK · браузер S1–S5 PASS ([MEASURE](../milestones/veha_2/artifacts/active_orders_receipt_arrow_only/MEASURE.md)); Enter/Space — только руками (синтетические события не активируют `<button>`)
 - [x] `/regress` PASS — JS зона 18 файлов (`order_status*` `active_orders*` `cart_sheet*` `sticky*` `order_cancel*` `order_action*` `subscription_offer*`) 238/1 (1 = legacy `order_action_buttons_cancel_test`, в ISSUES) · Rails шторка 5 файлов 28/0 · vite build OK
-- [ ] `/review`
+- [x] `/review` — bugbot 0 · security 0 · crit-audit CLEAN `3b626256..85b43aa9` · Entire `01M4GCQ9PBDZZBY7SGH4GTC94S` на `bb28557e` · сверка с ТЗ: Subtask 1–5 ок (Enter/Space — руками после deploy) · CI — после push
 - [ ] `COMPONENT_MAP.md` строка `ActiveOrdersAccordion` — после Review
 - [ ] deploy по апруву → телефон iOS + Android · Fly MCP Point A
 
