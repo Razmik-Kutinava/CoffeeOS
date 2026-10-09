@@ -211,8 +211,7 @@
 
   let displayOrders = $derived(visibleOrders(orders))
   let scrollable = $derived(shouldScrollStatusList(displayOrders))
-  /** TASK_84-PEEK-ONLY-EXT: открытый чек не раскрывает шторку — только scroll внутри peek */
-  let receiptOpen = $derived(!!accordionState.activeExpandedOrderId)
+  /** TASK_84-PEEK-ONLY-EXT: открытый чек не раскрывает шторку — scroll внутри .oss__list (TASK_103) */
   let statusSheetMode = $derived(
     displayOrders.length === 0
       ? ORDER_STATUS_SHEET_MODES.HIDDEN
@@ -243,7 +242,6 @@
     <div
       class="oss__panel"
       class:scrollable
-      class:receipt-open={receiptOpen}
       class:embedded
       style={embedded ? undefined : "pointer-events:auto"}
       role="status"
@@ -255,18 +253,21 @@
       {#if cancelToast}
         <p class="oss__toast" data-testid="sticky-cancel-toast" role="status">{cancelToast}</p>
       {/if}
-      {#each displayOrders as order (order.id || order.order_id)}
-        <ActiveOrdersAccordion
-          {order}
-          {sheetContext}
-          bind:accordionState
-          onOpenDetail={(o) => push(`/order/${o.id || o.order_id}`)}
-          onCancelRequest={onCancelRequest}
-        />
-      {/each}
-      {#if scrollable}
-        <div class="oss__scroll-hint" aria-hidden="true">↕</div>
-      {/if}
+      <!-- TASK_103: единственный scroll-бокс шторки; fit чека скроллит только его -->
+      <div class="oss__list" data-testid="shop-order-status-list" data-oss-scroll-root>
+        {#each displayOrders as order (order.id || order.order_id)}
+          <ActiveOrdersAccordion
+            {order}
+            {sheetContext}
+            bind:accordionState
+            onOpenDetail={(o) => push(`/order/${o.id || o.order_id}`)}
+            onCancelRequest={onCancelRequest}
+          />
+        {/each}
+        {#if scrollable}
+          <div class="oss__scroll-hint" aria-hidden="true">↕</div>
+        {/if}
+      </div>
     </div>
   </div>
 {/if}
@@ -320,6 +321,9 @@
     padding: 0.35rem 0.55rem 0.45rem;
     max-height: 8.75rem;
     transition: max-height 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
   .oss__panel.embedded {
     border-radius: 0;
@@ -330,10 +334,15 @@
     /* #42: не перекрывать оплату / каталог при multi-order */
     max-height: min(22vh, 8.5rem);
   }
-  .oss__panel.scrollable { overflow-y: auto; }
-  .oss__panel.receipt-open { overflow-y: auto; }
-  .oss__conn { margin: 0 0 0.25rem; font-size: 0.65rem; color: #f0c070; }
+  .oss__list {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .oss__conn { margin: 0 0 0.25rem; font-size: 0.65rem; color: #f0c070; flex-shrink: 0; }
   .oss__toast {
+    flex-shrink: 0;
     margin: 0 0 0.35rem;
     font-size: 0.68rem;
     color: #a5d6a7;

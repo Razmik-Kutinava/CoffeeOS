@@ -4,14 +4,14 @@
 |------|----------|
 | **Основание** | [TASK_103](../milestones/veha_2/requirements/customer_tasks/TASK-103-Вертикальный-скролл-списка-активных-заказов-в-статусной-шторке.md) · новая задача, семья TASK_84 · [Google Doc](https://docs.google.com/document/d/1TA-TSjes-cJc14BADMetvDNUqynS6Ihs6sE1en5ndLc/edit?usp=drivesdk) · Subtask 1–5 |
 | **Решение владельца (2026-10-09)** | `fitReceiptInView` / `measureReceiptFit` скроллят **только** новый внутренний контейнер списка `.oss__list`, не `.oss__panel` и не основной экран → блокер «не готов к Build» снят |
-| **Статус** | SPEC `[x]` · ждёт `/sbr` (RED) |
+| **Статус** | GREEN `[x]` · ждёт `/regress` |
 
 ## SBR
 
 - [x] intake (ТЗ 1:1 + строка CBR)
 - [x] SPEC — факт, решение, файлы, Не ломать, Проверка
-- [ ] RED — Node: SSR-разметка `.oss__list` + контракт scroll-root в аккордеоне + порог `> 1`; браузер-скрипт замера (MEASURE) **до** правок фиксирует дефект (2 заказа: `.oss__list` нет / scroll не двигается)
-- [ ] GREEN — `.oss__list` + CSS + `closest("[data-oss-scroll-root]")` + порог; браузер-скрипт: Subtask 1–5 PASS
+- [x] RED `3bfc86eb` (+ `9406b2df`, `8da3d1b8` — якорение fit) — Node: SSR-разметка `.oss__list` + контракт scroll-root в аккордеоне + порог `> 1`; браузер-скрипт замера (MEASURE) **до** правок фиксирует дефект (2 заказа: `.oss__list` нет / scroll не двигается)
+- [x] GREEN — `.oss__list` + CSS + `closest("[data-oss-scroll-root]")` + порог + якорение fit только при раскрытии чека; браузер-скрипт: Subtask 1–5 PASS ([MEASURE](../milestones/veha_2/artifacts/active_orders_list_scroll/MEASURE.md)) · Node 84/0 · Rails 20/0 · vite build OK
 - [ ] `/regress` — зона JS + Rails (см. «Проверка»)
 - [ ] `/review` — bugbot + security + crit-audit · Entire · push · CI
 - [ ] `COMPONENT_MAP.md` строки `OrderStatusSheet` / `ActiveOrdersAccordion` / `orderStatusSheet.js` — после Review
@@ -60,12 +60,12 @@
 
 ## DoD
 
-- [ ] Subtask 1: 2 заказа, чеки закрыты → список скроллится, высота peek та же, CartSheet / экран не скроллятся
-- [ ] Subtask 2: 3+ заказов — скролл как раньше
-- [ ] Subtask 3: длинный чек скроллится сам, список / экран не двигаются
-- [ ] Subtask 4: открытие второго чека закрывает первый, список скроллится
-- [ ] Subtask 5: `fitReceiptInView` двигает только `.oss__list`, `.oss__panel.scrollTop = 0`
-- [ ] Ограничение стека зафиксировано (нет system-тестов) · ручная проверка на телефоне после deploy
+- [x] Subtask 1: 2 заказа, чеки закрыты → список скроллится, высота peek та же, CartSheet / экран не скроллятся
+- [x] Subtask 2: 3+ заказов — скролл как раньше
+- [x] Subtask 3: длинный чек скроллится сам, список / экран не двигаются
+- [x] Subtask 4: открытие второго чека закрывает первый, список скроллится
+- [x] Subtask 5: `fitReceiptInView` двигает только `.oss__list`, `.oss__panel.scrollTop = 0`
+- [ ] Ограничение стека зафиксировано (нет system-тестов) `[x]` · ручная проверка на телефоне после deploy `[ ]`
 
 ---
 

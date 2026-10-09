@@ -59,8 +59,9 @@ export function stopActiveOrdersPolling() {
   }
 }
 
+/** Только подсказка ↕; сам scroll `.oss__list` включён всегда (TASK_103). */
 export function shouldScrollStatusList(orders) {
-  return (orders?.length || 0) > 2
+  return (orders?.length || 0) > 1
 }
 
 export function mapReconnectError(status) {

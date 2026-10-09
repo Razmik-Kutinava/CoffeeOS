@@ -80,11 +80,6 @@
     if (init.restored) pushSubscribed = true
   })
 
-  function isScrollBox(el) {
-    const cs = getComputedStyle(el)
-    return cs.overflowY === "auto" || cs.overflowY === "scroll"
-  }
-
   function isClipBox(el) {
     const cs = getComputedStyle(el)
     return cs.overflowY !== "visible" || cs.overflow === "hidden"
@@ -93,8 +88,8 @@
   function measureReceiptFit() {
     const el = receiptEl
     if (!el) return null
-    let container = el.parentElement
-    while (container && !isScrollBox(container)) container = container.parentElement
+    // TASK_103: двигаем только список шторки — не .oss__panel и не экран.
+    const container = el.closest("[data-oss-scroll-root]")
     if (!container) return null
     let clipBottom = window.innerHeight
     const clipBoxes = []
@@ -121,15 +116,17 @@
   }
 
   let fitGeneration = 0
+  /** Чек, к CTA которого список уже прокручен: poll / новые props не тянут список назад. */
+  let anchoredOrderId = null
 
-  async function fitReceipt(gen) {
+  async function fitReceipt(gen, anchor = true) {
     const first = measureReceiptFit()
     if (!first || gen !== fitGeneration) return null
     receiptFit = first.fit
     await tick()
     if (gen !== fitGeneration) return null
     const next = measureReceiptFit()
-    if (next) next.container.scrollTop += next.fit.scrollDelta
+    if (next && anchor) next.container.scrollTop += next.fit.scrollDelta
     return first
   }
 
@@ -137,6 +134,7 @@
     if (!receiptPanel.show || !receiptEl || !receipt) {
       fitGeneration++
       receiptFit = null
+      anchoredOrderId = null
       return
     }
     // Блоки между CTA и чеком меняют отступ — перевписать.
@@ -145,15 +143,18 @@
     let container = null
     let observer = null
     let frame = 0
+    // Список пользователь листает сам — refit не возвращает его к CTA (TASK_103).
     const refit = () => {
       cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(() => fitReceipt(gen))
+      frame = requestAnimationFrame(() => fitReceipt(gen, false))
     }
     // Панель анимирует max-height при expand — замер до конца transition неточный.
     const onTransitionEnd = (e) => {
       if (e.target === container) refit()
     }
-    fitReceipt(gen).then((m) => {
+    const anchor = anchoredOrderId !== orderId
+    anchoredOrderId = orderId
+    fitReceipt(gen, anchor).then((m) => {
       if (!m || gen !== fitGeneration) return
       container = m.container
       container.addEventListener("transitionend", onTransitionEnd)
