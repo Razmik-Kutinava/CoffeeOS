@@ -75,6 +75,19 @@ describe("TASK_103 — список заказов в отдельном scroll-
     assert.match(cssRule(src, ".oss__panel.embedded") || "", /max-height:\s*min\(22vh,\s*8\.5rem\)/)
   })
 
+  it("poll/refresh не возвращает список к открытому чеку: якорение один раз на раскрытие (Subtask 3–4)", () => {
+    const src = accordionSrc()
+    const fit = src.match(/async function fitReceipt\(([^)]*)\)\s*\{([\s\S]*?)\n {2}\}/)
+    assert.ok(fit, "fitReceipt на месте")
+    assert.match(fit[1], /gen,\s*anchor/)
+    assert.match(fit[2], /if \(next && anchor\) next\.container\.scrollTop \+= next\.fit\.scrollDelta/)
+    assert.match(src, /const anchor = anchoredOrderId !== orderId/)
+    assert.match(src, /fitReceipt\(gen, anchor\)/)
+    const closed = src.match(/if \(!receiptPanel\.show \|\| !receiptEl \|\| !receipt\) \{([\s\S]*?)return/)
+    assert.ok(closed)
+    assert.match(closed[1], /anchoredOrderId = null/)
+  })
+
   it("подгонка чека скроллит только [data-oss-scroll-root], не ближайший overflow-предок", () => {
     const src = accordionSrc()
     const fn = src.match(/function measureReceiptFit\(\)\s*\{([\s\S]*?)\n {2}\}/)
