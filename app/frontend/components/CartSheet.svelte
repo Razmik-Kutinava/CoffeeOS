@@ -110,7 +110,7 @@
   let payStackActive = $derived(onCheckout && payStackOpen && count > 0)
   /** TASK_106: пустая корзина без «повторить» и без статуса — высота по содержимому, без пустого низа */
   let fitContent = $derived(
-    !count && !hasActiveOrderFlag && !showRepeatInSheet && !payStackActive && !phoneAuthSlim
+    !count && !hasActiveOrderFlag && !showRepeatInSheet && !payStackActive && !phoneAuthSlim && !statusWidgetVisible
   )
   let sheetEl = $state(/** @type {HTMLElement | null} */ (null))
   let fitHeightPx = $state(0)
@@ -155,10 +155,21 @@
   $effect(() => {
     void [onProduct, sheetError, hideCheckoutCta]
     if (!fitContent || !sheetEl || typeof ResizeObserver === "undefined") return
+    const el = sheetEl
     const ro = new ResizeObserver(measureFitHeight)
-    for (const child of sheetEl.children) ro.observe(child)
-    measureFitHeight()
-    return () => ro.disconnect()
+    const observeChildren = () => {
+      ro.disconnect()
+      for (const child of el.children) ro.observe(child)
+      measureFitHeight()
+    }
+    const mo = typeof MutationObserver === "undefined" ? null : new MutationObserver(observeChildren)
+    mo?.observe(el, { childList: true })
+    observeChildren()
+    return () => {
+      ro.disconnect()
+      mo?.disconnect()
+      fitHeightPx = 0
+    }
   })
   let stackBottomPx = $derived(sheetHeightPx(stackBottomVh, { visualViewport: { height: vvh } }))
   let singleItem = $derived(count === 1 ? items[0] : null)
