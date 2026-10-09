@@ -33,14 +33,11 @@ describe("TASK_84-PEEK-ONLY-EXT — статусная шторка только
     assert.match(cssRule(src, ".oss__panel") || "", /max-height:\s*8\.75rem/)
   })
 
-  it("open receipt makes panel a scroll box without changing its height", () => {
+  it("open receipt does not change panel height or scroll the panel (TASK_103: scroll in .oss__list)", () => {
     const src = sheetSrc()
-    assert.match(src, /class:receipt-open=\{receiptOpen\}/)
-    assert.match(src, /let receiptOpen = \$derived\(!!accordionState\.activeExpandedOrderId\)/)
-    const rule = cssRule(src, ".oss__panel.receipt-open")
-    assert.ok(rule, ".oss__panel.receipt-open rule required")
-    assert.match(rule, /overflow-y:\s*auto/)
-    assert.doesNotMatch(rule, /max-height/)
+    assert.equal(cssRule(src, ".oss__panel.receipt-open"), null)
+    assert.doesNotMatch(src, /class:receipt-open/)
+    assert.match(cssRule(src, ".oss__list") || "", /overflow-y:\s*auto/)
   })
 
   it("receipt fits inside peek panel (embedded 136px) with own scroll", () => {

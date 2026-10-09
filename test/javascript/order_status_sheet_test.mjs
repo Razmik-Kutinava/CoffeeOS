@@ -58,10 +58,14 @@ describe("createOrderStatusSheetState (#35 A2)", () => {
   })
 })
 
-describe("shouldScrollStatusList (#35 A2b)", () => {
-  it("scroll off for 1–2 statuses", () => {
-    assert.equal(shouldScrollStatusList([{ id: 1 }, { id: 2 }]), false)
+describe("shouldScrollStatusList (#35 A2b, TASK_103)", () => {
+  it("scroll hint off for a single status", () => {
     assert.equal(shouldScrollStatusList([{ id: 1 }]), false)
+    assert.equal(shouldScrollStatusList([]), false)
+  })
+
+  it("scroll hint on from 2 statuses (TASK_103)", () => {
+    assert.equal(shouldScrollStatusList([{ id: 1 }, { id: 2 }]), true)
   })
 
   it("scroll on when more than 2 statuses", () => {
