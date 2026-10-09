@@ -1,3 +1,75 @@
+# todo — TASK_106: лишние блоки и пустой оверлей в PWA
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_106](../milestones/veha_2/requirements/customer_tasks/TASK-106-Устранение-лишних-блоков-и-пустого-оверлея-в-PWA.md) · новая задача · [Google Doc](https://docs.google.com/document/d/1qyXn19B6m9_5dPV11Yzyc29Cb_FodmZPpU3PeTdS_yw/edit?usp=drivesdk) · Subtask 1–7 · владелец: «убрать текст слева сумму 0₽, оставить только кнопку с суммой» |
+| **Решения владельца (2026-10-09)** | кнопка — сумма **без плюса** («0₽», «350₽») · кнопка **на всю ширину** нижней панели |
+| **Открытый вопрос** | какой слой = «пустой оверлей с полоской ~110px» — в коде отдельного компонента нет, идентификация замером на RED (шаг 0) · путь «расширяемого документа» — кандидат [TASK-SAFE-BOTTOM-MIN](../milestones/veha_2/requirements/customer_tasks/TASK-SAFE-BOTTOM-MIN-Минимальный-нижний-отступ-Home-Indicator.md) / Fly v515 (полоса 80→24px), подтвердить |
+| **Статус** | SPEC |
+
+## SBR
+
+- [x] intake (ТЗ 1:1 + строка CBR)
+- [x] SPEC — факт, решение, файлы, Не ломать, Проверка
+- [ ] RED шаг 0 — замер в браузере 412×915 (Pixel 6) + 412×~780 (WebView): `elementFromPoint` над «Итого»/кнопкой и заголовком «Холодные», каталог `#/`, пустая корзина, с историей «повторить» и без → какой слой и откуда высота; скрины до
+- [ ] RED — тесты (ниже) падают
+- [ ] GREEN
+- [ ] `/regress`
+- [ ] `/review`
+- [ ] `COMPONENT_MAP.md` строка `CartSheet` — после Review
+- [ ] deploy по апруву → Pixel 6 / Google Chat · Fly MCP Point A
+
+## Факт (аудит 2026-10-09)
+
+- **Товарной шторки как отдельного компонента нет** (канон #44): `#/product/:id` = `routes/Product.svelte`, низ — та же `CartSheet` (`App.svelte:160`); «добавить к заказу» = `ProductSheetCta` внутри `CartSheet.svelte:480-491`, состояние через `productPageCtaStore.js` (`Product.svelte:224-244`).
+- **«повторить»** = `RepeatSection.svelte` (`:262-268`, `data-testid="shop-repeat-section"`, подпись «повторить»), импорт **только** в `CartSheet`. Слоты: `shop-repeat-slot-empty` (`:504-507`, `layout="full"`, пустая корзина — на товаре это и есть ~320px под CTA), `-peek` (`:650-651`), `-expanded` (`:717-718`), `-single` (`:791-792`). Условие `showRepeat = frequentCount > 0 && !hasActiveOrderFlag && !onCheckout` (`:100`) — `onProduct` не учитывается.
+- **Резерв высоты под «повторить»:** `heightVh` (`:109-129`) — пустая корзина `peekSingleWithRepeat` 46 vs `peekSingle` 34; с позициями в peek — `peekSingle/MultiWithRepeat` 46/50; на товаре `+ PRODUCT_CTA_EXTRA_VH` 14. Пороги в `cartSheetThresholds.js` менять **не нужно** — достаточно не выбирать ветку `WithRepeat` на товаре.
+- `showRepeat` также идёт в `shouldShowAddCardCta({ hasRepeatContext })` (`:101-107`) — это логика оплаты/привязки карты, **не трогаем**.
+- **«Итого» слева** = `checkoutBar` snippet `:387-425`: `<div data-testid="shop-cart-order-total">Итого / N₽</div>` + кнопка `shop-cart-sheet-checkout` (`formatCartButtonTotal` → `+N₽`, `:240-242`) или `shop-cart-add-card`. Snippet один на empty/peek/expanded/single. Hidden-режим (`:539-569`) — своя кнопка `+N₽`, без «Итого».
+- «Итого» слева ввела «Правка 5» — `cart_checkout_button_total_dynamic_test.rb:23-31` (владелец теперь отменяет → тест переписать).
+- **Пустой оверлей:** единственная полоса-ручка на витрине = gesture-zone `CartSheet` (`:455-467`, `min-h-6`); `CatalogFiltersSheet`/`CatalogSortSheet` (`.sheet-handle`) нигде не смонтированы; `ShopPwaBanner` — сверху (`top: 3.25rem`); `OrderStatusSheet` embedded без активных заказов не рендерит ничего (`showStatusUi`, `:233`). Гипотезы: **H1** — пустой резерв самой `CartSheet` в empty-режиме (34/46vh − 56px > контент: ручка + «тут будут твои заказы» + бар); **H2** — `RepeatSection` пустой/ещё грузится при `frequentCount > 0` (46vh без карточек); **H3** — иное (браузер покажет). Фикс — только для подтверждённого слоя.
+
+## Решение для билда
+
+1. **Subtask 1–2:** `showRepeatInSheet = showRepeat && !onProduct` — во всех 4 слотах `RepeatSection` и в `heightVh` (на товаре — `peekSingle`/`peekMulti`/`sheetHeightVh` + 14vh CTA). `showAddCardCta` остаётся на `showRepeat`. `RepeatSection`/`frequentRepeatStore`/пороги — без изменений.
+2. **Владелец (нижняя панель):** в `checkoutBar` удалить блок `shop-cart-order-total`; кнопка `shop-cart-sheet-checkout` / `shop-cart-add-card` — `w-full`; `formatCartButtonTotal` → `${formatThousands(n)}₽` (без `+`, касается и hidden-кнопки — единый формат). Действие кнопки, `disabled`, `checkoutButtonFontSizePx`, testid сумм (`shop-cart-empty-total`/`-peek-total`) — без изменений.
+3. **Subtask 3–5:** по итогам замера RED шаг 0. Если H1 — не держать пустой резерв в empty-режиме (высота = контент, через существующий `--cart-sheet-h`); ручку/жест/safe-area не трогаем. Если слой другой — отдельный минимальный фикс, todo дописать до GREEN.
+4. **Не менять:** `cartSheetThresholds.js` значения (кроме маркера `CART_SHEET_BUILD` — конвенция «менять при UX-фиксе»), `phoneAuthSlim`, pay-stack, клавиатура, gesture-zone, `PaymentMethodsSheet`, `OrderStatusSheet`, `RepeatSection`.
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/components/CartSheet.svelte` — `showRepeatInSheet` (слоты + `heightVh`), `checkoutBar` без «Итого» + кнопка `w-full`, `formatCartButtonTotal` без `+`, фикс пустого слоя.
+2. `app/frontend/lib/cartSheetThresholds.js` — только маркер `CART_SHEET_BUILD` (значения — только если замер докажет).
+3. `test/integration/shop/product_sheet_no_repeat_bottom_bar_test.rb` (новый) — RED: на товаре нет `RepeatSection`/`WithRepeat`-высоты; в `checkoutBar` нет `shop-cart-order-total`/«Итого»; кнопка без `+` и `w-full`; пустой слой (по итогам замера).
+4. `test/integration/shop/cart_checkout_button_total_dynamic_test.rb` — переписать «Правку 5» под новый канон.
+5. `docs/operations/milestones/veha_2/artifacts/pwa_extra_blocks_empty_overlay/` — `measure_pwa_extra_blocks.js` (CDP) + `MEASURE.md` + скрины до/после.
+
+**Соседи (blast-radius, только регрессия; править, если упадут на старом каноне):** `quick_repeat_sheet_layout_canon_test.rb` / `quick_repeat_customer_fixes_test.rb` / `cart_sheet_empty_orders_placeholder_test.rb` (`showRepeat`, слоты), `cart_sheet_default_peek_empty_test.rb` (`peekSingleWithRepeat`), `b113_s2_cart_popup_test.rb` / `b113_s2a_cart_sheet_acceptance_test.rb` (`formatCartButtonTotal`), `product_card_s0_single_sheet_no_overlap_test.rb` (`PRODUCT_CTA_EXTRA_VH`).
+
+## Не ломать
+
+- Quick Repeat на каталоге `#/` (пустая корзина и с позициями): карточки, «+», оплата из повтора (`openRepeatPaymentSheet`), скрытие при активном заказе.
+- Оплата: кнопка checkout / add-card ведёт туда же, `disabled`, pay-stack на checkout, phone-auth slim, клавиатура (`hideCheckoutCta`), сумма = `total` корзины.
+- Геометрия: safe-area снизу (v514), gesture-zone 24px и свайпы (v515), peek/expanded/hidden, `--cart-sheet-h` спейсер товара/каталога.
+- Статусная шторка внутри `CartSheet` (TASK_103/104) — высота и `STATUS_IN_SHEET_EXTRA_VH` без изменений.
+
+## Проверка
+
+1. `ruby bin/rails test test/integration/shop/product_sheet_no_repeat_bottom_bar_test.rb test/integration/shop/cart_checkout_button_total_dynamic_test.rb test/integration/shop/quick_repeat_section_test.rb test/integration/shop/quick_repeat_sheet_layout_canon_test.rb test/integration/shop/quick_repeat_customer_fixes_test.rb test/integration/shop/cart_sheet_empty_orders_placeholder_test.rb test/integration/shop/cart_sheet_default_peek_empty_test.rb test/integration/shop/product_card_s0_single_sheet_no_overlap_test.rb test/integration/shop/cart_sheet_gesture_hit_area_test.rb test/integration/shop/bottom_sheet_heights_canon_test.rb`
+2. JS зона `node --test test/javascript/shop_safe_bottom_min_test.mjs test/javascript/widget_repeat_pay_flow_fallback_ui_test.mjs test/javascript/widget_repeat_pay_flow_patch1_test.mjs test/javascript/open_repeat_payment_sheet_test.mjs` · `npm run vite:build` · браузер 412×915 + 390×844 (MEASURE): Subtask 1–7.
+
+## DoD
+
+- [ ] Subtask 1: на товаре нет «повторить» в DOM
+- [ ] Subtask 2: высота шторки на товаре без резерва `WithRepeat`
+- [ ] Subtask 3: пустой слой (идентифицированный) не отображается
+- [ ] Subtask 4: кнопка с суммой «0₽» на всю ширину, без «Итого» слева, не перекрыта
+- [ ] Subtask 5: «Холодные» и карточки не перекрыты
+- [ ] Subtask 6: Quick Repeat на каталоге работает
+- [ ] Subtask 7: peek/expanded/phone-auth/pay-stack/safe-area/жест — без регрессии
+
+---
+
 # todo — TASK_104: переключатель состава заказа — только стрелка `>` / `v`
 
 | Поле | Значение |
