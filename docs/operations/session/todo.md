@@ -1,3 +1,74 @@
+# todo — TASK_104: переключатель состава заказа — только стрелка `>` / `v`
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_104](../milestones/veha_2/requirements/customer_tasks/TASK-104-Минималистичный-переключатель-состава-заказа-только-стрелка.md) · новая задача, семья TASK_84 · [Google Doc](https://docs.google.com/document/d/1VeEupfhH3wkqnRhjgVXPAgIXi2Bext1kCFbAOpQpoDw/edit?usp=drivesdk) · Subtask 1–5 · владелец: «заливку убрать и кнопку оставить только "> / v" под статусной моделью» |
+| **Открытый вопрос** | точное положение стрелки (ТЗ требует подтвердить до Build) — предложение ниже, § Решение п.1 |
+| **Статус** | SPEC |
+
+## SBR
+
+- [x] intake (ТЗ 1:1 + строка CBR)
+- [x] SPEC — факт, решение, файлы, Не ломать, Проверка
+- [ ] подтверждение владельцем положения стрелки
+- [ ] RED — Node SSR + оракул CSS + браузер-скрипт до правок (кнопка оранжевая, с текстом, на всю ширину)
+- [ ] GREEN — разметка + CSS `.aoa__receipt-cta`; браузер-скрипт Subtask 1–5 PASS
+- [ ] `/regress`
+- [ ] `/review`
+- [ ] `COMPONENT_MAP.md` строка `ActiveOrdersAccordion` — после Review
+- [ ] deploy по апруву → телефон iOS + Android · Fly MCP Point A
+
+## Факт (аудит 2026-10-09)
+
+- `ActiveOrdersAccordion.svelte:328-338` — `<button class="aoa__receipt-cta" data-testid="active-order-receipt-cta" aria-expanded aria-label={receiptLabel}>{receiptLabel} <span class="aoa__receipt-arrow" aria-hidden="true">{row.chevron}</span></button>`; стоит сразу под `.aoa__head` (мета-строка + прогресс + `OrderActionButtons`), до push recovery / toast / чека.
+- `:566-581` — `.aoa__receipt-cta`: `display: block; width: 100%`, `padding: 0.35rem 0.5rem`, `border-radius: 0.5rem`, `background: #ff8c42`, `color: #000`, `text-align: center`.
+- `:54-56` — `receiptLabel` = `notifyActionsView().secondaryLabel` = «Состав заказа» (`orderStatusNotifyActions.js:23`); `:71-73` — видимость только `accepted|paid|preparing`.
+- `:102-114` — `measureReceiptFit`: якорь = `receiptCtaEl`, `ctaHeightPx = offsetHeight`, `receiptOffsetPx` = факт. расстояние верх CTA → верх чека. `fitReceiptInView` (`activeOrdersAccordion.js:158`) от высоты не зависит жёстко — берёт замер → меньшая кнопка безопасна, проверяем браузером.
+- `activeOrdersAccordion.js:10-13` — `CHEVRON` `>` / `v`; `:70` — `row.chevron`. Менять не нужно.
+- Текст «Состав заказа» в `routes/OrderStatus.svelte:346` (заголовок карточки `/order/:id`) и тесты на него (`order_status_acceptance_cbr_test.rb:35`, `subscription_offer_banner_test.mjs:219-223`) — **другой экран, не трогаем**.
+- jsdom / playwright в `package.json` нет, `test/system` нет → реальный клик проверяем CDP-скриптом в браузере (как TASK_103, `artifacts/active_orders_list_scroll/measure_list_scroll.js`).
+
+## Решение для билда
+
+1. **Положение (предложение, ждёт ок владельца):** та же позиция в DOM — отдельная строка сразу под `.aoa__head` («статусная модель» = мета + прогресс + кнопки), стрелка прижата вправо (`margin-left: auto`). В заголовок заказа стрелку не переносим (запрет ТЗ).
+2. **Разметка:** внутри `<button>` только `<span class="aoa__receipt-arrow" aria-hidden="true">{row.chevron}</span>`; видимого `{receiptLabel}` нет. `data-testid="active-order-receipt-cta"`, `bind:this={receiptCtaEl}`, `aria-expanded`, `onclick` — без изменений.
+3. **Доступное имя:** `aria-label="Состав заказа"` (как сейчас) + `aria-expanded` — стандартный disclosure: скринридер читает «Состав заказа, свёрнуто / развёрнуто». Динамическое «Показать/Скрыть» не вводим (дублирует `aria-expanded`).
+4. **CSS `.aoa__receipt-cta`:** `display: flex; margin-left: auto; width: auto; background: transparent; border: 0; border-radius: 0; padding: 0`, кликабельная область `min-width: 2.75rem; min-height: 2.25rem` (36px = высота CTA проекта), стрелка по центру, цвет `#ff8c42` (акцент — читаемо на тёмном фоне, без заливки), `:focus-visible` — outline (клавиатура). Глобальные стили не трогаем.
+5. **`fitReceiptInView`** и `activeOrdersAccordion.js` — без изменений; браузером проверяем, что раскрытый чек виден, `window.scrollY = 0`, `.oss__panel.scrollTop = 0`, высота peek та же.
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/components/ActiveOrdersAccordion.svelte` — разметка кнопки (убрать видимый текст) + CSS `.aoa__receipt-cta` / `.aoa__receipt-arrow` / `:focus-visible`.
+2. `test/javascript/active_orders_receipt_arrow_test.mjs` — обновить: видимый текст = `>` / `v`, нет «Состав заказа» внутри кнопки, `aria-label="Состав заказа"`, `aria-expanded` false→true→false через `openOrderReceipt`; оракул CSS: нет `background: #ff8c42`, нет `width: 100%`, есть `margin-left: auto`, `min-height` ≥ 2.25rem; кнопка после `.aoa__head`, не внутри неё.
+3. `test/javascript/active_orders_accordion_test.mjs` — только регрессия (`:239-245` ищет `secondaryLabel` в исходнике — остаётся через `aria-label`); править, если упадёт.
+4. `test/javascript/order_status_notify_actions_test.mjs` — только регрессия (`secondaryLabel` = «Состав заказа» не меняется).
+5. `docs/operations/milestones/veha_2/artifacts/active_orders_receipt_arrow_only/` — `measure_receipt_arrow.js` (CDP: цвет фона, текст, позиция справа под `.aoa__head`, клик → `aria-expanded`/стрелка/чек, клавиатура Enter/Space, fit) + `MEASURE.md` и скрины 390×844 до/после.
+
+**Соседи (blast-radius, только регрессия):** `lib/activeOrdersAccordion.js` (`CHEVRON`, `fitReceiptInView`), `lib/orderStatusNotifyActions.js` (`secondaryLabel`, `openOrderReceipt`), `OrderStatusSheet.svelte` (`.oss__list`, peek-высота TASK_103).
+
+## Не ломать
+
+- Раскрытие чека: один открытый чек, повторный клик сворачивает, содержимое и внутренний скролл чека (TASK_84-RECEIPT-DISPLAY-EXT), `Total Amount` достижим.
+- Peek / скролл списка (TASK_103, TASK_84-PEEK-ONLY-EXT): высота панели та же, `fitReceiptInView` двигает только `.oss__list`, экран и `CartSheet` не скроллятся.
+- Видимость переключателя только `accepted|paid|preparing`; нет `×` (#83); `OrderActionButtons` (Wallet/Push/отмена/чат/чаевые), push recovery (TASK_90) — без изменений.
+- Статусы: `/orders/active`, polling, Cable — не трогаем.
+
+## Проверка
+
+1. `node --test test/javascript/active_orders_receipt_arrow_test.mjs test/javascript/active_orders_accordion_test.mjs test/javascript/order_status_notify_actions_test.mjs test/javascript/order_status_list_scroll_test.mjs test/javascript/order_status_sheet_test.mjs test/javascript/order_status_sheet_peek_only_test.mjs`
+2. Зона JS (`order_status*` `active_orders*` `cart_sheet*` `order_action*`) + `ruby bin/rails test test/integration/shop/order_status_sheet_mount_acceptance_test.rb test/integration/shop/active_order_cart_peek_stack_test.rb` · `npm run vite:build`
+3. Браузер 390×844 (CDP-скрипт, MEASURE): Subtask 1–5 — фон прозрачный, текста нет, стрелка справа под статусом, клик/Enter → `v` + `aria-expanded=true` + чек, повтор → `>`, `window.scrollY = 0`.
+
+## DoD
+
+- [ ] Subtask 1: закрытый чек — только `>` справа под статусом, без текста и заливки
+- [ ] Subtask 2: открытый чек — только `v`, без текста и заливки
+- [ ] Subtask 3: клик открывает / повторный закрывает, `aria-expanded` и стрелка меняются (браузер)
+- [ ] Subtask 4: клавиатура (Tab + Enter/Space), доступное имя «Состав заказа» + состояние
+- [ ] Subtask 5: чек вписан, экран не скроллится, peek не сломан
+
+---
+
 # todo — TASK_103: вертикальный скролл списка активных заказов в статусной шторке
 
 | Поле | Значение |
