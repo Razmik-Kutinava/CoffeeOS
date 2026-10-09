@@ -334,7 +334,7 @@
       aria-expanded={row.expanded}
       aria-label={receiptLabel}
       onclick={onReceiptClick}
-    >{receiptLabel} <span class="aoa__receipt-arrow" aria-hidden="true">{row.chevron}</span></button>
+    ><span class="aoa__receipt-arrow" aria-hidden="true">{row.chevron}</span></button>
   {/if}
   {#if pushRecovery}
     <div
@@ -564,21 +564,27 @@
   }
   .aoa__recovery-btn:active { opacity: 0.9; }
   .aoa__receipt-cta {
-    display: block;
-    width: 100%;
-    margin-top: 0.25rem;
-    padding: 0.35rem 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.25rem;
+    margin-left: auto;
+    padding: 0;
     border: 0;
-    border-radius: 0.5rem;
-    background: #ff8c42;
-    color: #000;
-    font-size: 0.75rem;
+    background: transparent;
+    color: #ff8c42;
+    font-size: 1rem;
     font-weight: 600;
+    line-height: 1;
     cursor: pointer;
-    text-align: center;
   }
-  .aoa__receipt-cta:active { opacity: 0.9; }
-  .aoa__receipt-arrow { display: inline-block; min-width: 0.6em; }
+  .aoa__receipt-cta:active { opacity: 0.7; }
+  .aoa__receipt-cta:focus-visible {
+    outline: 2px solid #ff8c42;
+    outline-offset: -2px;
+  }
+  .aoa__receipt-arrow { display: inline-block; min-width: 0.6em; text-align: center; }
   .aoa__receipt {
     margin-top: 0.35rem;
     border: 1px solid #888;
