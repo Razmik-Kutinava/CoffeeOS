@@ -57,11 +57,24 @@ class Shop::ProductSheetNoRepeatBottomBarTest < ActionDispatch::IntegrationTest
 
   test "Subtask 3: empty cart without repeat/order fits content height" do
     assert_match(
-      /let fitContent = \$derived\(\s*!count && !hasActiveOrderFlag && !showRepeatInSheet && !payStackActive && !phoneAuthSlim\s*\)/,
+      /let fitContent = \$derived\(\s*!count && !hasActiveOrderFlag && !showRepeatInSheet && !payStackActive && !phoneAuthSlim/,
       sheet
     )
     assert_match(/fitContent && fitHeightPx > 0\s*\? fitHeightPx/, sheet)
     assert_includes sheet, "new ResizeObserver"
+  end
+
+  test "bugbot: fit mode is off while status widget is visible" do
+    assert_match(/let fitContent = \$derived\([^)]*!statusWidgetVisible/, sheet)
+  end
+
+  test "bugbot: late-mounted sheet children are observed (MutationObserver childList)" do
+    assert_includes sheet, "new MutationObserver"
+    assert_match(/childList: true/, sheet)
+  end
+
+  test "bugbot: fitHeightPx is reset when fit mode turns off" do
+    assert_match(/fitHeightPx = 0/, sheet)
   end
 
   test "gesture zone, safe-area and thresholds values unchanged" do
