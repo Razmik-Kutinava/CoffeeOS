@@ -14,7 +14,7 @@
 - [x] RED шаг 0 — замер 412×915: «пустой слой» = низ `CartSheet` в пустой корзине (шторка 263, содержимое до 766, пусто 149px; на ~800px WebView ≈ 110px) → **H1 подтверждена** ([MEASURE](../milestones/veha_2/artifacts/pwa_extra_blocks_empty_overlay/MEASURE.md))
 - [x] RED `b87b54e0` — 6 fail (`product_sheet_no_repeat_bottom_bar_test.rb` 5 + «Правка 5» 1), охранные 2 зелёные
 - [x] GREEN — `showRepeatInSheet` (4 слота + `heightVh` + надпись), `fitContent` + `ResizeObserver` (высота = низ последней секции, `style:height`/safe-area без изменений), `checkoutBar` без «Итого», кнопки `w-full`, сумма без `+`, `px-3` у панели пустой корзины · маркер `CART_SHEET_BUILD` не менян (prog38 в 10 тестах) · RED-оракул Subtask 3 переписан с `height: auto` на `fitHeightPx` (контракт `shop_safe_bottom_min_test`) · 3 legacy-оракула `showRepeat` → `showRepeatInSheet` · Rails 15 файлов 87/0 · JS 5 файлов 63/0 · vite OK · браузер 412×915 S1–S5, S7 PASS ([MEASURE](../milestones/veha_2/artifacts/pwa_extra_blocks_empty_overlay/MEASURE.md)) · S6 (карточки «повторить» на каталоге) — после deploy на Point A
-- [ ] `/regress`
+- [x] `/regress` PASS — Rails 37 файлов (все, что читают `CartSheet.svelte` / `cartSheetThresholds` / `RepeatSection` / `ProductSheetCta`) 262/0 · JS 24 файла (`cart|repeat|safe_bottom|order_status|active_orders|sticky|order_action|product|checkout`) 269/273 — 4 legacy (`repeat_invalid_token_payment` 3 `[TDD]`, те же на `8547b253`; `order_action_buttons_cancel` 1 и `sticky_cancel` 1 — ISSUES) · vite build OK (после восстановления `node_modules`, см. ISSUES)
 - [ ] `/review`
 - [ ] `COMPONENT_MAP.md` строка `CartSheet` — после Review
 - [ ] deploy по апруву → Pixel 6 / Google Chat · Fly MCP Point A
