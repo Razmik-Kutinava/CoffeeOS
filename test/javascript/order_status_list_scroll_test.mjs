@@ -88,6 +88,13 @@ describe("TASK_103 — список заказов в отдельном scroll-
     assert.match(closed[1], /anchoredOrderId = null/)
   })
 
+  it("refit по resize / ResizeObserver / transitionend меняет только высоту чека, список не двигает", () => {
+    const src = accordionSrc()
+    const refit = src.match(/const refit = \(\) => \{([\s\S]*?)\n {4}\}/)
+    assert.ok(refit, "refit на месте")
+    assert.match(refit[1], /fitReceipt\(gen, false\)/)
+  })
+
   it("подгонка чека скроллит только [data-oss-scroll-root], не ближайший overflow-предок", () => {
     const src = accordionSrc()
     const fn = src.match(/function measureReceiptFit\(\)\s*\{([\s\S]*?)\n {2}\}/)
