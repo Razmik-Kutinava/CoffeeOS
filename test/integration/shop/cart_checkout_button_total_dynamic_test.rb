@@ -13,22 +13,17 @@ class Shop::CartCheckoutButtonTotalDynamicTest < ActionDispatch::IntegrationTest
     @store ||= File.read(Rails.root.join("app/frontend/lib/cartSheetStore.js"))
   end
 
-  test "checkout button shows formatted +{total}₽ and does not contain Оформить" do
+  test "checkout button shows formatted {total}₽ and does not contain Оформить" do
     assert_includes sheet, 'data-testid="shop-cart-sheet-checkout"'
     refute_includes sheet, ">Оформить</button>"
     assert_includes sheet, "formatCartButtonTotal(total)"
     assert_includes sheet, "disabled={checkoutDisabled}"
   end
 
-  # Правка 5: явная общая сумма («Итого»), не только +N₽ на кнопке
-  test "checkoutBar shows visible order total Итого next to checkout button" do
-    assert_includes sheet, 'data-testid="shop-cart-order-total"'
-    assert_includes sheet, ">Итого<"
-    assert_match(
-      /data-testid="shop-cart-order-total"[\s\S]*?\{formatThousands\(roundPrice\(total\)\)\}₽/,
-      sheet
-    )
-    # Кнопка +N₽ остаётся; старый серый span без подписи «Итого» не возвращаем
+  # TASK_106 (владелец 2026-10-09) отменяет Правку 5: «Итого» слева нет, сумма только в кнопке
+  test "checkoutBar has no Итого next to checkout button" do
+    refute_includes sheet, 'data-testid="shop-cart-order-total"'
+    refute_includes sheet, ">Итого<"
     refute_match(
       /checkoutBar[\s\S]*?<span class="text-sm text-\[#a0a0a0\]"[^>]*>\{roundPrice\(total\)\}₽<\/span>/,
       sheet
@@ -47,7 +42,7 @@ class Shop::CartCheckoutButtonTotalDynamicTest < ActionDispatch::IntegrationTest
     )
   end
 
-  test "empty mode renders disabled checkout with +0₽" do
+  test "empty mode renders disabled checkout with 0₽" do
     assert_includes sheet, "mode === MODE_EMPTY || !count"
     assert_includes sheet, "shop-cart-empty-total"
     assert_includes sheet, "formatCartButtonTotal(total)"
