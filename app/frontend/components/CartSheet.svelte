@@ -98,6 +98,8 @@
   }
   /** Повтор только без активного заказа (ревизия 2026-07-31) */
   let showRepeat = $derived(frequentCount > 0 && !hasActiveOrderFlag && !onCheckout)
+  /** TASK_106: на #/product «повторить» не рендерим и не резервируем под него высоту */
+  let showRepeatInSheet = $derived(showRepeat && !onProduct)
   let showAddCardCta = $derived(
     shouldShowAddCardCta({
       isTokenInvalid: tokenInvalid,
@@ -106,6 +108,12 @@
     })
   )
   let payStackActive = $derived(onCheckout && payStackOpen && count > 0)
+  /** TASK_106: пустая корзина без «повторить» и без статуса — высота по содержимому, без пустого низа */
+  let fitContent = $derived(
+    !count && !hasActiveOrderFlag && !showRepeatInSheet && !payStackActive && !phoneAuthSlim
+  )
+  let sheetEl = $state(/** @type {HTMLElement | null} */ (null))
+  let fitHeightPx = $state(0)
   let heightVh = $derived.by(() => {
     let base
     if (phoneAuthSlim) {
@@ -114,8 +122,8 @@
       base = CHECKOUT_PEEK_VH
     } else if (!count) {
       // Пустая корзина: peek-высота (placeholder или «повторить»)
-      base = showRepeat ? SHEET_VH.peekSingleWithRepeat : SHEET_VH.peekSingle
-    } else if (showRepeat && (mode === MODE_PEEK || mode === MODE_EMPTY)) {
+      base = showRepeatInSheet ? SHEET_VH.peekSingleWithRepeat : SHEET_VH.peekSingle
+    } else if (showRepeatInSheet && (mode === MODE_PEEK || mode === MODE_EMPTY)) {
       // Одна сущность заказ+«повторить»: выше peek, чтобы не выглядело как две шторки
       base = count <= 1 ? SHEET_VH.peekSingleWithRepeat : SHEET_VH.peekMultiWithRepeat
     } else {
@@ -130,9 +138,28 @@
   let vvh = $state(typeof window !== "undefined" ? shopVisualViewportHeight() : 0)
   let stackBottomVh = $derived(CHECKOUT_PAY_STACK_VH - CHECKOUT_PEEK_VH)
   let heightPx = $derived(
-    sheetHeightPx(heightVh, { visualViewport: { height: vvh } }) -
-      (payStackActive || phoneAuthSlim ? 0 : GESTURE_ZONE_SAVED_PX)
+    fitContent && fitHeightPx > 0
+      ? fitHeightPx
+      : sheetHeightPx(heightVh, { visualViewport: { height: vvh } }) -
+          (payStackActive || phoneAuthSlim ? 0 : GESTURE_ZONE_SAVED_PX)
   )
+
+  // Низ последней секции = высота содержимого (секции идут стыком сверху, overflow-hidden не влияет)
+  function measureFitHeight() {
+    const last = sheetEl?.lastElementChild
+    if (!sheetEl || !last) return
+    const px = Math.ceil(last.getBoundingClientRect().bottom - sheetEl.getBoundingClientRect().top)
+    if (px > 0) fitHeightPx = px
+  }
+
+  $effect(() => {
+    void [onProduct, sheetError, hideCheckoutCta]
+    if (!fitContent || !sheetEl || typeof ResizeObserver === "undefined") return
+    const ro = new ResizeObserver(measureFitHeight)
+    for (const child of sheetEl.children) ro.observe(child)
+    measureFitHeight()
+    return () => ro.disconnect()
+  })
   let stackBottomPx = $derived(sheetHeightPx(stackBottomVh, { visualViewport: { height: vvh } }))
   let singleItem = $derived(count === 1 ? items[0] : null)
 
@@ -238,7 +265,7 @@
   }
 
   function formatCartButtonTotal(n) {
-    return `+${formatThousands(n)}₽`
+    return `${formatThousands(n)}₽`
   }
 
   // Авто-уменьшение шрифта для больших сумм: вместо измерения DOM используем число цифр.
@@ -386,18 +413,12 @@
 
 {#snippet checkoutBar(totalTestId = null, hidden = false)}
   {#if !hidden}
-  <div class="mt-2 flex shrink-0 items-center justify-between gap-2 border-t border-[#3a3a3a] pt-2">
-    <div class="min-w-0" data-testid="shop-cart-order-total">
-      <span class="block text-[10px] leading-none text-[#a0a0a0]">Итого</span>
-      <span class="mt-0.5 block text-sm font-semibold leading-tight text-[#ff8c42]">
-        {formatThousands(roundPrice(total))}₽
-      </span>
-    </div>
+  <div class="mt-2 flex shrink-0 items-center gap-2 border-t border-[#3a3a3a] pt-2">
     {#if showAddCardCta}
       <button
         type="button"
         data-testid="shop-cart-add-card"
-        class="rounded-lg bg-[#ff8c42] px-4 py-2 text-sm font-semibold text-black"
+        class="w-full rounded-lg bg-[#ff8c42] px-4 py-2 text-sm font-semibold text-black"
         disabled={checkoutDisabled}
         onclick={goAddCard}
       >
@@ -407,7 +428,7 @@
     <button
       type="button"
       data-testid="shop-cart-sheet-checkout"
-      class="rounded-lg bg-[#ff8c42] px-4 py-2 text-sm font-semibold text-black"
+      class="w-full rounded-lg bg-[#ff8c42] px-4 py-2 text-sm font-semibold text-black"
       disabled={checkoutDisabled}
       onclick={goCheckoutOrPay}
     >
@@ -426,6 +447,7 @@
 
 {#if showSheet}
   <div
+    bind:this={sheetEl}
     data-testid="shop-cart-sheet"
     data-cart-sheet-mode={mode}
     data-cart-sheet-build={CART_SHEET_BUILD}
@@ -495,13 +517,15 @@
 
     <!-- EMPTY — надпись только без истории и без активного статуса; иначе «повторить» -->
     {:else if mode === MODE_EMPTY || !count}
-      {#if !showRepeat && !hasActiveOrderFlag}
+      {#if !showRepeatInSheet && !hasActiveOrderFlag}
         <p data-testid="shop-cart-sheet-empty" class="px-4 py-2 text-center text-sm italic text-[#888]">
           тут будут твои заказы
         </p>
       {/if}
-      {@render checkoutBar("shop-cart-empty-total", hideCheckoutCta)}
-      {#if showRepeat}
+      <div class="shrink-0 px-3">
+        {@render checkoutBar("shop-cart-empty-total", hideCheckoutCta)}
+      </div>
+      {#if showRepeatInSheet}
         <div data-testid="shop-repeat-slot-empty" class="shrink-0 px-2">
           <RepeatSection layout="full" />
         </div>
@@ -648,7 +672,7 @@
         {/if}
         {@render checkoutBar("shop-cart-peek-total", payStackActive || hideCheckoutCta)}
         <div data-testid="shop-repeat-slot-peek" class="shrink-0 border-t border-[#3a3a3a]/40">
-          {#if showRepeat}<RepeatSection layout="embedded" />{/if}
+          {#if showRepeatInSheet}<RepeatSection layout="embedded" />{/if}
         </div>
       </div>
 
@@ -715,7 +739,7 @@
         </div>
         {@render checkoutBar(null, payStackActive || hideCheckoutCta)}
         <div data-testid="shop-repeat-slot-expanded" class="shrink-0 border-t border-[#3a3a3a]/40">
-          {#if showRepeat}<RepeatSection layout="embedded" />{/if}
+          {#if showRepeatInSheet}<RepeatSection layout="embedded" />{/if}
         </div>
       </div>
 
@@ -789,7 +813,7 @@
         {/if}
         {@render checkoutBar(null, payStackActive || hideCheckoutCta)}
         <div data-testid="shop-repeat-slot-single" class="shrink-0 border-t border-[#3a3a3a]/40">
-          {#if showRepeat}<RepeatSection layout="embedded" />{/if}
+          {#if showRepeatInSheet}<RepeatSection layout="embedded" />{/if}
         </div>
       </div>
     {/if}

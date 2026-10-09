@@ -39,7 +39,7 @@ class Shop::ActiveOrderCartPeekStackTest < ActionDispatch::IntegrationTest
 
   test "empty placeholder hidden under active order without cart lines" do
     assert_match(
-      /#if !showRepeat && !hasActiveOrderFlag[\s\S]*?тут будут твои заказы/,
+      /#if !showRepeatInSheet && !hasActiveOrderFlag[\s\S]*?тут будут твои заказы/,
       sheet
     )
   end

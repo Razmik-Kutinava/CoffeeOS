@@ -4,16 +4,16 @@
 |------|----------|
 | **Основание** | [TASK_106](../milestones/veha_2/requirements/customer_tasks/TASK-106-Устранение-лишних-блоков-и-пустого-оверлея-в-PWA.md) · новая задача · [Google Doc](https://docs.google.com/document/d/1qyXn19B6m9_5dPV11Yzyc29Cb_FodmZPpU3PeTdS_yw/edit?usp=drivesdk) · Subtask 1–7 · владелец: «убрать текст слева сумму 0₽, оставить только кнопку с суммой» |
 | **Решения владельца (2026-10-09)** | кнопка — сумма **без плюса** («0₽», «350₽») · кнопка **на всю ширину** нижней панели |
-| **Открытый вопрос** | какой слой = «пустой оверлей с полоской ~110px» — в коде отдельного компонента нет, идентификация замером на RED (шаг 0) · путь «расширяемого документа» — кандидат [TASK-SAFE-BOTTOM-MIN](../milestones/veha_2/requirements/customer_tasks/TASK-SAFE-BOTTOM-MIN-Минимальный-нижний-отступ-Home-Indicator.md) / Fly v515 (полоса 80→24px), подтвердить |
-| **Статус** | SPEC |
+| **Открытый вопрос** | путь «расширяемого документа» — кандидат [TASK-SAFE-BOTTOM-MIN](../milestones/veha_2/requirements/customer_tasks/TASK-SAFE-BOTTOM-MIN-Минимальный-нижний-отступ-Home-Indicator.md) / Fly v515 (полоса 80→24px), подтвердить · peek с позициями тоже держит ~100px пустоты под кнопкой — вне scope (ТЗ запрещает менять peek), решение владельца |
+| **Статус** | GREEN · дальше `/regress` |
 
 ## SBR
 
 - [x] intake (ТЗ 1:1 + строка CBR)
 - [x] SPEC — факт, решение, файлы, Не ломать, Проверка
-- [ ] RED шаг 0 — замер в браузере 412×915 (Pixel 6) + 412×~780 (WebView): `elementFromPoint` над «Итого»/кнопкой и заголовком «Холодные», каталог `#/`, пустая корзина, с историей «повторить» и без → какой слой и откуда высота; скрины до
-- [ ] RED — тесты (ниже) падают
-- [ ] GREEN
+- [x] RED шаг 0 — замер 412×915: «пустой слой» = низ `CartSheet` в пустой корзине (шторка 263, содержимое до 766, пусто 149px; на ~800px WebView ≈ 110px) → **H1 подтверждена** ([MEASURE](../milestones/veha_2/artifacts/pwa_extra_blocks_empty_overlay/MEASURE.md))
+- [x] RED `b87b54e0` — 6 fail (`product_sheet_no_repeat_bottom_bar_test.rb` 5 + «Правка 5» 1), охранные 2 зелёные
+- [x] GREEN — `showRepeatInSheet` (4 слота + `heightVh` + надпись), `fitContent` + `ResizeObserver` (высота = низ последней секции, `style:height`/safe-area без изменений), `checkoutBar` без «Итого», кнопки `w-full`, сумма без `+`, `px-3` у панели пустой корзины · маркер `CART_SHEET_BUILD` не менян (prog38 в 10 тестах) · RED-оракул Subtask 3 переписан с `height: auto` на `fitHeightPx` (контракт `shop_safe_bottom_min_test`) · 3 legacy-оракула `showRepeat` → `showRepeatInSheet` · Rails 15 файлов 87/0 · JS 5 файлов 63/0 · vite OK · браузер 412×915 S1–S5, S7 PASS ([MEASURE](../milestones/veha_2/artifacts/pwa_extra_blocks_empty_overlay/MEASURE.md)) · S6 (карточки «повторить» на каталоге) — после deploy на Point A
 - [ ] `/regress`
 - [ ] `/review`
 - [ ] `COMPONENT_MAP.md` строка `CartSheet` — после Review
@@ -60,13 +60,13 @@
 
 ## DoD
 
-- [ ] Subtask 1: на товаре нет «повторить» в DOM
-- [ ] Subtask 2: высота шторки на товаре без резерва `WithRepeat`
-- [ ] Subtask 3: пустой слой (идентифицированный) не отображается
-- [ ] Subtask 4: кнопка с суммой «0₽» на всю ширину, без «Итого» слева, не перекрыта
-- [ ] Subtask 5: «Холодные» и карточки не перекрыты
-- [ ] Subtask 6: Quick Repeat на каталоге работает
-- [ ] Subtask 7: peek/expanded/phone-auth/pay-stack/safe-area/жест — без регрессии
+- [x] Subtask 1: на товаре нет «повторить» в DOM
+- [x] Subtask 2: высота шторки на товаре без резерва `WithRepeat` (пустая корзина — по содержимому, 200px)
+- [x] Subtask 3: пустой низ `CartSheet` убран (263 → 122px)
+- [x] Subtask 4: кнопка с суммой «0₽» на всю ширину, без «Итого» слева, не перекрыта
+- [x] Subtask 5: «Холодные» и карточки не перекрыты
+- [ ] Subtask 6: Quick Repeat на каталоге — оракулы зелёные, живые карточки — Point A после deploy
+- [x] Subtask 7: peek (браузер) + оракулы phone-auth/pay-stack/safe-area/жест — без регрессии
 
 ---
 

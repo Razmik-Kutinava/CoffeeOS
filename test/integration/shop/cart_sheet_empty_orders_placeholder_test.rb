@@ -14,9 +14,10 @@ class Shop::CartSheetEmptyOrdersPlaceholderTest < ActionDispatch::IntegrationTes
 
   test "empty placeholder only when frequentCount is zero" do
     assert_includes sheet, "тут будут твои заказы"
-    assert_includes sheet, "!showRepeat && !hasActiveOrderFlag"
+    # TASK_106: на #/product «повторить» скрыт → там надпись по showRepeatInSheet
+    assert_includes sheet, "!showRepeatInSheet && !hasActiveOrderFlag"
     assert_match(
-      /#if !showRepeat && !hasActiveOrderFlag[\s\S]*?shop-cart-sheet-empty[\s\S]*?тут будут твои заказы/,
+      /#if !showRepeatInSheet && !hasActiveOrderFlag[\s\S]*?shop-cart-sheet-empty[\s\S]*?тут будут твои заказы/,
       sheet
     )
   end
@@ -24,7 +25,7 @@ class Shop::CartSheetEmptyOrdersPlaceholderTest < ActionDispatch::IntegrationTes
   test "empty mode shows RepeatSection only when frequentCount > 0" do
     assert_includes sheet, "shop-repeat-slot-empty"
     assert_match(
-      /#if showRepeat[\s\S]*?shop-repeat-slot-empty[\s\S]*?RepeatSection/,
+      /#if showRepeatInSheet[\s\S]*?shop-repeat-slot-empty[\s\S]*?RepeatSection/,
       sheet
     )
   end

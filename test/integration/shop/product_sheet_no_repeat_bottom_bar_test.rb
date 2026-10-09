@@ -23,11 +23,15 @@ class Shop::ProductSheetNoRepeatBottomBarTest < ActionDispatch::IntegrationTest
 
   test "Subtask 1: repeat is hidden on product route via showRepeatInSheet" do
     assert_match(/let showRepeatInSheet = \$derived\(showRepeat && !onProduct\)/, sheet)
-    %w[shop-repeat-slot-empty shop-repeat-slot-peek shop-repeat-slot-expanded shop-repeat-slot-single].each do |slot|
-      block = sheet[/data-testid="#{slot}"[\s\S]*?<\/div>/]
-      assert block, "slot #{slot} missing"
-      assert_includes block, "showRepeatInSheet", "#{slot} must be gated by showRepeatInSheet"
+    assert_match(/\{#if showRepeatInSheet\}\s*<div data-testid="shop-repeat-slot-empty"/, sheet)
+    %w[shop-repeat-slot-peek shop-repeat-slot-expanded shop-repeat-slot-single].each do |slot|
+      assert_match(
+        /data-testid="#{slot}"[^>]*>\s*\{#if showRepeatInSheet\}<RepeatSection/,
+        sheet,
+        "#{slot} must be gated by showRepeatInSheet"
+      )
     end
+    refute_match(/\{#if showRepeat\}/, sheet)
   end
 
   test "Subtask 2: sheet height does not reserve WithRepeat space on product" do
@@ -56,7 +60,7 @@ class Shop::ProductSheetNoRepeatBottomBarTest < ActionDispatch::IntegrationTest
       /let fitContent = \$derived\(\s*!count && !hasActiveOrderFlag && !showRepeatInSheet && !payStackActive && !phoneAuthSlim\s*\)/,
       sheet
     )
-    assert_includes sheet, 'style:height={fitContent ? "auto"'
+    assert_match(/fitContent && fitHeightPx > 0\s*\? fitHeightPx/, sheet)
     assert_includes sheet, "new ResizeObserver"
   end
 

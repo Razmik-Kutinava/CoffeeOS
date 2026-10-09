@@ -11,7 +11,8 @@ class Shop::QuickRepeatCustomerFixesTest < ActionDispatch::IntegrationTest
     # showRepeat = frequentCount > 0 && !hasActiveOrderFlag && !onCheckout
     assert_match(/!onCheckout/, sheet)
     assert_includes sheet, "showRepeat"
-    assert_match(/\{#if showRepeat\}/, sheet)
+    # TASK_106: слоты гейтятся showRepeatInSheet = showRepeat && !onProduct
+    assert_match(/\{#if showRepeatInSheet\}/, sheet)
   end
 
   test "CartSheet shows repeat in single-item branch (screenshot 01)" do
