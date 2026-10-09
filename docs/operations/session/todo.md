@@ -1,3 +1,74 @@
+# todo — TASK_103: вертикальный скролл списка активных заказов в статусной шторке
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_103](../milestones/veha_2/requirements/customer_tasks/TASK-103-Вертикальный-скролл-списка-активных-заказов-в-статусной-шторке.md) · новая задача, семья TASK_84 · [Google Doc](https://docs.google.com/document/d/1TA-TSjes-cJc14BADMetvDNUqynS6Ihs6sE1en5ndLc/edit?usp=drivesdk) · Subtask 1–5 |
+| **Решение владельца (2026-10-09)** | `fitReceiptInView` / `measureReceiptFit` скроллят **только** новый внутренний контейнер списка `.oss__list`, не `.oss__panel` и не основной экран → блокер «не готов к Build» снят |
+| **Статус** | SPEC `[x]` · ждёт `/sbr` (RED) |
+
+## SBR
+
+- [x] intake (ТЗ 1:1 + строка CBR)
+- [x] SPEC — факт, решение, файлы, Не ломать, Проверка
+- [ ] RED — Node: SSR-разметка `.oss__list` + контракт scroll-root в аккордеоне + порог `> 1`; браузер-скрипт замера (MEASURE) **до** правок фиксирует дефект (2 заказа: `.oss__list` нет / scroll не двигается)
+- [ ] GREEN — `.oss__list` + CSS + `closest("[data-oss-scroll-root]")` + порог; браузер-скрипт: Subtask 1–5 PASS
+- [ ] `/regress` — зона JS + Rails (см. «Проверка»)
+- [ ] `/review` — bugbot + security + crit-audit · Entire · push · CI
+- [ ] `COMPONENT_MAP.md` строки `OrderStatusSheet` / `ActiveOrdersAccordion` / `orderStatusSheet.js` — после Review
+- [ ] deploy по апруву → ручная проверка на телефоне (iOS + Android) · Fly MCP Point A
+
+## Факт (аудит 2026-10-09)
+
+- `orderStatusSheet.js:62-64` — `shouldScrollStatusList` = `length > 2` → при 2 заказах `scrollable = false`.
+- `OrderStatusSheet.svelte:243-270` — строки `ActiveOrdersAccordion` лежат прямо в `.oss__panel`, отдельного контейнера списка нет; `:331` `max-height: min(22vh, 8.5rem)` у `.oss__panel.embedded`; `:333-334` `overflow-y: auto` только при `.scrollable` (>2) или `.receipt-open`. При 2 заказах с закрытыми чеками overflow панели `visible` → второй заказ режет `CartSheet` (`overflow: hidden`), скролла нет. С открытым чеком панель становится скролл-боксом — поэтому «работает только если раскрыт состав» (жалоба владельца).
+- `ActiveOrdersAccordion.svelte:83-134` — `measureReceiptFit` идёт вверх от чека до первого предка с computed `overflow-y: auto|scroll` (сейчас это `.oss__panel.receipt-open`) и делает `container.scrollTop += fit.scrollDelta`. `fitReceiptInView` (`activeOrdersAccordion.js:158-173`) — чистая функция, DOM не трогает.
+- Жесты `CartSheet` (`CartSheet.svelte:193-210`) висят только на полосе `shop-cart-sheet-gesture-zone` (`:456-467`), `OrderStatusSheet` смонтирован **после** неё (`:472-477`) → скролл списка с драгом шторки не пересекается.
+- `ActiveOrdersAccordion` используется только в `OrderStatusSheet` → явный scroll-root безопасен.
+- `test/system` нет; CI `system-test` пропускается (`ci.yml:200-205`); Node-тесты — SSR без layout.
+
+## Решение для билда
+
+1. **`.oss__panel`** — рамка peek: `max-height` без изменений (`8.75rem` / embedded `min(22vh, 8.5rem)`), `display: flex; flex-direction: column; overflow: hidden`. Правила `.oss__panel.scrollable { overflow-y: auto }` и `.oss__panel.receipt-open { overflow-y: auto }` удаляются (классы можно оставить как маркеры).
+2. **`.oss__list`** (новая обёртка `{#each displayOrders}` + `oss__scroll-hint`): `data-testid="shop-order-status-list"`, `data-oss-scroll-root`, `overflow-y: auto; overscroll-behavior: contain; flex: 1 1 auto; min-height: 0`. Всегда скроллится (не зависит от числа заказов). `oss__conn` / `oss__toast` остаются над списком в панели.
+3. **`measureReceiptFit`** — `container = el.closest("[data-oss-scroll-root]")` вместо обхода по computed overflow; `scrollTop` меняется только у него. Расчёт `clipBoxes` / `clipBottom` / `fitReceiptInView` — без изменений. `transitionend`-refit слушает тот же контейнер (у `.oss__list` нет transition → фактически работает `ResizeObserver` по клипам).
+4. **`shouldScrollStatusList`** — `> 2` → `> 1`: только подсказка `↕` (при двух заказах она тоже нужна). Сам скролл от порога не зависит.
+5. Чек — без изменений: свой `overflow-y: auto` + `overscroll-behavior: contain` (TASK_84-RECEIPT-DISPLAY-EXT) → прокрутка текста чека не тащит список (Subtask 3); `.oss__list` `contain` → не тащит CartSheet / экран (Subtask 1).
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/components/OrderStatusSheet.svelte` — обёртка `.oss__list` вокруг строк + подсказки; CSS панели (flex-колонка, `overflow: hidden`, без scroll-правил) и `.oss__list`.
+2. `app/frontend/components/ActiveOrdersAccordion.svelte` — `measureReceiptFit`: scroll-root через `closest("[data-oss-scroll-root]")` (`:93-98`), больше ничего.
+3. `app/frontend/lib/orderStatusSheet.js` — `shouldScrollStatusList`: `> 1`.
+4. `test/javascript/order_status_list_scroll_test.mjs` (новый) — SSR: 2 заказа → `.oss__list` с `data-oss-scroll-root`, обе строки внутри него, высота панели та же; 1 заказ → список есть, подсказки нет; оракул: панель без `overflow-y: auto`, `.oss__list` с `overflow-y: auto` + `overscroll-behavior: contain`; аккордеон ищет `closest("[data-oss-scroll-root]")` и не делает обход по `isScrollBox`.
+5. `test/javascript/order_status_sheet_test.mjs`, `test/javascript/order_status_sheet_peek_only_test.mjs`, `test/integration/shop/order_status_sheet_mount_acceptance_test.rb` — обновить старые ожидания (`2 → false`, `.oss__panel.receipt-open { overflow-y: auto }`, «>2» в названии теста) под новый контракт.
+6. `docs/operations/milestones/veha_2/artifacts/active_orders_list_scroll/` — `measure_list_scroll.js` (CDP-скрипт) + `MEASURE.md` (до/после, 390×844).
+
+**Соседи (blast-radius, только регрессия):** `CartSheet.svelte` (клип `overflow: hidden`, `STATUS_IN_SHEET_EXTRA_VH`, жесты — не трогаем), `lib/activeOrdersAccordion.js` (`fitReceiptInView` / `receiptPanelView` / правило одного чека — не трогаем), `test/javascript/active_orders_accordion_test.mjs` (замеры `fitReceiptInView` 390×844).
+
+## Не ломать
+
+- Peek-only (TASK_84-PEEK-ONLY-EXT): нет `expanded`, высота панели не растёт; #42 `min(22vh, 8.5rem)`.
+- Чек (TASK_84-RECEIPT-DISPLAY-EXT): чек виден целиком в клипе, свой scroll, `Total Amount` достижим; правило одного открытого чека; refit по `ResizeObserver` / `resize`.
+- Стрелка `>` / `v` и текст «Состав заказа» (TASK_84-RECEIPT-ARROW-EXT), нет `×` (#83), CTA / push recovery (TASK_90), отмена (#41).
+- Статусы: `/orders/active`, polling 8 с, Cable, reconnect, `CartSheet` жесты и высоты, Quick Repeat gate.
+
+## Проверка
+
+1. `node --test test/javascript/order_status_list_scroll_test.mjs test/javascript/order_status_sheet_test.mjs test/javascript/order_status_sheet_peek_only_test.mjs test/javascript/active_orders_accordion_test.mjs test/javascript/active_orders_receipt_arrow_test.mjs`
+2. Зона JS (`order_status*` `active_orders*` `cart_sheet*` `sticky*` `order_cancel*` `order_action*`) + `ruby bin/rails test test/integration/shop/order_status_sheet_mount_acceptance_test.rb test/integration/shop/order_status_expanded_stack_canon_test.rb test/integration/shop/active_order_cart_peek_stack_test.rb test/integration/shop/api/active_orders_receipt_test.rb` · `npm run vite:build`
+3. Браузер 390×844 (CDP-скрипт, MEASURE): 2 заказа / 3 заказа / чек раскрыт / второй чек → `.oss__list.scrollTop` меняется, `.oss__panel.scrollTop = 0`, `window.scrollY = 0`, высота панели неизменна.
+
+## DoD
+
+- [ ] Subtask 1: 2 заказа, чеки закрыты → список скроллится, высота peek та же, CartSheet / экран не скроллятся
+- [ ] Subtask 2: 3+ заказов — скролл как раньше
+- [ ] Subtask 3: длинный чек скроллится сам, список / экран не двигаются
+- [ ] Subtask 4: открытие второго чека закрывает первый, список скроллится
+- [ ] Subtask 5: `fitReceiptInView` двигает только `.oss__list`, `.oss__panel.scrollTop = 0`
+- [ ] Ограничение стека зафиксировано (нет system-тестов) · ручная проверка на телефоне после deploy
+
+---
+
 # todo — УК «Code Black»: организации → точки, модули, команда и ТВ из УК
 
 | Поле | Значение |
