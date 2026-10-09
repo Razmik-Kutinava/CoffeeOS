@@ -2,12 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-09 (TASK_106 — SPEC)  
+**Дата:** 2026-10-09 (TASK_106 — REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **TASK_106** (2026-10-09) — убрать «повторить» из шторки товара, отключить пустой слой с полоской на каталоге, убрать «Итого» слева (сумма «0₽» только в кнопке на всю ширину) · intake + SPEC · какой слой «пустой» — выясняем замером в браузере на RED · [todo](todo.md) | `/sbr` |
+| **TASK_106** (2026-10-09) — «повторить» убран из шторки товара (остался на каталоге), «Итого» слева убрано — одна кнопка на всю ширину с суммой «0₽», пустая корзина без пустого низа (263 → 122px) · RED `b87b54e0` → GREEN `d6baf6d8` · bugbot-фикс `a2cb4ca1` → `4a5c67a3` · /regress PASS · REVIEW: bugbot 0 · security 0 · crit-audit CLEAN · Entire `01M4GGPRK0QNF01Z6B0MY7GG2Y` · CI — после push · [todo](todo.md) | deploy по апруву → Point A / Pixel 6 Google Chat |
 | **TASK_104** (2026-10-09) — переключатель состава заказа в статусной шторке: только `>`/`v` справа под строкой статуса, без текста и оранжевой заливки · RED `e7709e13` → GREEN `bb28557` · браузер S1–S5 PASS · /regress PASS · REVIEW: bugbot 0 · security 0 · crit-audit CLEAN · Entire `01M4GCQ9PBDZZBY7SGH4GTC94S` · **CI green** [37937280293](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37937280293) на `14d8da3e` · [todo](todo.md) | deploy по апруву → телефон |
 | **TASK_103** (2026-10-09) — при 2 активных заказах список в статусной шторке не листается (работает только с раскрытым «Составом») · intake + SPEC: отдельный контейнер списка `.oss__list`, подгонка чека скроллит только его, высота peek та же, стрелка/CTA не трогаем · RED `3bfc86eb` `9406b2df` `8da3d1b8` → GREEN `d2f1b15d` · браузер 390×844 Subtask 1–5 PASS · /regress PASS · REVIEW: bugbot 0 · security 0 · crit-audit CLEAN · скрин заказчика про форму оплаты на Android с клавиатурой — отдельная задача (в артефактах) · **CI green** [37932963955](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37932963955) на `7c458499` · [todo](todo.md) | deploy по апруву → проверка на телефоне |
 | **Доступы в доках обновлены** (2026-10-07) — `CUSTOMER_HANDOFF.md`, `FLY_DEMO_STAND.md`, `veha_2/reference/DEMO_LOGINS.md`: убраны удалённые `*@demo` логины, `demo123456`, точка B; вписаны вход `/login`, УК `/admin`, табло `/barista`, витрина Point A · пароли в репо не пишем | заказчик проверяет входы |

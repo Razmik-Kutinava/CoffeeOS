@@ -5,7 +5,7 @@
 | **Основание** | [TASK_106](../milestones/veha_2/requirements/customer_tasks/TASK-106-Устранение-лишних-блоков-и-пустого-оверлея-в-PWA.md) · новая задача · [Google Doc](https://docs.google.com/document/d/1qyXn19B6m9_5dPV11Yzyc29Cb_FodmZPpU3PeTdS_yw/edit?usp=drivesdk) · Subtask 1–7 · владелец: «убрать текст слева сумму 0₽, оставить только кнопку с суммой» |
 | **Решения владельца (2026-10-09)** | кнопка — сумма **без плюса** («0₽», «350₽») · кнопка **на всю ширину** нижней панели |
 | **Открытый вопрос** | путь «расширяемого документа» — кандидат [TASK-SAFE-BOTTOM-MIN](../milestones/veha_2/requirements/customer_tasks/TASK-SAFE-BOTTOM-MIN-Минимальный-нижний-отступ-Home-Indicator.md) / Fly v515 (полоса 80→24px), подтвердить · peek с позициями тоже держит ~100px пустоты под кнопкой — вне scope (ТЗ запрещает менять peek), решение владельца |
-| **Статус** | GREEN · дальше `/regress` |
+| **Статус** | REVIEW пройден · CI после push · deploy по апруву |
 
 ## SBR
 
@@ -15,7 +15,7 @@
 - [x] RED `b87b54e0` — 6 fail (`product_sheet_no_repeat_bottom_bar_test.rb` 5 + «Правка 5» 1), охранные 2 зелёные
 - [x] GREEN — `showRepeatInSheet` (4 слота + `heightVh` + надпись), `fitContent` + `ResizeObserver` (высота = низ последней секции, `style:height`/safe-area без изменений), `checkoutBar` без «Итого», кнопки `w-full`, сумма без `+`, `px-3` у панели пустой корзины · маркер `CART_SHEET_BUILD` не менян (prog38 в 10 тестах) · RED-оракул Subtask 3 переписан с `height: auto` на `fitHeightPx` (контракт `shop_safe_bottom_min_test`) · 3 legacy-оракула `showRepeat` → `showRepeatInSheet` · Rails 15 файлов 87/0 · JS 5 файлов 63/0 · vite OK · браузер 412×915 S1–S5, S7 PASS ([MEASURE](../milestones/veha_2/artifacts/pwa_extra_blocks_empty_overlay/MEASURE.md)) · S6 (карточки «повторить» на каталоге) — после deploy на Point A
 - [x] `/regress` PASS — Rails 37 файлов (все, что читают `CartSheet.svelte` / `cartSheetThresholds` / `RepeatSection` / `ProductSheetCta`) 262/0 · JS 24 файла (`cart|repeat|safe_bottom|order_status|active_orders|sticky|order_action|product|checkout`) 269/273 — 4 legacy (`repeat_invalid_token_payment` 3 `[TDD]`, те же на `8547b253`; `order_action_buttons_cancel` 1 и `sticky_cancel` 1 — ISSUES) · vite build OK (после восстановления `node_modules`, см. ISSUES)
-- [ ] `/review`
+- [x] `/review` — security 0 · bugbot 3 (fit-height) → 2 исправлены RED `a2cb4ca1` → GREEN `4a5c67a3` (сброс `fitHeightPx` при выходе, `MutationObserver` на поздние блоки, `fitContent` выкл. при `statusWidgetVisible`), 1 (откат на vh до замера) не воспроизводится — замер в `$effect` до первой отрисовки · повторный bugbot 0 · crit-audit CLEAN `85b43aa9..4a5c67a3` · Entire `01M4GGPRK0QNF01Z6B0MY7GG2Y` на `4a5c67a3` · браузер 412×915 после фикса: 122px, «0₽» · сверка с ТЗ: Subtask 1–5, 7 ок, Subtask 6 — Point A после deploy · CI — после push
 - [ ] `COMPONENT_MAP.md` строка `CartSheet` — после Review
 - [ ] deploy по апруву → Pixel 6 / Google Chat · Fly MCP Point A
 
