@@ -315,5 +315,5 @@ Viewport configuration| Фактический файл viewport meta — опр
 
 - **ID:** в доке «TASK_98 — проверить, свободен ли номер». TASK_98 занят (воронка + UTM, ⊂ TASK_96) → ID = **TASK_105**, как в заголовке дока и в чате владельца.
 - **«Сравнить с В1.13 — допишу»:** B1.13 = эпик «Новая навигация витрины», § B1.13-S2-канон (режимы/высоты `CartSheet`, `cartSheetThresholds.js`). Сравнение заказчик допишет; не блокирует — ТЗ само запрещает менять карточку вне pay-стека и общие пороги. Прецедент: «CartSheet только на каталоге» (B1.13) не канон для checkout (UserCards).
-- **Скрин «экран, где крепить карту»:** в доке нет. Есть скрин Android из TASK_103 → `artifacts/pay_form_numeric_keyboard/01_customer_android_pay_form_keyboard_before.png`. Запросить у заказчика скрин экрана привязки карты.
+- **Скрин «экран, где крепить карту»:** владелец подтвердил 2026-10-11 — это скрин Android с формой оплаты и клавиатурой → `artifacts/pay_form_numeric_keyboard/02_customer_pay_form_keyboard_from_owner.png` (тот же кадр, что `01_customer_android_pay_form_keyboard_before.png` из TASK_103).
 - Аудит (Subtask 1–4) — в `docs/operations/session/todo.md` § TASK_105.

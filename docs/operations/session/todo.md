@@ -67,9 +67,9 @@
 
 | Поле | Значение |
 |------|----------|
-| **Основание** | [TASK_105](../milestones/veha_2/requirements/customer_tasks/TASK-105-Оптимизация-формы-оплаты-под-цифровой-клавиатурой.md) · новая задача · [Google Doc](https://docs.google.com/document/d/1FVfNMFAgUOmkkcvwS_GfCuolMe9QH35UtefsmDQ078Q/edit?usp=drivesdk) · Subtask 1–15 · владелец: «Замер + убрать карточку товара» · скрин до: [01](../milestones/veha_2/artifacts/pay_form_numeric_keyboard/01_customer_android_pay_form_keyboard_before.png) |
+| **Основание** | [TASK_105](../milestones/veha_2/requirements/customer_tasks/TASK-105-Оптимизация-формы-оплаты-под-цифровой-клавиатурой.md) · новая задача · [Google Doc](https://docs.google.com/document/d/1FVfNMFAgUOmkkcvwS_GfCuolMe9QH35UtefsmDQ078Q/edit?usp=drivesdk) · Subtask 1–15 · владелец: «Замер + убрать карточку товара» · скрин до: [01](../milestones/veha_2/artifacts/pay_form_numeric_keyboard/01_customer_android_pay_form_keyboard_before.png) · [02 от владельца 2026-10-11](../milestones/veha_2/artifacts/pay_form_numeric_keyboard/02_customer_pay_form_keyboard_from_owner.png) — тот же экран: карточка «Фильтр-кофе Бразилия» между «СБП» и «Номер карты», «Оплатить» срезана панелью Chrome «Мир / Сканировать» |
 | **ID** | в доке «TASK_98 — проверить» → TASK_98 занят (воронка UTM) → **TASK_105** |
-| **Ждём от заказчика** | «Сравнить с В1.13 — допишу» (не блокер: ТЗ запрещает менять карточку вне pay-стека и пороги) · скрин «экран, где крепить карту» |
+| **Ждём от заказчика** | «Сравнить с В1.13 — допишу» (не блокер: ТЗ запрещает менять карточку вне pay-стека и пороги) · скрин экрана — получен (02) |
 | **Статус** | SPEC |
 
 ## SBR
