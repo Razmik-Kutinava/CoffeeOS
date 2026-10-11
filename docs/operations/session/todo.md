@@ -76,8 +76,8 @@
 
 - [x] intake (ТЗ 1:1 + артефакты + строка CBR)
 - [x] SPEC — аудит Subtask 1–4, решение, файлы, Не ломать, Проверка
-- [ ] RED шаг 0 — замер CDP 412×915 / 390×844 / 360×640 с эмуляцией клавиатуры (`visualViewport` −365px): позиции `CartSheet` pay-peek, `.pm-sheet--stacked`, «Оплатить» → `MEASURE.md` + скрины до
-- [ ] RED — тесты (JS helper + Rails-оракул разметки)
+- [x] RED шаг 0 — замер **расчётом по коду** (локально до pay-стека нужен OTP, puppeteer нет): 412×915, клавиатура 365 → карточка 409–492 внутри формы 211–915, «Оплатить» под клавиатурой — совпадает со скрином ([MEASURE](../milestones/veha_2/artifacts/pay_form_numeric_keyboard/MEASURE.md)) · живой замер — Point A после deploy
+- [x] RED — `shop_pay_stack_keyboard_layout_test.mjs` (нет экспорта `payStackHeightPx`/`payStackBottomPx`) · `pay_stack_keyboard_layout_test.rb` 3 fail / 2 охранных green
 - [ ] GREEN
 - [ ] `/regress`
 - [ ] `/review`
