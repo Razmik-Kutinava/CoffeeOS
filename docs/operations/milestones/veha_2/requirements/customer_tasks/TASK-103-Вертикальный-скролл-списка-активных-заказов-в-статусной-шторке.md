@@ -2,7 +2,7 @@
 
 **ID:** TASK_103 · **семья:** TASK_84 · **Дата intake:** 2026-10-09  
 **Источник:** [Google Doc TASK_103](https://docs.google.com/document/d/1TA-TSjes-cJc14BADMetvDNUqynS6Ihs6sE1en5ndLc/edit?usp=drivesdk) · раздел «п.2 Гл. Экран статусная модель core funtional — Задача 1»  
-**Артефакты:** docs/operations/milestones/veha_2/artifacts/active_orders_list_scroll/  
+**Артефакты:** docs/operations/milestones/veha_2/artifacts/active_orders_list_scroll/ · скрин заказчика (прод `coffeeos.fly.dev`, телефон, 2 заказа, второй обрезан, не листается): [`00_customer_prod_two_orders_no_scroll.png`](../../artifacts/active_orders_list_scroll/00_customer_prod_two_orders_no_scroll.png)  
 **Тип:** новая задача (полный SBR)  
 **Статус:** SPEC
 
