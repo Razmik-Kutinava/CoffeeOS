@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK_107](../milestones/veha_2/requirements/customer_tasks/TASK-107-Профиль-ID-в-шапке-витрины.md) · доп. задача, реверс B1.13-S1 (`658ab4c0`) · [Google Doc](https://docs.google.com/document/d/1l7jRA2ebvcWNvtO0U5XOsrQV_9EW7tK3cx6aY_ARtjY/edit?usp=drivesdk) · Subtask 1–4 |
 | **Рядом** | «Обратная связь в ЛК ТГ не работает» — отдельная будущая задача владельца, `Header.svelte` не трогает |
-| **Статус** | GREEN `78c1739` · дальше `/regress` |
+| **Статус** | `/regress` PASS · дальше `/review` |
 
 ## SBR
 
@@ -12,7 +12,7 @@
 - [x] SPEC — факт, решение, файлы, Не ломать, Проверка
 - [x] RED `47a0f5d3` — новый `shop_header_profile_id_label_test.mjs` + оракулы B1.13-S1 / ЛК Патч 3 → JS 3 fail, Rails 1 fail
 - [x] GREEN `78c1739` — только `Header.svelte` (−31/+2): подпись «Профиль ID», без ветки `narrow`/`User`/бейджа/`formatProfileIdShort`; `api("profile")` оставлен · JS 7/0 · Rails b113+b114 7/0 · vite OK · Entire `01M4N7MB7HSS9CT8GZGD1QK2QR` (attach)
-- [ ] `/regress` — тесты шапки B1.13 / B1.14 / ЛК Патч 3 + vite build + браузер 390 и 320px
+- [x] `/regress` PASS — JS 3 файла 11/0 (шапка ×2 + `frequent_refresh_on_terminal`) · Rails 8 файлов 50/0 (b113_s1, b114, ЛК, Telegram WebView #67, b113_s2, order_status ×2, sbp_return — все, кто читает `Header.svelte`/`App.svelte`) · браузер CDP 390×844 и 320×640: «Профиль ID», без иконки/бейджа, без пересечения с адресом, часы на месте ([MEASURE](../milestones/veha_2/artifacts/shop_header_profile_id/MEASURE.md)) · находка → ISSUES: на <360px очень длинный адрес → шапка 93px > отступ 72px (фикс отдельно)
 - [ ] `/review` — bugbot · security · crit-audit · Entire · CI
 - [ ] `COMPONENT_MAP.md` — после Review (если шапка есть в карте; сейчас строки `Header` нет)
 - [ ] deploy по апруву → Fly MCP Point A
