@@ -1,9 +1,8 @@
 <script>
   import { onMount } from "svelte"
   import { push } from "svelte-spa-router"
-  import { User, ChevronDown } from "lucide-svelte"
+  import { ChevronDown } from "lucide-svelte"
   import { getOperatingHours, subscribeOperatingHours } from "../lib/shopOperatingHours.js"
-  import { formatProfileIdShort } from "../lib/shopProfileHeader.js"
   import {
     getTenantHeaderState,
     subscribeTenantHeader,
@@ -16,13 +15,7 @@
   let hours = $state(getOperatingHours())
   let tenantHeader = $state(getTenantHeaderState())
   let profileId = $state(null)
-  let narrow = $state(false)
   let rootEl = $state(null)
-
-  function profileLinkLabel() {
-    if (!profileId) return "Профиль"
-    return `Профиль › ${formatProfileIdShort(profileId)}`
-  }
 
   function onAddressClick() {
     if (!tenantHeader.switchable) return
@@ -42,12 +35,6 @@
       tenantHeader = next
     })
 
-    const mq = window.matchMedia("(max-width: 359px)")
-    const syncNarrow = () => {
-      narrow = mq.matches
-    }
-    syncNarrow()
-    mq.addEventListener("change", syncNarrow)
     document.addEventListener("click", onDocClick)
 
     api("profile")
@@ -61,7 +48,6 @@
     return () => {
       unsubHours()
       unsubTenant()
-      mq.removeEventListener("change", syncNarrow)
       document.removeEventListener("click", onDocClick)
     }
   })
@@ -130,22 +116,7 @@
         class="flex shrink-0 items-center gap-1 border-none bg-transparent p-0 pt-0.5 text-xs text-[#a0a0a0] cursor-pointer"
         onclick={() => push("/profile")}
       >
-      {#if narrow}
-        <span class="relative inline-flex">
-          <User class="h-5 w-5" aria-hidden="true" />
-          {#if profileId}
-            <span
-              class="absolute -right-2 -top-1.5 min-w-[1.1rem] rounded-full bg-[#ff8c42] px-0.5 text-center text-[9px] leading-tight font-medium text-[#1a1a1a]"
-              data-testid="shop-header-profile-id-badge"
-            >
-              {formatProfileIdShort(profileId).slice(-4)}
-            </span>
-          {/if}
-        </span>
-        <span class="sr-only">{profileLinkLabel()}</span>
-      {:else}
-        <span data-testid="shop-header-profile-label">{profileLinkLabel()}</span>
-      {/if}
+        <span data-testid="shop-header-profile-label">Профиль ID</span>
       </button>
     </div>
   </div>
