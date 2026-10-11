@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-11 — feat TASK_105: форма оплаты над цифровой клавиатурой, без карточки товара
+
+- Было (Android Chrome, скрин заказчика): при вводе номера карты карточка товара (`CartSheet` в стеке оплаты) залезала в форму между «СБП» и «Номер карты», а «Оплатить» уходила под клавиатуру и панель Chrome «Мир / Сканировать новую карту».
+- Причина: карточка считалась от видимой области (`visualViewport`), шторка оплаты — от CSS `vh` и `bottom: 0`, которые клавиатура не уменьшает.
+- Стало: в стеке оплаты карточка товара не показывается; шторка оплаты по высоте и низу привязана к видимой области над клавиатурой, содержимое прокручивается, «Оплатить» всегда под ним. Панель «Мир / Сканировать» — автозаполнение Chrome, не наша.
+- RED `3d7f329d` → GREEN `4500c4b1` (`CartSheet.svelte`, `PaymentMethodsSheet.svelte`, `shopWebViewLayout.js`) · /regress Rails 354/0 + JS 462/475 (13 legacy, те же до правки) · REVIEW bugbot 0 · security 0 · crit-audit CLEAN · Entire `01M4N85XSSB7821XPEV2A8P3X1` · замер расчётом ([MEASURE](../milestones/veha_2/artifacts/pay_form_numeric_keyboard/MEASURE.md)), живое — Point A после deploy.
+- Вне scope (ISSUES): `payment_error_matrix_test.mjs` красный с более позднего коммита; `shop_telegram_webview_ux_perf_test.mjs` не грузится на Node 22.
+
 ## 2026-10-11 — docs TASK_103: скрин заказчика в артефакты, сверка с Google Doc
 
 - Google Doc TASK_103 = ТЗ в репо дословно, новых требований нет.

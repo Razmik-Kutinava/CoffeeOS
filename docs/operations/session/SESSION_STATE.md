@@ -2,12 +2,13 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-11 (TASK_107 — REVIEW · TASK_105 — SPEC)  
+**Дата:** 2026-10-11 (TASK_107 — REVIEW · TASK_105 — REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
 | **TASK_103 сверка** (2026-10-11) · Google Doc = ТЗ в репо 1:1, доп. требований нет · скрин заказчика с прода (2 заказа, второй обрезан) в артефактах не было → `00_customer_prod_two_orders_no_scroll.png` + ссылки в ТЗ/MEASURE · скрин = Subtask 1, закрыт GREEN `d2f1b15d` · JS зона 81/0 · фикс в `develop`, **не** в `main` и не на Fly (последний деплой v515 07.10) → заказчик видит старое | deploy по апруву → телефон Point A |
+| **TASK_105 REVIEW** (2026-10-11) · security 0 · bugbot 0 (первый прогон по диффу develop↔main ~3000 файлов TASK_105 не захватил → повтор по 3 файлам: 0) · crit-audit CLEAN `4a5c67a3..4500c4b1` (весь код с прошлого аудита, `last_audited_sha` → `4500c4b1`) · Entire `01M4N85XSSB7821XPEV2A8P3X1` на `4500c4b1` · push → CI · [todo](todo.md) | CI green → deploy по апруву → Point A / Pixel 6 → `COMPONENT_MAP` |
 | **TASK_105 /regress PASS** (2026-10-11, витрина + оплата) · Rails 50 файлов + §2.3 354/0 · JS 44 файла 462/475 — 13 fail те же до GREEN (legacy + `payment_error_matrix` + `webview_ux_perf` на Node 22 → ISSUES) · Fly MCP Point A — после deploy | `/review` |
 | **TASK_105 GREEN** (2026-10-11) · RED `3d7f329d` → GREEN `4500c4b1` (Entire `01M4N85XSSB7821XPEV2A8P3X1`): `CartSheet` в pay-стеке не рендерится; `.pm-sheet--stacked` — высота/низ от visual viewport (`--shop-pay-stack-h`/`-bottom`), тело прокручивается, «Оплатить» под ним · JS 41/0 · Rails 17/0 · все читающие файлы: Rails 271/0, JS 84/91 (7 = `payment_error_matrix_test.mjs`, красный и без TASK_105 → ISSUES) · vite OK · замер — расчётом ([MEASURE](../milestones/veha_2/artifacts/pay_form_numeric_keyboard/MEASURE.md)), живое — Point A | `/regress` → `/review` → deploy по апруву → Pixel 6 |
 | **TASK_105 SPEC** (2026-10-11) · [ТЗ](../milestones/veha_2/requirements/customer_tasks/TASK-105-Оптимизация-формы-оплаты-под-цифровой-клавиатурой.md) · [Google Doc](https://docs.google.com/document/d/1FVfNMFAgUOmkkcvwS_GfCuolMe9QH35UtefsmDQ078Q/edit?usp=drivesdk) · ID: в доке TASK_98 (занят) → TASK_105 · аудит: карточка товара = `CartSheet` pay-peek (15vh) над `.pm-sheet--stacked`; поля карты — наш `NewCardForm`, не iframe; перекрытие = `CartSheet` от `visualViewport`, а `.pm-sheet--stacked` от CSS `vh` (92−15) → при клавиатуре карточка в форме, «Оплатить» под клавиатурой; «Мир / Сканировать новую карту» — панель автозаполнения Chrome (`autocomplete="cc-number"`), не наш DOM; `--shop-keyboard-inset` в pay-стеке не используется · все сценарии оплаты → `Checkout.svelte:335` · ждём от заказчика: «сравнить с В1.13» (не блокер) · скрин экрана получен (`02_customer_pay_form_keyboard_from_owner.png`) · [todo](todo.md) | `/sbr`: RED шаг 0 — замер CDP с клавиатурой |
