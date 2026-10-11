@@ -63,6 +63,84 @@
 
 ---
 
+# todo — TASK_105: форма оплаты под цифровой клавиатурой
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_105](../milestones/veha_2/requirements/customer_tasks/TASK-105-Оптимизация-формы-оплаты-под-цифровой-клавиатурой.md) · новая задача · [Google Doc](https://docs.google.com/document/d/1FVfNMFAgUOmkkcvwS_GfCuolMe9QH35UtefsmDQ078Q/edit?usp=drivesdk) · Subtask 1–15 · владелец: «Замер + убрать карточку товара» · скрин до: [01](../milestones/veha_2/artifacts/pay_form_numeric_keyboard/01_customer_android_pay_form_keyboard_before.png) |
+| **ID** | в доке «TASK_98 — проверить» → TASK_98 занят (воронка UTM) → **TASK_105** |
+| **Ждём от заказчика** | «Сравнить с В1.13 — допишу» (не блокер: ТЗ запрещает менять карточку вне pay-стека и пороги) · скрин «экран, где крепить карту» |
+| **Статус** | SPEC |
+
+## SBR
+
+- [x] intake (ТЗ 1:1 + артефакты + строка CBR)
+- [x] SPEC — аудит Subtask 1–4, решение, файлы, Не ломать, Проверка
+- [ ] RED шаг 0 — замер CDP 412×915 / 390×844 / 360×640 с эмуляцией клавиатуры (`visualViewport` −365px): позиции `CartSheet` pay-peek, `.pm-sheet--stacked`, «Оплатить» → `MEASURE.md` + скрины до
+- [ ] RED — тесты (JS helper + Rails-оракул разметки)
+- [ ] GREEN
+- [ ] `/regress`
+- [ ] `/review`
+- [ ] `COMPONENT_MAP.md` строки `CartSheet` / `PaymentMethodsSheet` / `shopWebViewLayout` — после Review
+- [ ] deploy по апруву → Pixel 6 Chrome + PWA · Fly MCP Point A
+
+## Факт (аудит 2026-10-11, Subtask 1–4)
+
+- **Subtask 1 — карточка товара в pay-стеке** = сама `CartSheet` в режиме `payStackActive` (`CartSheet.svelte:110`, `onCheckout && payStackOpen && count > 0`): peek-список позиций (`:609`, `:764` `data-testid="shop-cart-peek-list"`), высота `CHECKOUT_PEEK_VH` 15vh (`:121`), стоит **над** шторкой оплаты: `bottom = stackBottomPx` = `(CHECKOUT_PAY_STACK_VH 92 − CHECKOUT_PEEK_VH 15)` vh (`:139`, `:174`, `:471`), z-index 52. Минимальная точка скрытия — ветка `payStackActive` в `CartSheet` (каталог/товар/обычная корзина её не проходят).
+- **Subtask 2 — поля карты** = **наша разметка** `NewCardForm.svelte` (`PaymentMethodsSheet.svelte:228-229`, шифрование `tbankCardEncrypt.js`), **не** iframe Т-Банка. iframe (`tbankPayment.js`) — только 3DS/PaymentURL, не трогаем.
+- **Subtask 3 — причина перекрытия (две):**
+  1. **Разные системы координат.** `CartSheet` (карточка) считает `bottom`/высоту от `visualViewport` (`vvh`, сжимается при клавиатуре), а `.pm-sheet--stacked` (`PaymentMethodsSheet.svelte:516-519`) = `bottom: 0` + `calc(var(--checkout-pay-stack-h, 92vh) − var(--checkout-cart-peek-h, 15vh))` — CSS `vh` layout-viewport, при клавиатуре **не** сжимается (Android Chrome, `resizes-visual`). Итог: карточка съезжает вниз внутрь формы (на скрине — между «СБП» и «Номер карты»), а низ шторки с «Оплатить» уходит под клавиатуру.
+  2. **«Мир ••5953 / Сканировать новую карту» — не наш DOM**, это панель автозаполнения Chrome над клавиатурой (`autocomplete="cc-number"`/`cc-exp`/`cc-csc` в `NewCardForm.svelte:63,78,92`). Стилизовать её нельзя; она часть области клавиатуры → «Оплатить» должна стоять **выше** неё, т.е. считать высоту от `visualViewport`, а не `vh`. `autocomplete` не трогаем (это автозаполнение карты — полезно, и ТЗ не просит).
+  - `--shop-keyboard-inset` уже считается (`shopWebViewLayout.js:89-91`), но в pay-стеке **нигде не используется**.
+- **Subtask 4 — источники pay-стека:** единственная точка `Checkout.svelte:335` `openCheckoutPayStack()` → `cartSheetStore.js:139-156` (ставит `--checkout-*`). Через неё идут: обычный checkout, Quick Repeat (`frequentRepeatStore.js:82-85` → `#/checkout`), повтор из ЛК и fallback оплаты (`openRepeatPaymentSheet.js:24-51` → `#/checkout`), add-card CTA (`shop-cart-add-card` → checkout). Регрессия: каждый из 4 — открыть оплату, СБП/сохранённая карта/новая карта видны, «Итого» на месте.
+- viewport meta витрины: `app/views/layouts/shop.html.erb:5` (`width=device-width,initial-scale=1,viewport-fit=cover`) — **без** `interactive-widget`. Subtask 14: сначала фикс через `visualViewport`, meta — только если замер покажет, что без неё никак.
+
+## Решение для билда
+
+1. **Карточку товара убрать в pay-стеке (Subtask 6):** в `CartSheet` при `payStackActive` шторку не показывать (не рендерить peek-список / высота 0), `PaymentMethodsSheet` занимает весь стек. «Итого» — уже в `PaymentMethodsSheet` (TASK_101), не трогаем. Каталог/товар/обычная корзина/`phoneAuthSlim` — без изменений.
+2. **Высота pay-стека от `visualViewport` (Subtask 5, 7, 8, 10):** новый helper в `shopWebViewLayout.js` — доступная высота pay-стека = `min(CHECKOUT_PAY_STACK_VH% от vvh, vvh)` с учётом `--shop-keyboard-inset`; `.pm-sheet--stacked` получает `bottom: var(--shop-keyboard-inset)` и высоту от helper (CSS-переменная), а не `92vh − 15vh`. При закрытии клавиатуры inset = 0 → прежняя раскладка.
+3. **Внутренняя прокрутка (Subtask 9, 11):** список способов/форма — `overflow: auto` внутри шторки, «Оплатить» (`.pm-sheet__pay`) — внизу шторки, всегда в видимой области; активное поле — `scrollIntoView({ block: "nearest" })` внутри контейнера, если браузер сам не подкрутил (решить по замеру).
+4. **Значения `cartSheetThresholds.js` не менять** (`CHECKOUT_PEEK_VH` перестаёт участвовать в pay-стеке через ветку, а не через новое число). `shouldHideCartCheckoutCta`, `phoneAuthActive`, `isShopKeyboardOpen` — без изменений.
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/components/PaymentMethodsSheet.svelte` — `.pm-sheet--stacked`: высота/`bottom` от visual viewport + keyboard inset, внутренняя прокрутка, «Оплатить» не перекрыта. «Итого», список карт, СБП, `NewCardForm` — не трогаем.
+2. `app/frontend/components/CartSheet.svelte` — ветка `payStackActive`: карточка товара не показывается.
+3. `app/frontend/lib/shopWebViewLayout.js` — helper доступной высоты pay-стека (+ CSS-переменная в `applyShopWebViewLayout`), keyboard-path #80 без изменений.
+4. `test/javascript/shop_pay_stack_keyboard_layout_test.mjs` (новый) — RED: helper при 915/550 (клавиатура 365), 640, 844; inset 0 → прежняя высота; `shouldHideCartCheckoutCta` не изменился.
+5. `test/integration/shop/pay_stack_keyboard_layout_test.rb` (новый) — RED-оракул исходника: нет `92vh − 15vh` у `.pm-sheet--stacked`, есть keyboard inset; в `CartSheet` pay-стек без peek-списка; «Итого» (`payment-methods-order-total`) на месте.
+6. `docs/operations/milestones/veha_2/artifacts/pay_form_numeric_keyboard/` — `measure_pay_form_keyboard.js` (CDP) + `MEASURE.md` + скрины до/после.
+
+**Соседи (только регрессия; править, если упадут на старом каноне):** `app/frontend/lib/cartSheetStore.js` (ставит `--checkout-pay-stack-h`/`--checkout-cart-peek-h` — возможно, перестанут читаться) · `test/integration/shop/shop_checkout_cart_sheet_ux_test.rb` (pay-stack peek 15vh) · `test/integration/shop/auth_funnel_wizard_ui_test.rb` (phone-auth slim) · `test/javascript/shop_telegram_webview_ui_test.mjs` / `shop_safe_bottom_min_test.mjs` (`shouldHideCartCheckoutCta`, safe-area).
+
+## Не ломать
+
+- Оплата: СБП, сохранённая карта (one-click), новая карта + чекбокс `save_card`, промо 11 ₽, ошибки оплаты (TASK_100), «Итого» (TASK_101) — тексты и поведение те же.
+- Источники pay-стека: обычный checkout, Quick Repeat (#87), повтор из ЛК (TASK_94), add-card CTA.
+- Клавиатура вне оплаты: скрытие CTA на checkout (#80), phone-auth slim (TASK_89-UI-EXT).
+- `CartSheet` вне pay-стека: каталог/товар/peek/expanded/hidden, safe-area (v514), жест 24px (v515), статусная шторка.
+
+## Проверка
+
+1. `node --test test/javascript/shop_pay_stack_keyboard_layout_test.mjs test/javascript/shop_telegram_webview_ui_test.mjs test/javascript/shop_safe_bottom_min_test.mjs test/javascript/open_repeat_payment_sheet_test.mjs` · `npm run vite:build`
+2. `ruby bin/rails test test/integration/shop/pay_stack_keyboard_layout_test.rb test/integration/shop/shop_checkout_cart_sheet_ux_test.rb test/integration/shop/auth_funnel_wizard_ui_test.rb` · браузер (CDP, MEASURE) 412×915 / 390×844 / 360×640 с клавиатурой: Subtask 6–11.
+
+## DoD
+
+- [ ] Subtask 1–4: аудит (этот todo)
+- [ ] Subtask 5: helper высоты + тест
+- [ ] Subtask 6: карточки товара нет в pay-стеке, «Итого» есть
+- [ ] Subtask 7–8: «Оплатить» целиком над клавиатурой и панелью Chrome, без наложений (412×915)
+- [ ] Subtask 9: смена фокуса номер → ММ/ГГ → CVV без скачков
+- [ ] Subtask 10: клавиатура закрыта → прежняя раскладка
+- [ ] Subtask 11: 360×640 / 390×844 — внутренняя прокрутка
+- [ ] Subtask 12: СБП / сохранённая / новая карта / Quick Repeat / ЛК — Point A после deploy
+- [ ] Subtask 13: #80 и TASK_89-UI-EXT тесты зелёные
+- [ ] Subtask 14: viewport meta — решение по замеру
+- [ ] Subtask 15: скрины до/после, `COMPONENT_MAP.md`
+
+---
+
 # todo — TASK_106: лишние блоки и пустой оверлей в PWA
 
 | Поле | Значение |

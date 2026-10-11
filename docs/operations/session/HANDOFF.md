@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-11 (TASK_107 — SPEC)  
+**Дата:** 2026-10-11 (TASK_107 — SPEC · TASK_105 — SPEC)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **TASK_105** (2026-10-11) — форма оплаты под цифровой клавиатурой (Android): intake + SPEC · причина: карточка товара (`CartSheet` pay-peek) считается от `visualViewport`, шторка оплаты — от CSS `vh` → при клавиатуре карточка залезает в форму, «Оплатить» уходит под клавиатуру; «Мир / Сканировать» — панель Chrome, не наша · план: убрать карточку в pay-стеке, высота шторки оплаты от `visualViewport` + keyboard inset, внутренняя прокрутка · [todo](todo.md) | `/sbr` (замер → RED) · от заказчика: «сравнить с В1.13», скрин привязки карты |
 | **TASK_107** (2026-10-11) — в правом верхнем углу витрины вместо «Профиль › цифры» только «Профиль ID» (и на узком экране, без иконки и бейджа) · intake + SPEC · правка одного `Header.svelte` + 3 теста · [todo](todo.md) | `/sbr` → RED → GREEN |
 | **TASK_106** (2026-10-09) — «повторить» убран из шторки товара (остался на каталоге), «Итого» слева убрано — одна кнопка на всю ширину с суммой «0₽», пустая корзина без пустого низа (263 → 122px) · RED `b87b54e0` → GREEN `d6baf6d8` · bugbot-фикс `a2cb4ca1` → `4a5c67a3` · /regress PASS · REVIEW: bugbot 0 · security 0 · crit-audit CLEAN · Entire `01M4GGPRK0QNF01Z6B0MY7GG2Y` · **CI green** [37943973041](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37943973041) на `5b2ecb6e` · [todo](todo.md) | deploy по апруву → Point A / Pixel 6 Google Chat |
 | **TASK_104** (2026-10-09) — переключатель состава заказа в статусной шторке: только `>`/`v` справа под строкой статуса, без текста и оранжевой заливки · RED `e7709e13` → GREEN `bb28557` · браузер S1–S5 PASS · /regress PASS · REVIEW: bugbot 0 · security 0 · crit-audit CLEAN · Entire `01M4GCQ9PBDZZBY7SGH4GTC94S` · **CI green** [37937280293](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/37937280293) на `14d8da3e` · [todo](todo.md) | deploy по апруву → телефон |
