@@ -56,10 +56,9 @@ describe("Header: нет support-chat (ЛК Патч 3)", () => {
     assert.doesNotMatch(headerSource, /onSupportChatClick/)
   })
 
-  it("узкая ширина: badge «Профиль ID» в ветке narrow сохранён", () => {
-    const narrowBranch = headerSource.match(/\{#if narrow\}([\s\S]*?)\{:else\}/)
-    assert.ok(narrowBranch, "ожидалась ветка {#if narrow}")
-    assert.match(narrowBranch[1], /shop-header-profile-id-badge/)
+  it("узкая ширина (TASK_107): нет бейджа с ID, подпись «Профиль ID», ссылка в ЛК на месте", () => {
+    assert.doesNotMatch(headerSource, /shop-header-profile-id-badge/)
+    assert.match(headerSource, /Профиль ID/)
     assert.match(headerSource, /push\("\/profile"\)/)
   })
 })

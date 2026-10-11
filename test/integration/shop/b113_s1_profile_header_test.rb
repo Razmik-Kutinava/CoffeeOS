@@ -29,7 +29,9 @@ class Shop::B113S1ProfileHeaderTest < ActionDispatch::IntegrationTest
     refute_includes header, "Витрина</span>"
     assert_includes header, 'data-testid="shop-header-profile"'
     assert_includes header, 'push("/profile")'
-    assert_includes header, "formatProfileIdShort"
+    # TASK_107: в шапке только «Профиль ID», без сокращённого ID
+    assert_includes header, "Профиль ID"
+    refute_includes header, "formatProfileIdShort("
     assert_includes header, "shop-hours-display"
     assert_includes lib, "formatProfileIdShort"
   end
