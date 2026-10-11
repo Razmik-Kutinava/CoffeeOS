@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-11 — docs: COMPONENT_MAP — TASK_103/104/105/106
+
+- Карта витрины (`session/COMPONENT_MAP.md`) догнана после четырёх задач: `CartSheet` (TASK_106, TASK_105), `cartSheetThresholds` и `shopWebViewLayout` (TASK_105), `PaymentMethodsSheet` (TASK_105), `OrderStatusSheet` и `orderStatusSheet.js` (TASK_103), `ActiveOrdersAccordion` (TASK_103, TASK_104).
+- Убрано устаревшее: `.oss__panel.receipt-open`, номера строк, текст «Состав заказа» на CTA.
+- TASK_107 (`Header.svelte`) — вне зоны карты, не добавлен.
+
 ## 2026-10-11 — feat TASK_105: форма оплаты над цифровой клавиатурой, без карточки товара
 
 - Было (Android Chrome, скрин заказчика): при вводе номера карты карточка товара (`CartSheet` в стеке оплаты) залезала в форму между «СБП» и «Номер карты», а «Оплатить» уходила под клавиатуру и панель Chrome «Мир / Сканировать новую карту».
