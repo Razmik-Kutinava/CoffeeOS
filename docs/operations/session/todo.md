@@ -4,14 +4,14 @@
 |------|----------|
 | **Основание** | [TASK_107](../milestones/veha_2/requirements/customer_tasks/TASK-107-Профиль-ID-в-шапке-витрины.md) · доп. задача, реверс B1.13-S1 (`658ab4c0`) · [Google Doc](https://docs.google.com/document/d/1l7jRA2ebvcWNvtO0U5XOsrQV_9EW7tK3cx6aY_ARtjY/edit?usp=drivesdk) · Subtask 1–4 |
 | **Рядом** | «Обратная связь в ЛК ТГ не работает» — отдельная будущая задача владельца, `Header.svelte` не трогает |
-| **Статус** | SPEC `[x]` · дальше RED |
+| **Статус** | GREEN `78c1739` · дальше `/regress` |
 
 ## SBR
 
 - [x] intake (ТЗ 1:1 + строка CBR 107)
 - [x] SPEC — факт, решение, файлы, Не ломать, Проверка
-- [ ] RED — новый JS-тест + правка двух старых оракулов B1.13-S1 / ЛК Патч 3 → fail на текущем `Header.svelte`
-- [ ] GREEN — только `Header.svelte`
+- [x] RED `47a0f5d3` — новый `shop_header_profile_id_label_test.mjs` + оракулы B1.13-S1 / ЛК Патч 3 → JS 3 fail, Rails 1 fail
+- [x] GREEN `78c1739` — только `Header.svelte` (−31/+2): подпись «Профиль ID», без ветки `narrow`/`User`/бейджа/`formatProfileIdShort`; `api("profile")` оставлен · JS 7/0 · Rails b113+b114 7/0 · vite OK · Entire `01M4N7MB7HSS9CT8GZGD1QK2QR` (attach)
 - [ ] `/regress` — тесты шапки B1.13 / B1.14 / ЛК Патч 3 + vite build + браузер 390 и 320px
 - [ ] `/review` — bugbot · security · crit-audit · Entire · CI
 - [ ] `COMPONENT_MAP.md` — после Review (если шапка есть в карте; сейчас строки `Header` нет)
