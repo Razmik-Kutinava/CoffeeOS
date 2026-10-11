@@ -1,3 +1,68 @@
+# todo — TASK_107: «Профиль ID» в правом верхнем углу витрины
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_107](../milestones/veha_2/requirements/customer_tasks/TASK-107-Профиль-ID-в-шапке-витрины.md) · доп. задача, реверс B1.13-S1 (`658ab4c0`) · [Google Doc](https://docs.google.com/document/d/1l7jRA2ebvcWNvtO0U5XOsrQV_9EW7tK3cx6aY_ARtjY/edit?usp=drivesdk) · Subtask 1–4 |
+| **Рядом** | «Обратная связь в ЛК ТГ не работает» — отдельная будущая задача владельца, `Header.svelte` не трогает |
+| **Статус** | SPEC `[x]` · дальше RED |
+
+## SBR
+
+- [x] intake (ТЗ 1:1 + строка CBR 107)
+- [x] SPEC — факт, решение, файлы, Не ломать, Проверка
+- [ ] RED — новый JS-тест + правка двух старых оракулов B1.13-S1 / ЛК Патч 3 → fail на текущем `Header.svelte`
+- [ ] GREEN — только `Header.svelte`
+- [ ] `/regress` — тесты шапки B1.13 / B1.14 / ЛК Патч 3 + vite build + браузер 390 и 320px
+- [ ] `/review` — bugbot · security · crit-audit · Entire · CI
+- [ ] `COMPONENT_MAP.md` — после Review (если шапка есть в карте; сейчас строки `Header` нет)
+- [ ] deploy по апруву → Fly MCP Point A
+
+## Факт (аудит 2026-10-11)
+
+- `Header.svelte:22-25` — `profileLinkLabel()`: без `profileId` → «Профиль», с ним → «Профиль › 655a…a3» (`formatProfileIdShort`).
+- `:44-50` — `matchMedia("(max-width: 359px)")` → `narrow`; используется **только** для профиля.
+- `:133-145` — узкая ветка: иконка `User` + бейдж `shop-header-profile-id-badge` (последние 4 символа) + `sr-only` подпись. `:147` — обычная ширина: `<span data-testid="shop-header-profile-label">`.
+- `:53-59` — `api("profile")` → `profileId`; других потребителей `profileId` в шапке нет.
+- `shopProfileHeader.js` (`formatProfileIdShort`) импортирует только `Header.svelte`.
+- Оракулы прежнего вида: `b113_s1_profile_header_test.rb:32` (`assert_includes header, "formatProfileIdShort"`) · `shop_header_no_support_chat_test.mjs:59-64` (бейдж в ветке `narrow`). `b114_header_tenant_address_test.rb` — адрес/часы, профиль не проверяет.
+
+## Решение для билда
+
+1. Кнопка `shop-header-profile` (тот же `push("/profile")`, те же классы) содержит **только** `<span data-testid="shop-header-profile-label">Профиль ID</span>` — на всех ширинах и для гостя без ID (ТЗ: «точный текст»).
+2. Удалить из `Header.svelte`: ветку `{#if narrow}` (иконка `User`, бейдж, `sr-only`), `profileLinkLabel()`, импорт `User` и `formatProfileIdShort`, `narrow` + `matchMedia` (больше не нужны).
+3. `api("profile")` → `profileId` **оставить как есть**: ТЗ запрещает менять «получение идентификатора»; убрать запрос — отдельное решение владельца.
+4. `shopProfileHeader.js` и его тест-зеркало в `b113_s1_…:44-60` — не трогаем (ТЗ: не менять вспомогательную логику ID).
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/components/Header.svelte` — п.1–2 решения.
+2. `test/javascript/shop_header_profile_id_label_test.mjs` (новый) — RED: SSR обычная ширина → текст подписи ровно «Профиль ID», нет `›`/`…`/бейджа; исходник → нет `{#if narrow}`, `User`, `shop-header-profile-id-badge`, `formatProfileIdShort(`; `push("/profile")` на месте.
+3. `test/integration/shop/b113_s1_profile_header_test.rb` — `:32` `formatProfileIdShort` в шапке → «Профиль ID» в шапке (остальные проверки и зеркало сокращения — без изменений).
+4. `test/javascript/shop_header_no_support_chat_test.mjs` — кейс «badge в ветке narrow сохранён» → «в шапке нет бейджа и ветки narrow, `push("/profile")` есть»; проверки поддержки не ослаблять.
+
+**Соседи (только регрессия):** `test/integration/shop/b114_header_tenant_address_test.rb` (адрес/часы/дропдаун точки).
+
+## Не ломать
+
+- Клик по «Профиль ID» → `#/profile` (ЛК), сам ЛК не меняется.
+- Адрес точки слева: дропдаун переключения точки (B1.14), часы работы `shop-hours-display` (B1.11).
+- Иконки поддержки в шапке по-прежнему нет (ЛК Патч 3 / #69).
+- Шапка на узком экране (<360px): подпись не наезжает на адрес, высота шапки не растёт.
+
+## Проверка
+
+1. `node --test test/javascript/shop_header_profile_id_label_test.mjs test/javascript/shop_header_no_support_chat_test.mjs`
+2. `ruby bin/rails test test/integration/shop/b113_s1_profile_header_test.rb test/integration/shop/b114_header_tenant_address_test.rb` · `npm run vite:build` · браузер 390×844 и 320×640: подпись «Профиль ID», адрес и часы на месте.
+
+## DoD
+
+- [ ] Subtask 1: обычная ширина — ровно «Профиль ID», без ID/`›`/иконки/`…`
+- [ ] Subtask 2: <360px — то же, без бейджа и иконки
+- [ ] Subtask 3: адрес, дропдаун точки, часы — без регрессии
+- [ ] Subtask 4: оракулы B1.13-S1 / ЛК Патч 3 переписаны под новое требование, проверки поддержки и сокращения ID не ослаблены
+
+---
+
 # todo — TASK_106: лишние блоки и пустой оверлей в PWA
 
 | Поле | Значение |
