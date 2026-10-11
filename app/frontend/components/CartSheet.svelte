@@ -456,7 +456,8 @@
   {/if}
 {/snippet}
 
-{#if showSheet}
+<!-- TASK_105: в pay-стеке карточка товара не показывается — шторку оплаты не перекрывает -->
+{#if showSheet && !payStackActive}
   <div
     bind:this={sheetEl}
     data-testid="shop-cart-sheet"

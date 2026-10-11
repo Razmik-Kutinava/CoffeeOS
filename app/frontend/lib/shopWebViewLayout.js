@@ -3,6 +3,7 @@
  * Not Mini App, not bot, not auth. UA is not used.
  */
 import { applyShopVisualViewport } from "./shopWebView.js"
+import { CHECKOUT_PAY_STACK_VH } from "./cartSheetThresholds.js"
 
 const KEYBOARD_GAP_PX = 100
 const subs = new Set()
@@ -48,6 +49,19 @@ export function shouldHideCartCheckoutCta({ onCheckout, keyboardOpen, phoneAuthA
   return Boolean(onCheckout && (keyboardOpen || phoneAuthActive))
 }
 
+/** TASK_105: Android Chrome сжимает под клавиатурой только visual viewport, CSS `vh` и `bottom: 0` остаются в layout. */
+export function payStackHeightPx(env = globalThis) {
+  return sheetHeightPx(CHECKOUT_PAY_STACK_VH, env)
+}
+
+export function payStackBottomPx(env = globalThis) {
+  const vv = env.visualViewport
+  const inner = Number(env.innerHeight || 0)
+  if (!vv || !inner) return 0
+  const visualBottom = Number(vv.offsetTop || 0) + Number(vv.height || 0)
+  return Math.max(0, Math.round(inner - visualBottom))
+}
+
 export function keepUiStateOnViewportChange(state) {
   return state
 }
@@ -89,6 +103,8 @@ export function applyShopWebViewLayout(rootEl, env = globalThis) {
     const kb = isShopKeyboardOpen(env)
     const kbInset = kb ? Math.max(0, Math.round(Number(env.innerHeight || 0) - h)) : 0
     rootEl.style.setProperty("--shop-keyboard-inset", `${kbInset}px`)
+    rootEl.style.setProperty("--shop-pay-stack-h", `${payStackHeightPx(env)}px`)
+    rootEl.style.setProperty("--shop-pay-stack-bottom", `${payStackBottomPx(env)}px`)
   }
   emitViewport(h)
   return { height: h, keyboardOpen: isShopKeyboardOpen(env) }

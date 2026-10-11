@@ -77,8 +77,8 @@
 - [x] intake (ТЗ 1:1 + артефакты + строка CBR)
 - [x] SPEC — аудит Subtask 1–4, решение, файлы, Не ломать, Проверка
 - [x] RED шаг 0 — замер **расчётом по коду** (локально до pay-стека нужен OTP, puppeteer нет): 412×915, клавиатура 365 → карточка 409–492 внутри формы 211–915, «Оплатить» под клавиатурой — совпадает со скрином ([MEASURE](../milestones/veha_2/artifacts/pay_form_numeric_keyboard/MEASURE.md)) · живой замер — Point A после deploy
-- [x] RED — `shop_pay_stack_keyboard_layout_test.mjs` (нет экспорта `payStackHeightPx`/`payStackBottomPx`) · `pay_stack_keyboard_layout_test.rb` 3 fail / 2 охранных green
-- [ ] GREEN
+- [x] RED `3d7f329d` — `shop_pay_stack_keyboard_layout_test.mjs` (нет экспорта `payStackHeightPx`/`payStackBottomPx`) · `pay_stack_keyboard_layout_test.rb` 3 fail / 2 охранных green
+- [x] GREEN — `payStackHeightPx`/`payStackBottomPx` + `--shop-pay-stack-h`/`--shop-pay-stack-bottom` в `applyShopWebViewLayout` · `CartSheet` `{#if showSheet && !payStackActive}` · `.pm-sheet--stacked` flex-колонка: `.pm-sheet__body` прокрутка, `.pm-sheet__pay` не сжимается · Проверка: JS 41/0 · Rails 17/0 · vite OK · все тесты, читающие `PaymentMethodsSheet`/`CartSheet`/`shopWebViewLayout`: Rails 40 файлов 271/0 · JS 7 файлов 84/91 — 7 = `payment_error_matrix_test.mjs`, красный и без TASK_105 → ISSUES · [MEASURE](../milestones/veha_2/artifacts/pay_form_numeric_keyboard/MEASURE.md) после — расчёт, живое — Point A
 - [ ] `/regress`
 - [ ] `/review`
 - [ ] `COMPONENT_MAP.md` строки `CartSheet` / `PaymentMethodsSheet` / `shopWebViewLayout` — после Review

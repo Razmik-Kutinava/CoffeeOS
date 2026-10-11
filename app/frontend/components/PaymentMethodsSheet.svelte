@@ -109,6 +109,7 @@
       </button>
     </header>
 
+    <div class="pm-sheet__body">
     {#if orderTotalLabel}
       <p class="pm-sheet__total" data-testid="payment-methods-order-total">
         <span class="pm-sheet__total-label">{labelOrderTotal()}</span>
@@ -241,6 +242,7 @@
         {inlineError}
       </p>
     {/if}
+    </div>
 
     <div class="pm-sheet__pay">
       <CheckoutPayButton
@@ -516,10 +518,29 @@
   .pm-sheet--stacked {
     z-index: 51;
     max-height: none;
-    height: calc(var(--checkout-pay-stack-h, 92vh) - var(--checkout-cart-peek-h, 15vh));
+    height: var(--shop-pay-stack-h, var(--checkout-pay-stack-h, 92vh));
+    bottom: var(--shop-pay-stack-bottom, 0px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     border-radius: 0;
     border-top: 1px solid #3a3a3a;
     box-shadow: none;
+  }
+
+  .pm-sheet--stacked .pm-sheet__header {
+    flex-shrink: 0;
+  }
+
+  .pm-sheet--stacked .pm-sheet__body {
+    flex: 0 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .pm-sheet--stacked .pm-sheet__pay {
+    flex-shrink: 0;
   }
 
   .pm-new-card {
