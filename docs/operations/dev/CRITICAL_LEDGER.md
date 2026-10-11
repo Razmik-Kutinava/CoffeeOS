@@ -8,7 +8,7 @@
 
 **last_audited_sha:** `4500c4b1` (TASK_105 шторка оплаты над цифровой клавиатурой, без карточки товара; TASK_107 шапка — аудирован отдельно)  
 **last_audit_date:** 2026-10-11  
-**last_verdict:** `CLEAN` (CI — после push)
+**last_verdict:** `CLEAN` (CI green `f56758bd`)
 
 ## Статусы
 
