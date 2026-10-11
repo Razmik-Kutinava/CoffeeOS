@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-11 — deploy Fly v516: TASK_103, TASK_104, TASK_105, TASK_106, TASK_107
+
+- На проде: список активных заказов листается внутри статусной шторки (TASK_103); переключатель состава — только стрелка `>`/`v` (TASK_104); форма оплаты над цифровой клавиатурой, без карточки товара (TASK_105); в нижней панели одна кнопка «0₽» без «Итого», «повторить» убран с экрана товара, пустая шторка без пустого низа (TASK_106); в шапке «Профиль ID» (TASK_107).
+- Перед деплоем: CI 38134215415 + Semgrep + CodeQL green на `2788ad45`, crit-audit CLEAN, миграций нет. Красный `payment_error_matrix_test.mjs` — среда Node 22 (`navigator.onLine`), не продукт.
+- Deploy 38134557508 → v516. Приёмка: один CDP-скрипт на проде до (v515) и после (v516) — 5/5 PASS, Sentry 24h 0, Fly logs без 5xx, worker OK ([MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v516_2026-10-11/MCP_RESULT.md)).
+- В ISSUES: устаревшая подсказка «+сумма» на checkout; install-баннер перекрывает заголовок товара (было и на v515).
+
 ## 2026-10-11 — docs: COMPONENT_MAP — TASK_103/104/105/106
 
 - Карта витрины (`session/COMPONENT_MAP.md`) догнана после четырёх задач: `CartSheet` (TASK_106, TASK_105), `cartSheetThresholds` и `shopWebViewLayout` (TASK_105), `PaymentMethodsSheet` (TASK_105), `OrderStatusSheet` и `orderStatusSheet.js` (TASK_103), `ActiveOrdersAccordion` (TASK_103, TASK_104).

@@ -1,0 +1,50 @@
+{
+  "orders_2_mid_scroll": {
+    "scrollTop": 140,
+    "windowScrollY": 0,
+    "rows": [
+      {
+        "text": "Примерно 8–12 минут —202610-T1— Витрина А",
+        "metaFullyVisible": false
+      },
+      {
+        "text": "Примерно 8–12 минут —202610-T2— Витрина А",
+        "metaFullyVisible": true
+      }
+    ]
+  },
+  "arrow_keyboard": {
+    "focused": {
+      "focused": true,
+      "ariaExpanded": "false",
+      "text": ">",
+      "receipts": 0,
+      "outline": "none"
+    },
+    "afterEnter": {
+      "focused": true,
+      "ariaExpanded": "true",
+      "text": "v",
+      "receipts": 1,
+      "outline": "solid"
+    },
+    "afterSpace": {
+      "focused": true,
+      "ariaExpanded": "false",
+      "text": ">",
+      "receipts": 0,
+      "outline": "solid"
+    }
+  },
+  "pay_360x640_card_number_focus": {
+    "vvh": 275,
+    "active": "cc-number",
+    "fieldTop": 107,
+    "fieldBottom": 154,
+    "fieldVisible": true,
+    "payBottom": 255,
+    "payAboveKb": true,
+    "overlap": false,
+    "windowScrollY": 0
+  }
+}

@@ -1,0 +1,1478 @@
+{
+  "catalog_empty_412x915": {
+    "cart": {
+      "viewport": {
+        "w": 412,
+        "h": 915
+      },
+      "sheet": {
+        "top": 793,
+        "bottom": 915,
+        "left": 0,
+        "right": 412,
+        "h": 122,
+        "w": 412
+      },
+      "sheetMode": "peek",
+      "itogoBlock": false,
+      "itogoTextInSheet": false,
+      "checkoutBtn": {
+        "text": "0₽",
+        "top": 871,
+        "bottom": 907,
+        "left": 12,
+        "right": 400,
+        "h": 36,
+        "w": 388
+      },
+      "emptyText": "тут будут твои заказы",
+      "repeatSlots": [],
+      "repeatSectionRendered": false,
+      "productCta": null,
+      "coldHeader": {
+        "top": 316,
+        "bottom": 344,
+        "left": 12,
+        "right": 100,
+        "h": 28,
+        "w": 88
+      }
+    },
+    "header": {
+      "profileText": "Профиль ID",
+      "profileHasSvg": false,
+      "badge": false,
+      "profileInside": true,
+      "address": "Самара, ул. Куйбышева, 78",
+      "hours": "Пн–Пт 08:00–22:00, Сб–Вс 10:00–20:00",
+      "headerH": 55
+    }
+  },
+  "header_320x640": {
+    "profileText": "Профиль ID",
+    "profileHasSvg": false,
+    "badge": false,
+    "profileInside": true,
+    "address": "Самара, ул. Куйбышева, 78",
+    "hours": "Пн–Пт 08:00–22:00, Сб–Вс 10:00–20:00",
+    "headerH": 55
+  },
+  "repeat_catalog_vs_product_412x915": {
+    "catalog": {
+      "viewport": {
+        "w": 412,
+        "h": 915
+      },
+      "sheet": {
+        "top": 542,
+        "bottom": 915,
+        "left": 0,
+        "right": 412,
+        "h": 373,
+        "w": 412
+      },
+      "sheetMode": "peek",
+      "itogoBlock": false,
+      "itogoTextInSheet": false,
+      "checkoutBtn": {
+        "text": "0₽",
+        "top": 584,
+        "bottom": 620,
+        "left": 12,
+        "right": 400,
+        "h": 36,
+        "w": 388
+      },
+      "emptyText": null,
+      "repeatSlots": [
+        {
+          "id": "shop-repeat-slot-empty",
+          "h": 199,
+          "children": 1
+        }
+      ],
+      "repeatSectionRendered": true,
+      "productCta": null,
+      "coldHeader": {
+        "top": 316,
+        "bottom": 344,
+        "left": 12,
+        "right": 100,
+        "h": 28,
+        "w": 88
+      }
+    },
+    "product": {
+      "viewport": {
+        "w": 412,
+        "h": 915
+      },
+      "sheet": {
+        "top": 715,
+        "bottom": 915,
+        "left": 0,
+        "right": 412,
+        "h": 200,
+        "w": 412
+      },
+      "sheetMode": "peek",
+      "itogoBlock": false,
+      "itogoTextInSheet": false,
+      "checkoutBtn": {
+        "text": "0₽",
+        "top": 871,
+        "bottom": 907,
+        "left": 12,
+        "right": 400,
+        "h": 36,
+        "w": 388
+      },
+      "emptyText": "тут будут твои заказы",
+      "repeatSlots": [],
+      "repeatSectionRendered": false,
+      "productCta": {
+        "top": 740,
+        "bottom": 818,
+        "left": 0,
+        "right": 412,
+        "h": 78,
+        "w": 412
+      },
+      "coldHeader": null
+    }
+  },
+  "active_orders_2_390x844": {
+    "before": {
+      "panel": {
+        "top": 630,
+        "bottom": 766,
+        "h": 136,
+        "scrollTop": 0,
+        "scrollH": 135,
+        "clientH": 135,
+        "overflowY": "hidden"
+      },
+      "list": {
+        "top": 655,
+        "bottom": 758,
+        "h": 103,
+        "scrollTop": 0,
+        "scrollH": 290,
+        "clientH": 103,
+        "overflowY": "auto"
+      },
+      "rows": [
+        {
+          "top": 655,
+          "bottom": 800,
+          "visiblePx": 103
+        },
+        {
+          "top": 800,
+          "bottom": 945,
+          "visiblePx": 0
+        }
+      ],
+      "windowScrollY": 0,
+      "cart": {
+        "top": 605,
+        "bottom": 844,
+        "h": 239,
+        "scrollTop": 0,
+        "scrollH": 257,
+        "clientH": 238,
+        "overflowY": "hidden"
+      },
+      "cta": {
+        "visibleText": ">",
+        "ariaLabel": "Состав заказа",
+        "ariaExpanded": "false",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 140, 66)",
+        "w": 44,
+        "h": 36,
+        "right": 381,
+        "rowRight": 381
+      },
+      "openReceipts": 0
+    },
+    "after": {
+      "panel": {
+        "top": 630,
+        "bottom": 766,
+        "h": 136,
+        "scrollTop": 0,
+        "scrollH": 135,
+        "clientH": 135,
+        "overflowY": "hidden"
+      },
+      "list": {
+        "top": 636,
+        "bottom": 758,
+        "h": 122,
+        "scrollTop": 168,
+        "scrollH": 290,
+        "clientH": 122,
+        "overflowY": "auto"
+      },
+      "rows": [
+        {
+          "top": 468,
+          "bottom": 613,
+          "visiblePx": 0
+        },
+        {
+          "top": 613,
+          "bottom": 758,
+          "visiblePx": 122
+        }
+      ],
+      "windowScrollY": 0,
+      "cart": {
+        "top": 605,
+        "bottom": 844,
+        "h": 239,
+        "scrollTop": 0,
+        "scrollH": 257,
+        "clientH": 238,
+        "overflowY": "hidden"
+      },
+      "cta": {
+        "visibleText": ">",
+        "ariaLabel": "Состав заказа",
+        "ariaExpanded": "false",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 140, 66)",
+        "w": 44,
+        "h": 36,
+        "right": 381,
+        "rowRight": 381
+      },
+      "openReceipts": 0
+    }
+  },
+  "active_orders_3_390x844": {
+    "before": {
+      "panel": {
+        "top": 630,
+        "bottom": 766,
+        "h": 136,
+        "scrollTop": 0,
+        "scrollH": 135,
+        "clientH": 135,
+        "overflowY": "hidden"
+      },
+      "list": {
+        "top": 636,
+        "bottom": 758,
+        "h": 122,
+        "scrollTop": 0,
+        "scrollH": 435,
+        "clientH": 122,
+        "overflowY": "auto"
+      },
+      "rows": [
+        {
+          "top": 636,
+          "bottom": 781,
+          "visiblePx": 122
+        },
+        {
+          "top": 781,
+          "bottom": 926,
+          "visiblePx": 0
+        },
+        {
+          "top": 926,
+          "bottom": 1071,
+          "visiblePx": 0
+        }
+      ],
+      "windowScrollY": 0,
+      "cart": {
+        "top": 605,
+        "bottom": 844,
+        "h": 239,
+        "scrollTop": 0,
+        "scrollH": 257,
+        "clientH": 238,
+        "overflowY": "hidden"
+      },
+      "cta": {
+        "visibleText": ">",
+        "ariaLabel": "Состав заказа",
+        "ariaExpanded": "false",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 140, 66)",
+        "w": 44,
+        "h": 36,
+        "right": 381,
+        "rowRight": 381
+      },
+      "openReceipts": 0
+    },
+    "after": {
+      "panel": {
+        "top": 630,
+        "bottom": 766,
+        "h": 136,
+        "scrollTop": 0,
+        "scrollH": 135,
+        "clientH": 135,
+        "overflowY": "hidden"
+      },
+      "list": {
+        "top": 636,
+        "bottom": 758,
+        "h": 122,
+        "scrollTop": 313,
+        "scrollH": 435,
+        "clientH": 122,
+        "overflowY": "auto"
+      },
+      "rows": [
+        {
+          "top": 323,
+          "bottom": 468,
+          "visiblePx": 0
+        },
+        {
+          "top": 468,
+          "bottom": 613,
+          "visiblePx": 0
+        },
+        {
+          "top": 613,
+          "bottom": 758,
+          "visiblePx": 122
+        }
+      ],
+      "windowScrollY": 0,
+      "cart": {
+        "top": 605,
+        "bottom": 844,
+        "h": 239,
+        "scrollTop": 0,
+        "scrollH": 257,
+        "clientH": 238,
+        "overflowY": "hidden"
+      },
+      "cta": {
+        "visibleText": ">",
+        "ariaLabel": "Состав заказа",
+        "ariaExpanded": "false",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 140, 66)",
+        "w": 44,
+        "h": 36,
+        "right": 381,
+        "rowRight": 381
+      },
+      "openReceipts": 0
+    }
+  },
+  "receipt_arrow_toggle_390x844": {
+    "ctaRect": {
+      "x": 359.203125,
+      "y": 774,
+      "top": 756,
+      "bottom": 792,
+      "left": 337,
+      "right": 381,
+      "w": 44,
+      "h": 36
+    },
+    "closed": {
+      "panel": {
+        "top": 630,
+        "bottom": 766,
+        "h": 136,
+        "scrollTop": 0,
+        "scrollH": 135,
+        "clientH": 135,
+        "overflowY": "hidden"
+      },
+      "list": {
+        "top": 655,
+        "bottom": 758,
+        "h": 103,
+        "scrollTop": 0,
+        "scrollH": 290,
+        "clientH": 103,
+        "overflowY": "auto"
+      },
+      "rows": [
+        {
+          "top": 655,
+          "bottom": 800,
+          "visiblePx": 103
+        },
+        {
+          "top": 800,
+          "bottom": 945,
+          "visiblePx": 0
+        }
+      ],
+      "windowScrollY": 0,
+      "cart": {
+        "top": 605,
+        "bottom": 844,
+        "h": 239,
+        "scrollTop": 0,
+        "scrollH": 257,
+        "clientH": 238,
+        "overflowY": "hidden"
+      },
+      "cta": {
+        "visibleText": ">",
+        "ariaLabel": "Состав заказа",
+        "ariaExpanded": "false",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 140, 66)",
+        "w": 44,
+        "h": 36,
+        "right": 381,
+        "rowRight": 381
+      },
+      "openReceipts": 0
+    },
+    "opened": {
+      "panel": {
+        "top": 630,
+        "bottom": 766,
+        "h": 136,
+        "scrollTop": 0,
+        "scrollH": 135,
+        "clientH": 135,
+        "overflowY": "hidden"
+      },
+      "list": {
+        "top": 636,
+        "bottom": 758,
+        "h": 122,
+        "scrollTop": 101,
+        "scrollH": 376,
+        "clientH": 122,
+        "overflowY": "auto"
+      },
+      "rows": [
+        {
+          "top": 535,
+          "bottom": 765,
+          "visiblePx": 122
+        },
+        {
+          "top": 765,
+          "bottom": 910,
+          "visiblePx": 0
+        }
+      ],
+      "windowScrollY": 0,
+      "cart": {
+        "top": 605,
+        "bottom": 844,
+        "h": 239,
+        "scrollTop": 0,
+        "scrollH": 257,
+        "clientH": 238,
+        "overflowY": "hidden"
+      },
+      "cta": {
+        "visibleText": "v",
+        "ariaLabel": "Состав заказа",
+        "ariaExpanded": "true",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 140, 66)",
+        "w": 44,
+        "h": 36,
+        "right": 381,
+        "rowRight": 381
+      },
+      "openReceipts": 1
+    },
+    "afterReceiptWheel": {
+      "panel": {
+        "top": 630,
+        "bottom": 766,
+        "h": 136,
+        "scrollTop": 0,
+        "scrollH": 135,
+        "clientH": 135,
+        "overflowY": "hidden"
+      },
+      "list": {
+        "top": 636,
+        "bottom": 758,
+        "h": 122,
+        "scrollTop": 101,
+        "scrollH": 376,
+        "clientH": 122,
+        "overflowY": "auto"
+      },
+      "rows": [
+        {
+          "top": 535,
+          "bottom": 765,
+          "visiblePx": 122
+        },
+        {
+          "top": 765,
+          "bottom": 910,
+          "visiblePx": 0
+        }
+      ],
+      "windowScrollY": 0,
+      "cart": {
+        "top": 605,
+        "bottom": 844,
+        "h": 239,
+        "scrollTop": 0,
+        "scrollH": 257,
+        "clientH": 238,
+        "overflowY": "hidden"
+      },
+      "cta": {
+        "visibleText": "v",
+        "ariaLabel": "Состав заказа",
+        "ariaExpanded": "true",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 140, 66)",
+        "w": 44,
+        "h": 36,
+        "right": 381,
+        "rowRight": 381
+      },
+      "openReceipts": 1
+    },
+    "closedAgain": {
+      "panel": {
+        "top": 630,
+        "bottom": 766,
+        "h": 136,
+        "scrollTop": 0,
+        "scrollH": 135,
+        "clientH": 135,
+        "overflowY": "hidden"
+      },
+      "list": {
+        "top": 636,
+        "bottom": 758,
+        "h": 122,
+        "scrollTop": 101,
+        "scrollH": 290,
+        "clientH": 122,
+        "overflowY": "auto"
+      },
+      "rows": [
+        {
+          "top": 535,
+          "bottom": 680,
+          "visiblePx": 44
+        },
+        {
+          "top": 680,
+          "bottom": 825,
+          "visiblePx": 78
+        }
+      ],
+      "windowScrollY": 0,
+      "cart": {
+        "top": 605,
+        "bottom": 844,
+        "h": 239,
+        "scrollTop": 0,
+        "scrollH": 257,
+        "clientH": 238,
+        "overflowY": "hidden"
+      },
+      "cta": {
+        "visibleText": ">",
+        "ariaLabel": "Состав заказа",
+        "ariaExpanded": "false",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 140, 66)",
+        "w": 44,
+        "h": 36,
+        "right": 381,
+        "rowRight": 381
+      },
+      "openReceipts": 0
+    },
+    "afterEnter": {
+      "panel": {
+        "top": 630,
+        "bottom": 766,
+        "h": 136,
+        "scrollTop": 0,
+        "scrollH": 135,
+        "clientH": 135,
+        "overflowY": "hidden"
+      },
+      "list": {
+        "top": 636,
+        "bottom": 758,
+        "h": 122,
+        "scrollTop": 101,
+        "scrollH": 290,
+        "clientH": 122,
+        "overflowY": "auto"
+      },
+      "rows": [
+        {
+          "top": 535,
+          "bottom": 680,
+          "visiblePx": 44
+        },
+        {
+          "top": 680,
+          "bottom": 825,
+          "visiblePx": 78
+        }
+      ],
+      "windowScrollY": 0,
+      "cart": {
+        "top": 605,
+        "bottom": 844,
+        "h": 239,
+        "scrollTop": 0,
+        "scrollH": 257,
+        "clientH": 238,
+        "overflowY": "hidden"
+      },
+      "cta": {
+        "visibleText": ">",
+        "ariaLabel": "Состав заказа",
+        "ariaExpanded": "false",
+        "bg": "rgba(0, 0, 0, 0)",
+        "color": "rgb(255, 140, 66)",
+        "w": 44,
+        "h": 36,
+        "right": 381,
+        "rowRight": 381
+      },
+      "openReceipts": 0
+    }
+  },
+  "pay_stack_412x915": {
+    "noKb": {
+      "visualViewportH": 915,
+      "innerH": 915,
+      "sheet": {
+        "top": 73,
+        "bottom": 915,
+        "h": 842
+      },
+      "payBlock": {
+        "top": 525,
+        "bottom": 578,
+        "h": 52
+      },
+      "payBtnText": "Оплатить",
+      "payBtn": {
+        "top": 525,
+        "bottom": 578,
+        "h": 52
+      },
+      "payBtnAboveKeyboard": true,
+      "body": {
+        "top": 129,
+        "bottom": 505,
+        "h": 376,
+        "scrollH": 376,
+        "clientH": 376,
+        "overflowY": "auto"
+      },
+      "cartSheetRendered": false,
+      "productCardInPay": false,
+      "totalLine": "Итого 10 ₽",
+      "sbp": {
+        "top": 172,
+        "bottom": 226,
+        "h": 54
+      },
+      "cardInput": {
+        "top": 336,
+        "bottom": 383,
+        "h": 47
+      },
+      "activeEl": "BUTTON",
+      "activeVisible": true,
+      "windowScrollY": 0
+    },
+    "kbCard": {
+      "visualViewportH": 550,
+      "innerH": 915,
+      "sheet": {
+        "top": 44,
+        "bottom": 550,
+        "h": 506
+      },
+      "payBlock": {
+        "top": 478,
+        "bottom": 530,
+        "h": 52
+      },
+      "payBtnText": "Оплатить",
+      "payBtn": {
+        "top": 478,
+        "bottom": 530,
+        "h": 52
+      },
+      "payBtnAboveKeyboard": true,
+      "body": {
+        "top": 100,
+        "bottom": 458,
+        "h": 358,
+        "scrollH": 376,
+        "clientH": 358,
+        "overflowY": "auto"
+      },
+      "cartSheetRendered": false,
+      "productCardInPay": false,
+      "totalLine": "Итого 10 ₽",
+      "sbp": {
+        "top": 143,
+        "bottom": 197,
+        "h": 54
+      },
+      "cardInput": {
+        "top": 307,
+        "bottom": 354,
+        "h": 47
+      },
+      "activeEl": "cc-number",
+      "activeVisible": true,
+      "windowScrollY": 0
+    },
+    "fields": {
+      "cc-exp": {
+        "visualViewportH": 550,
+        "innerH": 915,
+        "sheet": {
+          "top": 44,
+          "bottom": 550,
+          "h": 506
+        },
+        "payBlock": {
+          "top": 478,
+          "bottom": 530,
+          "h": 52
+        },
+        "payBtnText": "Оплатить",
+        "payBtn": {
+          "top": 478,
+          "bottom": 530,
+          "h": 52
+        },
+        "payBtnAboveKeyboard": true,
+        "body": {
+          "top": 100,
+          "bottom": 458,
+          "h": 358,
+          "scrollH": 376,
+          "clientH": 358,
+          "overflowY": "auto"
+        },
+        "cartSheetRendered": false,
+        "productCardInPay": false,
+        "totalLine": "Итого 10 ₽",
+        "sbp": {
+          "top": 143,
+          "bottom": 197,
+          "h": 54
+        },
+        "cardInput": {
+          "top": 307,
+          "bottom": 354,
+          "h": 47
+        },
+        "activeEl": "cc-exp",
+        "activeVisible": true,
+        "windowScrollY": 0
+      },
+      "cc-csc": {
+        "visualViewportH": 550,
+        "innerH": 915,
+        "sheet": {
+          "top": 44,
+          "bottom": 550,
+          "h": 506
+        },
+        "payBlock": {
+          "top": 478,
+          "bottom": 530,
+          "h": 52
+        },
+        "payBtnText": "Оплатить",
+        "payBtn": {
+          "top": 478,
+          "bottom": 530,
+          "h": 52
+        },
+        "payBtnAboveKeyboard": true,
+        "body": {
+          "top": 100,
+          "bottom": 458,
+          "h": 358,
+          "scrollH": 376,
+          "clientH": 358,
+          "overflowY": "auto"
+        },
+        "cartSheetRendered": false,
+        "productCardInPay": false,
+        "totalLine": "Итого 10 ₽",
+        "sbp": {
+          "top": 143,
+          "bottom": 197,
+          "h": 54
+        },
+        "cardInput": {
+          "top": 307,
+          "bottom": 354,
+          "h": 47
+        },
+        "activeEl": "cc-csc",
+        "activeVisible": true,
+        "windowScrollY": 0
+      }
+    },
+    "kbScrolled": {
+      "visualViewportH": 550,
+      "innerH": 915,
+      "sheet": {
+        "top": 44,
+        "bottom": 550,
+        "h": 506
+      },
+      "payBlock": {
+        "top": 478,
+        "bottom": 530,
+        "h": 52
+      },
+      "payBtnText": "Оплатить",
+      "payBtn": {
+        "top": 478,
+        "bottom": 530,
+        "h": 52
+      },
+      "payBtnAboveKeyboard": true,
+      "body": {
+        "top": 100,
+        "bottom": 458,
+        "h": 358,
+        "scrollH": 376,
+        "clientH": 358,
+        "overflowY": "auto"
+      },
+      "cartSheetRendered": false,
+      "productCardInPay": false,
+      "totalLine": "Итого 10 ₽",
+      "sbp": {
+        "top": 125,
+        "bottom": 179,
+        "h": 54
+      },
+      "cardInput": {
+        "top": 289,
+        "bottom": 336,
+        "h": 47
+      },
+      "activeEl": "cc-csc",
+      "activeVisible": true,
+      "windowScrollY": 0
+    },
+    "kbClosed": {
+      "visualViewportH": 915,
+      "innerH": 915,
+      "sheet": {
+        "top": 73,
+        "bottom": 915,
+        "h": 842
+      },
+      "payBlock": {
+        "top": 525,
+        "bottom": 578,
+        "h": 52
+      },
+      "payBtnText": "Оплатить",
+      "payBtn": {
+        "top": 525,
+        "bottom": 578,
+        "h": 52
+      },
+      "payBtnAboveKeyboard": true,
+      "body": {
+        "top": 129,
+        "bottom": 505,
+        "h": 376,
+        "scrollH": 376,
+        "clientH": 376,
+        "overflowY": "auto"
+      },
+      "cartSheetRendered": false,
+      "productCardInPay": false,
+      "totalLine": "Итого 10 ₽",
+      "sbp": {
+        "top": 172,
+        "bottom": 226,
+        "h": 54
+      },
+      "cardInput": {
+        "top": 336,
+        "bottom": 383,
+        "h": 47
+      },
+      "activeEl": "BODY",
+      "activeVisible": null,
+      "windowScrollY": 0
+    }
+  },
+  "pay_stack_390x844": {
+    "noKb": {
+      "visualViewportH": 844,
+      "innerH": 844,
+      "sheet": {
+        "top": 68,
+        "bottom": 844,
+        "h": 776
+      },
+      "payBlock": {
+        "top": 520,
+        "bottom": 573,
+        "h": 52
+      },
+      "payBtnText": "Оплатить",
+      "payBtn": {
+        "top": 520,
+        "bottom": 573,
+        "h": 52
+      },
+      "payBtnAboveKeyboard": true,
+      "body": {
+        "top": 124,
+        "bottom": 500,
+        "h": 376,
+        "scrollH": 376,
+        "clientH": 376,
+        "overflowY": "auto"
+      },
+      "cartSheetRendered": false,
+      "productCardInPay": false,
+      "totalLine": "Итого 10 ₽",
+      "sbp": {
+        "top": 167,
+        "bottom": 221,
+        "h": 54
+      },
+      "cardInput": {
+        "top": 331,
+        "bottom": 378,
+        "h": 47
+      },
+      "activeEl": "BUTTON",
+      "activeVisible": true,
+      "windowScrollY": 0
+    },
+    "kbCard": {
+      "visualViewportH": 479,
+      "innerH": 844,
+      "sheet": {
+        "top": 38,
+        "bottom": 479,
+        "h": 441
+      },
+      "payBlock": {
+        "top": 407,
+        "bottom": 459,
+        "h": 52
+      },
+      "payBtnText": "Оплатить",
+      "payBtn": {
+        "top": 407,
+        "bottom": 459,
+        "h": 52
+      },
+      "payBtnAboveKeyboard": true,
+      "body": {
+        "top": 94,
+        "bottom": 387,
+        "h": 293,
+        "scrollH": 376,
+        "clientH": 293,
+        "overflowY": "auto"
+      },
+      "cartSheetRendered": false,
+      "productCardInPay": false,
+      "totalLine": "Итого 10 ₽",
+      "sbp": {
+        "top": 137,
+        "bottom": 191,
+        "h": 54
+      },
+      "cardInput": {
+        "top": 301,
+        "bottom": 348,
+        "h": 47
+      },
+      "activeEl": "cc-number",
+      "activeVisible": true,
+      "windowScrollY": 0
+    },
+    "fields": {
+      "cc-exp": {
+        "visualViewportH": 479,
+        "innerH": 844,
+        "sheet": {
+          "top": 38,
+          "bottom": 479,
+          "h": 441
+        },
+        "payBlock": {
+          "top": 407,
+          "bottom": 459,
+          "h": 52
+        },
+        "payBtnText": "Оплатить",
+        "payBtn": {
+          "top": 407,
+          "bottom": 459,
+          "h": 52
+        },
+        "payBtnAboveKeyboard": true,
+        "body": {
+          "top": 94,
+          "bottom": 387,
+          "h": 293,
+          "scrollH": 376,
+          "clientH": 293,
+          "overflowY": "auto"
+        },
+        "cartSheetRendered": false,
+        "productCardInPay": false,
+        "totalLine": "Итого 10 ₽",
+        "sbp": {
+          "top": 97,
+          "bottom": 151,
+          "h": 54
+        },
+        "cardInput": {
+          "top": 261,
+          "bottom": 308,
+          "h": 47
+        },
+        "activeEl": "cc-exp",
+        "activeVisible": true,
+        "windowScrollY": 0
+      },
+      "cc-csc": {
+        "visualViewportH": 479,
+        "innerH": 844,
+        "sheet": {
+          "top": 38,
+          "bottom": 479,
+          "h": 441
+        },
+        "payBlock": {
+          "top": 407,
+          "bottom": 459,
+          "h": 52
+        },
+        "payBtnText": "Оплатить",
+        "payBtn": {
+          "top": 407,
+          "bottom": 459,
+          "h": 52
+        },
+        "payBtnAboveKeyboard": true,
+        "body": {
+          "top": 94,
+          "bottom": 387,
+          "h": 293,
+          "scrollH": 376,
+          "clientH": 293,
+          "overflowY": "auto"
+        },
+        "cartSheetRendered": false,
+        "productCardInPay": false,
+        "totalLine": "Итого 10 ₽",
+        "sbp": {
+          "top": 97,
+          "bottom": 151,
+          "h": 54
+        },
+        "cardInput": {
+          "top": 261,
+          "bottom": 308,
+          "h": 47
+        },
+        "activeEl": "cc-csc",
+        "activeVisible": true,
+        "windowScrollY": 0
+      }
+    },
+    "kbScrolled": {
+      "visualViewportH": 479,
+      "innerH": 844,
+      "sheet": {
+        "top": 38,
+        "bottom": 479,
+        "h": 441
+      },
+      "payBlock": {
+        "top": 407,
+        "bottom": 459,
+        "h": 52
+      },
+      "payBtnText": "Оплатить",
+      "payBtn": {
+        "top": 407,
+        "bottom": 459,
+        "h": 52
+      },
+      "payBtnAboveKeyboard": true,
+      "body": {
+        "top": 94,
+        "bottom": 387,
+        "h": 293,
+        "scrollH": 376,
+        "clientH": 293,
+        "overflowY": "auto"
+      },
+      "cartSheetRendered": false,
+      "productCardInPay": false,
+      "totalLine": "Итого 10 ₽",
+      "sbp": {
+        "top": 54,
+        "bottom": 108,
+        "h": 54
+      },
+      "cardInput": {
+        "top": 218,
+        "bottom": 265,
+        "h": 47
+      },
+      "activeEl": "cc-csc",
+      "activeVisible": true,
+      "windowScrollY": 0
+    },
+    "kbClosed": {
+      "visualViewportH": 844,
+      "innerH": 844,
+      "sheet": {
+        "top": 68,
+        "bottom": 844,
+        "h": 776
+      },
+      "payBlock": {
+        "top": 520,
+        "bottom": 573,
+        "h": 52
+      },
+      "payBtnText": "Оплатить",
+      "payBtn": {
+        "top": 520,
+        "bottom": 573,
+        "h": 52
+      },
+      "payBtnAboveKeyboard": true,
+      "body": {
+        "top": 124,
+        "bottom": 500,
+        "h": 376,
+        "scrollH": 376,
+        "clientH": 376,
+        "overflowY": "auto"
+      },
+      "cartSheetRendered": false,
+      "productCardInPay": false,
+      "totalLine": "Итого 10 ₽",
+      "sbp": {
+        "top": 167,
+        "bottom": 221,
+        "h": 54
+      },
+      "cardInput": {
+        "top": 331,
+        "bottom": 378,
+        "h": 47
+      },
+      "activeEl": "BODY",
+      "activeVisible": null,
+      "windowScrollY": 0
+    }
+  },
+  "pay_stack_360x640": {
+    "noKb": {
+      "visualViewportH": 640,
+      "innerH": 640,
+      "sheet": {
+        "top": 51,
+        "bottom": 640,
+        "h": 589
+      },
+      "payBlock": {
+        "top": 503,
+        "bottom": 556,
+        "h": 52
+      },
+      "payBtnText": "Оплатить",
+      "payBtn": {
+        "top": 503,
+        "bottom": 556,
+        "h": 52
+      },
+      "payBtnAboveKeyboard": true,
+      "body": {
+        "top": 107,
+        "bottom": 483,
+        "h": 376,
+        "scrollH": 376,
+        "clientH": 376,
+        "overflowY": "auto"
+      },
+      "cartSheetRendered": false,
+      "productCardInPay": false,
+      "totalLine": "Итого 10 ₽",
+      "sbp": {
+        "top": 150,
+        "bottom": 204,
+        "h": 54
+      },
+      "cardInput": {
+        "top": 314,
+        "bottom": 361,
+        "h": 47
+      },
+      "activeEl": "BUTTON",
+      "activeVisible": true,
+      "windowScrollY": 0
+    },
+    "kbCard": {
+      "visualViewportH": 275,
+      "innerH": 640,
+      "sheet": {
+        "top": 22,
+        "bottom": 275,
+        "h": 253
+      },
+      "payBlock": {
+        "top": 203,
+        "bottom": 255,
+        "h": 52
+      },
+      "payBtnText": "Оплатить",
+      "payBtn": {
+        "top": 203,
+        "bottom": 255,
+        "h": 52
+      },
+      "payBtnAboveKeyboard": true,
+      "body": {
+        "top": 78,
+        "bottom": 183,
+        "h": 105,
+        "scrollH": 376,
+        "clientH": 105,
+        "overflowY": "auto"
+      },
+      "cartSheetRendered": false,
+      "productCardInPay": false,
+      "totalLine": "Итого 10 ₽",
+      "sbp": {
+        "top": 121,
+        "bottom": 175,
+        "h": 54
+      },
+      "cardInput": {
+        "top": 285,
+        "bottom": 332,
+        "h": 47
+      },
+      "activeEl": "cc-number",
+      "activeVisible": false,
+      "windowScrollY": 0
+    },
+    "fields": {
+      "cc-exp": {
+        "visualViewportH": 275,
+        "innerH": 640,
+        "sheet": {
+          "top": 22,
+          "bottom": 275,
+          "h": 253
+        },
+        "payBlock": {
+          "top": 203,
+          "bottom": 255,
+          "h": 52
+        },
+        "payBtnText": "Оплатить",
+        "payBtn": {
+          "top": 203,
+          "bottom": 255,
+          "h": 52
+        },
+        "payBtnAboveKeyboard": true,
+        "body": {
+          "top": 78,
+          "bottom": 183,
+          "h": 105,
+          "scrollH": 376,
+          "clientH": 105,
+          "overflowY": "auto"
+        },
+        "cartSheetRendered": false,
+        "productCardInPay": false,
+        "totalLine": "Итого 10 ₽",
+        "sbp": {
+          "top": -136,
+          "bottom": -82,
+          "h": 54
+        },
+        "cardInput": {
+          "top": 28,
+          "bottom": 75,
+          "h": 47
+        },
+        "activeEl": "cc-exp",
+        "activeVisible": true,
+        "windowScrollY": 0
+      },
+      "cc-csc": {
+        "visualViewportH": 275,
+        "innerH": 640,
+        "sheet": {
+          "top": 22,
+          "bottom": 275,
+          "h": 253
+        },
+        "payBlock": {
+          "top": 203,
+          "bottom": 255,
+          "h": 52
+        },
+        "payBtnText": "Оплатить",
+        "payBtn": {
+          "top": 203,
+          "bottom": 255,
+          "h": 52
+        },
+        "payBtnAboveKeyboard": true,
+        "body": {
+          "top": 78,
+          "bottom": 183,
+          "h": 105,
+          "scrollH": 376,
+          "clientH": 105,
+          "overflowY": "auto"
+        },
+        "cartSheetRendered": false,
+        "productCardInPay": false,
+        "totalLine": "Итого 10 ₽",
+        "sbp": {
+          "top": -136,
+          "bottom": -82,
+          "h": 54
+        },
+        "cardInput": {
+          "top": 28,
+          "bottom": 75,
+          "h": 47
+        },
+        "activeEl": "cc-csc",
+        "activeVisible": true,
+        "windowScrollY": 0
+      }
+    },
+    "kbScrolled": {
+      "visualViewportH": 275,
+      "innerH": 640,
+      "sheet": {
+        "top": 22,
+        "bottom": 275,
+        "h": 253
+      },
+      "payBlock": {
+        "top": 203,
+        "bottom": 255,
+        "h": 52
+      },
+      "payBtnText": "Оплатить",
+      "payBtn": {
+        "top": 203,
+        "bottom": 255,
+        "h": 52
+      },
+      "payBtnAboveKeyboard": true,
+      "body": {
+        "top": 78,
+        "bottom": 183,
+        "h": 105,
+        "scrollH": 376,
+        "clientH": 105,
+        "overflowY": "auto"
+      },
+      "cartSheetRendered": false,
+      "productCardInPay": false,
+      "totalLine": "Итого 10 ₽",
+      "sbp": {
+        "top": -150,
+        "bottom": -96,
+        "h": 54
+      },
+      "cardInput": {
+        "top": 14,
+        "bottom": 61,
+        "h": 47
+      },
+      "activeEl": "cc-csc",
+      "activeVisible": true,
+      "windowScrollY": 0
+    },
+    "kbClosed": {
+      "visualViewportH": 640,
+      "innerH": 640,
+      "sheet": {
+        "top": 51,
+        "bottom": 640,
+        "h": 589
+      },
+      "payBlock": {
+        "top": 503,
+        "bottom": 556,
+        "h": 52
+      },
+      "payBtnText": "Оплатить",
+      "payBtn": {
+        "top": 503,
+        "bottom": 556,
+        "h": 52
+      },
+      "payBtnAboveKeyboard": true,
+      "body": {
+        "top": 107,
+        "bottom": 483,
+        "h": 376,
+        "scrollH": 376,
+        "clientH": 376,
+        "overflowY": "auto"
+      },
+      "cartSheetRendered": false,
+      "productCardInPay": false,
+      "totalLine": "Итого 10 ₽",
+      "sbp": {
+        "top": 150,
+        "bottom": 204,
+        "h": 54
+      },
+      "cardInput": {
+        "top": 314,
+        "bottom": 361,
+        "h": 47
+      },
+      "activeEl": "BODY",
+      "activeVisible": null,
+      "windowScrollY": 0
+    }
+  }
+}
