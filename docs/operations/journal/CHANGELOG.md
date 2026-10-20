@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-20 — Sentry RUBY-1R: поддельный `Client-IP` больше не роняет запрос
+
+- Sentry 14d unresolved: одна ошибка — RUBY-1R `ActionDispatch::RemoteIp::IpSpoofAttackError` (2026-10-18 13:21 UTC, `GET https://codeblack.coffee/`, бот Chrome 126 / Ubuntu, NL). Клиент прислал `Client-IP`, которого нет в `X-Forwarded-For` → Rails бросал исключение в `Rails::Rack::Logger` (до контроллера) → 500 на любом пути. Fly proxy `Client-IP` не ставит — его шлёт только сам клиент.
+- RED `7c7c955c` (`test/integration/client_ip_header_spoof_test.rb`: `request.remote_ip` → `IpSpoofAttackError`) → GREEN `2bcbafe9`: `StripClientIpHeader` (`app/middleware/`) удаляет `HTTP_CLIENT_IP` перед `ActionDispatch::RemoteIp`; IP клиента — из `X-Forwarded-For`, как и раньше. `Rack::Attack` (`req.ip`) не затронут.
+- Local: новый тест + health/rack_attack/payment_returns 17/0 · RuboCop 0 · zeitwerk OK. Коммит с `Fixes RUBY-1R` — issue закроется после деплоя.
+
 ## 2026-10-11 — deploy Fly v516: TASK_103, TASK_104, TASK_105, TASK_106, TASK_107
 
 - На проде: список активных заказов листается внутри статусной шторки (TASK_103); переключатель состава — только стрелка `>`/`v` (TASK_104); форма оплаты над цифровой клавиатурой, без карточки товара (TASK_105); в нижней панели одна кнопка «0₽» без «Итого», «повторить» убран с экрана товара, пустая шторка без пустого низа (TASK_106); в шапке «Профиль ID» (TASK_107).
