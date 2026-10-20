@@ -27,6 +27,9 @@ module CoffeeOs
     # Автозагрузка middleware
     config.autoload_paths << Rails.root.join("app/middleware")
 
+    require_relative "../app/middleware/strip_client_ip_header"
+    config.middleware.insert_before ActionDispatch::RemoteIp, StripClientIpHeader
+
     # Лог каждого запроса в JSON (шумно). Включить: LOG_TENANT_MIDDLEWARE=1
     if ENV["LOG_TENANT_MIDDLEWARE"].present?
       require_relative "../app/middleware/log_tenant_middleware"
