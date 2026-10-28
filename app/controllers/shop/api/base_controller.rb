@@ -15,8 +15,8 @@ module Shop
 
       # TASK_120 Патч 1: cookie_store с expire_after пишет cookie на каждом ответе — ответ параллельного
       # запроса со старым снимком затирал сброс/добавление корзины. Сессия не изменилась → cookie не пишем.
-      # process_action, а не around_action: снимок до всех колбэков (CSRF в Auth пишет `_csrf_token`),
-      # сравнение после rescue_from (handle_cart_overflow! чистит корзину уже в обработчике).
+      # process_action, а не around_action: сравнение после rescue_from (handle_cart_overflow! чистит корзину
+      # уже в обработчике). Записи сессии после process_action (новый CSRF-токен при commit_session) не сохранятся.
       # Без сохранённой cookie пишем как раньше: id новой сессии сохраняется только записью cookie.
       def process_action(*)
         persisted = persisted_session_cookie?
