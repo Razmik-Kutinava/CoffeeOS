@@ -4,15 +4,16 @@
 |------|----------|
 | **Основание** | [TASK_120 § Патч 1](../milestones/veha_2/requirements/customer_tasks/TASK-120-Корзина-при-переходе-в-другую-точку.md#патч-1-2026-10-28) · приёмка Fly v517 FAIL 2 ([MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v517_2026-10-28/MCP_RESULT.md)) · ISSUES 🔴 «TASK_120 на проде» · решение владельца 2026-10-28: read-only запросы shop API не пишут cookie |
 | **Не в scope** | `session_store.rb` (store, `expire_after`, domain) · `Shop::PagesController` и контроллеры вне `/shop/api/*` · логика `CartService`/`CartController` · фронт (`cartSheetStore.js`, `shopCartAdd.js`) · перенос сессии/корзины в БД или кэш · одновременные **изменяющие** запросы (предел cookie-сессии) |
-| **Статус** | `/regress` PASS → `/review` |
+| **Статус** | REVIEW → push / CI |
 
-## SBR: /regress PASS → /review
+## SBR: REVIEW
 
 - [x] `/patch` `d66c1a94` — аудит + Патч 1 в TASK_120 (Subtask 1, 1a, 4, 6 patch v1 + охранные 10–12)
 - [x] RED `9aa91d8d` — 7 runs: 3 F (Subtask 1/6, 4/6, 12 — read-only ответ со старой cookie пишет `Set-Cookie`), 4 охранных зелёные · охранный «без cookie» переписан на первый `GET /cart` (пустая сессия и раньше cookie не писала)
 - [x] GREEN — `Shop::Api::BaseController#process_action`: была сохранённая cookie (`signed_or_encrypted[...]["session_id"]`) и JSON сессии до = после → `session_options[:skip]` · сначала `around_action` → упал `cart_overflow_test.rb:65` (очистка в `rescue_from` после `ensure` колбэка) → `process_action` (оборачивает колбэки и `rescue_from`; снимок раньше CSRF в `Auth`) · задача 7/0 · `test/integration/shop/api/` + сервисы корзины + `order_creator` 359/0 · соседи 40 файлов (`test/integration/shop/*cart|repeat|checkout|peek|profile|auth|b113|subscription*`, `rack_attack_otp_verify`, `binding_step_up`) 280/0 · JS 14/0 · rubocop 0
 - [x] `/regress` PASS — зона: весь shop API (`process_action` в базовом контроллере) + оплата §2.3 + RLS · полный `test/integration/shop/` 728/0 (на Windows не завис) · вне `shop/`: контроллеры `shop/api` (вкл. `base_controller_test`), T-Bank callback + adapter, RLS-тройка, поддомен витрины, склад/касса, rack-attack, онбординг/меню УК, демо QA — 22 файла 136/0 · JS корзины/повторов 8 файлов 60/63: 3 fail `repeat_invalid_token_payment_test.mjs` — известная среда Node 22 (`navigator.onLine`, ISSUES), с `onLine = true` 20/0, фронт не менялся · Fly MCP — после деплоя
-- [ ] `/review` · deploy по апруву → повтор `verify_prod.mjs`
+- [x] `/review` — bugbot 0 · security 0 medium+ (комментарий «CSRF в Auth пишет `_csrf_token`» неточен: в Rails 8 токен пишет middleware при `commit_session`, после `process_action` → поправлен `b92b74a4`) · crit-audit CLEAN `a694f98b..b92b74a4` · COMPONENT_MAP: не требуется — `Shop::Api::BaseController` не UI-компонент карты, связи/владение не менялись · Entire — на ops-коммите до push
+- [ ] CI green → повторный 🚀 1 по апруву → `verify_prod.mjs` A → B → B → A + добавление под опросом
 
 ## Файлы (ожидаемо)
 

@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-28 — fix: TASK_120 Патч 1 — shop API не переписывает cookie без изменения сессии
+
+- **Что:** `Shop::Api::BaseController#process_action` — если запрос пришёл с сохранённой cookie и сессия (JSON) не изменилась, `request.session_options[:skip] = true`. Ответы `/config`, `/tenants`, `/categories`, `/frequent_products`, `/orders/active` и неизменённого `GET /cart` больше не возвращают старый снимок корзины поверх сброса при смене точки или поверх только что добавленного товара.
+- **Как раньше:** первый запрос без cookie, любые изменения сессии (корзина, сброс по точке, вход, OTP, step-up привязки), очистка при переполнении в `rescue_from`, `GET /shop` (продление 90 дней).
+- **Почему `process_action`, а не `around_action`:** `rescue_from` (`handle_cart_overflow!`) чистит корзину после `ensure` колбэка — `around_action` терял эту запись (`cart_overflow_test.rb:65`).
+- **Тесты:** новый `session_stale_snapshot_test.rb` (7, гонка воспроизводится подменой старой cookie) · `test/integration/shop/` 728/0 · вне витрины 136/0 · bugbot 0 · security 0 · crit-audit CLEAN. RED `9aa91d8d` → GREEN `0738a924`, комментарий `b92b74a4`. Не задеплоено — повторный 🚀 1 по апруву.
+
 ## 2026-10-28 — docs: `/patch` TASK_120 — Патч 1 (гонка cookie-сессии)
 
 - **Тип:** ПАТЧ — Subtask 1, 4, 6 TASK_120 были в Gherkin, на проде (Fly v517) не держатся.
