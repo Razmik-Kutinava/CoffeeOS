@@ -4,14 +4,14 @@
 |------|----------|
 | **Основание** | [TASK_92](../milestones/veha_2/requirements/customer_tasks/TASK-92-Production-background-FCM-и-синхронизация-статусов-заказа.md) «Патч 2: 2026-10-18», Subtask 5b–5f · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 3 · [Google Doc](https://docs.google.com/document/d/1GlRrdNGaXuSTTCYEKBN1dem8hB0A0WPnC2w9O_gi-mc/edit) |
 | **Не в scope** | `FcmClient` и его payload · ready-путь (`ReadyPushJob`, `ready_notified_at`) · каскад и SMS · логика отмены (`GuestOrderCancellationService`, `Barista::OrderCancellationService`, `PaymentFailureJournal`) · `Barista::OrdersController` / `OrderStatusUpdateService` · ActionCable · доставка accepted/preparing · `OrderCancellationPresenter` (тексты API/Cable) · push при системной отмене на закрытии смены · тексты предварительного экрана (TASK_110) · service worker (`show.js.erb`, `swNotificationActions.js`) — уже ставит tag, если он есть |
-| **Статус** | SPEC готов → `/sbr` |
+| **Статус** | GREEN → `/regress` |
 
 ## SBR
 
 - [x] intake `0709834d` (Патч 2 дословно в конец TASK_92, CBR #92, очередь 3 → `in_progress`)
-- [x] SPEC — все факты патча совпали с кодом, решения ниже, файлы, Не ломать, Проверка
-- [ ] RED
-- [ ] GREEN
+- [x] SPEC `47eed912` — все факты патча совпали с кодом, решения ниже, файлы, Не ломать, Проверка
+- [x] RED `5ec173a4` — Rails 19 runs: 7 failures (нет tag у cancelled ×4, push из `pending_payment` создаётся, текст гостя «Заказ отменён», payload `enrichable?` false) · JS SW 18/0 — охранный, мутация (убрать `opts.tag` в `swNotificationActions.js`) → 2 fail, файл возвращён
+- [x] GREEN `6d95763e` — `OrderStatusPushPayload::TAG_ONLY_STATUSES` (`cancelled` → только tag) · нотификатор: выход для `cancelled` из `pending_payment`, `actions`/`progress` только если есть в meta, префикс только при progress, `GUEST_CANCEL_BODY` «Вы отменили заказ» (presenter не тронут) · задача 19/0 · JS 18/0 · соседи (Broadcaster, каскад, отмена гостем/баристой, смена статуса баристой, API отмены, push pipeline, b21) 56/0 · rubocop 4 файла 0 · **Entire: пусто** (`no trailer`; транскрипт текущего чата ещё не записан — `agent-transcripts` пуст, в `entire session list` только сессии прошлых шагов) → attach на `/review` до push (прецедент шага 1)
 - [ ] `/regress`
 - [ ] `/review` (+ COMPONENT_MAP: строки `OrderStatusPushNotifier` в карте нет, хотя патч на неё ссылается → добавить на review)
 
