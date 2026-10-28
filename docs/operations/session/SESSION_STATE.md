@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-28 (очередь Push + SMS: шаг 6 TASK_90 Патч 2 — REVIEW)  
+**Дата:** 2026-10-28 (очередь Push + SMS: шаг 6 TASK_90 Патч 2 — done)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь 6 done** (2026-10-28) · Entire `01M61M0ZK4EWD9X5GP5VP14W04` на `81b5de4a` (attach `bf460022 --force`, ops-коммит дополнен до push) · push `01a52026..81b5de4a` · **CI green** [40723244521](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40723244521) — 5 jobs, test 2385 runs 0 F/E 1 skip + Semgrep/CodeQL · очередь 6 → `done` · COMPONENT_MAP: да (3 строки) · Fly MCP — после 🚀 2 · [todo](todo.md) | новый чат → `/start` → шаг 7 TASK_108 |
 | **Очередь 6 REVIEW** (2026-10-28) · security 0 medium+ (вне scope: TEMP DIAG → TASK_108; `downloadWalletPass` без `withTenantQuery` — до патча) · bugbot: 1-й прогон по диффу develop↔main (3145 файлов) пропустил файлы задачи → повтор `Diff: natural language` по 4 файлам → 0 · crit-audit CLEAN `b92b74a4..b59a0d6c` (`f36fdee7`, `last_audited_sha` → `b59a0d6c`; C4: потребители `reason` — только `subscribeOrderPush` и `OrderStatus.svelte:110-118`, `dismissed` → `"error"`, кнопка остаётся) · COMPONENT_MAP: да — `ActiveOrdersAccordion`, `orderStatusNotifyActions.js`, `firebasePush.js` (`bb179843`) · Entire `01M61M0ZK4EWD9X5GP5VP14W04` (attach `bf460022 --force`; без `--force` attach ждал подтверждения) · CBR #90 Патч 2 → REVIEW · Fly MCP — после 🚀 2 · [todo](todo.md) | push → CI green → очередь 6 `done` |
 | **Очередь 6 /regress PASS** (2026-10-28) · зона: push-подписка в панели заказов витрины (только фронт) · JS 12 файлов (push, аккордеон, кнопки и статус заказа, wallet, CTA-машина) 187: 186/1 — `order_action_buttons_cancel_test` «422/500: force preparing» = известный legacy (ISSUES), есть и без правок · Rails `order_status_meta_product_name_canon` + `order_status_acceptance_cbr` + `order_status_sheet_mount_acceptance` 17/0 · вся JS-зона 756: 684/72 = те же legacy, `vite:build` OK (GREEN) · Fly MCP — после 🚀 2 · Entire attach — на `/review` до push · [todo](todo.md) | `/review` |
 | **Очередь 6 GREEN** (2026-10-28) · RED `3ff5d957` (41 runs: 5 F на новой логике, охранные зелёные; `:430-444` переписан явно) → GREEN `8b70dcda` · `firebasePush.js` не-`denied` → `reason: "dismissed"` · `PUSH_NOT_ENABLED_TOAST` «Уведомления не включены» + ветка `dismissed` (`notice`, без `openSettings`) · аккордеон: `notice` → обычный тост, recovery только при `openSettings` · `OrderStatus.svelte` не менялся · задача 110/0 · вся JS-зона 756: 684/72 — те же 72 legacy, что без правок · `vite:build` OK · **Entire: пусто** → attach на `/review` до push · не запушено · [todo](todo.md) | `/regress` |

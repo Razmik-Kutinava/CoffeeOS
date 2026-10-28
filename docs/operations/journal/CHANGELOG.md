@@ -16,7 +16,7 @@
 - **Что:** `registerShopPush` различает ответы системного диалога: `denied` → `reason: "denied"` (как раньше), `default` (закрыт без выбора) → `reason: "dismissed"`. `subscribeOrderPush` на `dismissed` отдаёт `notice` «Уведомления не включены» и прежнюю подпись кнопки, без `openSettings`; панель заказов показывает обычный тост, recovery («Открыть настройки» / «Смотреть готовность») и автоподписка после возврата не включаются.
 - **Как раньше:** настоящий запрет → recovery TASK_90 + Патч 1; регистрация токена, `/push/register`, VAPID, SW; `requestPermission()` — первый async-вызов (TASK_99); экран заказа `#/order/:id` (`dismissed` → состояние ошибки, кнопка «Разрешить уведомления» остаётся).
 - **Коммиты:** intake `7f7c5ff7` · SPEC `80922271` · RED `3ff5d957` → GREEN `8b70dcda` · crit-audit `f36fdee7` · COMPONENT_MAP `bb179843`.
-- **Проверки:** задача 110/0 · `/regress` JS 12 файлов 186/187 (1 legacy `#41 sticky cancel`) + Rails 17/0 · вся JS-зона 684/756 — те же 72 legacy, что без правок · `vite:build` OK · bugbot 0 · security 0 medium+ · crit-audit CLEAN · Entire `01M61M0ZK4EWD9X5GP5VP14W04` · не задеплоено (🚀 2).
+- **Проверки:** задача 110/0 · `/regress` JS 12 файлов 186/187 (1 legacy `#41 sticky cancel`) + Rails 17/0 · вся JS-зона 684/756 — те же 72 legacy, что без правок · `vite:build` OK · bugbot 0 · security 0 medium+ · crit-audit CLEAN · Entire `01M61M0ZK4EWD9X5GP5VP14W04` · CI green [40723244521](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40723244521) на `81b5de4a` (2385 runs, 0 F/E) + Semgrep/CodeQL · очередь, шаг 6 → `done` · не задеплоено (🚀 2).
 
 ## 2026-10-28 — docs: intake TASK_90 Патч 2 — default ≠ denied (очередь, шаг 6)
 
