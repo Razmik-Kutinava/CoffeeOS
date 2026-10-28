@@ -5,7 +5,7 @@
 | **Основание** | [TASK_112](../milestones/veha_2/requirements/customer_tasks/TASK-112-Снимок-окружения-при-открытии-витрины.md) Subtask 1–12 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 1 · [Google Doc](https://docs.google.com/document/d/1zj0HL_Ws1FbqJFQPC3wSuKmo9msLYN8qrjLqV63afEI/edit) |
 | **Не в scope** | push-регистрация, VAPID/FCM, SW, каскад, оплата, tenant resolution, CSRF/CORS, `safeWebStorage`/`probeStorage`, event_kind кроме `session_open`, развёртывание Metabase |
 | **Решения владельца 2026-10-28** | (1) сигнал перенаправления — флаг в `shopTenantHeader.js` · (2) Metabase: только таблица + view, подключение — отдельно (Q4 очереди), Subtask 9 принимается после подключения · (3) Migration Gate — **go** |
-| **Статус** | SPEC · дальше `/sbr` |
+| **Статус** | `/review` · push → CI |
 
 ## SBR
 
@@ -13,9 +13,9 @@
 - [x] SPEC — факты сверены, решения владельца, файлы, Не ломать, Проверка, Migration Gate go
 - [x] RED `01753c2c` — JS: модуля нет (1 fail) · Rails 25 runs: 6 failures, 19 errors (нет модели/маршрута/сервиса)
 - [x] GREEN — `pushEnvironment.js`, флаг `shopTenantRedirectPending()`, вызов в `App.svelte`, миграция + модель + view, `Shop::EnvironmentEventRecorder`, `Shop::Api::EnvironmentEventsController` (`POST /shop/api/environment_events`, 413 > 2 КБ, битый JSON → 422 через `rescue_from ParseError`), Rack::Attack `shop/environment_events/ip` 30/мин · миграция dev up → down → up OK · `schema.rb` — только новая таблица и версия (локальный Postgres печатает старые CHECK иначе — этот шум не коммитим) · JS 47/0 (3 файла) · `npx vite build` OK · Rails задачи 26/0 · соседи (b114, shop tenant_isolation, rls_tenant_isolation, telegram webview, rack_attack /o/, marketing_event) 31/0 · rubocop 10 файлов 0
-- [ ] Entire: `explain 277fcf5c` пусто (`no trailer`); в Entire только сессия `3ec3bda8` (шаг 0.3), этот чат не зарегистрирован → attach id этого чата на `/review` **до** push
+- [x] Entire: `explain 277fcf5c` пусто (`no trailer`) → на `/review` attach сессии `f26a532f` на незапушенный GREEN review — checkpoint `01M60W7Q3QR2980AMJY0WKCQM7` на `aa525f50`, `explain HEAD` не пустой
 - [x] `/regress` PASS — JS 8 файлов 97/0 (все, кто читает `App.svelte` / `shopTenantHeader.js` / `deviceDetect.js` / `shopWebView.js` + новый) · Rails 24 файла 145/0, 1 skip (Redis в `rack_attack_store`): 8 исходных тестов витрины (`App.svelte`/bootstrap), все Rack::Attack (`/o/`, OTP verify, store, environment_events, `phone_otp`, `categories`), shop API (`config`, `b114_tenant_address_api`, `tenant_isolation`, `push_register`, `subscription_offer_marketing_events`, `environment_events`), модель + сервис, RLS (`rls_tenant_isolation`, `multi_tenant_isolation`) · полный `test/integration/shop/` — CI (на Windows виснет)
-- [ ] `/review` (bugbot + security + crit-audit + Entire + push/CI)
+- [x] `/review` — bugbot 1: тело без/с заниженным Content-Length (chunked) читалось целиком до 413 — Rails разбирает JSON-тело ещё до `before_action`, а `request.content_length` при `Transfer-Encoding` сам зовёт `raw_post` → middleware `ShopEnvironmentEventsBodyLimit` (≤2 КБ до Rails, вариант `.json` тоже) · security 1: в prod `Shop::Api::Auth` требует CSRF+Referer или API key, sendBeacon заголовков не шлёт → 401, событий бы не было (в test auth выключен) → `skip_before_action :authenticate_shop_api!, only: :create` + строка 5a в `SHOP_API_ACCESS_MATRIX.md` · throttle матчит тот же путь (`.json` не обходит) · RED `ed9d6562` / GREEN `aa525f50` · фиксы 21/0, `shop/api` + rack_attack 293/0 (1 skip Redis), rubocop 0 · crit-audit CLEAN `452a08b1..aa525f50` · push/CI — ниже
 - [ ] 🚀 1 (после шагов 1–5) → 👤 события в БД с телефона (Android PWA, iPhone с иконки и из Safari, Telegram, Instagram, Chrome с заблокированными данными сайта)
 
 ## Факт (аудит 2026-10-28) — документ совпал с кодом, кроме одного пробела
