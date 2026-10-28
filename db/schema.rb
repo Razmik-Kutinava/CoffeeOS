@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_28_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_28_130000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -1406,6 +1406,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_120000) do
   create_table "tenants", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Точки продаж (кофейни)", force: :cascade do |t|
     t.text "address"
     t.string "city", limit: 100
+    t.boolean "code_black_member", default: false, null: false
     t.string "country", limit: 2, default: "RU", null: false
     t.datetime "created_at", null: false
     t.string "currency", limit: 3, default: "RUB", null: false
@@ -1427,6 +1428,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_120000) do
     t.index ["slug"], name: "index_tenants_on_slug", unique: true
     t.index ["status"], name: "index_tenants_on_status"
     t.index ["type"], name: "index_tenants_on_type"
+    t.check_constraint "NOT code_black_member OR type::text = 'sales_point'::text", name: "chk_tenants_code_black_member_sales_point"
   end
 
   create_table "tv_board_settings", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "Настройки ТВ-борда для точки", force: :cascade do |t|

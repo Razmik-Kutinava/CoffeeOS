@@ -66,9 +66,21 @@ class Tenant < ApplicationRecord
   validates :status, presence: true
   validates :country, presence: true, length: { is: 2 }
   validates :currency, presence: true, length: { is: 3 }
+  validates :code_black_member, inclusion: { in: [ true, false ] }
   validate :slug_not_reserved_for_shop_subdomain
+  validate :code_black_member_only_for_sales_point
+
+  # TASK_115: сеть CODE:BLACK — только явный признак; organization_id, slug, название
+  # и status не участвуют (закрытая точка остаётся в сети).
+  scope :code_black_network, -> { where(code_black_member: true, type: "sales_point") }
 
   private
+
+  def code_black_member_only_for_sales_point
+    return unless code_black_member && !sales_point?
+
+    errors.add(:code_black_member, "Сеть CODE:BLACK — только для точки продаж")
+  end
 
   def slug_not_reserved_for_shop_subdomain
     return if slug.blank?

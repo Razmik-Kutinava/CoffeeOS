@@ -44,6 +44,7 @@ module Platform
         unless sync_point_campaign!
           raise ActiveRecord::Rollback
         end
+        Platform::TenantCodeBlackAudit.call(tenant: @tenant, actor: current_user, was: false, request_id: request.request_id)
         committed = true
       end
 
@@ -88,6 +89,7 @@ module Platform
     def update
       @tenant = Tenant.includes(:weekday_schedules).find(params[:id])
       authorize @tenant
+      code_black_was = @tenant.code_black_member
       committed = false
       ActiveRecord::Base.transaction do
         unless @tenant.update(tenant_params)
@@ -113,6 +115,7 @@ module Platform
         unless sync_point_campaign!
           raise ActiveRecord::Rollback
         end
+        Platform::TenantCodeBlackAudit.call(tenant: @tenant, actor: current_user, was: code_black_was, request_id: request.request_id)
         committed = true
       end
 
@@ -147,7 +150,7 @@ module Platform
       params.require(:tenant).permit(
         :name, :slug, :organization_id, :type, :status, :city, :address,
         :latitude, :longitude,
-        :country, :currency, :timezone
+        :country, :currency, :timezone, :code_black_member
       )
     end
 

@@ -17,6 +17,15 @@
     <%= f.select :type, [%w[Точка\ продаж sales_point], %w[Кухня production_kitchen]] %></p>
   <p><%= f.label :status %>
     <%= f.select :status, Tenant::STATUSES.map { |k, v| [k.to_s.humanize, v] } %></p>
+  <% if tenant.sales_point? %>
+    <p>
+      <%= f.check_box :code_black_member %>
+      <%= f.label :code_black_member, "Сеть CODE:BLACK" %>
+      <span style="display: block; font-size: 12px; color: #94a3b8; margin-top: 4px;">
+        По умолчанию точка не в сети. Только для точки продаж; статус точки на членство не влияет.
+      </span>
+    </p>
+  <% end %>
   <p><%= f.label :city %> <%= f.text_field :city, style: "width: 100%;" %></p>
   <p><%= f.label :address, "Адрес" %> <%= f.text_field :address, style: "width: 100%;" %></p>
 

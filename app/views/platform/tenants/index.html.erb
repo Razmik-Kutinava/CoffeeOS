@@ -11,6 +11,7 @@
       <th style="padding: 8px;">Статус</th>
       <th style="padding: 8px;">Slug</th>
       <th style="padding: 8px;">Орг.</th>
+      <th style="padding: 8px;">CODE:BLACK</th>
       <th></th>
     </tr>
   </thead>
@@ -22,6 +23,7 @@
         <td style="padding: 8px;"><%= uk_tenant_status_label(t) %></td>
         <td style="padding: 8px;"><%= t.slug %></td>
         <td style="padding: 8px;"><%= t.organization&.name || "—" %></td>
+        <td style="padding: 8px;"><%= t.code_black_member ? "да" : "—" %></td>
         <td style="padding: 8px;">
           <%= link_to "Карточка", platform_tenant_path(t), style: "color: #93c5fd;" %> ·
           <%= button_to "Менеджер", open_as_manager_platform_tenant_path(t), method: :post, form: { style: "display:inline;" } %>
