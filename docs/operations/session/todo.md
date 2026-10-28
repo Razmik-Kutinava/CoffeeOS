@@ -4,14 +4,14 @@
 |------|----------|
 | **Основание** | [TASK_118](../milestones/veha_2/requirements/customer_tasks/TASK-118-SMS-Заказ-готов-история-заказов-CODE-BLACK.md) Subtask 9 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 0.3 · [Google Doc](https://docs.google.com/document/d/1DVbALzcHHRccOAMk3SMJUU1gA7StyB_pxmNA_RhScII/edit) |
 | **Не в scope** | Subtask 1–8, 10–13 (редирект в историю, экраны «устарела/недействительна», точка заказа…) — шаг 15 очереди |
-| **Статус** | SPEC готов |
+| **Статус** | GREEN · дальше `/regress` |
 
 ## SBR
 
 - [x] intake `84192185` (ТЗ 1:1 + CBR #118)
-- [x] SPEC — факты сверены, файлы, Не ломать, Проверка
-- [ ] RED — охранный тест длины с хостом из `fly.toml` (на текущем коде зелёный сразу) + доказательство мутацией
-- [ ] GREEN — строка «Уточнение 2026-10-24» в ТЗ #39 и #82
+- [x] SPEC `4a02b83d` — факты сверены, файлы, Не ломать, Проверка
+- [x] RED `0344d954` — охранный тест «TASK_118 S9» в `order_ready_sms_link_test.rb`: на текущем коде зелёный (65/70), файл 9/0 · мутации (не закоммичены, откачены): `message_prefix` «Заказ готов!» → fail (проверка текста); `fly.toml` `APP_HOST = "order.codeblack.coffee"` → fail «Expected 71 to be <= 70»
+- [x] GREEN — строка «Уточнение 2026-10-24» дословно: ТЗ #39 после :71 (отдельным абзацем), ТЗ #82 после :49 (стала :50) · Проверка: 4 файла 72/0
 - [ ] `/regress` → `/review` (push) → закрытие шага 0.3 в очереди
 
 ## Факт (аудит 2026-10-28) — документ совпал с кодом

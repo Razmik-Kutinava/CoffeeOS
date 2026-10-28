@@ -47,6 +47,7 @@ https://docs.google.com/document/d/134SH9AGyliv3IxhXJiXz0jZxZo6HI27nJiOeN-zaNdU/
 ​When: Вызывается SmsRuClient.send_sms.
 ​Then:
 ​Текст сообщения CODE:BLACK. Заказ готов! codeblack.xyz/o/{order_hash} валидируется на длину <= 70 символов.
+Уточнение 2026-10-24: фактический текст SMS «CODE:BLACK. Готов! {host}/o/{hash}», хост из SHOP_SMS_LINK_HOST, затем APP_HOST (prod: codeblack.coffee), длина 65 из 70; см. TASK-39-SMS-READY-LINK-ORDER-HISTORY-EXT
 ​Если длина > 70 символов: Генерируется ValidationError, джоба переходит в статус failed без выполнения сетевого запроса (защита от лишних списаний за 2+ SMS).
 ​Если валидация пройдена: Выполняется POST [https://sms.ru/sms/send](https://sms.ru/sms/send) с параметрами api_id, to, msg, json=1.
 ​Результат (успех или код ошибки от API sms.ru) сохраняется в таблице notification_histories (связанной с order_id).
