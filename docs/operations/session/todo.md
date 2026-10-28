@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK_120](../milestones/veha_2/requirements/customer_tasks/TASK-120-Корзина-при-переходе-в-другую-точку.md) v3, Subtask 1–9 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 5 · [Google Doc](https://docs.google.com/document/d/1Uz11weI_haC7SRlIdKt1teEloqz3QID_iWknF4609dM/edit) |
 | **Не в scope** | отдельные корзины по точкам · цены, настройки товаров, `json_lines` (расчёт) · checkout и `OrderCreator` (код) · платежи · Quick Repeat (`createRepeatInlineOrder`), `historyRepeatAdapter`, `clearCartAfterSuccessfulPay` (COMPONENT_MAP:11) · определение точки (`tenant_resolution.rb`, `shopTenantHeader.js`) · авторизация, cookie (`session_store.rb`, domain) · офлайн-очередь корзины (`shopOfflineCart.js`) · `CartSheet.svelte` (плашка сообщения уже есть) |
-| **Статус** | GREEN |
+| **Статус** | REVIEW |
 
 ## SBR
 
@@ -13,7 +13,8 @@
 - [x] RED `2d653fb6` — Rails 18 runs: 6 F, 7 E (нет `TENANT_SESSION_KEY`/`tenant_reset?`, корзина B в A пересчитывается или даёт 404, нет `cart_reset`, заказ из чужих позиций); 5 охранных зелёные (пустая корзина, та же точка, 404 → `DELETE /cart` → добавление, разные хосты, `clear!`) · JS 10: 7 fail, 3 охранных «без флага» зелёные
 - [x] GREEN `cfa6f721` — `CartService`: `TENANT_SESSION_KEY`, `reset_if_other_tenant!` в `initialize`, `tenant_reset?`, метка в `add!`/`replace_line!`, снятие в `clear!` · `CartController`: один сервис на запрос (`cart_service`), `with_cart_reset` · `cartSheetStore.js`: `CART_TENANT_RESET_MESSAGE`, флаг в refresh/PATCH/DELETE строки, слушатель `shop:cart-reset`, `DELETE /cart` в ветке «Товар недоступен» · `shopCartAdd.js`: `CART_RESET_EVENT`, событие при `cart_reset`, 404 «Товар недоступен» → `DELETE /cart` + `clearCartCache` · задача Rails 18/0, JS 10/0 · соседи Rails 89/0 (корзина ×5, `order_creator`, `orders_controller`, `tenant_isolation`), JS 21/0 (очистка после оплаты, повтор из истории, Quick Repeat) · rubocop 0 · `vite build` OK · **Entire: пусто** (`no trailer`, транскрипта чата нет) → attach на `/review` до push
 - [x] `/regress` PASS — зона: shop API + корзина + оплата + RLS · `test/integration/shop/api/` целиком + `order_creator` + сервис корзины ×3 + RLS-тройка → 366 runs: 1 F `email_otp_tenant_isolation_test.rb:34` — тест клал товар в корзину в A и оформлял в B (опирался на общую корзину) → теперь «Корзина пуста» вместо «подтвердите email»; предусловие поправлено (товар кладётся и в B), проверка email та же → 7/0 · шторка/корзина/повторы (`test/integration/shop/*cart*|*repeat*|*checkout*|*peek*` + b113) 33 файла 244/0 · остальные потребители `cart/add` (карты/оплата витрины, приёмка статусов, склад, касса, demo QA) 15 файлов 74/0 · JS корзины 7 файлов 54/0 · полный `test/integration/shop/` — CI · Fly MCP — после 🚀 1
-- [ ] `/review`
+- [x] `/review` — bugbot 0 (повтор по 4 файлам задачи; 1 находка удалена валидатором) · security 0 medium+ (гигиена: `OrderCreator#clear_cart!` не снимает метку — backlog) · crit-audit CLEAN `205465e5..a694f98b` (`last_audited_sha` → `a694f98b`) `9ef89028` · COMPONENT_MAP: строка `cartSheetStore` `0d31c7f8` · Entire `01M61CJD6YJ7SMNN8W8D8HJZ9B` на `0d31c7f8` (attach `--force`) · push → CI
+- Backlog: `order_creator.rb:396` — снимать `:shop_cart_tenant_id` вместе с корзиной (гигиена, на поведение не влияет) · две вкладки разных точек на одном хосте очищают корзины друг друга (следствие R9 А, одна cookie-сессия)
 
 ## Факт (сверка 2026-10-28) — поведение кода = документ
 
