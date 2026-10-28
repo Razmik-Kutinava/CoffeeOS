@@ -16,6 +16,7 @@ Slash-команды в чате Agent: введи `/` и выбери имя ф
 | `/patch` | `patch.md` | Кривая задача / кривой ответ: патч / EXT / переписать | `/sbr` или `/spec` |
 
 Цепочка: `/start` → (`/unlazy` при substantial) → `/spec` → `/sbr` → `/regress` → `/review`  
+**Очередь Push + SMS:** один шаг = новый чат; `/start` сам берёт шаг из [`PUSH_SMS_QUEUE.md`](../../docs/operations/milestones/veha_2/requirements/PUSH_SMS_QUEUE.md), `/review` закрывает его и печатает `Next (новый чат): …`  
 Кривая после Review: `/patch` → `/sbr` (карта — после следующего Review)  
 **Периодика:** `/ctx-trim` — вручную или пт–вс (если `ctx_trim` >7 дней в HANDOFF)  
 Диагностика интеграции: `/trace-bug` → `/spec` или `/sbr`  

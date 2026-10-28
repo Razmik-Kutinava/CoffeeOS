@@ -4,12 +4,18 @@
 
 Порядок: local → `bugbot`+`security-review` + **`/crit-audit`** ([`crit-audit.md`](crit-audit.md); находки субагентов фильтруются по C1–C5 + падающий тест, вердикт `CLEAN` обязателен) → Entire (`explain` не пустой, иначе attach, не push) → push/CI (логи, чин, снова push) → **CI green → стоп**. Deploy — апрув владельца.
 
-## COMPONENT_MAP (опционально, после принятия)
+## COMPONENT_MAP (после зелёных тестов)
 
-Если задача **главная** для зоны карты (новый/удалённый/переименованный UI-компонент или смена связей CartSheet/OrderStatus*/GuestOrder*) и в ТЗ есть **БЛОК 4** — после зелёных тестов и принятия владельцем обновить только строки таблицы в `docs/operations/session/COMPONENT_MAP.md` (промпт из шапки файла / заказчика). Не главная → **не** читать и **не** править карту. Отдельный docs-коммит: `docs: update COMPONENT_MAP — [компонент]`.
+Решение и правило правки — [`TASK_PATCH.md`](../../docs/operations/dev/TASK_PATCH.md) шаг 6: сначала «Обновление требуется: да/нет — причина» (критерии 6.0), при «да» — только строки таблицы `docs/operations/session/COMPONENT_MAP.md`, отдельный docs-коммит `docs: update COMPONENT_MAP — [компоненты]`. При «нет» карту не читать целиком и не править.
+
+## Очередь Push + SMS
+
+Шаг из [`PUSH_SMS_QUEUE.md`](../../docs/operations/milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) → после CI green закрыть шаг по разделу «Как работать» п. 9 (статус `done`, HANDOFF «Следующий шаг», строки `Next`).
 
 ## Обязательно в конце (копипаст)
 
 `Next: deploy — только по апруву владельца`
+
+Шаг очереди Push + SMS — вместо строки выше: `Next: 🚀 деплой N — по апруву владельца` (если после шага стоит 🚀), затем последней строкой `Next (новый чат): /start → шаг <№> — <ID> <название>`.
 
 Дыры до push: `Next: /sbr`

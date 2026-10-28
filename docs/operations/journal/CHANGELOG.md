@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-28 — docs: очередь Push + SMS (строгий порядок задач заказчика)
+
+- Новый [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md): 4 подготовительных шага (уточнения + TASK_99, TASK_114 Subtask 1, TASK_118 Subtask 9, TASK_119 этап 1), 16 задач и 7 точек деплоя в порядке документа заказчика; метки документов (TASK-PUSH-…) ↔ ID заказчика (TASK_108–121); ручные шаги владельца; открытые вопросы.
+- Дословно сохранены порядок заказчика и его ответы 2026-10-28 (`artifacts/push_sms_task_order/`). Все 18 Google Docs читаются через Google Docs MCP; G — v3 (R10).
+- `/start` получил режим Q (берёт следующий шаг очереди), `/review` закрывает шаг и печатает `Next (новый чат)`; `TASK_PATCH.md` шаг 6 — критерии «нужно ли обновлять COMPONENT_MAP» и строка «не требуется — причина».
+
 ## 2026-10-20 — Sentry RUBY-1R: поддельный `Client-IP` больше не роняет запрос
 
 - Sentry 14d unresolved: одна ошибка — RUBY-1R `ActionDispatch::RemoteIp::IpSpoofAttackError` (2026-10-18 13:21 UTC, `GET https://codeblack.coffee/`, бот Chrome 126 / Ubuntu, NL). Клиент прислал `Client-IP`, которого нет в `X-Forwarded-For` → Rails бросал исключение в `Rails::Rack::Logger` (до контроллера) → 500 на любом пути. Fly proxy `Client-IP` не ставит — его шлёт только сам клиент.

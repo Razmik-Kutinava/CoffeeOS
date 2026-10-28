@@ -198,6 +198,8 @@
 
 Оглавление: [`customer_tasks/README.md`](customer_tasks/README.md). Тексты заказчика **не сокращаем** в CBR — только ссылки и статус.
 
+**Очередь Push + SMS (2026-10-28):** TASK_99, TASK_90 Патч 2, TASK_92 Патч 1–2, TASK_108–121 — порядок и статусы в [`PUSH_SMS_QUEUE.md`](PUSH_SMS_QUEUE.md); строки в таблицу ниже добавляются при intake каждого шага.
+
 | Порядок | ID | Задача | Статус | Файл |
 |---------|-----|--------|--------|------|
 | 1 | **B1.7** | Доработка экрана оформления (checkout) | **закрыта** · апрув `[x]` 2026-06-04 | [B1_7_checkout_order_screen.md](customer_tasks/B1_7_checkout_order_screen.md) |
