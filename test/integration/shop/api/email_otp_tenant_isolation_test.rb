@@ -24,6 +24,8 @@ class Shop::Api::EmailOtpTenantIsolationTest < ActionDispatch::IntegrationTest
     open_session do |sess|
       add_to_cart!(sess, @tenant_a)
       verify_shop_email!(tenant_id: @tenant_a.id, email: @email1, session: sess)
+      # TASK_120: корзина точки A в точке B очищается — без своей корзины в B до проверки email не дойти.
+      add_to_cart!(sess, @tenant_b)
 
       sess.post "/shop/api/orders",
         headers: shop_tenant_headers(@tenant_b.id),
