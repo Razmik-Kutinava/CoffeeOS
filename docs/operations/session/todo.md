@@ -1,3 +1,85 @@
+# todo — TASK_92 Патч 1: ready-пуш не теряется при сбое доставки (очередь, шаг 2)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_92](../milestones/veha_2/requirements/customer_tasks/TASK-92-Production-background-FCM-и-синхронизация-статусов-заказа.md) § «Патч 1: 2026-10-18», Subtask 4–4g · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 2 · [Google Doc](https://docs.google.com/document/d/1GlRrdNGaXuSTTCYEKBN1dem8hB0A0WPnC2w9O_gi-mc/edit) |
+| **Не в scope** | момент постановки claim (C1 остаётся ранним) · колонки в `orders` · payload FCM · каскад и решение об SMS · статусы Barista · `FCM_SIMULATE` · Патч 2 (cancelled) · ActionCable · код Wallet/APNs (только изоляция их ошибок) · endpoint скачивания карты |
+| **Статус** | SPEC готов · ждёт `/sbr` |
+
+## SBR
+
+- [x] intake `e3915c6d` (тело TASK_92 + Патч 1 дословно, CBR #92)
+- [x] SPEC — все ссылки патча на код сверены, решения ниже, файлы, Не ломать, Проверка
+- [ ] RED — тесты 4–4g + классификация ошибок `FcmClient` + `release!` / `claim!(at:)`
+- [ ] GREEN
+- [ ] `/regress`
+- [ ] `/review` → push → CI · закрыть backlog `V2-#35-PUSH-RELIABILITY` в `PRACTICES.md:118` · COMPONENT_MAP: строки `FcmClient` / `GuestOrderBroadcaster` — решение на review
+
+## Факт (сверка 2026-10-28) — все ссылки патча совпали с кодом
+
+- `ready_push_job.rb`: claim `:23`, затем `update_wallet!` `:25`, `deliver_fcm!` `:26`; `update_wallet!` ловит только `UnavailableError` `:38-39`; `PushNotification.create!(status: :pending)` `:46`; `SendPushNotificationJob.perform_now` `:64`; ловится только `OrderStatusPushPayload::Error` `:65-66`.
+- `ready_push_claim.rb:11-24` — `UPDATE … WHERE ready_notified_at IS NULL` в своей транзакции; метода освобождения нет.
+- `send_push_notification_job.rb:29-31` — `FcmClient::Error` → `failed`, исключение не выходит наружу → у `ReadyPushJob` успех, повтора нет. Любая другая ошибка вылетает, запись остаётся `pending`.
+- `fcm_client.rb`: `fetch_access_token!` `:38`; ответ OAuth разбирается без проверки кода (`:106`, `JSON::ParserError` не обёрнут; «нет токена» → `Error` `:108`); `http_request` `:172-176` — `Net::OpenTimeout`/`ReadTimeout`, `SocketError`, `Errno::*`, `OpenSSL::SSL::SSLError` вылетают как есть; любой не-2xx от FCM → `Error` `:119-121` (5xx/429 и «мёртвый токен» не различаются); очистка мёртвого токена `:129-136` (в патче `:129-133`).
+- `application_job.rb:5` — `retry_on` закомментирован. Прецедент в проекте: `OrderReadyCascadeJob:12` `retry_on …, wait: :polynomially_longer, attempts: 5`.
+- `job_tenant_context.rb:7-9,29` — вне транзакции контекст через `SET`/`RESET`, внешней транзакции нет → claim не откатывается.
+- `apns_client.rb:14-21` — при сертификатах всегда `raise Error` («not configured»); `PassUpdater:39` его не ловит → в режиме с сертификатами FCM не уходит никогда.
+- `GenerationError` — `pass_builder.rb:37`, `pass_signer.rb:41`; тест `ready_push_job_test.rb:90-95` закрепляет «GenerationError вылетает для повтора ActiveJob» (повтора на деле нет — `retry_on` выключен).
+- `order_ready_sms_link.rb:61` — `anchor = ready_notified_at || ready_at || updated_at`. Других читателей `ready_notified_at` в `app/` нет, кроме `OrderStatusPushNotifier:42`. Каскад (`OrderReadyCascadeJob`) от push и `ready_notified_at` не зависит.
+- `PRACTICES.md:118` `V2-#35-PUSH-RELIABILITY` — backlog, совпало. Решение C1 — «Интеграция статусной модели…md:57» (в патче `:55-59`).
+- Защитные тесты на месте: `ready_push_claim_test.rb:35-39`, `:41-47`; `ready_push_job_test.rb:66-77`, `:117-123`. `ready_push_claim_test.rb:49-55` называется «claims and enqueues», а проверяет `nil` — совпало.
+- `minitest/mock` в проекте не используется; подмена — `define_singleton_method` (как `stub_fcm_http!` в `fcm_client_test.rb:80`).
+
+## Решение для билда (предложение SPEC)
+
+1. **Классификация в `FcmClient`** (только ошибки, payload не меняется): `class TransientError < Error`.
+   - временные → `TransientError`: FCM 5xx и 429; сеть и таймауты в `http_request` (`Net::OpenTimeout`, `Net::ReadTimeout`, `SocketError`, `SystemCallError`, `OpenSSL::SSL::SSLError`, `EOFError`, `IOError`); **любой** сбой получения OAuth-токена (сеть, не-2xx, битый JSON, нет `access_token`) — по тексту заказчика «сбой получения OAuth-токена».
+   - постоянные → `Error`, как сейчас: прочие 4xx от FCM (мёртвый токен с очисткой `:129-136`, 400 payload, 401/403/404).
+2. **`ReadyPushClaim`**: `claim!(order, at: nil)` — при повторе ставит **исходное** время claim (Subtask 4f: начало срока SMS-ссылки не сдвигается); `release!(order, claimed_at)` — `UPDATE … SET ready_notified_at = NULL WHERE id = ? AND ready_notified_at = claimed_at` (снимает только свой claim), тот же `SET LOCAL` в транзакции.
+3. **Повтор — своя перепостановка в `ReadyPushJob`, не `retry_on`**: `retry_on` повторяет job с теми же аргументами, а для 4f нужно передать исходное время claim. `perform(order_id, old_status = "preparing", attempt: 1, claimed_at: nil)`; первая постановка (нотификатор) не меняется — `args: [id, "preparing"]`.
+   - `TransientError` и попытка < 5 → `release!` → `ReadyPushJob.set(wait: BACKOFF[attempt - 1]).perform_later(order_id, old_status, attempt: attempt + 1, claimed_at:)`; `BACKOFF = [10.seconds, 30.seconds, 2.minutes, 5.minutes]` (5 попыток, ~8 минут).
+   - попытки кончились → claim остаётся (с исходным временем), `PushNotification` = `failed`, `warn` в лог.
+   - повторный запуск: `claim!(order, at: claimed_at)`; не удалось (кто-то успел) → выход, второго пуша нет (4e).
+   - `application_job.rb` **не трогаем** (в «Файлы (ожидаемо)» патча он есть): глобальный `retry_on` задел бы все job’ы, а своя перепостановка его не требует.
+4. **`SendPushNotificationJob`**: аргумент `raise_transient: false`; при `true` (только из `ReadyPushJob`) `TransientError` → запись `failed` + исключение наружу. По умолчанию — как сейчас.
+5. **Wallet изолирован (4c)**: `update_wallet!` ловит любую ошибку (`StandardError`: `GenerationError`, `UnavailableError`, `ApnsClient::Error`, ошибки БД при сохранении карты) → `warn` в лог → FCM уходит. Порядок «Wallet → FCM» и код Wallet/APNs не меняются. На повторе Wallet не дублируется: карта уже `ready` → пропуск (`:35`).
+6. **Нет `pending` (4d)**: любая неожиданная ошибка после создания записи → запись `failed` (`error_message` = класс + текст) → исключение наружу (видно в Solid Queue / Sentry), claim остаётся.
+7. **Постоянная ошибка (4b)**: как сейчас — токен очищается в `FcmClient`, запись `failed`, повтора нет, claim остаётся.
+
+**Побочный эффект для accepted/preparing (на решение владельца):** после п. 1 сетевая ошибка FCM в пушах accepted/preparing станет `TransientError` (подкласс `Error`) и будет поймана существующим `rescue` → запись `failed` вместо «висящей» `pending` и упавшего job’а. Пуш не уходит ни до, ни после, повтора нет в обоих случаях — меняется только статус записи. Без этого классификацию сетевых ошибок (разрешена патчем) не сделать.
+
+## Файлы (ожидаемо)
+
+1. `app/jobs/shop/ready_push_job.rb` — освобождение claim, перепостановка с backoff, изоляция Wallet, нет `pending`.
+2. `app/services/shop/ready_push_claim.rb` — `release!`, `claim!(at:)`.
+3. `app/jobs/shop/send_push_notification_job.rb` — `raise_transient:`.
+4. `app/services/shop/fcm_client.rb` — `TransientError` + классификация (5xx/429, сеть, OAuth).
+5. `test/jobs/shop/ready_push_job_test.rb` — 4, 4b–4g; актуализировать `:90-95` под 4c.
+6. `test/services/shop/ready_push_claim_test.rb` — `release!` (только свой), `claim!(at:)`; переименовать `:49-55`.
+7. `test/services/shop/fcm_client_test.rb` — 5xx/429/сеть/таймаут/OAuth → `TransientError`; 400/404 мёртвый токен → `Error` не `TransientError`.
+
+Соседи (не меняем, гоняем): `test/services/shop/guest_order_broadcaster_test.rb` (на ready ставит `ReadyPushJob`), `test/jobs/shop/order_ready_cascade_job_test.rb` (граница с каскадом), `test/services/shop/order_status_push_notifier_test.rb` (`:42`, путь accepted/preparing через `SendPushNotificationJob`), `test/services/shop/order_ready_sms_link_test.rb` (4f, `:61`), `test/integration/shop/push_pipeline_simulation_test.rb`.
+
+## Не ломать
+
+- Ранний claim C1: один ready-пуш на заказ при параллельных постановках; нотификатор не ставит `ReadyPushJob`, если claim уже есть (`ready_push_claim_test.rb:35-47`, `ready_push_job_test.rb:66-77`, `:117-123`).
+- Payload FCM data-only (`tag order-<id>`, actions, progress) — `ready_push_job_test.rb:127-135`, `fcm_client_test`.
+- Push accepted/preparing и оффер подписки через `SendPushNotificationJob` — отправка как сейчас (кроме статуса записи при сетевой ошибке, см. выше).
+- Каскад SMS и срок жизни SMS-ссылки (`order_ready_sms_link.rb:61`); Broadcaster на ready; табло/статус Barista и ActionCable не трогаем.
+
+## Проверка
+
+- `ruby bin/rails test test/jobs/shop/ready_push_job_test.rb test/services/shop/ready_push_claim_test.rb test/services/shop/fcm_client_test.rb`
+- `ruby bin/rails test test/services/shop/guest_order_broadcaster_test.rb test/jobs/shop/order_ready_cascade_job_test.rb test/services/shop/order_status_push_notifier_test.rb test/services/shop/order_ready_sms_link_test.rb test/integration/shop/push_pipeline_simulation_test.rb` + `bundle exec rubocop` по изменённым файлам
+
+## DoD
+
+- Subtask 4–4g тестами; защитные тесты зелёные.
+- Реальный Android (TASK_92 Subtask 16, дубль схлопывается по tag — Subtask 5) — 👤 после 🚀 1.
+- Fly MCP — после 🚀 1 (доставку на устройство локально не проверить).
+
+---
+
 # todo — TASK_112: снимок окружения при открытии витрины (очередь, шаг 1)
 
 | Поле | Значение |
