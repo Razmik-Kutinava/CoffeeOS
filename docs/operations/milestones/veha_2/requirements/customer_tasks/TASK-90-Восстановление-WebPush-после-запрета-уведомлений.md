@@ -252,6 +252,7 @@ DoD
 - Фокус intake: только gap **9.1 / denied → settings** (переход в настройки браузера + recovery UI). Остальные gaps #81 (фоновые FCM/Wallet, чат) — **не** этот шаг.
 - Исходный продуктовый док заказчика по виджету: #37 «Адаптивный виджет…».
 - 2026-10-28: строки «Уточнение 2026-10-18» вставлены по [ответам заказчика](../../artifacts/push_sms_task_order/customer_answers_2026-10-28.md) п. 1 («после строки 78 и после строки 290»): номера совпали с файлом; строка про путь `OrderStatus.svelte` — после пункта `OrderStatus.svelte` в «Не трогать» (§2), строка про Subtask 1 — после пункта `OrderStatus.svelte` в «Не трогать» Патча 1.
+- 2026-10-28 (очередь Push + SMS, шаг 6): «Патч 2: 2026-10-18» вставлен дословно из Google Doc (одна вкладка) в конец файла после Патча 1; в документе Google строк «Уточнение 2026-10-18» нет — они внесены по ответам заказчика, текст Патча 2 их не меняет. Шапка патча без «Зависит от» / «Порядок сборки» / «Статус» — расхождения с очередью нет. Факты файл:строка (`firebasePush.js:57-59,95-106`, `ActiveOrdersAccordion.svelte:278-282`, `OrderStatus.svelte:116-117`, `orderStatusNotifyActions.js:176-180,190-191,226`, `order_status_push_subscribe_test.mjs:350-357,399-409,483-495`) — сверка на `/spec`.
 
 ---
 
@@ -327,3 +328,32 @@ DoD
 `denied → settings → пользователь разрешил → возврат в PWA → permission === granted → registerShopPush() → существующий WebPush flow`
 
 и при этом пользователь не обязан повторно нажимать первоначальную кнопку подписки.
+
+
+## Патч 2: 2026-10-18
+Основание: аудиты C и K от 2026-10-13 и 2026-10-18, факт firebasePush.js:95-106; ActiveOrdersAccordion.svelte:278-282; OrderStatus.svelte:116-117
+### Расхождение
+Subtask 1: было — recovery при Notification.permission === "denied";
+по факту — любой результат requestPermission, кроме granted, возвращается как reason "denied", в том числе "default", когда гость закрыл диалог без выбора (firebasePush.js:104-105), и нижняя панель показывает «Уведомления запрещены…» (ActiveOrdersAccordion.svelte:278-282);
+расхождение — recovery и сообщение «запрещены» показываются тому, кто ничего не запрещал.
+### Исправленный сценарий
+- [ ] Subtask 1 (patch v2): Given гость нажал push-CTA и закрыл системный диалог без выбора (permission === "default"), When registerShopPush завершается, Then блок «запрещены» и кнопка «Открыть настройки» не показываются, And CTA остаётся доступным, And показывается нейтральное сообщение «Уведомления не включены».
+- [ ] Subtask 1b (patch v2): Given permission === "denied", Then recovery работает как в TASK_90 и Патче 1.
+- [ ] Subtask 8 (patch v2): Тесты различают default и denied; тест denied → settings сохранён.
+### Не трогать
+См. COMPONENT_MAP.md: firebasePush.js (токен, VAPID, /push/register), orderStatusNotifyActions.js (resumePushAfterSettings: только armed и granted), ActiveOrdersAccordion (без «×», #83 Патч 1).
+OrderStatus.svelte: новое значение reason не должно ломать его состояние error (:116-117), проверить тестом.
+Случай «нет Notification API» (Safari на iOS вне главного экрана) сюда не входит: см. TASK-PUSH-ENV-GATE.
+Инвариант TASK_99: Notification.requestPermission() остаётся первым асинхронным вызовом в registerShopPush; до него нет await, setTimeout и динамического импорта (firebasePush.js:57-59, orderStatusNotifyActions.js:226). Тесты order_status_push_subscribe_test.mjs:399-409 и :483-495 не менять. Правка reason (firebasePush.js:104-106) выполняется после requestPermission и порядок вызовов не затрагивает.
+Известные ограничения (зафиксировано 2026-10-18, не входят в этот патч):
+1. Авто-подписка после возврата из настроек (Subtask 7 Патча 1) срабатывает, пока жив экземпляр панели и виден recovery. После перезагрузки PWA, перемонтирования панели, а также после «Смотреть готовность» до включения гостю достаточно ещё одного нажатия на CTA: requestPermission вернёт granted сразу. Тест Патча 1 проверяет исходник регулярками (order_status_push_subscribe_test.mjs:350-357).
+2. На Android intent открывает общие настройки уведомлений, а не настройки сайта (orderStatusNotifyActions.js:176-180, 190-191); ручная приёмка Subtask 4 (Android + Chrome) не записана.
+3. Тексты recovery написаны для Android и desktop; для iPhone (установленное приложение) см. TASK-IOS-PUSH-PATH, Subtask 13.
+### Scope
+Разрешено: различение default и denied в возвращаемом reason и в нижней панели; тесты.
+Запрещено: регистрация токена, endpoint, VAPID, Service Worker, orderStatusCtaMachine.js, iOS и Wallet, удаление существующих denied → settings тестов.
+## SBR: Патч 2 TASK_90 — default ≠ denied
+## Файлы (ожидаемо): firebasePush.js (reason), ActiveOrdersAccordion.svelte, orderStatusNotifyActions.js
+## Не ломать: регистрация токена, resumePushAfterSettings, OrderStatus (состояние error), инвариант TASK_99 (requestPermission первым async-вызовом)
+## Проверка: npm test -- --run (order_status_push_subscribe, active_orders_accordion); npm run lint; npm run typecheck
+## DoD: Subtask 1/1b/8 patch v2, тест denied → settings сохранён, тесты синхронного пути TASK_99 зелёные
