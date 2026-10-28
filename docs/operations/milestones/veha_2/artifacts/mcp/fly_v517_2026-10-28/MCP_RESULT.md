@@ -1,6 +1,6 @@
 # Fly v517 — 🚀 1 (очередь Push + SMS, шаги 1–5) · 2026-10-28
 
-**Итог: FAIL — приёмка остановлена, отката и hotfix нет (ждём решения владельца).**
+**Итог: FAIL — приёмка остановлена, отката и hotfix нет.** FAIL 1 (500 после миграции) закрыт перезапуском compute Neon в 14:35 UTC; FAIL 2 (TASK_120) — патч отдельным шагом (решение владельца).
 
 **Коммит:** `7413a427` (код — `a694f98b` и раньше; после — только docs) · CI [40701310484](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40701310484) + Semgrep [40701310485](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40701310485) + CodeQL [40701310481](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40701310481) green · deploy [40703896556](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40703896556) (4м54с) · release **v517** complete 14:18 UTC · release_command (миграции) OK · web 1/1 health passing
 **В поставке относительно v516:** TASK_112 (снимок окружения, миграция `20261028120000`), TASK_92 Патч 1–2 (push ready / отмена), TASK_115 (`tenants.code_black_member`, миграция `20261028130000`), TASK_120 (корзина при смене точки), RUBY-1R (`Client-IP`), CI-раннер 24.04 + гемы `crass`/`net-ssh`/`rubocop`.
@@ -42,6 +42,8 @@ Headless Chrome через CDP (эквивалент DevTools MCP) на прод
 - Масштаб в окне лога 14:22–14:27 UTC: 6 ответов 500 (14:23 ×3, 14:24 ×1, 14:27 ×2), только эти два эндпоинта; на остальных — 2xx. Само не прошло за ~9 минут после выкладки.
 - В Sentry не попадает: `Shop::Api::ErrorHandler` перехватывает `StandardError` и только пишет в лог.
 - Для гостя: при 500 на `/config` шапка уходит в офлайн-режим (адрес из кэша, `bootstrapShopTenant` → `applyOfflineFallback`); `/config` отдаёт ещё настройки оплаты, push и график — как витрина ведёт себя без них при оформлении, не проверял. При 500 на `/tenants` — только текущая точка. Каталог и корзина отвечали 2xx. Панели персонала в окне лога запросов не делали — затронуты ли они, не проверено.
+
+**Закрыто 14:35 UTC:** владелец перезапустил compute в консоли Neon (сброс соединений пула). Повторная проверка 14:35–14:40 UTC: в логе Fly 0 `PreparedStatementCacheExpired`, 0 ответов 5xx на 252 ответа 2xx, `/config` + `/tenants` обработаны 39 раз без ошибок; в браузере (`after_neon_restart/`) `/config` 7/7 и `/tenants` 14/14 → 200, beacon TASK_112 → 204, JS-исключений 0. **Впредь:** любая миграция, меняющая колонки таблицы, которую читают внутри транзакции, повторит ошибку — после такого деплоя перезапускать compute Neon или выключить `prepared_statements` (backlog в ISSUES).
 
 ## FAIL 2 — TASK_120: сброс корзины затирается параллельными запросами
 

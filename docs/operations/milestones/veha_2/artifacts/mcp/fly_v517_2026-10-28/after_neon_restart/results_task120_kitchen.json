@@ -1,0 +1,972 @@
+{
+  "label": "after_neon_restart",
+  "base": "https://coffeeos.fly.dev",
+  "startedAt": "2026-10-28T14:39:07.885Z",
+  "task120_kitchen_as_b_412x915": {
+    "addA": [
+      {
+        "method": "POST",
+        "url": "/shop/api/cart/add?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "status": 200,
+        "cart_reset": null,
+        "items": 1
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "status": 200,
+        "cart_reset": null,
+        "items": 1
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "status": 200,
+        "cart_reset": null,
+        "items": 1
+      }
+    ],
+    "stateA": {
+      "href": "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/",
+      "title": "CoffeeOS — витрина",
+      "address": "Самара, ул. Куйбышева, 78",
+      "switchable": false,
+      "hours": "Пн–Пт 08:00–22:00, Сб–Вс 10:00–20:00",
+      "profileLabel": "Профиль ID",
+      "cartSheet": true,
+      "cartSheetMode": "peek",
+      "checkoutText": "10₽",
+      "cartError": null,
+      "resetBannerInBody": false,
+      "cartLs": "{\"savedAt\":\"2026-10-28T14:39:28.671Z\",\"ttlMs\":7776000000,\"payload\":{\"items\":[{\"index\":0,\"product_id\":\"3c5259e0-f42f-4d47-953d-2ce82e335f8c\",\"product_name\":\"Фильтр-кофе без кофеина (декаф) Гватемала\",\"description\":\"Тот же формат фильтра — без кофемашины, без горечи. Декофеинизация водой и воздухом сохраняет вкус зерна без химии. Арабика из Гватемалы: черешня, карамель, лёгкий зелёный чай с цитрусом. Для вечера, для паузы, для спокойного ритма.\",\"quantity\":1,\"price\":10,\"image_url\":\"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80\",\"selected_modifiers\":[],\"removed_modifiers\":[{\"id\":\"7c469cb3-43d6-400e-9863-835149ecd4fb\",\"name\":\"Со льдом\",\"price\":0},{\"id\":\"9fd199d3-919d-430a-895c-7f32b7c54812\",\"name\":\"Кардамон и корица - пряный акцент, без сладости\",\"price\":30},{\"id\":\"8d4f0d06-43c1-400e-948b-380d897a23f8\",\"name\":\"Яблочный с корицей - мягкий, с лёгкой фруктовостью\",\"price\":30},{\"id\":\"5704146b-26ce-4f84-aeee-81410d496f16\",\"name\":\"Мёд - натуральная сладость с цветочным оттенком\",\"price\":30},{\"id\":\"826e9365-c881-4372-9258-1e43a583589d\",\"name\":\"Топинамбур - нейтральная сладость без послевкусия\",\"price\":30},{\"id\":\"a3a6ec13-e4af-47b6-876b-2ba4cc6b1d83\",\"name\":\"Сахар - мягкая сладость\",\"price\":0}],\"unit_total\":10,\"line_total\":10}],\"total\":10}}",
+      "selected": null,
+      "envGuard": "1"
+    },
+    "onB": [
+      {
+        "method": "GET",
+        "url": "/shop/api/cart?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c",
+        "status": 200,
+        "cart_reset": true,
+        "items": 0
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c",
+        "status": 200,
+        "cart_reset": true,
+        "items": 0
+      }
+    ],
+    "configOnB": [
+      200
+    ],
+    "afterB": {
+      "href": "/shop?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c#/",
+      "title": "CoffeeOS — витрина",
+      "address": "Москва, пр-д Заготовочный, 1",
+      "switchable": false,
+      "hours": null,
+      "profileLabel": "Профиль ID",
+      "cartSheet": true,
+      "cartSheetMode": "peek",
+      "checkoutText": "0₽",
+      "cartError": "Корзина очищена: вы перешли в другую точку",
+      "resetBannerInBody": true,
+      "cartLs": "{\"savedAt\":\"2026-10-28T14:39:39.318Z\",\"ttlMs\":7776000000,\"payload\":{\"items\":[],\"total\":0,\"cart_reset\":true}}",
+      "selected": null,
+      "envGuard": "1"
+    },
+    "emptyOnB": [
+      {
+        "method": "GET",
+        "url": "/shop/api/cart?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c",
+        "status": 200,
+        "cart_reset": true,
+        "items": 0
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c",
+        "status": 200,
+        "cart_reset": true,
+        "items": 0
+      }
+    ],
+    "afterEmpty": {
+      "href": "/shop?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c#/",
+      "title": "CoffeeOS — витрина",
+      "address": "Москва, пр-д Заготовочный, 1",
+      "switchable": false,
+      "hours": null,
+      "profileLabel": "Профиль ID",
+      "cartSheet": true,
+      "cartSheetMode": "peek",
+      "checkoutText": "0₽",
+      "cartError": "Корзина очищена: вы перешли в другую точку",
+      "resetBannerInBody": true,
+      "cartLs": "{\"savedAt\":\"2026-10-28T14:39:51.232Z\",\"ttlMs\":7776000000,\"payload\":{\"items\":[],\"total\":0,\"cart_reset\":true}}",
+      "selected": null,
+      "envGuard": "1"
+    },
+    "backToA": [
+      {
+        "method": "GET",
+        "url": "/shop/api/cart?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "status": 200,
+        "cart_reset": null,
+        "items": 1
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "status": 200,
+        "cart_reset": null,
+        "items": 1
+      }
+    ],
+    "afterBackToA": {
+      "href": "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/",
+      "title": "CoffeeOS — витрина",
+      "address": "Самара, ул. Куйбышева, 78",
+      "switchable": false,
+      "hours": "Пн–Пт 08:00–22:00, Сб–Вс 10:00–20:00",
+      "profileLabel": "Профиль ID",
+      "cartSheet": true,
+      "cartSheetMode": "peek",
+      "checkoutText": "10₽",
+      "cartError": null,
+      "resetBannerInBody": false,
+      "cartLs": "{\"savedAt\":\"2026-10-28T14:40:03.006Z\",\"ttlMs\":7776000000,\"payload\":{\"items\":[{\"index\":0,\"product_id\":\"3c5259e0-f42f-4d47-953d-2ce82e335f8c\",\"product_name\":\"Фильтр-кофе без кофеина (декаф) Гватемала\",\"description\":\"Тот же формат фильтра — без кофемашины, без горечи. Декофеинизация водой и воздухом сохраняет вкус зерна без химии. Арабика из Гватемалы: черешня, карамель, лёгкий зелёный чай с цитрусом. Для вечера, для паузы, для спокойного ритма.\",\"quantity\":1,\"price\":10,\"image_url\":\"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80\",\"selected_modifiers\":[],\"removed_modifiers\":[{\"id\":\"7c469cb3-43d6-400e-9863-835149ecd4fb\",\"name\":\"Со льдом\",\"price\":0},{\"id\":\"9fd199d3-919d-430a-895c-7f32b7c54812\",\"name\":\"Кардамон и корица - пряный акцент, без сладости\",\"price\":30},{\"id\":\"8d4f0d06-43c1-400e-948b-380d897a23f8\",\"name\":\"Яблочный с корицей - мягкий, с лёгкой фруктовостью\",\"price\":30},{\"id\":\"5704146b-26ce-4f84-aeee-81410d496f16\",\"name\":\"Мёд - натуральная сладость с цветочным оттенком\",\"price\":30},{\"id\":\"826e9365-c881-4372-9258-1e43a583589d\",\"name\":\"Топинамбур - нейтральная сладость без послевкусия\",\"price\":30},{\"id\":\"a3a6ec13-e4af-47b6-876b-2ba4cc6b1d83\",\"name\":\"Сахар - мягкая сладость\",\"price\":0}],\"unit_total\":10,\"line_total\":10}],\"total\":10}}",
+      "selected": null,
+      "envGuard": "1"
+    },
+    "addAagain": [
+      {
+        "method": "POST",
+        "url": "/shop/api/cart/add?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "status": 200,
+        "cart_reset": null,
+        "items": 1
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "status": 200,
+        "cart_reset": null,
+        "items": 1
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "status": 200,
+        "cart_reset": null,
+        "items": 1
+      }
+    ],
+    "stateAagain": {
+      "href": "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/",
+      "title": "CoffeeOS — витрина",
+      "address": "Самара, ул. Куйбышева, 78",
+      "switchable": false,
+      "hours": "Пн–Пт 08:00–22:00, Сб–Вс 10:00–20:00",
+      "profileLabel": "Профиль ID",
+      "cartSheet": true,
+      "cartSheetMode": "peek",
+      "checkoutText": "20₽",
+      "cartError": null,
+      "resetBannerInBody": false,
+      "cartLs": "{\"savedAt\":\"2026-10-28T14:40:22.591Z\",\"ttlMs\":7776000000,\"payload\":{\"items\":[{\"index\":0,\"product_id\":\"3c5259e0-f42f-4d47-953d-2ce82e335f8c\",\"product_name\":\"Фильтр-кофе без кофеина (декаф) Гватемала\",\"description\":\"Тот же формат фильтра — без кофемашины, без горечи. Декофеинизация водой и воздухом сохраняет вкус зерна без химии. Арабика из Гватемалы: черешня, карамель, лёгкий зелёный чай с цитрусом. Для вечера, для паузы, для спокойного ритма.\",\"quantity\":2,\"price\":10,\"image_url\":\"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80\",\"selected_modifiers\":[],\"removed_modifiers\":[{\"id\":\"7c469cb3-43d6-400e-9863-835149ecd4fb\",\"name\":\"Со льдом\",\"price\":0},{\"id\":\"9fd199d3-919d-430a-895c-7f32b7c54812\",\"name\":\"Кардамон и корица - пряный акцент, без сладости\",\"price\":30},{\"id\":\"8d4f0d06-43c1-400e-948b-380d897a23f8\",\"name\":\"Яблочный с корицей - мягкий, с лёгкой фруктовостью\",\"price\":30},{\"id\":\"5704146b-26ce-4f84-aeee-81410d496f16\",\"name\":\"Мёд - натуральная сладость с цветочным оттенком\",\"price\":30},{\"id\":\"826e9365-c881-4372-9258-1e43a583589d\",\"name\":\"Топинамбур - нейтральная сладость без послевкусия\",\"price\":30},{\"id\":\"a3a6ec13-e4af-47b6-876b-2ba4cc6b1d83\",\"name\":\"Сахар - мягкая сладость\",\"price\":0}],\"unit_total\":10,\"line_total\":20}],\"total\":20}}",
+      "selected": null,
+      "envGuard": "1"
+    },
+    "timeline": [
+      {
+        "at": "14:39:08",
+        "req": "GET /shop",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:12",
+        "req": "GET /shop/api/profile",
+        "tenant": "2fdee1ac",
+        "status": 401
+      },
+      {
+        "at": "14:39:12",
+        "req": "GET /shop/api/orders/active",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:12",
+        "req": "GET /shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart": {
+          "items": 0,
+          "cart_reset": null
+        }
+      },
+      {
+        "at": "14:39:12",
+        "req": "GET /shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart": {
+          "items": 0,
+          "cart_reset": null
+        }
+      },
+      {
+        "at": "14:39:12",
+        "req": "GET /shop/api/categories",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:12",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:12",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:12",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:12",
+        "req": "GET /shop/api/config",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:13",
+        "req": "GET /shop/api/tenants",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:13",
+        "req": "GET /shop/api/tenants",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:13",
+        "req": "POST /shop/api/environment_events",
+        "tenant": "2fdee1ac",
+        "status": 204
+      },
+      {
+        "at": "14:39:20",
+        "req": "GET /shop/api/orders/active",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:22",
+        "req": "GET /shop/api/products/3c5259e0-f42f-4d47-953d-2ce82e335f8c",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:22",
+        "req": "GET /shop/api/favorites",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:22",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:27",
+        "req": "POST /shop/api/cart/add",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart": {
+          "items": 1,
+          "cart_reset": null
+        }
+      },
+      {
+        "at": "14:39:28",
+        "req": "GET /shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart": {
+          "items": 1,
+          "cart_reset": null
+        }
+      },
+      {
+        "at": "14:39:28",
+        "req": "GET /shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart": {
+          "items": 1,
+          "cart_reset": null
+        }
+      },
+      {
+        "at": "14:39:28",
+        "req": "GET /shop/api/categories",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:28",
+        "req": "GET /shop/api/orders/active",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:28",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:36",
+        "req": "GET /shop/api/orders/active",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:36",
+        "req": "GET /shop/api/categories",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:36",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:39:38",
+        "req": "GET /shop",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:38",
+        "req": "GET /shop/api/profile",
+        "tenant": "d47165db",
+        "status": 401
+      },
+      {
+        "at": "14:39:38",
+        "req": "GET /shop/api/orders/active",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:38",
+        "req": "GET /shop/api/cart",
+        "tenant": "d47165db",
+        "status": 200,
+        "cart": {
+          "items": 0,
+          "cart_reset": true
+        }
+      },
+      {
+        "at": "14:39:38",
+        "req": "GET /shop/api/cart",
+        "tenant": "d47165db",
+        "status": 200,
+        "cart": {
+          "items": 0,
+          "cart_reset": true
+        }
+      },
+      {
+        "at": "14:39:38",
+        "req": "GET /shop/api/categories",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:38",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:38",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:39",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:39",
+        "req": "GET /shop/api/config",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:39",
+        "req": "GET /shop/api/tenants",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:39",
+        "req": "GET /shop/api/tenants",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:46",
+        "req": "GET /shop/api/orders/active",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:47",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:47",
+        "req": "GET /shop/api/categories",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:50",
+        "req": "GET /shop",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:50",
+        "req": "GET /shop/api/profile",
+        "tenant": "d47165db",
+        "status": 401
+      },
+      {
+        "at": "14:39:50",
+        "req": "GET /shop/api/orders/active",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:50",
+        "req": "GET /shop/api/cart",
+        "tenant": "d47165db",
+        "status": 200,
+        "cart": {
+          "items": 0,
+          "cart_reset": true
+        }
+      },
+      {
+        "at": "14:39:50",
+        "req": "GET /shop/api/cart",
+        "tenant": "d47165db",
+        "status": 200,
+        "cart": {
+          "items": 0,
+          "cart_reset": true
+        }
+      },
+      {
+        "at": "14:39:50",
+        "req": "GET /shop/api/categories",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:50",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:50",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:51",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:51",
+        "req": "GET /shop/api/config",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:51",
+        "req": "GET /shop/api/tenants",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:51",
+        "req": "GET /shop/api/tenants",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:58",
+        "req": "GET /shop/api/orders/active",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:59",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:39:59",
+        "req": "GET /shop/api/categories",
+        "tenant": "d47165db",
+        "status": 200
+      },
+      {
+        "at": "14:40:02",
+        "req": "GET /shop",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:02",
+        "req": "GET /shop/api/profile",
+        "tenant": "2fdee1ac",
+        "status": 401
+      },
+      {
+        "at": "14:40:02",
+        "req": "GET /shop/api/orders/active",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:02",
+        "req": "GET /shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart": {
+          "items": 1,
+          "cart_reset": null
+        }
+      },
+      {
+        "at": "14:40:02",
+        "req": "GET /shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart": {
+          "items": 1,
+          "cart_reset": null
+        }
+      },
+      {
+        "at": "14:40:02",
+        "req": "GET /shop/api/categories",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:02",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:02",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:02",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:02",
+        "req": "GET /shop/api/config",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:03",
+        "req": "GET /shop/api/tenants",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:03",
+        "req": "GET /shop/api/tenants",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:10",
+        "req": "GET /shop/api/orders/active",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:10",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:11",
+        "req": "GET /shop/api/categories",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:11",
+        "req": "GET /shop/api/products/3c5259e0-f42f-4d47-953d-2ce82e335f8c",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:11",
+        "req": "GET /shop/api/favorites",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:18",
+        "req": "POST /shop/api/cart/add",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart": {
+          "items": 1,
+          "cart_reset": null
+        }
+      },
+      {
+        "at": "14:40:18",
+        "req": "GET /shop/api/orders/active",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:18",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:18",
+        "req": "GET /shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart": {
+          "items": 1,
+          "cart_reset": null
+        }
+      },
+      {
+        "at": "14:40:18",
+        "req": "GET /shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart": {
+          "items": 1,
+          "cart_reset": null
+        }
+      },
+      {
+        "at": "14:40:18",
+        "req": "GET /shop/api/categories",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:22",
+        "req": "GET /shop",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:22",
+        "req": "GET /shop/api/profile",
+        "tenant": "2fdee1ac",
+        "status": 401
+      },
+      {
+        "at": "14:40:22",
+        "req": "GET /shop/api/orders/active",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:22",
+        "req": "GET /shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart": {
+          "items": 1,
+          "cart_reset": null
+        }
+      },
+      {
+        "at": "14:40:22",
+        "req": "GET /shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart": {
+          "items": 1,
+          "cart_reset": null
+        }
+      },
+      {
+        "at": "14:40:22",
+        "req": "GET /shop/api/categories",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:22",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:22",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:22",
+        "req": "GET /shop/api/frequent_products",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:22",
+        "req": "GET /shop/api/config",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:22",
+        "req": "GET /shop/api/tenants",
+        "tenant": "2fdee1ac",
+        "status": 200
+      },
+      {
+        "at": "14:40:23",
+        "req": "GET /shop/api/tenants",
+        "tenant": "2fdee1ac",
+        "status": 200
+      }
+    ],
+    "consoleErrors": [
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 401 () https://coffeeos.fly.dev/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/favicon.ico"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 401 () https://coffeeos.fly.dev/shop/api/profile?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 401 () https://coffeeos.fly.dev/shop/api/profile?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 401 () https://coffeeos.fly.dev/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 401 () https://coffeeos.fly.dev/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      }
+    ],
+    "apiNot2xx": [
+      {
+        "url": "/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "method": "GET",
+        "type": "Fetch",
+        "status": 401,
+        "t": 1793198352504
+      },
+      {
+        "url": "/shop/api/profile?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c",
+        "method": "GET",
+        "type": "Fetch",
+        "status": 401,
+        "t": 1793198378982
+      },
+      {
+        "url": "/shop/api/profile?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c",
+        "method": "GET",
+        "type": "Fetch",
+        "status": 401,
+        "t": 1793198390903
+      },
+      {
+        "url": "/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "method": "GET",
+        "type": "Fetch",
+        "status": 401,
+        "t": 1793198402759
+      },
+      {
+        "url": "/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "method": "GET",
+        "type": "Fetch",
+        "status": 401,
+        "t": 1793198422393
+      }
+    ]
+  },
+  "finishedAt": "2026-10-28T14:40:29.489Z"
+}
