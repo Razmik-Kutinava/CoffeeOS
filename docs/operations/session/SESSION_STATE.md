@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-28 (очередь Push + SMS: шаг 4 TASK_115 — /regress PASS)  
+**Дата:** 2026-10-28 (очередь Push + SMS: шаг 4 TASK_115 — REVIEW)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь 4 REVIEW** (2026-10-28) · bugbot 0 (`Base Branch: origin/develop` — сразу только коммиты задачи) · security 0 medium+ (необязательные советы: потребители сети TASK_116/118 — только через `code_black_network`; автосброс признака при смене типа — UX) · crit-audit CLEAN `6d95763e..205465e5` (`last_audited_sha` → `205465e5`; C3 — тест S10 по 4 ролям; C5 — откат формы откатывает журнал) · COMPONENT_MAP: нет (админка УК) · Entire `01M61AQ2PQJTYKM4T3GD4VVVMC` на `1f51d75d` (attach `0d0ef993 --force`, ops-коммит дополнен до push; `explain HEAD` не пустой) · CBR #115 → REVIEW · Fly MCP — после 🚀 1 · [todo](todo.md) | push → CI → очередь 4 `done` |
 | **Очередь 4 /regress PASS** (2026-10-28) · зона: platform (интеграция, контроллеры, сервисы) + все `test/models` + RLS-тройка + health/tenants, франчайзи, rbac-изоляция, переключатель точек витрины → 369 runs, 0 F/E, 1 skip (`prod_single_point_cleanup_test.rb:65`, нет Point A в тестовой базе) · Fly MCP — после 🚀 1 · Entire attach — на `/review` до push · [todo](todo.md) | `/review` |
 | **Очередь 4 GREEN** (2026-10-28) · RED `18ae4410` (30 runs: 3 F, 15 E — все новые TASK_115) → GREEN `205465e5` · миграция `20261028130000` `tenants.code_black_member` + CHECK `chk_tenants_code_black_member_sales_point` (dev up/down/up OK; test DB — `RAILS_ENV=test db:migrate` вручную) · `schema.rb` 3 строки, шум CHECK откатан · `Tenant.code_black_network` · `Platform::TenantCodeBlackAudit` (`tenant_code_black_member_changed`) · контроллер +3 строки · форма/список · задача 30/0 · соседи 17/0 · rubocop 0 · **Entire: пусто** (`no trailer`, транскрипта нет) → attach на `/review` до push · не запушено · [todo](todo.md) | `/regress` |
 | **Очередь 4 SPEC** (2026-10-28) · факты документа = код, сдвиг только `schema.rb` (`tenants` `:1406-1428`, FK `:1628` — сместила миграция TASK_112) · `AdminAuditLog` в `TenantsController`/`tenant_onboarding` не пишется ✓ · RLS на `admin_audit_logs` нет · **Migration Gate go**: `tenants.code_black_member` boolean NOT NULL default false + CHECK «true только у sales_point», без индекса; down = снять CHECK + колонку · `Tenant.code_black_network` (без status/org/slug) · новый `Platform::TenantCodeBlackAudit` (`tenant_code_black_member_changed`, from/to, actor) · `TenantsController` 236 строк > 200 → владелец: разовое исключение +3–4 строки, сплит → backlog `V2-#115-TENANTS-CTRL-SPLIT` · форма: чекбокс у sales_point, список: колонка · COMPONENT_MAP — нет · [todo](todo.md) | `/sbr` |
