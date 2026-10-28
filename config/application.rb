@@ -30,6 +30,9 @@ module CoffeeOs
     require_relative "../app/middleware/strip_client_ip_header"
     config.middleware.insert_before ActionDispatch::RemoteIp, StripClientIpHeader
 
+    require_relative "../app/middleware/shop_environment_events_body_limit"
+    config.middleware.insert_before ActionDispatch::RemoteIp, ShopEnvironmentEventsBodyLimit
+
     # Лог каждого запроса в JSON (шумно). Включить: LOG_TENANT_MIDDLEWARE=1
     if ENV["LOG_TENANT_MIDDLEWARE"].present?
       require_relative "../app/middleware/log_tenant_middleware"

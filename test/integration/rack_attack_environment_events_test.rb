@@ -11,8 +11,8 @@ class RackAttackEnvironmentEventsTest < ActionDispatch::IntegrationTest
     @tenant = create_tenant!
   end
 
-  def post_event(ip)
-    post "/shop/api/environment_events?tenant_id=#{@tenant.id}",
+  def post_event(ip, path: "/shop/api/environment_events")
+    post "#{path}?tenant_id=#{@tenant.id}",
          params: { event_kind: "session_open" }.to_json,
          headers: { "CONTENT_TYPE" => "application/json", "REMOTE_ADDR" => ip }
   end
@@ -30,6 +30,8 @@ class RackAttackEnvironmentEventsTest < ActionDispatch::IntegrationTest
       end
       post_event(ip)
       assert_response :too_many_requests
+      post_event(ip, path: "/shop/api/environment_events.json")
+      assert_response :too_many_requests, "вариант пути с форматом считается тем же счётчиком"
     end
   end
 end

@@ -5,10 +5,12 @@ module Shop
     # TASK_112: публичный приём снимка окружения витрины (sendBeacon / fetch keepalive).
     # Авторизация гостя не нужна; точка — из with_shop_tenant!, не из тела.
     # sendBeacon может прислать text/plain — тело разбираем сами.
+    # sendBeacon не умеет X-CSRF-Token / X-Shop-Api-Key → без skip prod отвечает 401.
+    # Риск публичного POST: только enum-флаги, точка с сервера, Rack::Attack 30/мин/IP.
     class EnvironmentEventsController < Shop::Api::BaseController
-      MAX_BODY_BYTES = 2048
+      MAX_BODY_BYTES = ShopEnvironmentEventsBodyLimit::MAX_BODY_BYTES
 
-      prepend_before_action :reject_oversized_body
+      skip_before_action :authenticate_shop_api!, only: :create
 
       # Битый JSON с типом application/json падает ещё в with_shop_tenant! (params) — иначе 500.
       rescue_from ActionDispatch::Http::Parameters::ParseError do
@@ -27,10 +29,6 @@ module Shop
       end
 
       private
-
-      def reject_oversized_body
-        head 413 if request.content_length.to_i > MAX_BODY_BYTES
-      end
 
       def parse_payload
         raw = request.raw_post.to_s

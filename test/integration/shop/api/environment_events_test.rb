@@ -126,6 +126,10 @@ class Shop::Api::EnvironmentEventsTest < ActionDispatch::IntegrationTest
     assert_equal 413, response.status
     buffered = request.get_header("RAW_POST_DATA").to_s
     assert_operator buffered.bytesize, :<=, Shop::Api::EnvironmentEventsController::MAX_BODY_BYTES + 1
+
+    post "#{URL}.json?tenant_id=#{@tenant.id}", params: body,
+      headers: { "CONTENT_TYPE" => "application/json", "CONTENT_LENGTH" => "100", "Transfer-Encoding" => "chunked" }
+    assert_equal 413, response.status, "вариант пути с форматом тоже под лимитом"
   end
 
   test "scope: table contents not exposed via shop API (GET has no JSON route)" do

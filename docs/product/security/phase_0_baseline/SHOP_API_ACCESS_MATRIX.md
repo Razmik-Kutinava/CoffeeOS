@@ -40,6 +40,7 @@ Phase 1 ownership: [SHOP_API_AUTH.md](../phase_1_rbac_closure/SHOP_API_AUTH.md) 
 | **Server/mobile** | `X-Shop-Api-Key` или `api_key` param | `ENV["SHOP_API_KEY"]` |
 | **Test** | `Rails.env.test?` | auth skip |
 | **Exception** | `GET categories` | `skip authenticate_shop_api!` |
+| **Exception** | `POST environment_events` (TASK_112, sendBeacon без заголовков) | `skip authenticate_shop_api!` |
 
 Tenant resolution (`Shop::Concerns::TenantResolution`): `tenant_id` param → `X-Shop-Tenant` header → `SHOP_DEFAULT_TENANT_ID`.
 
@@ -85,6 +86,7 @@ Order.where(tenant_id:, source: :mobile, customer_id: cid).find(params[:id])
 | 3 | POST | `/shop/api/push/register` | `push#register` | CUSTOMER | mixed | resolved | `current_shop_customer` required | yes | no | OK | `push_controller.rb:11-12` | — |
 | 4 | GET | `/shop/api/debug` | `debug#index` | INTERNAL | mixed | resolved | non-prod only | no | no | OK | `debug_controller.rb:9-10`, `routes.rb:175` | route absent in production |
 | 5 | GET | `/shop/api/categories` | `categories#index` | PUBLIC | **none** (skip API key) | resolved | catalog public | no | no | OK | `categories_controller.rb:6`, `rack_attack.rb` | public catalog; `shop/categories` 60/min per IP |
+| 5a | POST | `/shop/api/environment_events` | `environment_events#create` | PUBLIC | **none** (skip API key; sendBeacon) | resolved | write-only, enum-флаги, точка с сервера | no | no | OK | `environment_events_controller.rb`, `shop_environment_events_body_limit.rb`, `rack_attack.rb` | тело ≤2 КБ до Rails; `shop/environment_events/ip` 30/min; чтения через API нет |
 | 6 | GET | `/shop/api/frequent_products` | `frequent_products#index` | GUEST | mixed | resolved | GuestCustomerResolver; empty if no customer | optional | no | OK | `frequent_products_controller.rb:8-24` | — |
 | 7 | GET | `/shop/api/products` | `products#index` | PUBLIC | mixed | resolved | catalog scope | no | no | OK | `products_controller.rb:6-37` | — |
 | 8 | GET | `/shop/api/products/:id` | `products#show` | PUBLIC | mixed | resolved | catalog scope | no | no | OK | `products_controller.rb:40-47` | — |

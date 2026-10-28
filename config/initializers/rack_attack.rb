@@ -170,7 +170,7 @@ class Rack::Attack
   # TASK_112: снимок окружения — одно событие на вкладку; запас на общий Wi-Fi точки.
   # IP — только ключ счётчика, в таблицу не пишется.
   throttle("shop/environment_events/ip", limit: 30, period: 1.minute) do |req|
-    req.ip if req.post? && req.path == "/shop/api/environment_events"
+    req.ip if req.post? && ShopEnvironmentEventsBodyLimit::PATH.match?(req.path)
   end
 
   # Лимит для shop API: 150 запросов в минуту с одного IP
