@@ -1,3 +1,77 @@
+# todo — TASK_90 Патч 2: default ≠ denied (очередь, шаг 6)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_90 § Патч 2](../milestones/veha_2/requirements/customer_tasks/TASK-90-Восстановление-WebPush-после-запрета-уведомлений.md#патч-2-2026-10-18) — Subtask 1, 1b, 8 (patch v2) · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 6 · [Google Doc](https://docs.google.com/document/d/1YtZzj-Lf2HHrM4azejIuZISTKsWdu8q6y-kPHvm_d44/edit) |
+| **Не в scope** | регистрация токена, `/push/register`, VAPID, Service Worker · `orderStatusCtaMachine.js` · iOS / Wallet · `resumePushAfterSettings` (только `armed` + `granted`) · случай «нет Notification API» (TASK_109) · известные ограничения 1–3 Патча 2 · удаление тестов `denied → settings` · TEMP DIAG (TASK_108) · текст/поведение `OrderStatus.svelte` |
+| **Статус** | SPEC |
+
+## SBR
+
+- [x] intake `7f7c5ff7` — Патч 2 дословно, CBR #90, очередь 6 → `in_progress`
+- [x] SPEC — факты патча = код, сдвигов нет (ниже) · решения · файлы · Не ломать · Проверка
+- [ ] RED
+- [ ] GREEN
+- [ ] `/regress`
+- [ ] `/review` (bugbot + security + crit-audit, COMPONENT_MAP, Entire, push, CI)
+
+## Сверка фактов (SPEC 2026-10-28)
+
+| Документ | Код | Итог |
+|---|---|---|
+| `firebasePush.js:95-106` — любой не-`granted` → `reason: "denied"` | `:95-99` `requestPermission`, `:104-106` `if (permission !== "granted") return { ok: false, reason: "denied", permission }` | ✅ |
+| `firebasePush.js:57-59` — инвариант TASK_99 | `:57-59` комментарий «`requestPermission()` первый async-вызов» | ✅ |
+| `ActiveOrdersAccordion.svelte:278-282` — панель «запрещены» | `:278-283` `result?.openSettings` → `pushRecovery = true` → `:339-371` блок `PUSH_DENIED_TOAST` + «Открыть настройки» | ✅ |
+| `OrderStatus.svelte:116-117` — состояние `error` | `app/frontend/routes/OrderStatus.svelte` (в документе без папки) `:113-118`: `denied` → `pushState = "denied"`, иначе → `"error"`; баннер «Разрешить уведомления» скрыт только при `registered` (`:291`) | ✅ — новое значение `reason` уйдёт в `"error"`, кнопка останется |
+| `orderStatusNotifyActions.js:226` — нет `await` до `register` | `:226-228` | ✅ |
+| `orderStatusNotifyActions.js:176-180, 190-191` — Android intent | `:176-180` intent, `:190-191` комментарий «всегда даём ручную инструкцию» | ✅ (ограничение 2, не в scope) |
+| тесты `order_status_push_subscribe_test.mjs:350-357`, `:399-409`, `:483-495` — не менять | `:350-359` (Патч 1, регулярки), `:399-409` (синхронный `requestPermission`), `:483-495` (путь аккордеона, `denied`) | ✅ не трогаем |
+
+**Находки:**
+- `subscribeOrderPush` (`orderStatusNotifyActions.js:239-256`): кроме `denied` все `reason` уходят в «Не удалось включить уведомления. Проверьте сеть.» → без новой ветки `default` покажет гостю «Проверьте сеть» — ветка нужна.
+- Охранный тест `order_status_push_subscribe_test.mjs:430-444` (цикл `denied`/`default`) сейчас **требует** `default` → `reason: "denied"` — это и есть поведение, которое патч меняет; в список «не менять» не входит → переписываем явно на RED (`default` → новый `reason`), `denied` — как было.
+- В `package.json` нет `npm test` / `lint` / `typecheck` (из «Проверки» документа) → JS-тесты — `node --test`, сборка Svelte — `npm run vite:build`; typecheck в проекте нет.
+- Лимит размера: `ActiveOrdersAccordion.svelte` 610 строк, `orderStatusNotifyActions.js` 333 — уже > 200; патч добавляет ≤ 15 строк, сплит вне scope (переписывать запрещено документом) → не делаем.
+
+## Решения
+
+1. **`firebasePush.js:104-106`:** `permission === "denied"` → `reason: "denied"` (как было); любой другой не-`granted` (`"default"`, `undefined` у старых браузеров) → `reason: "dismissed"`; `permission` в ответе — как было. Правка после `requestPermission`, порядок вызовов не меняется (инвариант TASK_99).
+2. **`orderStatusNotifyActions.js`:** экспорт `PUSH_NOT_ENABLED_TOAST = "Уведомления не включены"`; в `subscribeOrderPush` ветка `reason === "dismissed"` → `{ ok: false, isLoading: false, primaryLabel: idle, error: "dismissed", notice: PUSH_NOT_ENABLED_TOAST }` **без** `openSettings`; тост только для внедрённого `registerShopPushImpl` (как у `denied`, не затирать TEMP DIAG внутри вызова).
+3. **`ActiveOrdersAccordion.svelte` `onAction("push")`:** `result.notice` → `toastMsg = result.notice`, `toastOpensSettings = false`, `pushRecovery` не включается → обычный тост `active-order-notify-toast` (`:384-385`), кнопка «🔔 Уведомление о готовности» остаётся активной. В этом случае текст заменяет лог TEMP DIAG — так же, как сейчас при `denied` (`:280` `toastMsg = ""`).
+4. **`OrderStatus.svelte`:** не меняем — `dismissed` → `pushState = "error"`, кнопка «Разрешить уведомления» остаётся; охранный тест по исходнику.
+5. `resumePushAfterSettings` не трогаем: при `dismissed` `pushRecovery` не включается → `armed = false` → автоподписки нет (как требует Патч 1).
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/lib/firebasePush.js` — `reason: "dismissed"` для не-`denied` (решение 1).
+2. `app/frontend/lib/orderStatusNotifyActions.js` — `PUSH_NOT_ENABLED_TOAST`, ветка `dismissed` в `subscribeOrderPush` (решение 2).
+3. `app/frontend/components/ActiveOrdersAccordion.svelte` — нейтральный тост вместо recovery при `notice` (решение 3).
+4. `test/javascript/order_status_push_subscribe_test.mjs` — RED: `:430-444` `default` → `dismissed`; `subscribeOrderPush` при `dismissed` (без `openSettings`, тост «Уведомления не включены», CTA idle, не «Проверьте сеть»); путь аккордеона с реальным `registerShopPush` и `default` (синхронный `requestPermission`, `error: "dismissed"`); исходник аккордеона: `notice` → тост, без `pushRecovery`; охранные: `denied` → recovery как было, `OrderStatus.svelte` `else` → `"error"` и кнопка не скрыта, копирайт не содержит «запрещены».
+
+Соседи (только чтение / регрессия): `app/frontend/routes/OrderStatus.svelte` (второй потребитель `registerShopPush`, решение 4) · `test/javascript/active_orders_accordion_test.mjs` (recovery-панель `#92`) · `test/javascript/push_environment_test.mjs` (`notification_state` не зависит от `reason`).
+
+## Не ломать
+
+- `denied` → recovery: «Уведомления запрещены…», «Открыть настройки», «Смотреть готовность», fallback-инструкция (TASK_90, Subtask 1b).
+- Возврат из настроек: `resumePushAfterSettings` — только `armed` + `granted`, полная цепочка `denied → settings → granted → registerShopPush` (TASK_90 Патч 1).
+- Инвариант TASK_99: `requestPermission` синхронно первым — `:399-409`, `:483-495`; `granted` → Firebase → `/push/register` как было.
+- Экран `#/order/:id` (`OrderStatus.svelte`): кнопка «Разрешить уведомления» после отказа/закрытия остаётся; статусы и CTA заказа (`orderStatusCtaMachine.js`) не меняются · COMPONENT_MAP строки `ActiveOrdersAccordion`, `orderStatusNotifyActions.js`, `firebasePush.js`.
+
+## Проверка
+
+- `node --test test/javascript/order_status_push_subscribe_test.mjs test/javascript/active_orders_accordion_test.mjs test/javascript/push_environment_test.mjs`
+- `node --test test/javascript/` (вся JS-зона; известные legacy-fail — ISSUES: `payment_error_matrix`, `repeat_invalid_token_payment`, `sticky_cancel #41`, `email_collection`, `order_action_buttons_cancel`) · `npm run vite:build`
+
+## DoD
+
+- Subtask 1 (patch v2): закрыли диалог без выбора → нет блока «запрещены» и «Открыть настройки», кнопка подключения доступна, тост «Уведомления не включены».
+- Subtask 1b: `denied` → recovery как TASK_90 + Патч 1.
+- Subtask 8: тесты различают `default` и `denied`; тест `denied → settings` сохранён; тесты синхронного пути TASK_99 зелёные.
+- COMPONENT_MAP — решение на `/review` (вероятно да: строки `ActiveOrdersAccordion` / `orderStatusNotifyActions.js` — новая граница `dismissed` ≠ recovery).
+- Fly MCP Point A — после 🚀 2 (системный диалог в headless не закрыть «без выбора» — проверка тостом через подмену `Notification.requestPermission` в CDP).
+
+---
+
 # todo — TASK_120 Патч 1: гонка cookie-сессии затирает сброс корзины (после 🚀 1)
 
 | Поле | Значение |
