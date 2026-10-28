@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-28 (очередь Push + SMS: шаг 3 TASK_92 Патч 2 — done)  
+**Дата:** 2026-10-28 (очередь Push + SMS: шаг 4 TASK_115 — intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь 4 intake** (2026-10-28) · Google Docs MCP OK (`1cEfAVf…`, одна вкладка) · TASK_115 v4 (2026-10-25) · новый `customer_tasks/TASK-115-CODE-BLACK-явное-членство-точек-в-сети.md` (текст 1:1) · CBR #115 · очередь 4 → `in_progress` · сверка шапки (п. 4): «Зависит от»/«Порядок сборки» нет, «Статус» (Build: миграция, форма, журнал; клиентский контекст ждёт E = TASK_119) = строка очереди · R6: по умолчанию не в сети, существующие точки отмечает владелец · миграция → Migration Gate на `/spec` · факты файл:строка (`schema.rb:1380-1396,26-42`, `tenants_controller.rb:13,17-63,88-130,146-151`, `_form.html.erb`, `tenant.rb:9-14,40,63-69`, политики, `user.rb:74-76`) не сверялись | `/spec` шага 4 |
 | **Очередь 3 done** (2026-10-28) · Entire `01M6130ZX1S5EKZZHHR9PCT2X5` (attach `28acbb46 --force`, ops-коммит переписан до push → `3dc5f126`, `explain HEAD` не пустой) · push `77959fd4..3dc5f126` · **CI green** [40677574862](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40677574862) — 5 jobs, test 2342 runs 0 F/E 1 skip + Semgrep/CodeQL · очередь 3 → `done` · Fly MCP — после 🚀 1 · [todo](todo.md) | новый чат → `/start` → шаг 4 TASK_115 |
 | **Очередь 3 REVIEW** (2026-10-28) · security 0 medium+ (опционально: tenant-guard на `MobileCustomer.find_by` — до патча, backlog) · bugbot: 1-й прогон по диффу develop↔main (3084 файла) пропустил оба файла задачи → повтор `Diff: natural language` по 2 файлам → 0 · crit-audit CLEAN `d687c6e8..6d95763e` (`c0fed5af`, `last_audited_sha` → `6d95763e`; C1: тот же запрос `order_status_logs`, C4: `call` под `rescue StandardError`) · COMPONENT_MAP: да — строка `OrderStatusPushNotifier + OrderStatusPushPayload`, пометка `opts.tag` у `swNotificationActions` (`5a5619aa`) · CBR #92 → REVIEW · Entire attach текущей сессии на незапушенный HEAD · Fly MCP — после 🚀 1 · [todo](todo.md) | push → CI → очередь 3 `done` |
 | **Очередь 3 /regress PASS** (2026-10-28) · зона: push о статусе заказа + все пути отмены (гость, бариста, смена статуса) + ready-путь Патча 1 · Rails 28 файлов 268/0 · JS 5 файлов 66/67 — 1 fail `applyStickyCancelSuccess #41` = известный legacy (ISSUES, с TASK_106), фронт не менялся · полный `test/integration/shop/` — CI · Fly MCP — после 🚀 1 · [todo](todo.md) | `/review` (Entire attach до push) |
