@@ -4,7 +4,7 @@
 **Источник:** Google Doc Spec (v5, 2026-10-25)  
 **Артефакты:** `docs/operations/milestones/veha_2/artifacts/production_rls_verify/`  
 **Google Doc:** https://docs.google.com/document/d/1-YuCzTQCuGP_Mvioctw0lCQT1IOtzf1_0lsnZGVXXaA/edit  
-**Статус:** этап 1 (только чтение) — шаг 0.4 очереди, в работе · этап 2 (исправления) — шаг 13a очереди, только если этап 1 покажет, что RLS действует; текст этапа 2 формулирует заказчик
+**Статус:** этап 1 (только чтение) — **done** 2026-10-28 (шаг 0.4): RLS в production не действует — [PROD_QUERIES_RESULT](../../artifacts/production_rls_verify/PROD_QUERIES_RESULT.md), [CODE_BYPASS_INVENTORY](../../artifacts/production_rls_verify/CODE_BYPASS_INVENTORY.md) · этап 2 (исправления) — шаг 13a очереди, только если этап 1 покажет, что RLS действует; текст этапа 2 формулирует заказчик
 
 ---
 

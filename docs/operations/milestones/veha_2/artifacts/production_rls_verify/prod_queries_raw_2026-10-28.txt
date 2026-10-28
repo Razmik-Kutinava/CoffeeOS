@@ -1,0 +1,144 @@
+default_transaction_read_only=on
+=== Q1 rows=1
+rolname	rolsuper	rolbypassrls
+neondb_owner	false	true
+=== Q2 rows=98
+relname	owner	relrowsecurity	relforcerowsecurity
+admin_audit_logs	neondb_owner	false	false
+ar_internal_metadata	neondb_owner	false	false
+billing_plans	neondb_owner	false	false
+billing_subscriptions	neondb_owner	false	false
+blog_categories	neondb_owner	false	false
+blog_posts	neondb_owner	false	false
+card_binding_attempts	neondb_owner	false	false
+cash_shifts	neondb_owner	false	false
+categories	neondb_owner	false	false
+device_sessions	neondb_owner	false	false
+devices	neondb_owner	false	false
+feature_flags	neondb_owner	false	false
+feature_flags_logs	neondb_owner	false	false
+fiscal_receipts	neondb_owner	false	false
+ingredient_tenant_stocks	neondb_owner	false	false
+ingredients	neondb_owner	false	false
+kiosk_carts	neondb_owner	false	false
+kiosk_sessions	neondb_owner	false	false
+kiosk_settings	neondb_owner	false	false
+loyalty_accounts	neondb_owner	false	false
+loyalty_transactions	neondb_owner	false	false
+marketing_events	neondb_owner	false	false
+menu_types	neondb_owner	false	false
+mobile_carts	neondb_owner	false	false
+mobile_customers	neondb_owner	false	false
+mobile_otp_codes	neondb_owner	false	false
+mobile_payment_methods	neondb_owner	false	false
+mobile_sessions	neondb_owner	false	false
+modifier_option_recipes	neondb_owner	false	false
+modifier_option_tenant_settings	neondb_owner	false	false
+order_cancel_reasons	neondb_owner	false	false
+order_emails	neondb_owner	false	false
+order_feedback	neondb_owner	false	false
+order_items	neondb_owner	false	false
+order_notification_logs	neondb_owner	true	false
+order_status_logs	neondb_owner	false	false
+order_wallet_passes	neondb_owner	false	false
+orders	neondb_owner	false	false
+organizations	neondb_owner	false	false
+payment_polling_attempts	neondb_owner	false	false
+payment_status_logs	neondb_owner	false	false
+payments	neondb_owner	false	false
+pickup_calls	neondb_owner	false	false
+pickup_display_settings	neondb_owner	false	false
+pickup_events	neondb_owner	false	false
+point_campaign_settings	neondb_owner	true	false
+prep_kitchen_sales_point_links	neondb_owner	true	false
+product_menu_visibilities	neondb_owner	false	false
+product_modifier_groups	neondb_owner	false	false
+product_modifier_options	neondb_owner	false	false
+product_price_histories	neondb_owner	false	false
+product_recipes	neondb_owner	false	false
+product_tenant_settings	neondb_owner	false	false
+production_batches	neondb_owner	false	false
+production_recipes	neondb_owner	false	false
+products	neondb_owner	false	false
+promo_code_usages	neondb_owner	false	false
+promo_codes	neondb_owner	false	false
+push_notifications	neondb_owner	false	false
+refunds	neondb_owner	false	false
+roles	neondb_owner	false	false
+schema_migrations	neondb_owner	false	false
+sessions	neondb_owner	false	false
+shift_cash_operations	neondb_owner	false	false
+shift_staffs	neondb_owner	false	false
+shifts	neondb_owner	false	false
+shop_api_keys	neondb_owner	true	false
+shop_customer_favorites	neondb_owner	true	false
+shop_email_otp_codes	neondb_owner	false	false
+shop_email_verifications	neondb_owner	false	false
+solid_cable_messages	neondb_owner	false	false
+solid_cache_entries	neondb_owner	false	false
+solid_queue_blocked_executions	neondb_owner	false	false
+solid_queue_claimed_executions	neondb_owner	false	false
+solid_queue_failed_executions	neondb_owner	false	false
+solid_queue_jobs	neondb_owner	false	false
+solid_queue_pauses	neondb_owner	false	false
+solid_queue_processes	neondb_owner	false	false
+solid_queue_ready_executions	neondb_owner	false	false
+solid_queue_recurring_executions	neondb_owner	false	false
+solid_queue_recurring_tasks	neondb_owner	false	false
+solid_queue_scheduled_executions	neondb_owner	false	false
+solid_queue_semaphores	neondb_owner	false	false
+stock_movement_items	neondb_owner	false	false
+stock_movements	neondb_owner	false	false
+subscription_offer_settings	neondb_owner	true	false
+subscription_offer_states	neondb_owner	false	false
+subscription_plans	neondb_owner	false	false
+subscription_usage_events	neondb_owner	false	false
+subscriptions	neondb_owner	false	false
+supply_order_items	neondb_owner	false	false
+supply_orders	neondb_owner	false	false
+tenant_invitations	neondb_owner	false	false
+tenant_weekday_schedules	neondb_owner	true	false
+tenants	neondb_owner	true	false
+tv_board_settings	neondb_owner	false	false
+user_roles	neondb_owner	false	false
+users	neondb_owner	false	false
+=== Q3 rows=16
+tablename	policyname	permissive	roles	cmd	qual	with_check
+devices	rls_devices_token_lookup	PERMISSIVE	{public}	SELECT	(NULLIF(current_setting('app.device_token_lookup'::text, true), ''::text) = 'on'::text)	
+ingredient_tenant_stocks	rls_stock_isolation	PERMISSIVE	{public}	ALL	((tenant_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid) OR (EXISTS ( SELECT 1 FROM (user_roles ur JOIN roles r ON ((ur.role_id = r.id))) WHERE ((ur.user_id = (NULLIF(current_setting('app.current_user_id'::text, true), ''::text))::uuid) AND ((r.code)::text = ANY ((ARRAY['ук_global_admin'::character varying, 'general_manager'::character varying, 'prep_kitchen_manager'::character varying])::text[]))))))	
+order_notification_logs	rls_order_notification_logs_isolation	PERMISSIVE	{public}	ALL	((tenant_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid) OR (EXISTS ( SELECT 1 FROM (user_roles ur JOIN roles r ON ((ur.role_id = r.id))) WHERE ((ur.user_id = (NULLIF(current_setting('app.current_user_id'::text, true), ''::text))::uuid) AND ((r.code)::text = ANY ((ARRAY['ук_global_admin'::character varying, 'franchise_manager'::character varying])::text[]))))))	((tenant_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid) OR (EXISTS ( SELECT 1 FROM (user_roles ur JOIN roles r ON ((ur.role_id = r.id))) WHERE ((ur.user_id = (NULLIF(current_setting('app.current_user_id'::text, true), ''::text))::uuid) AND ((r.code)::text = ANY ((ARRAY['ук_global_admin'::character varying, 'franchise_manager'::character varying])::text[]))))))
+orders	rls_orders_shop_city_lookup	PERMISSIVE	{public}	SELECT	(NULLIF(current_setting('app.shop_city_lookup'::text, true), ''::text) = 'on'::text)	
+payments	rls_payments_isolation	PERMISSIVE	{public}	ALL	((tenant_id = (current_setting('app.current_tenant_id'::text))::uuid) OR ((current_setting('app.current_user_id'::text, true) IS NOT NULL) AND (EXISTS ( SELECT 1 FROM ((user_roles ur JOIN roles r ON ((r.id = ur.role_id))) JOIN users u ON ((u.id = ur.user_id))) WHERE ((ur.user_id = (current_setting('app.current_user_id'::text))::uuid) AND ((r.code)::text = 'franchise_manager'::text) AND (u.organization_id = ( SELECT tenants.organization_id FROM tenants WHERE (tenants.id = payments.tenant_id))))))))	
+point_campaign_settings	rls_point_campaign_settings_isolation	PERMISSIVE	{public}	ALL	((point_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid) OR (EXISTS ( SELECT 1 FROM (user_roles ur JOIN roles r ON ((ur.role_id = r.id))) WHERE ((ur.user_id = (NULLIF(current_setting('app.current_user_id'::text, true), ''::text))::uuid) AND ((r.code)::text = 'ук_global_admin'::text)))))	
+prep_kitchen_sales_point_links	rls_prep_kitchen_sales_point_links	PERMISSIVE	{public}	ALL	((prep_kitchen_tenant_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid) OR (sales_point_tenant_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid))	((prep_kitchen_tenant_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid) OR (sales_point_tenant_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid))
+product_tenant_settings	rls_pts_isolation	PERMISSIVE	{public}	ALL	((tenant_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid) OR (EXISTS ( SELECT 1 FROM (user_roles ur JOIN roles r ON ((ur.role_id = r.id))) WHERE ((ur.user_id = (NULLIF(current_setting('app.current_user_id'::text, true), ''::text))::uuid) AND ((r.code)::text = ANY ((ARRAY['ук_global_admin'::character varying, 'general_manager'::character varying, 'franchise_manager'::character varying])::text[]))))))	
+shop_api_keys	rls_shop_api_keys_isolation	PERMISSIVE	{public}	ALL	((tenant_id IS NOT NULL) AND (tenant_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid))	((tenant_id IS NOT NULL) AND (tenant_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid))
+shop_api_keys	rls_shop_api_keys_lookup	PERMISSIVE	{public}	ALL	(NULLIF(current_setting('app.shop_api_key_lookup'::text, true), ''::text) = 'on'::text)	(NULLIF(current_setting('app.shop_api_key_lookup'::text, true), ''::text) = 'on'::text)
+shop_customer_favorites	rls_shop_customer_favorites_isolation	PERMISSIVE	{public}	ALL	(tenant_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid)	(tenant_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid)
+subscription_offer_settings	rls_subscription_offer_settings_isolation	PERMISSIVE	{public}	ALL	((point_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid) OR (EXISTS ( SELECT 1 FROM (user_roles ur JOIN roles r ON ((ur.role_id = r.id))) WHERE ((ur.user_id = (NULLIF(current_setting('app.current_user_id'::text, true), ''::text))::uuid) AND ((r.code)::text = 'ук_global_admin'::text)))))	
+tenant_weekday_schedules	rls_tenant_weekday_schedules_isolation	PERMISSIVE	{public}	ALL	((tenant_id = (NULLIF(current_setting('app.current_tenant_id'::text, true), ''::text))::uuid) OR (EXISTS ( SELECT 1 FROM (user_roles ur JOIN roles r ON ((ur.role_id = r.id))) WHERE ((ur.user_id = (NULLIF(current_setting('app.current_user_id'::text, true), ''::text))::uuid) AND ((r.code)::text = 'ук_global_admin'::text)))))	
+tenants	rls_tenants_shop_city_lookup	PERMISSIVE	{public}	SELECT	((NULLIF(current_setting('app.shop_city_lookup'::text, true), ''::text) = 'on'::text) AND ((status)::text = 'active'::text) AND ((type)::text = 'sales_point'::text))	
+user_roles	rls_user_roles_auth_login	PERMISSIVE	{public}	SELECT	(NULLIF(current_setting('app.auth_login'::text, true), ''::text) = 'on'::text)	
+users	rls_users_auth_login	PERMISSIVE	{public}	SELECT	(NULLIF(current_setting('app.auth_login'::text, true), ''::text) = 'on'::text)	
+=== Q4 rows=20
+version
+20261005140000
+20261005120000
+20260929150000
+20260929120000
+20260926190000
+20260918123500
+20260918123000
+20260909120000
+20260905120000
+20260904180001
+20260904180000
+20260904160000
+20260904140000
+20260904120100
+20260904120000
+20260831160000
+20260831150000
+20260831140000
+20260831120000
+20260827180200
