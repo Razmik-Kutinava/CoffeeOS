@@ -8,7 +8,7 @@
 
 **last_audited_sha:** `aa525f50` (TASK_112 снимок окружения витрины + фиксы review)  
 **last_audit_date:** 2026-10-28  
-**last_verdict:** `CLEAN` (CI pending — до push)
+**last_verdict:** `CLEAN` (CI green [40662246296](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40662246296) на `61e53c83`)
 
 ## Статусы
 
