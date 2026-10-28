@@ -191,6 +191,7 @@ INTEGRATIONS.md Update
 - TASK-049 / TASK-048 в ТЗ заказчика = наша нумерация **#67 / #66**. Не плодить TASK-* в коде.
 - Пути заказчика `src/components/**`, `src/routes/**`, `src/styles/**`, `src/lib/**`, `src/app.css`, `prisma/schema.prisma`, `npm test tests/integration/.test.ts`, `npx tsc --noEmit` — чужой стек. Канон CoffeeOS: `app/frontend/**` (Svelte) + `node --test test/javascript/*.mjs`. Prisma / tsc / backend API — **не трогать**.
 - #66 уже даёт runtime: `shopWebView.js`, `--shop-vvh`, `viewport-fit=cover`, storage fallback. Эта задача **потребляет** `--shop-vvh` в layout (CartSheet/`vh`, Header, catalog padding). Не решать заново CORS/CSP/API/tenant/bot.
+- 2026-10-15: в рантайме подключён только try/catch, memory fallback не подключён; см. TASK-STORAGE-FALLBACK-EXT
 - `CartSheet.svelte` >700 строк — **не раздувать**. Высота/keyboard/safe-area → новый `shopWebViewLayout.js`; шторка только подставляет px.
 - Канон одной шторки (`coffeeos-cart-sheet`): не второй `position:fixed` низ; peek/expanded/CTA — секции одной колонки.
 - Catalog скролл = `window` + `handleCatalogScroll` (peek/hidden). Внутренний overflow шторки ≠ lock body так, чтобы сломать этот скролл.

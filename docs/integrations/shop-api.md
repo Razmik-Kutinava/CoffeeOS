@@ -226,6 +226,8 @@ Bootstrap: HTML содержит `shop-boot-skeleton`; единственный 
 | visualViewport / keyboard | `--shop-vvh` + `viewport-fit=cover` |
 | WebView UI (#67) | `app/frontend/lib/shopWebViewLayout.js` · CartSheet/Header в px visual viewport |
 
+2026-10-15: в рантайме подключён только try/catch, memory fallback не подключён; см. TASK-STORAGE-FALLBACK-EXT
+
 - Origin витрины = origin API → CORS не расширяем.
 - CSP: `connect-src 'self'` (+ банк). `telegram.org` SDK не подключаем.
 - Identity: WebView **не** подменяет `user_id`; `tenant_id` только по контракту #65 (query > meta; не client-only cache).
