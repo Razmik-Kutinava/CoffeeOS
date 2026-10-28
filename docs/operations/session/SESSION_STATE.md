@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-28 (очередь Push + SMS: шаг 5 TASK_120 — REVIEW)  
+**Дата:** 2026-10-28 (очередь Push + SMS: шаг 5 TASK_120 — done)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь 5 done** (2026-10-28) · push `ea5a61ae..49b5f18d` · **CI green** [40700814429](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40700814429) — test 2378 runs 0 F/E 1 skip + system-test, lint, scans · Semgrep/CodeQL green · Entire `01M61CJD6YJ7SMNN8W8D8HJZ9B` на `0d31c7f8` · очередь 5 → `done` · COMPONENT_MAP: да (`cartSheetStore`) · Fly MCP — после 🚀 1 · [todo](todo.md) | 🚀 1 по апруву → новый чат → `/start` → шаг 6 |
 | **Очередь 5 REVIEW** (2026-10-28) · bugbot 0 (повтор по 4 файлам задачи; первый прогон по develop↔main пропустил задачу; 1 находка удалена валидатором) · security 0 medium+ · crit-audit CLEAN `205465e5..a694f98b` → `9ef89028` · COMPONENT_MAP `cartSheetStore` · Entire `01M61CJD6YJ7SMNN8W8D8HJZ9B` на `0d31c7f8` · CBR #120 → REVIEW · backlog: метка в `OrderCreator#clear_cart!`, две вкладки разных точек · [todo](todo.md) | push → CI green → очередь 5 `done` |
 | **Очередь 5 /regress PASS** (2026-10-28) · зона: shop API + корзина + оплата §2.3 + RLS · `test/integration/shop/api/` + `order_creator` + корзина ×3 + RLS → 366 runs, 1 F `email_otp_tenant_isolation_test.rb:34` (предусловие опиралось на общую корзину A→B; теперь «Корзина пуста» раньше проверки email) → товар кладётся и в B, проверка email та же → 7/0 · шторка/корзина/повторы 33 файла 244/0 · прочие потребители `cart/add` 15 файлов 74/0 · JS 7 файлов 54/0 · полный `test/integration/shop/` — CI · Fly MCP — после 🚀 1 · Entire attach — на `/review` до push · [todo](todo.md) | `/review` |
 | **Очередь 5 GREEN** (2026-10-28) · RED `2d653fb6` (Rails 18: 6 F, 7 E; JS 10: 7 fail) → GREEN `cfa6f721` · `CartService` метка `:shop_cart_tenant_id` + сброс в `initialize` + `tenant_reset?` · контроллер — один сервис на запрос, `cart_reset: true` · `cartSheetStore.js` / `shopCartAdd.js` — сообщение, событие `shop:cart-reset`, `DELETE /cart` при «Товар недоступен» · задача 18/0 + JS 10/0 · соседи 89/0 + JS 21/0 · rubocop 0 · vite OK · **Entire: пусто** → attach на `/review` до push · не запушено · [todo](todo.md) | `/regress` |
