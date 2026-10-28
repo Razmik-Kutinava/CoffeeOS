@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-28 (очередь Push + SMS: шаг 1 TASK_112 — GREEN)  
+**Дата:** 2026-10-28 (очередь Push + SMS: шаг 1 TASK_112 — /regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь 1 /regress PASS** (2026-10-28) · зона: старт витрины + shop API + Rack::Attack + схема · JS 8 файлов 97/0 · Rails 24 файла 145/0 (1 skip Redis) — исходные тесты `App.svelte`/bootstrap ×8, Rack::Attack ×6, shop API ×6, модель/сервис, RLS ×2 · Fly MCP — после 🚀 1 (данные на проде + телефоны) · Entire attach — на `/review` · [todo](todo.md) | `/review` |
 | **Очередь 1 GREEN** (2026-10-28) · RED `01753c2c` → GREEN `277fcf5c` · `pushEnvironment.js` + `shopTenantRedirectPending()` + 1 вызов в `App.svelte` · миграция `20261028120000` (dev up/down/up OK; `schema.rb` — только таблица + версия, шум рендера CHECK локального PG не взят) · `POST /shop/api/environment_events` (без авторизации гостя, 413 > 2 КБ, битый JSON → 422) · Rack::Attack 30/мин/IP · Local: JS 47/0 · vite OK · Rails 26/0 + соседи 31/0 · rubocop 0 · **Entire: пусто** (`no trailer`; Entire видит только сессию `3ec3bda8` шага 0.3, текущий чат не зарегистрирован, транскриптов нет) → attach на `/review` до push · не запушено | `/regress` |
 | **Очередь 1 SPEC** (2026-10-28) · факты = код (сдвиги: `base_controller.rb:19-38`, `subscriptionOffer.js:102-150`) · пробел: `bootstrapShopTenant` возвращает `cfg` и при `navigateToTenant` (`shopTenantHeader.js:186-194`) → решение владельца: флаг + геттер `shopTenantRedirectPending()` · rate-limit = Rack::Attack `shop/environment_events/ip` 30/мин · Metabase нет → только view `v_shop_environment_events`, Q4 · `schema.rb` не хранит view → SQL-константа в модели, тест создаёт view в транзакции · `npm test/lint/typecheck` нет → `node --test` + `npx vite build` · Migration Gate **go** (таблица `shop_environment_events`, CHECK, индекс `point_id,created_at`, без FK/RLS; down = drop view + table) · COMPONENT_MAP — нет · [todo](todo.md) | `/sbr` |
 | **Очередь 1 intake** (2026-10-28) · Google Docs MCP OK · TASK_112 (версии/даты в документе нет) · новый `customer_tasks/TASK-112-Снимок-окружения-при-открытии-витрины.md` (текст 1:1) · CBR #112 · очередь 1 → `in_progress` · сверка шапки (п. 4): «Зависит от»/«Порядок сборки» в документе нет, «Документ готов к билду» = очередь · метки: TASK-PUSH-ENV-SNAPSHOT = 112, TASK-IOS-PUSH-PATH = 111, TASK-STORAGE-FALLBACK-EXT = 114, Д7a = 109 · миграция → Migration Gate на `/spec` · таблица без RLS (прецедент `marketing_events`, решение владельца 2026-10-15) · факты файл:строка, rate-limit (Subtask 7), Metabase — не сверялись | `/spec` шага 1 |
