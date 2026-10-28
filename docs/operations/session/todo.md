@@ -1,3 +1,73 @@
+# todo — TASK_115: CODE:BLACK — явное членство точек в сети (очередь, шаг 4)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_115](../milestones/veha_2/requirements/customer_tasks/TASK-115-CODE-BLACK-явное-членство-точек-в-сети.md) v4, Subtask 1–13 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 4 · [Google Doc](https://docs.google.com/document/d/1cEfAVfO7mL39eBpWtRMTwYPvQIkHGHC_-vaAzCmOf8c/edit) |
+| **Не в scope** | потребители признака (история CODE:BLACK — TASK_116, SMS-ссылка — TASK_118) · чтение признака из клиентского контекста и RLS-политики `tenants` (TASK_119) · `CustomerTenantHistory` (переключатель точек по городу) · проверка статуса точки витриной (`shop/api/base_controller.rb:27`, `tenant_resolution.rb:27`) · роли, авторизация, `TenantPolicy`/`PlatformPolicy` · `TenantOnboarding::Provision` · журнал изменений других полей точки · карточка точки (`show`) · сплит `TenantsController` (backlog) |
+| **Статус** | SPEC · Migration Gate **go** (владелец 2026-10-28) |
+
+## SBR
+
+- [x] intake `d7aaca1b` (ТЗ v4 дословно, CBR #115, очередь 4 → `in_progress`)
+- [x] SPEC — факты документа совпали с кодом (сдвиг только в `schema.rb`), решения ниже, файлы, Не ломать, Проверка · Migration Gate go · контроллер >200 строк — разовое исключение (решение владельца)
+- [ ] RED
+- [ ] GREEN
+- [ ] `/regress`
+- [ ] `/review`
+
+## Факт (сверка 2026-10-28) — поведение кода = документ
+
+- `db/schema.rb`: `admin_audit_logs` `:26-44` (`action` ≤ 50, `actor_id`, `entity_type/id`, `details` jsonb, `tenant_id` NOT NULL, FK на `tenants` с cascade `:1476`); `organizations` `:692-698` ✓ · **сдвиг:** `tenants` теперь `:1406-1428` (в документе `:1380-1396`), `organization_id` `:1415`, FK `tenants → organizations` `:1628` (в документе `:1602`) — сместила миграция TASK_112. Признака сети нет.
+- `tenant.rb`: `TYPES`/`STATUSES` `:9-10`, `sales_point?` `:12-14`, `belongs_to :organization, optional: true` `:40`, валидации `:63-69` ✓. `inactive` пишет `prod_single_point_cleanup.rb:55,61` ✓.
+- `platform/tenants_controller.rb`: `new` sales_point/active `:13`, `create` `:17-63`, `update` `:88-130` (транзакция + `Provision.call`), `tenant_params` `:146-151` ✓. Файл 236 строк.
+- `_form.html.erb:1-63` ✓; список `index.html.erb:6-33` — колонки Название/Тип/Статус/Slug/Орг.
+- Доступ: `base_controller.rb:8,38-42` (`require_uk_global_admin`), `platform_policy.rb:6-8`, `tenant_policy.rb:6-32` ✓; `user.rb:74-76` — `roles.exists?(code: "ук_global_admin")` (кириллица «ук»), тесты: `role_codes: %w[ук_global_admin]` ✓. `manager/tenant_context_controller.rb:8-27` — только выбор точки, без правки ✓. Других мест, где контроллер меняет `Tenant`, нет (поиск `update` по `app/controllers`).
+- `AdminAuditLog.log(action:, actor:, entity:, tenant_id:, details:, request_id:)` (`admin_audit_log.rb:14-24`); в `TenantsController` и `tenant_onboarding/` вызовов нет ✓. RLS на `admin_audit_logs` нет ни в миграциях, ни в тестовом bootstrap (`MVP_TABLES`).
+- `shop/api/base_controller.rb:27` `Tenant.find_by(id: tid)` ✓; `shop/concerns/tenant_resolution.rb:27` `Tenant.where(status: "active")` ✓.
+- RLS `tenants`: `20260918123000_…:5-26` — при `app.shop_city_lookup` видны только active `sales_point` ✓ (не FORCE; в prod роль с `BYPASSRLS` — TASK_119).
+- Миграций в ожидании нет; последняя `20261028120000`.
+
+## Решение для билда
+
+1. **Миграция** `AddCodeBlackMemberToTenants`: `tenants.code_black_member boolean NOT NULL DEFAULT false` + CHECK `chk_tenants_code_black_member_sales_point`: `NOT code_black_member OR type = 'sales_point'`. Без индекса (точек единицы). Существующие точки → `false` (Subtask 9, R6). Колонка, а не отдельная таблица: один флаг на точку, история — в `admin_audit_logs`. Откат: снять CHECK → удалить колонку.
+2. **`Tenant`**: `scope :code_black_network` → `where(code_black_member: true, type: "sales_point")` — без `status`, `organization_id`, slug, названия (Subtask 1–5, 12). Валидации: `code_black_member` только `true/false` (nil → ошибка, Subtask 4); `true` при не-`sales_point` → ошибка «Сеть CODE:BLACK — только для точки продаж» (Subtask 11; при смене типа на кухню с включённым признаком — ошибка формы, не тихий сброс). Смена статуса признак не трогает (Subtask 13).
+3. **Новый `Platform::TenantCodeBlackAudit.call(tenant:, actor:, was:, request_id:)`**: если `was != tenant.code_black_member` → `AdminAuditLog.log(action: "tenant_code_black_member_changed", entity: tenant, tenant_id: tenant.id, actor:, details: { field: "code_black_member", from: was, to: now })` (кто — `actor_id`, когда — `created_at`). Иначе ничего (Subtask 7: другие поля журнал не пишут).
+4. **`TenantsController`** (+3–4 строки, разовое исключение из лимита 200): `:code_black_member` в `tenant_params`; `create` — аудит с `was: false`; `update` — `was` запоминается до `update`; вызов внутри той же транзакции, после `sync_point_campaign!` → откат формы откатывает и запись журнала.
+5. **Форма**: чекбокс «Сеть CODE:BLACK» (по умолчанию выключен) с подсказкой — только у `sales_point` (как промо 11₽). **Список**: колонка «CODE:BLACK» — «да» / «—».
+
+## Файлы (ожидаемо)
+
+1. `db/migrate/20261028130000_add_code_black_member_to_tenants.rb` — колонка + CHECK, `down`.
+2. `db/schema.rb` — только колонка, CHECK и версия (шум рендера локального PG не брать).
+3. `app/models/tenant.rb` — scope `code_black_network`, 2 валидации.
+4. `app/services/platform/tenant_code_black_audit.rb` — запись изменения признака в журнал.
+5. `app/controllers/platform/tenants_controller.rb` — permit + вызов аудита в `create`/`update`.
+6. `app/views/platform/tenants/_form.html.erb` + `index.html.erb` — чекбокс и колонка.
+7. Тесты: новый `test/models/tenant_code_black_network_test.rb` (Subtask 1–5, 8, 11–13, CHECK в БД) · `test/controllers/platform/tenants_controller_test.rb` (Subtask 6–11 через HTTP: форма, журнал, права менеджера/франчайзи, кухня → 422, колонка в списке).
+
+Соседи (не меняем, гоняем): `test/integration/rls_tenant_isolation_test.rb` (Migration Gate), `test/integration/platform/b114_tenants_map_index_test.rb` (список точек с картой), `test/models/tenant_slug_validation_test.rb` (валидации `Tenant`), `test/services/shop/customer_tenant_history_test.rb` (выборка точек витриной не изменилась).
+
+## Не ломать
+
+- Создание и правка точки: `Provision` (PTS, shop API ключ один раз), расписание, промо 11₽, откат при сбое `Provision` — `tenants_controller_test.rb` целиком.
+- Список точек с картой — `b114_tenants_map_index_test.rb`.
+- Витрина: переключатель точек по городу и проверка статуса точки не меняются — `customer_tenant_history_test.rb`.
+- Изоляция точек (RLS) — `rls_tenant_isolation_test.rb`.
+
+## Проверка
+
+- `ruby bin/rails test test/models/tenant_code_black_network_test.rb test/controllers/platform/tenants_controller_test.rb`
+- `ruby bin/rails test test/integration/rls_tenant_isolation_test.rb test/integration/platform/b114_tenants_map_index_test.rb test/models/tenant_slug_validation_test.rb test/services/shop/customer_tenant_history_test.rb` + `bundle exec rubocop` по изменённым файлам · миграция: `db:migrate` → `db:rollback` → `db:migrate` локально
+
+## DoD
+
+- Subtask 1–13 тестами (точная строка роли `ук_global_admin`); Не ломать — зелёное.
+- COMPONENT_MAP: не требуется — admin-панель, вне зоны карты.
+- Backlog: сплит `Platform::TenantsController` (236 строк > 200) — `PRACTICES.md`.
+- Fly: после 🚀 1 — колонка в `/admin/tenants`, все точки «—»; точки сети отмечает владелец сам.
+
+---
+
 # todo — TASK_92 Патч 2: push при отмене заказа — tag, текст по инициатору (очередь, шаг 3)
 
 | Поле | Значение |
