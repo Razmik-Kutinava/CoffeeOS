@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-28 (очередь Push + SMS: шаг 4 TASK_115 — done)  
+**Дата:** 2026-10-28 (очередь Push + SMS: шаг 5 TASK_120 — intake)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь 5 intake** (2026-10-28) · Google Docs MCP OK (`1Uz11we…`, одна вкладка) · TASK_120 v3 (2026-10-25) · новый `customer_tasks/TASK-120-Корзина-при-переходе-в-другую-точку.md` (текст 1:1) · CBR #120 · очередь 5 → `in_progress` · сверка шапки (п. 4): «Зависит от»/«Порядок сборки» нет, «Статус: готов к Build» = очередь · метка `TASK-SHOP-CART-ON-TENANT-SWITCH` = 120 (F), `TASK-HISTORY-REPEAT-PRICE-CHECK-EXT` = 121 · миграции в тексте нет (метка точки — в сессии рядом с `:shop_cart`) · зона CartSheet (`cartSheetStore.js`, COMPONENT_MAP:11) → на `/spec` читать COMPONENT_MAP · факты файл:строка (`cart_service.rb:7,19,137,143,146,257,262,281`, `cart_controller.rb:17,30-32`, `shopCartCache.js:7`, `shopTenantHeader.js:141-148,175-193`, `App.svelte:116`, `cartSheetStore.js:257-264`, `session_store.rb:4-7`, `tenant_resolution.rb:13-18`, `order_creator.rb:40`, `cart_service_test.rb:51-59`) не сверялись | `/spec` шага 5 |
 | **Очередь 4 done** (2026-10-28) · push `437c426e..51f6ea34` · **CI green** [40695863759](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40695863759) — 5 jobs (test 2360 runs 0 F/E 1 skip, system-test, lint, scan_ruby, scan_js) + Semgrep/CodeQL · Entire `01M61AQ2PQJTYKM4T3GD4VVVMC` на `1f51d75d` · очередь 4 → `done` · COMPONENT_MAP: нет · Fly MCP — после 🚀 1 · [todo](todo.md) | новый чат → `/start` → шаг 5 TASK_120 |
 | **Очередь 4 REVIEW** (2026-10-28) · bugbot 0 (`Base Branch: origin/develop` — сразу только коммиты задачи) · security 0 medium+ (необязательные советы: потребители сети TASK_116/118 — только через `code_black_network`; автосброс признака при смене типа — UX) · crit-audit CLEAN `6d95763e..205465e5` (`last_audited_sha` → `205465e5`; C3 — тест S10 по 4 ролям; C5 — откат формы откатывает журнал) · COMPONENT_MAP: нет (админка УК) · Entire `01M61AQ2PQJTYKM4T3GD4VVVMC` на `1f51d75d` (attach `0d0ef993 --force`, ops-коммит дополнен до push; `explain HEAD` не пустой) · CBR #115 → REVIEW · Fly MCP — после 🚀 1 · [todo](todo.md) | push → CI → очередь 4 `done` |
 | **Очередь 4 /regress PASS** (2026-10-28) · зона: platform (интеграция, контроллеры, сервисы) + все `test/models` + RLS-тройка + health/tenants, франчайзи, rbac-изоляция, переключатель точек витрины → 369 runs, 0 F/E, 1 skip (`prod_single_point_cleanup_test.rb:65`, нет Point A в тестовой базе) · Fly MCP — после 🚀 1 · Entire attach — на `/review` до push · [todo](todo.md) | `/review` |
