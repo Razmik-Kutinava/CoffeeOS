@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK_92](../milestones/veha_2/requirements/customer_tasks/TASK-92-Production-background-FCM-и-синхронизация-статусов-заказа.md) § «Патч 1: 2026-10-18», Subtask 4–4g · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 2 · [Google Doc](https://docs.google.com/document/d/1GlRrdNGaXuSTTCYEKBN1dem8hB0A0WPnC2w9O_gi-mc/edit) |
 | **Не в scope** | момент постановки claim (C1 остаётся ранним) · колонки в `orders` · payload FCM · каскад и решение об SMS · статусы Barista · `FCM_SIMULATE` · Патч 2 (cancelled) · ActionCable · код Wallet/APNs (только изоляция их ошибок) · endpoint скачивания карты |
-| **Статус** | `/regress` PASS · ждёт `/review` |
+| **Статус** | `/review` — crit-audit CLEAN · push → CI |
 
 ## SBR
 
@@ -13,7 +13,7 @@
 - [x] RED `4acc0f9f` — 45 runs: 1 failure, 24 errors (нет `TransientError`, `release!`, `claim!(at:)`, `attempt:`/`claimed_at:`, `raise_transient:`; `GenerationError`/`ApnsClient::Error` блокируют FCM; `SocketError`/`Net::OpenTimeout` вылетают как есть; запись остаётся `pending`)
 - [x] GREEN — `FcmClient::TransientError` (5xx/429, `NETWORK_ERRORS` в `http_request`, OAuth без токена / битый JSON) · `ReadyPushClaim.claim!(at:)` + `release!` (только свой claim, без касания `updated_at`) · `ReadyPushJob`: `MAX_ATTEMPTS = 5`, `RETRY_WAITS` 10s/30s/2m/5m, своя перепостановка с `claimed_at`, `update_wallet!` ловит `StandardError`, `fail_if_pending!` · `SendPushNotificationJob(raise_transient:)` · задача 4 файла 45/0 · соседи (Broadcaster, каскад, нотификатор, SMS-ссылка, push pipeline) 45/0 · остальные потребители (`offer_push_notifier`, `Barista::OrderStatusUpdateService`, `b21_guest_notify`, payload) 22/0 · rubocop 8 файлов 0 · коммит `d687c6e8` (был `18e683cb`, переписан attach до push) · Entire `01M60XHFA61Q55VY3WFRMGP8KJ` (сессия `9835eb36`)
 - [x] `/regress` PASS — зона фоновой доставки push: 22 файла 165/0 (все тесты, где есть `ReadyPush*`, `ready_notified_at`, `PushNotification`, `GuestOrderBroadcaster`, `SendPushNotificationJob`, `FcmClient`, каскад, `push_token`: job’ы, нотификатор, payload, оффер подписки + конкурентность, колбэк оплаты, короткие SMS-ссылки + Rack::Attack, push register, профиль/оффер, `b21_guest_notify`, канал заказа гостя, `rls_tenant_isolation`) · смена статуса баристой через `update_status`: `barista_tablet_regression` + `block_g_cash_shift` 32/0 · полный `test/integration/shop/` — CI (на Windows виснет)
-- [ ] `/review` → push → CI · закрыть backlog `V2-#35-PUSH-RELIABILITY` в `PRACTICES.md:118` · COMPONENT_MAP: строки `FcmClient` / `GuestOrderBroadcaster` — решение на review
+- [x] `/review` — security 0 medium+ (гигиена: тело ответа FCM/OAuth в `error_message` и логах — внутреннее) · bugbot 0 (2 находки удалены его валидатором; первый прогон оборвался, повтор; scope `origin/develop..HEAD`) · crit-audit CLEAN `aa525f50..d687c6e8` (`last_audited_sha` → `d687c6e8`) · Entire `01M60XHFA61Q55VY3WFRMGP8KJ` на `d687c6e8` · backlog `V2-#35-PUSH-RELIABILITY` закрыт (Cable soft-fail остаётся) · COMPONENT_MAP: да — строка `FcmClient` (новая граница `TransientError` ↔ повтор `ReadyPushJob`); `GuestOrderBroadcaster` не менялся → без правки · push → CI
 
 ## Факт (сверка 2026-10-28) — все ссылки патча совпали с кодом
 
