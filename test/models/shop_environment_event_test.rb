@@ -76,6 +76,11 @@ class ShopEnvironmentEventTest < ActiveSupport::TestCase
     end
   end
 
+  test "migration creates the same view SQL as the model" do
+    src = Rails.root.glob("db/migrate/*_create_shop_environment_events.rb").first.read
+    assert_includes src.squish, ShopEnvironmentEvent::METABASE_VIEW_SQL.squish
+  end
+
   test "Subtask 9: Metabase view exposes day (Moscow), point name and flags" do
     conn = ShopEnvironmentEvent.connection
     conn.execute(ShopEnvironmentEvent::METABASE_VIEW_SQL)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_05_140000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_28_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -1178,6 +1178,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_05_140000) do
     t.datetime "updated_at", null: false
     t.index ["expires_at"], name: "index_shop_email_verifications_on_expires_at"
     t.index ["tenant_id", "email"], name: "index_shop_email_verifications_on_tenant_and_email_unique", unique: true
+  end
+
+  create_table "shop_environment_events", id: :uuid, default: -> { "gen_random_uuid()" }, comment: "TASK_112: shop environment snapshot (session_open), no guest data", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "event_kind", limit: 32, default: "session_open", null: false
+    t.string "inapp_label", limit: 16, null: false
+    t.string "notification_state", limit: 16, null: false
+    t.string "os_family", limit: 16, null: false
+    t.uuid "point_id", null: false
+    t.string "push_manager", limit: 16, null: false
+    t.string "service_worker", limit: 16, null: false
+    t.string "standalone", limit: 16, null: false
+    t.string "storage_local", limit: 16, null: false
+    t.string "storage_session", limit: 16, null: false
+    t.string "ua_snippet", limit: 300
+    t.index ["point_id", "created_at"], name: "idx_shop_environment_events_point_created"
+    t.check_constraint "event_kind::text = ANY (ARRAY['session_open'::text])", name: "chk_shop_environment_events_event_kind"
+    t.check_constraint "inapp_label::text = ANY (ARRAY['telegram'::text, 'instagram'::text, 'facebook'::text, 'other_inapp'::text, 'none'::text])", name: "chk_shop_environment_events_inapp_label"
+    t.check_constraint "notification_state::text = ANY (ARRAY['default'::text, 'granted'::text, 'denied'::text, 'unavailable'::text])", name: "chk_shop_environment_events_notification_state"
+    t.check_constraint "os_family::text = ANY (ARRAY['ios'::text, 'android'::text, 'other'::text])", name: "chk_shop_environment_events_os_family"
+    t.check_constraint "push_manager::text = ANY (ARRAY['available'::text, 'unavailable'::text])", name: "chk_shop_environment_events_push_manager"
+    t.check_constraint "service_worker::text = ANY (ARRAY['available'::text, 'unavailable'::text])", name: "chk_shop_environment_events_service_worker"
+    t.check_constraint "standalone::text = ANY (ARRAY['standalone'::text, 'browser'::text, 'unavailable'::text])", name: "chk_shop_environment_events_standalone"
+    t.check_constraint "storage_local::text = ANY (ARRAY['available'::text, 'unavailable'::text])", name: "chk_shop_environment_events_storage_local"
+    t.check_constraint "storage_session::text = ANY (ARRAY['available'::text, 'unavailable'::text])", name: "chk_shop_environment_events_storage_session"
+    t.check_constraint "ua_snippet IS NULL OR inapp_label::text = 'other_inapp'::text", name: "chk_shop_environment_events_ua_snippet"
   end
 
   create_table "solid_cache_entries", primary_key: ["key", "namespace"], force: :cascade do |t|

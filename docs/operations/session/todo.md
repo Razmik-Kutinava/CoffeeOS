@@ -11,8 +11,8 @@
 
 - [x] intake `ad527706` (ТЗ 1:1 + CBR #112)
 - [x] SPEC — факты сверены, решения владельца, файлы, Не ломать, Проверка, Migration Gate go
-- [ ] RED — JS `push_environment_test.mjs` + Rails (модель, endpoint, rate-limit, view) падают
-- [ ] GREEN — реализация, тесты зелёные, миграция локально up/down/up
+- [x] RED `01753c2c` — JS: модуля нет (1 fail) · Rails 25 runs: 6 failures, 19 errors (нет модели/маршрута/сервиса)
+- [x] GREEN — `pushEnvironment.js`, флаг `shopTenantRedirectPending()`, вызов в `App.svelte`, миграция + модель + view, `Shop::EnvironmentEventRecorder`, `Shop::Api::EnvironmentEventsController` (`POST /shop/api/environment_events`, 413 > 2 КБ, битый JSON → 422 через `rescue_from ParseError`), Rack::Attack `shop/environment_events/ip` 30/мин · миграция dev up → down → up OK · `schema.rb` — только новая таблица и версия (локальный Postgres печатает старые CHECK иначе — этот шум не коммитим) · JS 47/0 (3 файла) · `npx vite build` OK · Rails задачи 26/0 · соседи (b114, shop tenant_isolation, rls_tenant_isolation, telegram webview, rack_attack /o/, marketing_event) 31/0 · rubocop 10 файлов 0
 - [ ] `/regress`
 - [ ] `/review` (bugbot + security + crit-audit + Entire + push/CI)
 - [ ] 🚀 1 (после шагов 1–5) → 👤 события в БД с телефона (Android PWA, iPhone с иконки и из Safari, Telegram, Instagram, Chrome с заблокированными данными сайта)

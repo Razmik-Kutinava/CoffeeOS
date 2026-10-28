@@ -311,7 +311,7 @@ describe("TASK_112 Subtask 2, 3, 4 — reportSessionOpenOnce", () => {
     const env = makeEnv()
     const s = sender()
     reportSessionOpenOnce({ env, beacon: s.beacon, resolveUrl: (u) => u })
-    resetSessionOpenGuardForTests({ keepStorage: true })
+    resetSessionOpenGuardForTests()
     const again = reportSessionOpenOnce({ env, beacon: s.beacon, resolveUrl: (u) => u })
     assert.equal(again, false)
     assert.equal(s.sent.length, 1)

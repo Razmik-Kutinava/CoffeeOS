@@ -190,6 +190,7 @@ Rails.application.routes.draw do
       get "tenants", to: "tenants#index"
       post "push/register", to: "push#register"
       post "pwa_install", to: "pwa_installs#create"
+      post "environment_events", to: "environment_events#create"
       get "debug", to: "debug#index" unless Rails.env.production?
       get "categories", to: "categories#index"
       get "frequent_products", to: "frequent_products#index"

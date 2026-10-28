@@ -138,12 +138,20 @@ function applyOfflineFallback() {
   })
 }
 
+let tenantRedirectPending = false
+
+/** TASK_112: страница уже уходит на другую точку (location.assign вызван). */
+export function shopTenantRedirectPending() {
+  return tenantRedirectPending
+}
+
 export function navigateToTenant(tenantId, { remember = true } = {}) {
   if (!tenantId) return
   if (remember) saveSelectedTenantId(tenantId)
   const url = new URL(window.location.href)
   url.searchParams.set("tenant_id", tenantId)
   const hash = window.location.hash || "#/"
+  tenantRedirectPending = true
   window.location.assign(`${url.pathname}${url.search}${hash}`)
 }
 

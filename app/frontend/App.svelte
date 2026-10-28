@@ -18,7 +18,8 @@
   import { installShopWebViewLayout } from "./lib/shopWebViewLayout.js"
   import { installSlowRequestTracker } from "./lib/slowRequest.js"
   import { api } from "./lib/api.js"
-  import { bootstrapShopTenant } from "./lib/shopTenantHeader.js"
+  import { bootstrapShopTenant, shopTenantRedirectPending } from "./lib/shopTenantHeader.js"
+  import { reportSessionOpenOnce } from "./lib/pushEnvironment.js"
   import { restoreGuestSession } from "./lib/restoreGuestSession.js"
   import { loadOperatingHours } from "./lib/shopOperatingHours.js"
   import {
@@ -116,6 +117,11 @@
       .then(() => bootstrapShopTenant(api))
       .then((cfg) => {
         if (!cfg?.operating_hours) loadOperatingHours(api).catch(() => {})
+        try {
+          if (!shopTenantRedirectPending()) reportSessionOpenOnce()
+        } catch {
+          /* телеметрия не должна ломать старт витрины */
+        }
       })
       .catch(() => {
         loadOperatingHours(api).catch(() => {})
