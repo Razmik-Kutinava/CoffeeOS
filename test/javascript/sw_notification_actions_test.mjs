@@ -60,6 +60,22 @@ describe("buildShowNotificationOptions (#38 step 2)", () => {
       { action: "tips", title: "Чаевые" }
     ])
   })
+
+  it("TASK_92 P2: cancelled push reuses order tag (replaces previous) and has no actions", () => {
+    const previous = buildShowNotificationOptions({
+      body: "🟩🟩⬜ Ваш заказ начали готовить",
+      data: { order_id: "7", tag: "order-7", status: "preparing", actions: '["chat","tips"]' }
+    })
+    const cancelled = buildShowNotificationOptions({
+      body: "Вы отменили заказ",
+      data: { order_id: "7", tag: "order-7", status: "cancelled" }
+    })
+
+    assert.equal(cancelled.tag, previous.tag)
+    assert.equal(cancelled.tag, "order-7")
+    assert.deepEqual(cancelled.actions, [])
+    assert.equal(cancelled.body, "Вы отменили заказ")
+  })
 })
 
 describe("orderDeepLink (#38 step 2)", () => {

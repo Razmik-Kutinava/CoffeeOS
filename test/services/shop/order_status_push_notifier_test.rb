@@ -119,4 +119,66 @@ class Shop::OrderStatusPushNotifierTest < ActiveSupport::TestCase
   ensure
     ENV.delete("PUSH_PAYLOAD_FORCE_ERROR")
   end
+
+  # --- TASK_92 Патч 2: push при отмене (tag, текст по инициатору) ---
+
+  %w[accepted preparing ready].each do |from|
+    test "TASK_92 P2 5b cancelled from #{from} by barista: tag, no actions/progress, staff text" do
+      cancel_order!(from: from, source: "barista")
+
+      assert_enqueued_with(job: Shop::SendPushNotificationJob) do
+        Shop::OrderStatusPushNotifier.call(order: @order, old_status: from)
+      end
+
+      notification = PushNotification.order(created_at: :desc).first
+      assert_equal "order-#{@order.id}", notification.payload["tag"]
+      assert_equal "cancelled", notification.payload["status"]
+      assert_not notification.payload.key?("actions"), "cancelled push без actions"
+      assert_not notification.payload.key?("progress"), "cancelled push без progress"
+      assert_equal "Заказ отменён", notification.title
+      assert_equal Shop::OrderCancellationPresenter::STAFF_MESSAGE, notification.body
+    end
+  end
+
+  test "TASK_92 P2 5d cancelled from accepted by guest: tag and guest text differs from title" do
+    cancel_order!(from: "accepted", source: "customer")
+
+    Shop::OrderStatusPushNotifier.call(order: @order, old_status: "accepted")
+
+    notification = PushNotification.order(created_at: :desc).first
+    assert_equal "order-#{@order.id}", notification.payload["tag"]
+    assert_not notification.payload.key?("actions")
+    assert_not notification.payload.key?("progress")
+    assert_equal "Заказ отменён", notification.title
+    assert_equal "Вы отменили заказ", notification.body
+  end
+
+  test "TASK_92 P2 5c cancelled from pending_payment: no push" do
+    @order.update!(status: :pending_payment)
+    cancel_order!(from: "pending_payment", source: "customer")
+
+    assert_no_enqueued_jobs(only: Shop::SendPushNotificationJob) do
+      assert_no_difference -> { PushNotification.count } do
+        Shop::OrderStatusPushNotifier.call(order: @order, old_status: "pending_payment")
+      end
+    end
+  end
+
+  test "TASK_92 P2 5b guest cancel service from accepted sends tagged push via broadcaster" do
+    Shop::GuestOrderCancellationService.new(order: @order, session: {}, tenant_id: @tenant.id).call!
+
+    notification = PushNotification.order(created_at: :desc).first
+    assert notification.present?
+    assert_equal "order-#{@order.id}", notification.payload["tag"]
+    assert_equal "Вы отменили заказ", notification.body
+  end
+
+  private
+
+  def cancel_order!(from:, source:)
+    @order.update!(status: from) unless @order.status == from
+    @order.update!(status: :cancelled)
+    OrderStatusLog.create!(order_id: @order.id, status_from: from, status_to: "cancelled", source: source)
+    @order.reload
+  end
 end

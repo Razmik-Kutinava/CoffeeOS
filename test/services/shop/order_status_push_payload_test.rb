@@ -46,6 +46,15 @@ class Shop::OrderStatusPushPayloadTest < ActiveSupport::TestCase
     assert_equal "🟩🟩🟩", result[:progress]
   end
 
+  test "TASK_92 P2 cancelled: tag only, without actions and progress" do
+    @order.update!(status: :cancelled)
+
+    assert Shop::OrderStatusPushPayload.enrichable?(@order.reload)
+    result = Shop::OrderStatusPushPayload.build!(order: @order)
+
+    assert_equal({ tag: "order-#{@order.id}" }, result)
+  end
+
   test "#38 unknown status raises for soft-fail path" do
     @order.update_column(:status, "pending_payment")
 
