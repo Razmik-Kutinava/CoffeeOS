@@ -1,3 +1,73 @@
+# todo — TASK_92 Патч 2: push при отмене заказа — tag, текст по инициатору (очередь, шаг 3)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_92](../milestones/veha_2/requirements/customer_tasks/TASK-92-Production-background-FCM-и-синхронизация-статусов-заказа.md) «Патч 2: 2026-10-18», Subtask 5b–5f · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 3 · [Google Doc](https://docs.google.com/document/d/1GlRrdNGaXuSTTCYEKBN1dem8hB0A0WPnC2w9O_gi-mc/edit) |
+| **Не в scope** | `FcmClient` и его payload · ready-путь (`ReadyPushJob`, `ready_notified_at`) · каскад и SMS · логика отмены (`GuestOrderCancellationService`, `Barista::OrderCancellationService`, `PaymentFailureJournal`) · `Barista::OrdersController` / `OrderStatusUpdateService` · ActionCable · доставка accepted/preparing · `OrderCancellationPresenter` (тексты API/Cable) · push при системной отмене на закрытии смены · тексты предварительного экрана (TASK_110) · service worker (`show.js.erb`, `swNotificationActions.js`) — уже ставит tag, если он есть |
+| **Статус** | SPEC готов → `/sbr` |
+
+## SBR
+
+- [x] intake `0709834d` (Патч 2 дословно в конец TASK_92, CBR #92, очередь 3 → `in_progress`)
+- [x] SPEC — все факты патча совпали с кодом, решения ниже, файлы, Не ломать, Проверка
+- [ ] RED
+- [ ] GREEN
+- [ ] `/regress`
+- [ ] `/review` (+ COMPONENT_MAP: строки `OrderStatusPushNotifier` в карте нет, хотя патч на неё ссылается → добавить на review)
+
+## Факт (сверка 2026-10-28) — все ссылки патча совпали с кодом, поведение то же
+
+- `order_status_push_notifier.rb`: условия выхода `:30-36` (не mobile, нет гостя, тот же статус, push выключен, нет токена); базовый payload `order_id/tenant_id/status/order_number` `:53-58`; tag/actions/progress добавляются только при `meta` `:59-63`; `enriched_meta!` → `nil`, если статус не в матрице `:82-84` → для `cancelled` push уходит без tag. Заголовок `cancelled` = «Заказ отменён» `:17`; текст `cancelled` — `OrderCancellationPresenter.cancel_message_for(cancelled_by)` `:111-114`.
+- `order_status_push_payload.rb:8-22` — матрица `PROGRESS`/`ACTIONS` только accepted/preparing/ready; `enrichable?` = `PROGRESS.key?`.
+- `order_cancellation_presenter.rb:6-7,22-33`: `cancelled_by` по последнему логу `status_to: cancelled` — `barista` → `staff`, `customer` → `guest`, иначе `system`; `cancel_message_for`: `staff` → «Заказ отменён исполнителем. Средства будут возвращены в течение 3 рабочих дней», иначе (`guest`, `system`) — «Заказ отменён» = заголовок. Тот же presenter отдаёт `cancel_message` в API/Cable (`orders_guest_cancel_test.rb:27` ждёт «Заказ отменён» для гостя) → **presenter не трогаем**.
+- `firebase_sw/show.js.erb:44-52` — `opts.tag` только если `data.tag` (`:50`); `onBackgroundMessage` `:108-120`. То же в `swNotificationActions.js:55-69` (`:67`).
+- Источники push на `cancelled` (все через `GuestOrderBroadcaster` → нотификатор): гость `guest_order_cancellation_service.rb:42` (из `pending_payment` — лог `source: customer` через `PaymentFailureJournal` `:105-111,134-136`; из `accepted` — `:112-118`); бариста `barista/order_cancellation_service.rb:60` (лог `barista` `:38`); перевод статуса баристой `barista/order_status_update_service.rb:41` (лог `barista` `:35`). Отказ банка (`payment_status_updater.rb:163-177`) и закрытие смены (`shift_close_service.rb:84-112`) Broadcaster не зовут — push нет, как и сказано в патче.
+- Переходы в `cancelled` (`order.rb:63-65`): из accepted, preparing, ready; гость — только pending_payment/accepted (`guest_can_cancel?` `:58`).
+- `lib/tasks/shop_push.rake:14,28-29` — смоук зовёт нотификатор с `old_status` = текущий статус заказа; не меняется.
+- Тестов на push при `cancelled` нет (поиск по `test/`) — актуализировать нечего.
+- `COMPONENT_MAP.md`: строк `OrderStatusPushNotifier` нет (есть `FcmClient` `:39`, `GuestOrderBroadcaster` `:49`, `firebase_sw` `:38`, `swNotificationActions` `:35`).
+- Команды `npm test -- --run` в проекте нет → `node --test test/javascript/sw_notification_actions_test.mjs`.
+
+## Решение для билда
+
+1. **`OrderStatusPushPayload`**: `cancelled` входит в `enrichable?`; `build!` для `cancelled` возвращает только `{ tag: "order-#{order.id}" }` — без `actions` и `progress` (5b). Матрица accepted/preparing/ready и ошибка для прочих статусов (`pending_payment`) — как сейчас; `PUSH_PAYLOAD_FORCE_ERROR` действует и на `cancelled` (мягкий отказ, push нет — как у остальных).
+2. **`OrderStatusPushNotifier`**:
+   - `cancelled` из `pending_payment` (по `old_status`) → выход до создания `PushNotification` (5c). Касается и отмены гостем, и любого другого инициатора.
+   - payload: `actions`/`progress` пишутся, только если они есть в `meta`; `tag` и `status` — всегда при `meta`.
+   - текст: прогресс-префикс только при `meta[:progress]` (у `cancelled` префикса нет).
+   - текст отмены (5d): `guest` → «Вы отменили заказ» (новая константа в нотификаторе); `staff` → текст presenter’а как сейчас; `system` → как сейчас (presenter, «Заказ отменён») — в рабочих путях из accepted/preparing/ready такой отмены через Broadcaster нет. Заголовок «Заказ отменён» не меняется.
+3. Service worker не меняется: tag уже прокидывается в `showNotification`; тест SW — охранный (зелёный сразу, доказательство — мутация: без `tag` в data тест падает).
+
+## Файлы (ожидаемо)
+
+1. `app/services/shop/order_status_push_payload.rb` — `cancelled`: только tag.
+2. `app/services/shop/order_status_push_notifier.rb` — пропуск из `pending_payment`, payload без пустых actions/progress, текст гостя.
+3. `test/services/shop/order_status_push_notifier_test.rb` — cancelled из accepted/preparing/ready (tag, нет actions/progress, текст по инициатору: гость / бариста / перевод статуса), из `pending_payment` — push нет.
+4. `test/services/shop/order_status_push_payload_test.rb` — `cancelled` → только tag; `pending_payment` по-прежнему ошибка.
+5. `test/javascript/sw_notification_actions_test.mjs` — уведомление `cancelled` с тем же tag и без actions (заменяет предыдущее).
+
+Соседи (не меняем, гоняем): `test/services/shop/guest_order_broadcaster_test.rb`, `test/jobs/shop/order_ready_cascade_job_test.rb` (из Проверки патча), `test/services/shop/guest_order_cancellation_service_test.rb` + `test/services/barista/order_cancellation_service_test.rb` + `test/services/barista/order_status_update_service_test.rb` (все три пути отмены идут через нотификатор), `test/integration/shop/api/orders_guest_cancel_test.rb` (`cancel_message` API не изменился), `test/integration/shop/push_pipeline_simulation_test.rb`, `test/integration/b21_guest_notify_test.rb`.
+
+## Не ломать
+
+- Push accepted/preparing: tag, actions, progress-префикс в тексте (`order_status_push_notifier_test.rb:84-106`, payload-тесты `:23-47`).
+- Ready-путь: нотификатор ставит `ReadyPushJob`, сам push не создаёт (`order_status_push_notifier_test.rb:64-81`); claim (Патч 1) не трогаем.
+- Тексты отмены в API и Cable (`cancel_message`: гость «Заказ отменён», бариста «…исполнителем…») — `orders_guest_cancel_test.rb:16-28,72-93`.
+- Мягкий отказ: ошибка payload/нотификатора не ломает отмену, табло и Cable (`:108-121`, Broadcaster).
+
+## Проверка
+
+- `ruby bin/rails test test/services/shop/order_status_push_notifier_test.rb test/services/shop/order_status_push_payload_test.rb` + `node --test test/javascript/sw_notification_actions_test.mjs`
+- `ruby bin/rails test test/services/shop/guest_order_broadcaster_test.rb test/jobs/shop/order_ready_cascade_job_test.rb test/services/shop/guest_order_cancellation_service_test.rb test/services/barista/order_cancellation_service_test.rb test/services/barista/order_status_update_service_test.rb test/integration/shop/api/orders_guest_cancel_test.rb` + `bundle exec rubocop` по изменённым файлам
+
+## DoD
+
+- Subtask 5b–5f тестами; Не ломать — зелёное.
+- На Android уведомление отмены заменяет предыдущее — 👤 в E2E TASK_92 после 🚀 1.
+- Fly MCP — после 🚀 1.
+
+---
+
 # todo — TASK_92 Патч 1: ready-пуш не теряется при сбое доставки (очередь, шаг 2)
 
 | Поле | Значение |
