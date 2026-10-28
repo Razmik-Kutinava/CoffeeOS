@@ -11,6 +11,16 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-28 — test+ci: очередь Push + SMS, шаг 0.3 закрыт — TASK_118 Subtask 9; починка CI
+
+- Охранный тест в `test/services/shop/order_ready_sms_link_test.rb` берёт настоящий хост прода из `fly.toml` (`APP_HOST = codeblack.coffee`) и проверяет SMS «Заказ готов»: текст начинается с «CODE:BLACK. Готов! {host}/o/» и не длиннее 70 символов (сейчас 65). Если кто-то вернёт «Заказ готов!» или поставит хост длиннее, тест упадёт (проверено временными мутациями). Код приложения не менялся.
+- В ТЗ #39 и #82 дословно вставлена строка «Уточнение 2026-10-24» про фактический текст SMS и хост.
+- Вместе с шагом запушен фикс Sentry RUBY-1R (`StripClientIpHeader`, от 2026-10-20), на прод он не выкатывался — деплой по апруву.
+- Review: bugbot 0, security 0, crit-audit CLEAN `4500c4b1..452a08b1`.
+- CI на push покраснел не из-за задачи: метка `ubuntu-latest` теперь означает Ubuntu 26.04, а там нет Ruby 3.4.8. Раннер в `ci.yml` закреплён на `ubuntu-24.04`. Потом bundler-audit нашёл свежие уязвимости, гемы обновлены точечно: `crass` 1.0.8, `net-ssh` 7.3.8, `rubocop` 1.92.1 (больше не тянет `mcp`). Поднять Ruby до 3.4.12 — отдельная задача (ISSUES).
+- CI green [40654065250](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40654065250) + Semgrep + CodeQL.
+- Коммиты: `0344d954` (RED), `cccd0187` (GREEN, Entire `01M60Q7W90ZDQ44P3ZE4ZAT59C`), `887b61e6` (crit-audit), `a4827500` (раннер), `b02e14ba` (гемы).
+
 ## 2026-10-28 — docs: очередь Push + SMS, шаг 0.3 — ТЗ TASK_118 (intake)
 
 - ТЗ заказчика TASK_118 (SMS «Заказ готов» → история заказов CODE:BLACK, v4 от 2026-10-24) сохранено дословно из Google Doc в [`TASK-118-…`](../milestones/veha_2/requirements/customer_tasks/TASK-118-SMS-Заказ-готов-история-заказов-CODE-BLACK.md) и добавлено в реестр задач заказчика (#118).

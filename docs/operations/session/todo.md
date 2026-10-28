@@ -13,7 +13,7 @@
 - [x] RED `0344d954` — охранный тест «TASK_118 S9» в `order_ready_sms_link_test.rb`: на текущем коде зелёный (65/70), файл 9/0 · мутации (не закоммичены, откачены): `message_prefix` «Заказ готов!» → fail (проверка текста); `fly.toml` `APP_HOST = "order.codeblack.coffee"` → fail «Expected 71 to be <= 70»
 - [x] GREEN `cccd0187` (Entire `01M60Q7W90ZDQ44P3ZE4ZAT59C`, attach) — строка «Уточнение 2026-10-24» дословно: ТЗ #39 после :71 (отдельным абзацем), ТЗ #82 после :49 (стала :50) · Проверка: 4 файла 72/0
 - [x] `/regress` PASS (зона SMS «Заказ готов») — 8 файлов 98/0: `order_ready_sms_link`, `order_ready_paid_notifier`, `sms_ru_client`, `sms_ru_phone_otp`, `telegram_bot_client`, `jobs/shop/order_ready_cascade_job`, `integration/shop/order_short_links`, `integration/rack_attack_order_short_link` (все тесты, где есть `OrderReadySmsLink`/`OrderReadyPaidNotifier`/`SmsRuClient`/короткая ссылка) · код app не менялся → Fly MCP не нужен
-- [ ] `/review` (push) → закрытие шага 0.3 в очереди
+- [x] `/review` — bugbot 0 · security 0 (вместе с незапушенным RUBY-1R) · crit-audit CLEAN `4500c4b1..452a08b1` (`887b61e6`) · Entire `01M60Q7W90ZDQ44P3ZE4ZAT59C` на `cccd0187` · push → CI красный не из-за задачи: `ubuntu-latest` = 26.04 без Ruby 3.4.8 → `ci.yml` на `ubuntu-24.04` (`a4827500`); bundler-audit → `crass` 1.0.8, `net-ssh` 7.3.8, `rubocop` 1.92.1 (`b02e14ba`) · **CI green** [40654065250](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40654065250) + Semgrep/CodeQL · шаг 0.3 в очереди `done`
 
 ## Факт (аудит 2026-10-28) — документ совпал с кодом
 
