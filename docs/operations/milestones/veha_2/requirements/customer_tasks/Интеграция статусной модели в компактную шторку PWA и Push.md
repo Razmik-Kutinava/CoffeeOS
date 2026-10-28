@@ -50,6 +50,8 @@
   - **Then:** Гостю уходит Web Push (Android) / обновление `.pkpass` (iOS Wallet) с текстом: «Ваш заказ готов, заберите на кассе!».
   - *Обработка ошибок:* Если Push-сервис возвращает 4xx/5xx, ошибка логируется, джоба уходит в retry в Sidekiq. POS-терминал не блокируется.
 
+Уточнение 2026-10-18: сценарий B2 описывает push на ready. Push на accepted и preparing определяется TASK_92 (контракт #38: tag order-#{order.id}, status, progress, actions), на cancelled — Патчем 2 TASK_92.
+
 ### Блок C — Защита от спама и дублей (Idempotency)
 
 - [ ] Шаг C1: Флаг ready_notified_at

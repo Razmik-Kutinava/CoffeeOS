@@ -76,6 +76,9 @@ TASK_90: Восстановление WebPush после запрета увед
 
 1. `app/frontend/lib/orderStatusCtaMachine.js` — не менять существующую статусную модель CTA без отдельной задачи.
 1. `app/frontend/components/OrderStatus.svelte` — не менять существующий самостоятельный push-сценарий без отдельной задачи.
+
+Уточнение 2026-10-18: фактический путь файла app/frontend/routes/OrderStatus.svelte; в коммитах TASK_90 подписаны «#92» (95a9a000, 0b7f0b2d, 72dcb5e9, 736d79a9, 2f3d39de).
+
 1. PWA Service Worker.
 1. Apple Wallet flow.
 
@@ -248,6 +251,7 @@ DoD
 - ID заказчика **TASK_90** = CBR **#90** (канон 2026-09-17: EXT семьи 89 не занимают 90/91).
 - Фокус intake: только gap **9.1 / denied → settings** (переход в настройки браузера + recovery UI). Остальные gaps #81 (фоновые FCM/Wallet, чат) — **не** этот шаг.
 - Исходный продуктовый док заказчика по виджету: #37 «Адаптивный виджет…».
+- 2026-10-28: строки «Уточнение 2026-10-18» вставлены по [ответам заказчика](../../artifacts/push_sms_task_order/customer_answers_2026-10-28.md) п. 1 («после строки 78 и после строки 290»): номера совпали с файлом; строка про путь `OrderStatus.svelte` — после пункта `OrderStatus.svelte` в «Не трогать» (§2), строка про Subtask 1 — после пункта `OrderStatus.svelte` в «Не трогать» Патча 1.
 
 ---
 
@@ -288,6 +292,9 @@ DoD
 1. модель статуса заказа;
 1. `orderStatusCtaMachine.js`;
 1. `OrderStatus.svelte`, кроме случаев, если фактический выбранный lifecycle-механизм требует минимальной точки интеграции для recovery;
+
+Уточнение 2026-10-18 (Subtask 1): расхождение на экране заказа #/order/:id (нет recovery) закрывается задачей TASK-PUSH-ENV-GATE.
+
 1. Apple Wallet / iOS;
 1. refund / tips / другие CTA;
 1. TASK_37 и его CSP-патч;

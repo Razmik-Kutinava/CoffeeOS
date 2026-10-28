@@ -1,6 +1,7 @@
 # TASK_94: Повтор покупки из истории ЛК с one-click оплатой
 
 **CBR:** #94 · **Дата intake:** 2026-09-19  
+Уточнение 2026-10-18 (метки): метка «#94» в коммитах и тестах до 19.09 относится к TASK_92 (20c05ba6, f274c11c, 39601e94; order_status_push_subscribe_test.mjs:191,202,213,232; fcm_client_test.rb:41,43); к этой задаче (повтор заказа из истории) относится метка «TASK_94».  
 **Источник:** Google Doc Spec  
 **Артефакты:** docs/operations/milestones/veha_2/artifacts/lk_history_repeat_one_click/  
 **Google Doc:** https://docs.google.com/document/d/19QWNuRirU9jGkzFMY7sXXQV8xFTf2oEq_u3Yf0fo-6w/edit  

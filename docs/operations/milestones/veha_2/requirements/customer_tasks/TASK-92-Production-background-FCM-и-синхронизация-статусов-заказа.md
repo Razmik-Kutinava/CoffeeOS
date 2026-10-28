@@ -1,6 +1,9 @@
 # TASK_92: Production background FCM и синхронизация статусов заказа
 
 **ID заказчика:** TASK_92 · **CBR:** #92 · **Дата intake:** 2026-09-17  
+Уточнение 2026-10-18 (метки): в коммитах TASK_92 подписаны «#94» (20c05ba6, f274c11c, 39601e94), не путать с TASK_94.  
+Уточнение 2026-10-18 (шаг 5): чаевые как запасной CTA отменены (0fe747a0); в preparing и ready без подписки CTA «Чат» и push или Wallet, при подписке «Чат» (и «Оформить подписку» на ready, если оффер включён).  
+Уточнение 2026-10-18 (шаги 3–4, Wallet): в коде вместо AppleWalletPassUpdater.call из Broadcaster ставится PassUpdateJob (на ready пропускается); Wallet не используется как канал уведомлений для iPhone (по схеме Б2, 2026-10-16; см. TASK-IOS-PUSH-PATH).  
 **Источник:** текст заказчика (правка по фоновым уведомлениям) + Google Doc  
 **Артефакты:** docs/operations/milestones/veha_2/artifacts/production_background_fcm_status_sync/  
 **Google Doc:** https://docs.google.com/document/d/1gcML9WkV4n2s6KNsDN0sobY3ITm4Dge9kOjStzf917g/edit?usp=sharing  
