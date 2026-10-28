@@ -13,6 +13,24 @@ module Shop
 
       private
 
+      # TASK_120 Патч 1: cookie_store с expire_after пишет cookie на каждом ответе — ответ параллельного
+      # запроса со старым снимком затирал сброс/добавление корзины. Сессия не изменилась → cookie не пишем.
+      # process_action, а не around_action: снимок до всех колбэков (CSRF в Auth пишет `_csrf_token`),
+      # сравнение после rescue_from (handle_cart_overflow! чистит корзину уже в обработчике).
+      # Без сохранённой cookie пишем как раньше: id новой сессии сохраняется только записью cookie.
+      def process_action(*)
+        persisted = persisted_session_cookie?
+        before = session.to_hash.to_json if persisted
+        super
+      ensure
+        request.session_options[:skip] = true if persisted && session.to_hash.to_json == before
+      end
+
+      def persisted_session_cookie?
+        data = cookies.signed_or_encrypted[Rails.application.config.session_options[:key]]
+        data.is_a?(Hash) && data["session_id"].present?
+      end
+
       # TASK_93-E: session-level SET (not SET LOCAL inside long AR txn).
       # Init/Т‑Банк HTTP must not hold a pool connection in an open transaction (~15s).
       # GUC is reset in ensure so checkout reuse cannot leak tenant across requests.
