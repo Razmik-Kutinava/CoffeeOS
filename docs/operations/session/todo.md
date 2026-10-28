@@ -1,3 +1,77 @@
+# todo — TASK_120: Корзина при переходе в другую точку (очередь, шаг 5)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_120](../milestones/veha_2/requirements/customer_tasks/TASK-120-Корзина-при-переходе-в-другую-точку.md) v3, Subtask 1–9 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 5 · [Google Doc](https://docs.google.com/document/d/1Uz11weI_haC7SRlIdKt1teEloqz3QID_iWknF4609dM/edit) |
+| **Не в scope** | отдельные корзины по точкам · цены, настройки товаров, `json_lines` (расчёт) · checkout и `OrderCreator` (код) · платежи · Quick Repeat (`createRepeatInlineOrder`), `historyRepeatAdapter`, `clearCartAfterSuccessfulPay` (COMPONENT_MAP:11) · определение точки (`tenant_resolution.rb`, `shopTenantHeader.js`) · авторизация, cookie (`session_store.rb`, domain) · офлайн-очередь корзины (`shopOfflineCart.js`) · `CartSheet.svelte` (плашка сообщения уже есть) |
+| **Статус** | SPEC |
+
+## SBR
+
+- [x] intake `6069d7eb` (ТЗ v3 дословно, CBR #120, очередь 5 → `in_progress`)
+- [x] SPEC — факты документа совпали с кодом (сдвиги ниже), решения, файлы, Не ломать, Проверка · миграции нет
+- [ ] RED
+- [ ] GREEN
+- [ ] `/regress`
+- [ ] `/review`
+
+## Факт (сверка 2026-10-28) — поведение кода = документ
+
+- `cart_service.rb`: `SESSION_KEY = :shop_cart` `:7`, `@session[SESSION_KEY] ||= []` `:19` — один ключ, точки нет ✓; `tenant_settings` текущей точки `:137`, `line_unit_price` `:146` → `setting.price` `:281`, `shop_available?` `:257`, `line_available?` `:262` ✓ · **сдвиг:** `raise "Товар недоступен"` — `:144` (в документе `:143`).
+- `cart_controller.rb`: `add` после `add!` зовёт `json_lines` `:17` → свой rescue `:19-21` отдаёт 404 с текстом; `show` `:27-33` — `RecordNotFound` уходит в `ErrorHandler` → 404 ✓. Каждый экшен создаёт `CartService.new` заново (до 2 раз за запрос). Маршруты: `DELETE /cart` → `cart#clear` (`routes.rb:201`).
+- `shop_api_error_handler.rb` — это `config/initializers/shop_api_error_handler.rb`: `rescue_from RecordNotFound` `:13`, `handle_not_found` `:30-32` ✓.
+- `config/initializers/session_store.rb:4-7` — `_coffeeos_session`, 90 дней, `same_site: :lax`, без domain ✓. `url_builder.rb:28-32` (`shop_base_domain`), `:35` `tenant_id_for_host` ✓.
+- `tenant_resolution.rb` — это `app/controllers/shop/concerns/tenant_resolution.rb`: `?tenant_id` `:13-15`, затем `X-Shop-Tenant` `:17`, затем хост `:18` ✓.
+- `shopCartCache.js:7` `coffeeos_shop_cart_v1` — один ключ ✓.
+- **сдвиг (+7, флаг TASK_112):** `shopTenantHeader.js` `navigateToTenant` `:148-156` (в документе `:141-148`) — `?tenant_id=` + `location.assign`, корзину не трогает ✓; `bootstrapShopTenant` `:159-210`, переходы `:193-202` (в документе `:175-193`) ✓; вызов — `App.svelte:117` (в документе `:116`).
+- `cartSheetStore.js:257-264` — при «Товар недоступен» чистит store и кэш, `DELETE /cart` не зовёт ✓. Сообщения показываются через `cartSheetError` → плашка `shop-cart-error` в `CartSheet.svelte:478-485` (прецедент «Товар недоступен. Корзина обновлена.»).
+- `order_creator.rb:40` — `CartService.new(...).json_lines` → «Товар недоступен» роняет создание заказа ✓. Ещё читают/чистят корзину: `order_creator.rb:396` (`session[SESSION_KEY] = []`), `orders_controller.rb:100`, `recurrent_order_creator.rb:86`, `new_card_payment_service.rb:128` (`clear!`).
+- Повторы: `createRepeatInlineOrder.js:31` и `historyRepeatAdapter.js:73` сначала `DELETE /cart`, потом `addToCart` → в текущей точке, новое правило их не задевает.
+- `cart_service_test.rb:51-59` — только товар без настроек точки ✓; тестов на смену точки нет (поиск по `test/`).
+
+## Решение для билда
+
+1. **Метка точки — отдельный ключ сессии** `:shop_cart_tenant_id` рядом с `:shop_cart` (массив строк не меняем → старые сессии читаются как прежде). Ставится в `add!` и `replace_line!` (= точка, где корзину наполняют); снимается в `clear!`.
+2. **Сброс — в `CartService#initialize`**, чтобы правило действовало для любого чтения корзины (API корзины, создание заказа, очистки после оплаты): корзина не пустая **и** метка есть **и** метка ≠ текущая точка → `@session[:shop_cart] = []`, метка снимается, `tenant_reset?` = true (Subtask 1, 6). Пустая корзина с чужой меткой → метка просто снимается, `tenant_reset?` = false (Subtask 3). Метка = текущая точка → как сейчас (Subtask 4). Метки нет → как сейчас, без сброса (Subtask 7).
+   - Побочно: `POST /orders` из точки A с корзиной точки B → корзина пуста → прежняя ошибка «Корзина пуста» (422) вместо заказа с чужими позициями по ценам A. Код checkout не меняется.
+3. **Ответ API**: `CartController` берёт **один** `CartService` на запрос (сейчас создаёт до двух — второй уже не увидит сброса) и добавляет `cart_reset: true` в JSON `show` / `add` / `update` / `destroy` / `clear`, если был сброс. Без сброса ключа нет — контракт прежний.
+4. **Фронт `cartSheetStore.js`**: константа `CART_TENANT_RESET_MESSAGE` = «Корзина очищена: вы перешли в другую точку»; `refreshCartSheet` при `cart_reset` → кэш и store уже пустые из ответа + сообщение в `cartSheetError` (Subtask 2); то же для ответов `PATCH`/`DELETE` строки (`enqueueBump`, `removeCartLine`), иначе следующий `GET /cart` (уже без флага) потеряет сообщение; слушатель события `shop:cart-reset` для пути добавления. Ветка «Товар недоступен» (`:257-264`) дополнительно зовёт `DELETE /cart` (Subtask 5).
+5. **Фронт `shopCartAdd.js`**: `cart_reset` в ответе `/cart/add` → событие `shop:cart-reset` после `markJustAdded` (обратный импорт `cartSheetStore` дал бы цикл). Ответ 404 «Товар недоступен» (старая строка корзины, `add!` уже прошёл) → `DELETE /cart` + `clearCartCache()`, ошибка пробрасывается как сейчас → следующее добавление проходит (Subtask 5).
+6. **Между хостами** (Subtask 8) код не нужен — cookie без domain; охранный интеграционный тест: корзина на хосте поддомена точки не видна и не очищается с основного хоста.
+7. **Автопереход при старте** (Subtask 6): `shopTenantHeader.js` не меняется — после `location.assign` первый `GET /cart` идёт с `?tenant_id=` новой точки и попадает под п. 2; тест — интеграционный (параметр и заголовок).
+
+## Файлы (ожидаемо)
+
+1. `app/services/shop/cart_service.rb` — метка точки, сброс в `initialize`, `tenant_reset?`, метка в `add!`/`replace_line!`/`clear!`.
+2. `app/controllers/shop/api/cart_controller.rb` — один сервис на запрос, `cart_reset: true` в ответах.
+3. `app/frontend/lib/cartSheetStore.js` — сообщение при `cart_reset`, `DELETE /cart` при «Товар недоступен», событие `shop:cart-reset`.
+4. `app/frontend/lib/shopCartAdd.js` — `cart_reset` на добавлении, очистка при 404 «Товар недоступен».
+5. `test/services/shop/cart_service_tenant_switch_test.rb` (новый; `cart_service_test.rb` уже 339 строк) — Subtask 1, 3, 4, 7, метка, `OrderCreator` после смены точки.
+6. `test/integration/shop/api/cart_tenant_switch_test.rb` (новый) — через HTTP: `?tenant_id` и `X-Shop-Tenant` другой точки на одном хосте, одинаковые и разные товары, пустая корзина, 404 → `DELETE /cart` → добавление и заказ проходят, `cart_reset` в ответе, разные хосты (Subtask 1, 3–8).
+7. `test/javascript/cart_tenant_reset_test.mjs` (новый) — `refreshCartSheet`: флаг → пустой кэш/store + сообщение; «Товар недоступен» → `DELETE /cart`; `addToCart` (импорт или по исходнику, если модуль не грузится в node).
+
+Соседи (не меняем, гоняем): `test/services/shop/cart_service_test.rb`, `cart_service_replace_line_test.rb`, `test/integration/shop/api/cart_persistence_test.rb` + `cart_overflow_test.rb` + `cart_total_amount_test.rb` (контракт API корзины), `test/services/shop/order_creator_test.rb` + `test/integration/shop/api/orders_controller_test.rb` (checkout читает корзину), `test/javascript/clear_cart_after_successful_pay_test.mjs` + `lk_history_repeat_one_click_test.mjs` + `create_repeat_inline_order_test.mjs` (повторы и очистка после оплаты), `test/integration/shop/api/tenant_isolation_test.rb`.
+
+## Не ломать
+
+- Добавление, +/−, удаление, правка модификаторов и цены в той же точке — без сброса и без нового ключа в ответе (`cart_service_test.rb`, `cart_persistence_test.rb`, `cart_total_amount_test.rb`).
+- Оформление и оплата: `POST /orders`, очистка корзины после оплаты (`orders_controller.rb:100`, `clearCartAfterSuccessfulPay`) — `order_creator_test.rb`, `orders_controller_test.rb`, `clear_cart_after_successful_pay_test.mjs`.
+- Повтор из истории (TASK_94) и Quick Repeat — `lk_history_repeat_one_click_test.mjs`, `create_repeat_inline_order_test.mjs`.
+- Переполнение корзины (TASK_93-H) — `cart_overflow_test.rb`; метка не должна раздувать cookie (UUID ≈ 60 байт сверх бюджета строк).
+
+## Проверка
+
+- `ruby bin/rails test test/services/shop/cart_service_tenant_switch_test.rb test/integration/shop/api/cart_tenant_switch_test.rb test/services/shop/cart_service_test.rb test/services/shop/cart_service_replace_line_test.rb test/integration/shop/api/cart_persistence_test.rb test/integration/shop/api/cart_overflow_test.rb test/integration/shop/api/cart_total_amount_test.rb test/services/shop/order_creator_test.rb test/integration/shop/api/orders_controller_test.rb`
+- `node --test test/javascript/cart_tenant_reset_test.mjs test/javascript/clear_cart_after_successful_pay_test.mjs test/javascript/lk_history_repeat_one_click_test.mjs test/javascript/create_repeat_inline_order_test.mjs` + `npx vite build` + `bundle exec rubocop` по изменённым файлам
+
+## DoD
+
+- Subtask 1–9 тестами; Не ломать — зелёное.
+- COMPONENT_MAP: да — строка `cartSheetStore` (сброс корзины при смене точки, `DELETE /cart` при «Товар недоступен»), решение на `/review`.
+- Fly: после 🚀 1 — Point A ↔ вторая точка на одном хосте: корзина очищается с сообщением; пустая — без сообщения.
+
+---
+
 # todo — TASK_115: CODE:BLACK — явное членство точек в сети (очередь, шаг 4)
 
 | Поле | Значение |
