@@ -4,14 +4,14 @@
 |------|----------|
 | **Основание** | [TASK_90 § Патч 2](../milestones/veha_2/requirements/customer_tasks/TASK-90-Восстановление-WebPush-после-запрета-уведомлений.md#патч-2-2026-10-18) — Subtask 1, 1b, 8 (patch v2) · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 6 · [Google Doc](https://docs.google.com/document/d/1YtZzj-Lf2HHrM4azejIuZISTKsWdu8q6y-kPHvm_d44/edit) |
 | **Не в scope** | регистрация токена, `/push/register`, VAPID, Service Worker · `orderStatusCtaMachine.js` · iOS / Wallet · `resumePushAfterSettings` (только `armed` + `granted`) · случай «нет Notification API» (TASK_109) · известные ограничения 1–3 Патча 2 · удаление тестов `denied → settings` · TEMP DIAG (TASK_108) · текст/поведение `OrderStatus.svelte` |
-| **Статус** | SPEC |
+| **Статус** | GREEN |
 
 ## SBR
 
 - [x] intake `7f7c5ff7` — Патч 2 дословно, CBR #90, очередь 6 → `in_progress`
-- [x] SPEC — факты патча = код, сдвигов нет (ниже) · решения · файлы · Не ломать · Проверка
-- [ ] RED
-- [ ] GREEN
+- [x] SPEC `80922271` — факты патча = код, сдвигов нет (ниже) · решения · файлы · Не ломать · Проверка
+- [x] RED `3ff5d957` — 41 runs: 5 F (`default` → `dismissed` в `registerShopPush` и на пути аккордеона, копирайт, ветка `dismissed` в `subscribeOrderPush`, тост `notice` в аккордеоне); охранные зелёные (`denied` → recovery + тост, `dismissed` не взводит `resumePushAfterSettings`, `OrderStatus.svelte` `else` → `"error"`) · `:430-444` переписан явно (`default` → `dismissed`), `:350-359`, `:399-409`, `:483-495` не тронуты · константа через namespace-импорт — чтобы отсутствие экспорта не роняло загрузку файла
+- [x] GREEN — `firebasePush.js` `reason: "dismissed"` для не-`denied` · `PUSH_NOT_ENABLED_TOAST` + ветка `dismissed` (`notice`, без `openSettings`) · аккордеон `result?.notice` → обычный тост · задача (`order_status_push_subscribe` + `active_orders_accordion` + `push_environment`) 110/0 · вся JS-зона `node --test "test/javascript/**/*.mjs"` 756: 684/72 — те же 72 legacy, что и без правок (749: 677/72; `#71`, `#41 sticky`, TASK_100/`shopPayFsm` `navigator.onLine`, `PERSONAL-CABINET [RED]`, `shop_telegram_webview` — ISSUES) · `npm run vite:build` OK
 - [ ] `/regress`
 - [ ] `/review` (bugbot + security + crit-audit, COMPONENT_MAP, Entire, push, CI)
 

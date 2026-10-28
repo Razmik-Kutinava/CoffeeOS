@@ -102,7 +102,8 @@ export async function registerShopPush(opts = {}) {
     throw err
   }
   if (permission !== "granted") {
-    return { ok: false, reason: "denied", permission }
+    // TASK_90 Патч 2: "default" — диалог закрыт без выбора, это не запрет.
+    return { ok: false, reason: permission === "denied" ? "denied" : "dismissed", permission }
   }
 
   let supported = false

@@ -280,6 +280,9 @@
         toastMsg = ""
         toastOpensSettings = false
         settingsFallback = ""
+      } else if (result?.notice) {
+        toastMsg = result.notice
+        toastOpensSettings = false
       } else {
         toastOpensSettings = Boolean(result?.openSettings)
       }

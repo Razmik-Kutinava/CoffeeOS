@@ -128,6 +128,8 @@ export async function downloadWalletPass(opts = {}) {
 const PUSH_SUCCESS_LABEL = "✓ Уведомления включены"
 /** Публичный текст denied-баннера (#81 / #92). */
 export const PUSH_DENIED_TOAST = "Уведомления запрещены в настройках браузера"
+/** TASK_90 Патч 2: системный диалог закрыт без выбора — без recovery. */
+export const PUSH_NOT_ENABLED_TOAST = "Уведомления не включены"
 /** #92 recovery CTA. */
 export const PUSH_OPEN_SETTINGS_CTA = "Открыть настройки"
 export const PUSH_WATCH_READINESS_CTA = "Смотреть готовность"
@@ -244,6 +246,17 @@ export async function subscribeOrderPush(opts = {}) {
         primaryLabel: idleLabel,
         error: "denied",
         openSettings: true
+      }
+    }
+
+    if (result?.reason === "dismissed") {
+      if (typeof onToast === "function" && injectedRegister) onToast(PUSH_NOT_ENABLED_TOAST)
+      return {
+        ok: false,
+        isLoading: false,
+        primaryLabel: idleLabel,
+        error: "dismissed",
+        notice: PUSH_NOT_ENABLED_TOAST
       }
     }
 
