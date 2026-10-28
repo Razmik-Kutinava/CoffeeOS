@@ -5,7 +5,7 @@
 **Дата:** 2026-10-28 (очередь Push + SMS: шаг 3 — GREEN; на проде Fly v516)  
 **Ветка:** `develop`  
 **Очередь:** [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) — один шаг = новый чат, `/start` берёт шаг сам  
-**Следующий шаг:** 3 — TASK_92 Патч 2 «Push при отмене заказа: tag, текст по инициатору» — `/regress` (в этом же чате; GREEN `6d95763e`, Entire attach — на `/review`)
+**Следующий шаг:** 3 — TASK_92 Патч 2 «Push при отмене заказа: tag, текст по инициатору» — `/review` (в этом же чате; GREEN `6d95763e`, /regress PASS 268/0, Entire attach — на `/review` до push)
 
 | Сейчас | Дальше |
 |--------|--------|

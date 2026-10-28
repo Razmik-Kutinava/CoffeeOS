@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-28 (очередь Push + SMS: шаг 3 TASK_92 Патч 2 — GREEN)  
+**Дата:** 2026-10-28 (очередь Push + SMS: шаг 3 TASK_92 Патч 2 — /regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь 3 /regress PASS** (2026-10-28) · зона: push о статусе заказа + все пути отмены (гость, бариста, смена статуса) + ready-путь Патча 1 · Rails 28 файлов 268/0 · JS 5 файлов 66/67 — 1 fail `applyStickyCancelSuccess #41` = известный legacy (ISSUES, с TASK_106), фронт не менялся · полный `test/integration/shop/` — CI · Fly MCP — после 🚀 1 · [todo](todo.md) | `/review` (Entire attach до push) |
 | **Очередь 3 GREEN** (2026-10-28) · RED `5ec173a4` (19 runs: 7 F; SW охранный 18/0, мутация `opts.tag` → 2 fail) → GREEN `6d95763e` · `OrderStatusPushPayload::TAG_ONLY_STATUSES` · нотификатор: `cancelled` из `pending_payment` → нет push, `actions`/`progress` только если есть, `GUEST_CANCEL_BODY` · задача 19/0 · JS 18/0 · соседи 56/0 · rubocop 0 · **Entire: пусто** (`no trailer`, транскрипта текущего чата нет) → attach на `/review` до push · не запушено · [todo](todo.md) | `/regress` |
 | **Очередь 3 SPEC** (2026-10-28) · факты патча = код, сдвигов нет (`order_status_push_notifier.rb:30-36,53-63,82-84,17,111-114`, `order_status_push_payload.rb:8-22`, `show.js.erb:50`, три пути отмены `:42`/`:60`/`:41`, `payment_failure_journal.rb:105-111,134-136`) · текст отмены — `OrderCancellationPresenter` (он же `cancel_message` API/Cable, `orders_guest_cancel_test.rb:27`) → не трогаем, «Вы отменили заказ» — константа в нотификаторе · план: payload `cancelled` → только `tag`; нотификатор: из `pending_payment` выход, actions/progress только если есть, префикс только при progress; `system` — текст как сейчас · SW не меняется, тест охранный · COMPONENT_MAP: строки `OrderStatusPushNotifier` нет → на review · 2 файла кода + 3 теста · [todo](todo.md) | `/sbr` |
 | **Очередь 3 intake** (2026-10-28) · Google Docs MCP OK (`1GlRrdN…`, одна вкладка) · «Патч 2: 2026-10-18» дословно в конец `TASK-92-…md` после блока SBR Патча 1 (только пустые строки между блоками, как у Патча 1) · суть: push на `cancelled` уходит без tag/actions/progress (`order_status_push_payload.rb:8-22`, `order_status_push_notifier.rb:53-58,82-84`) → на Android не заменяет предыдущее уведомление; при отмене гостем заголовок = текст «Заказ отменён» → Subtask 5b–5f: tag `order-#{id}` без actions/progress, из `pending_payment` push нет, текст по инициатору («Вы отменили заказ» / «…исполнителем…»), тесты notifier/payload/SW · шапка: «Зависит от»/«Порядок сборки»/«Статус» нет · CBR #92 + очередь 3 → `in_progress` · факты файл:строка не сверялись | `/spec` шага 3 |
