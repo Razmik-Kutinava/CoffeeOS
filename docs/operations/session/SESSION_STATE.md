@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-28 (очередь Push + SMS: шаг 0.3 in_progress — GREEN)  
+**Дата:** 2026-10-28 (очередь Push + SMS: шаг 0.3 in_progress — /regress PASS)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь 0.3 /regress PASS** (2026-10-28) · зона SMS «Заказ готов»: 8 файлов (ссылка, нотификатор, SMS-клиент, OTP, Telegram-клиент, каскад-джоба, `/o/:hash`, rack-attack `/o/`) 98/0 · код app не менялся → Fly MCP skip · [todo](todo.md) | `/review` |
 | **Очередь 0.3 GREEN** (2026-10-28) · TASK_118 Subtask 9 · RED `0344d954`: охранный тест «TASK_118 S9» в `order_ready_sms_link_test.rb` (хост из `fly.toml`, начало текста, ≤ 70) — зелёный сразу, мутации поймал: «Заказ готов!» → fail, `APP_HOST=order.codeblack.coffee` → 71 > 70 · GREEN `cccd0187`: «Уточнение 2026-10-24» дословно в ТЗ #39 (после :71) и #82 (после :49) · Проверка 4 файла 72/0 · Entire `01M60Q7W90ZDQ44P3ZE4ZAT59C` (attach, коммит переписан до push) · тесты гонять `ruby bin/rails test` (PowerShell) · не запушено | `/regress` → `/review` |
 | **Очередь 0.3 SPEC** (2026-10-28) · TASK_118 Subtask 9 · факты документа = код: `message_prefix` `order_ready_sms_link.rb:20-23`, `link_host` :16-18, `fly.toml:10` `APP_HOST=codeblack.coffee` (без `SHOP_SMS_LINK_HOST`), 19+16+3+27 = 65 ≤ 70, «Заказ готов!» = 71 · пробел: T-C1b проверяет длину только с `DEFAULT_HOST` (тоже 16 символов — совпадение) · ТЗ #39 :71 и #82 :49 совпали · план: RED = охранный тест в `order_ready_sms_link_test.rb` (читает `fly.toml`; зелёный сразу, доказательство — временная мутация «Заказ готов!» / длинный хост), GREEN = 2 строки-уточнения дословно · код приложения не меняется · [todo](todo.md) | `/sbr` |
 | **Очередь 0.3 intake** (2026-10-28) · Google Docs MCP OK · TASK_118 v4 (2026-10-24) · новый `customer_tasks/TASK-118-SMS-Заказ-готов-история-заказов-CODE-BLACK.md` (текст 1:1) · CBR #118 · очередь 0.3 → `in_progress` · метка `TASK-39-SMS-READY-LINK-ORDER-HISTORY-EXT` = TASK_118 (добавлена в таблицу меток) · scope шага: только Subtask 9 — тест длины SMS ≤ 70 с хостом из `fly.toml` (`APP_HOST=codeblack.coffee`; в доке 65/70, «Заказ готов!» = 71) + строка «Уточнение 2026-10-24» в ТЗ #39 (после :71) и #82 (после :49) · факты дока (номера строк `order_ready_sms_link.rb`, `fly.toml:10`) не сверялись — это `/spec` · `84192185` | `/spec` шага 0.3 |
