@@ -4,14 +4,14 @@
 |------|----------|
 | **Основание** | [TASK_120](../milestones/veha_2/requirements/customer_tasks/TASK-120-Корзина-при-переходе-в-другую-точку.md) v3, Subtask 1–9 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 5 · [Google Doc](https://docs.google.com/document/d/1Uz11weI_haC7SRlIdKt1teEloqz3QID_iWknF4609dM/edit) |
 | **Не в scope** | отдельные корзины по точкам · цены, настройки товаров, `json_lines` (расчёт) · checkout и `OrderCreator` (код) · платежи · Quick Repeat (`createRepeatInlineOrder`), `historyRepeatAdapter`, `clearCartAfterSuccessfulPay` (COMPONENT_MAP:11) · определение точки (`tenant_resolution.rb`, `shopTenantHeader.js`) · авторизация, cookie (`session_store.rb`, domain) · офлайн-очередь корзины (`shopOfflineCart.js`) · `CartSheet.svelte` (плашка сообщения уже есть) |
-| **Статус** | SPEC |
+| **Статус** | GREEN |
 
 ## SBR
 
 - [x] intake `6069d7eb` (ТЗ v3 дословно, CBR #120, очередь 5 → `in_progress`)
-- [x] SPEC — факты документа совпали с кодом (сдвиги ниже), решения, файлы, Не ломать, Проверка · миграции нет
-- [ ] RED
-- [ ] GREEN
+- [x] SPEC `082043e5` — факты документа совпали с кодом (сдвиги ниже), решения, файлы, Не ломать, Проверка · миграции нет
+- [x] RED `2d653fb6` — Rails 18 runs: 6 F, 7 E (нет `TENANT_SESSION_KEY`/`tenant_reset?`, корзина B в A пересчитывается или даёт 404, нет `cart_reset`, заказ из чужих позиций); 5 охранных зелёные (пустая корзина, та же точка, 404 → `DELETE /cart` → добавление, разные хосты, `clear!`) · JS 10: 7 fail, 3 охранных «без флага» зелёные
+- [x] GREEN `cfa6f721` — `CartService`: `TENANT_SESSION_KEY`, `reset_if_other_tenant!` в `initialize`, `tenant_reset?`, метка в `add!`/`replace_line!`, снятие в `clear!` · `CartController`: один сервис на запрос (`cart_service`), `with_cart_reset` · `cartSheetStore.js`: `CART_TENANT_RESET_MESSAGE`, флаг в refresh/PATCH/DELETE строки, слушатель `shop:cart-reset`, `DELETE /cart` в ветке «Товар недоступен» · `shopCartAdd.js`: `CART_RESET_EVENT`, событие при `cart_reset`, 404 «Товар недоступен» → `DELETE /cart` + `clearCartCache` · задача Rails 18/0, JS 10/0 · соседи Rails 89/0 (корзина ×5, `order_creator`, `orders_controller`, `tenant_isolation`), JS 21/0 (очистка после оплаты, повтор из истории, Quick Repeat) · rubocop 0 · `vite build` OK · **Entire: пусто** (`no trailer`, транскрипта чата нет) → attach на `/review` до push
 - [ ] `/regress`
 - [ ] `/review`
 
