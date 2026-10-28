@@ -1,0 +1,28 @@
+{
+  "task": "B1_1_order_status_fly_smoke",
+  "date": "2026-08-28",
+  "base": "https://coffeeos.fly.dev",
+  "tenant_id": "2fdee1ac-4674-41ee-b89e-87b45643f789",
+  "email": "b11-fly-08281031@coffeeos.dev",
+  "checks": [
+    {
+      "id": "otp_send",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "otp_verify",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": "create_order",
+      "pass": false,
+      "http": 422,
+      "order_id": null,
+      "order_create_ms": 631
+    }
+  ],
+  "status": "FAIL",
+  "error": "JSON::ParserError: unexpected character: '<!doctype' at line 1 column 1"
+}

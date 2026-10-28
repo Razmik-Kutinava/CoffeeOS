@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-28 — chore: чистая рабочая копия перед очередью Push + SMS
+
+- Незакоммиченный отладочный лог `# region agent log` (sessionId `896a0d`, брошенный чат 2026-10-06/07 про табло) в `barista/dashboard_controller.rb`, `barista/order_board_broadcaster.rb`, `callbacks/payment_status_updater.rb`, `shop/order_creator.rb` и `debug-896a0d.log` убран в `git stash` («debug 896a0d …»), в коммиты задач не попадёт; вернуть — `git stash pop`.
+- Удалены пустые случайные файлы `caramel`, `vanilla`, `{`, `typescript` (следы shell-команд 2026-09-18).
+- Закоммичены забытые артефакты приёмки: `demo-feedback/b11_fly_smoke_2026-08-28.json`, `mcp/fly_v461_2026-08-29/mcp_result.json` (без секретов).
+
 ## 2026-10-28 — docs: очередь Push + SMS (строгий порядок задач заказчика)
 
 - Новый [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md): 4 подготовительных шага (уточнения + TASK_99, TASK_114 Subtask 1, TASK_118 Subtask 9, TASK_119 этап 1), 16 задач и 7 точек деплоя в порядке документа заказчика; метки документов (TASK-PUSH-…) ↔ ID заказчика (TASK_108–121); ручные шаги владельца; открытые вопросы.
