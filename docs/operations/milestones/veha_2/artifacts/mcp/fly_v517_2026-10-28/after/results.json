@@ -1,0 +1,252 @@
+{
+  "label": "after",
+  "base": "https://coffeeos.fly.dev",
+  "startedAt": "2026-10-28T14:19:37.131Z",
+  "catalog_and_env_event_412x915": {
+    "first": {
+      "href": "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/",
+      "title": "CoffeeOS — витрина",
+      "address": "Самара, ул. Куйбышева, 78",
+      "switchable": false,
+      "hours": "Пн–Пт 08:00–22:00, Сб–Вс 10:00–20:00",
+      "profileLabel": "Профиль ID",
+      "cartSheet": true,
+      "cartSheetMode": "peek",
+      "checkoutText": "0₽",
+      "cartError": null,
+      "resetBannerInBody": false,
+      "cartLs": "{\"savedAt\":\"2026-10-28T14:19:55.391Z\",\"ttlMs\":7776000000,\"payload\":{\"items\":[],\"total\":0}}",
+      "selected": null,
+      "envGuard": "1"
+    },
+    "afterReload": {
+      "href": "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/",
+      "title": "CoffeeOS — витрина",
+      "address": "Самара, ул. Куйбышева, 78",
+      "switchable": false,
+      "hours": "Пн–Пт 08:00–22:00, Сб–Вс 10:00–20:00",
+      "profileLabel": "Профиль ID",
+      "cartSheet": true,
+      "cartSheetMode": "peek",
+      "checkoutText": "0₽",
+      "cartError": null,
+      "resetBannerInBody": false,
+      "cartLs": "{\"savedAt\":\"2026-10-28T14:20:01.399Z\",\"ttlMs\":7776000000,\"payload\":{\"items\":[],\"total\":0}}",
+      "selected": null,
+      "envGuard": "1"
+    },
+    "envFirst": [
+      {
+        "method": "POST",
+        "type": "Ping",
+        "status": 204,
+        "failed": null
+      }
+    ],
+    "envTotal": [
+      {
+        "method": "POST",
+        "type": "Ping",
+        "status": 204,
+        "failed": null
+      }
+    ],
+    "api": [
+      "GET /shop/api/profile 401",
+      "GET /shop/api/orders/active 200",
+      "GET /shop/api/cart 200",
+      "GET /shop/api/cart 200",
+      "GET /shop/api/categories 200",
+      "GET /shop/api/frequent_products 200",
+      "GET /shop/api/frequent_products 200",
+      "GET /shop/api/frequent_products 200",
+      "GET /shop/api/config 200",
+      "GET /shop/api/tenants 200",
+      "GET /shop/api/tenants 200",
+      "POST /shop/api/environment_events 204",
+      "GET /shop/api/profile 401",
+      "GET /shop/api/orders/active 200",
+      "GET /shop/api/cart 200",
+      "GET /shop/api/cart 200",
+      "GET /shop/api/categories 200",
+      "GET /shop/api/frequent_products 200",
+      "GET /shop/api/frequent_products 200",
+      "GET /shop/api/frequent_products 200",
+      "GET /shop/api/config 200",
+      "GET /shop/api/tenants 200",
+      "GET /shop/api/tenants 200",
+      "GET /shop/api/orders/active 200",
+      "GET /shop/api/frequent_products 200",
+      "GET /shop/api/categories 200"
+    ],
+    "consoleErrors": [
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 401 () https://coffeeos.fly.dev/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/favicon.ico"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 401 () https://coffeeos.fly.dev/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      }
+    ],
+    "apiNot2xx": [
+      {
+        "url": "/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "method": "GET",
+        "type": "Fetch",
+        "status": 401,
+        "t": 1793197194673
+      },
+      {
+        "url": "/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "method": "GET",
+        "type": "Fetch",
+        "status": 401,
+        "t": 1793197201102
+      }
+    ]
+  },
+  "cart_tenant_switch_412x915": {
+    "addA": [
+      {
+        "method": "POST",
+        "url": "/shop/api/cart/add?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "status": 200,
+        "cart_reset": null,
+        "items": 1
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "status": 200,
+        "cart_reset": null,
+        "items": 1
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "status": 200,
+        "cart_reset": null,
+        "items": 1
+      }
+    ],
+    "stateA": {
+      "href": "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/",
+      "title": "CoffeeOS — витрина",
+      "address": "Самара, ул. Куйбышева, 78",
+      "switchable": false,
+      "hours": "Пн–Пт 08:00–22:00, Сб–Вс 10:00–20:00",
+      "profileLabel": "Профиль ID",
+      "cartSheet": true,
+      "cartSheetMode": "peek",
+      "checkoutText": "10₽",
+      "cartError": null,
+      "resetBannerInBody": false,
+      "cartLs": "{\"savedAt\":\"2026-10-28T14:20:29.898Z\",\"ttlMs\":7776000000,\"payload\":{\"items\":[{\"index\":0,\"product_id\":\"3c5259e0-f42f-4d47-953d-2ce82e335f8c\",\"product_name\":\"Фильтр-кофе без кофеина (декаф) Гватемала\",\"description\":\"Тот же формат фильтра — без кофемашины, без горечи. Декофеинизация водой и воздухом сохраняет вкус зерна без химии. Арабика из Гватемалы: черешня, карамель, лёгкий зелёный чай с цитрусом. Для вечера, для паузы, для спокойного ритма.\",\"quantity\":1,\"price\":10,\"image_url\":\"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80\",\"selected_modifiers\":[],\"removed_modifiers\":[{\"id\":\"7c469cb3-43d6-400e-9863-835149ecd4fb\",\"name\":\"Со льдом\",\"price\":0},{\"id\":\"9fd199d3-919d-430a-895c-7f32b7c54812\",\"name\":\"Кардамон и корица - пряный акцент, без сладости\",\"price\":30},{\"id\":\"8d4f0d06-43c1-400e-948b-380d897a23f8\",\"name\":\"Яблочный с корицей - мягкий, с лёгкой фруктовостью\",\"price\":30},{\"id\":\"5704146b-26ce-4f84-aeee-81410d496f16\",\"name\":\"Мёд - натуральная сладость с цветочным оттенком\",\"price\":30},{\"id\":\"826e9365-c881-4372-9258-1e43a583589d\",\"name\":\"Топинамбур - нейтральная сладость без послевкусия\",\"price\":30},{\"id\":\"a3a6ec13-e4af-47b6-876b-2ba4cc6b1d83\",\"name\":\"Сахар - мягкая сладость\",\"price\":0}],\"unit_total\":10,\"line_total\":10}],\"total\":10}}",
+      "selected": null,
+      "envGuard": "1"
+    },
+    "toB": {
+      "switched": false,
+      "reason": "в шапке нет переключателя точек (одна активная точка)"
+    },
+    "consoleErrors": [
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/favicon.ico"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 401 () https://coffeeos.fly.dev/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      }
+    ],
+    "apiNot2xx": [
+      {
+        "url": "/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+        "method": "GET",
+        "type": "Fetch",
+        "status": 401,
+        "t": 1793197213586
+      }
+    ]
+  },
+  "ruby_1r_client_ip": [
+    {
+      "url": "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789",
+      "status": 200
+    },
+    {
+      "url": "/up",
+      "status": 200
+    }
+  ],
+  "finishedAt": "2026-10-28T14:20:47.483Z"
+}
