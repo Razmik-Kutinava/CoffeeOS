@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK_92](../milestones/veha_2/requirements/customer_tasks/TASK-92-Production-background-FCM-и-синхронизация-статусов-заказа.md) § «Патч 1: 2026-10-18», Subtask 4–4g · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 2 · [Google Doc](https://docs.google.com/document/d/1GlRrdNGaXuSTTCYEKBN1dem8hB0A0WPnC2w9O_gi-mc/edit) |
 | **Не в scope** | момент постановки claim (C1 остаётся ранним) · колонки в `orders` · payload FCM · каскад и решение об SMS · статусы Barista · `FCM_SIMULATE` · Патч 2 (cancelled) · ActionCable · код Wallet/APNs (только изоляция их ошибок) · endpoint скачивания карты |
-| **Статус** | `/review` — crit-audit CLEAN · push → CI |
+| **Статус** | done · CI green [40672687152](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40672687152) на `95889e7c` |
 
 ## SBR
 
