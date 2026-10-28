@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-28 (очередь Push + SMS: шаг 3 TASK_92 Патч 2 — REVIEW)  
+**Дата:** 2026-10-28 (очередь Push + SMS: шаг 3 TASK_92 Патч 2 — done)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь 3 done** (2026-10-28) · Entire `01M6130ZX1S5EKZZHHR9PCT2X5` (attach `28acbb46 --force`, ops-коммит переписан до push → `3dc5f126`, `explain HEAD` не пустой) · push `77959fd4..3dc5f126` · **CI green** [40677574862](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40677574862) — 5 jobs, test 2342 runs 0 F/E 1 skip + Semgrep/CodeQL · очередь 3 → `done` · Fly MCP — после 🚀 1 · [todo](todo.md) | новый чат → `/start` → шаг 4 TASK_115 |
 | **Очередь 3 REVIEW** (2026-10-28) · security 0 medium+ (опционально: tenant-guard на `MobileCustomer.find_by` — до патча, backlog) · bugbot: 1-й прогон по диффу develop↔main (3084 файла) пропустил оба файла задачи → повтор `Diff: natural language` по 2 файлам → 0 · crit-audit CLEAN `d687c6e8..6d95763e` (`c0fed5af`, `last_audited_sha` → `6d95763e`; C1: тот же запрос `order_status_logs`, C4: `call` под `rescue StandardError`) · COMPONENT_MAP: да — строка `OrderStatusPushNotifier + OrderStatusPushPayload`, пометка `opts.tag` у `swNotificationActions` (`5a5619aa`) · CBR #92 → REVIEW · Entire attach текущей сессии на незапушенный HEAD · Fly MCP — после 🚀 1 · [todo](todo.md) | push → CI → очередь 3 `done` |
 | **Очередь 3 /regress PASS** (2026-10-28) · зона: push о статусе заказа + все пути отмены (гость, бариста, смена статуса) + ready-путь Патча 1 · Rails 28 файлов 268/0 · JS 5 файлов 66/67 — 1 fail `applyStickyCancelSuccess #41` = известный legacy (ISSUES, с TASK_106), фронт не менялся · полный `test/integration/shop/` — CI · Fly MCP — после 🚀 1 · [todo](todo.md) | `/review` (Entire attach до push) |
 | **Очередь 3 GREEN** (2026-10-28) · RED `5ec173a4` (19 runs: 7 F; SW охранный 18/0, мутация `opts.tag` → 2 fail) → GREEN `6d95763e` · `OrderStatusPushPayload::TAG_ONLY_STATUSES` · нотификатор: `cancelled` из `pending_payment` → нет push, `actions`/`progress` только если есть, `GUEST_CANCEL_BODY` · задача 19/0 · JS 18/0 · соседи 56/0 · rubocop 0 · **Entire: пусто** (`no trailer`, транскрипта текущего чата нет) → attach на `/review` до push · не запушено · [todo](todo.md) | `/regress` |
