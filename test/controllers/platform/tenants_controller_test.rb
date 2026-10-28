@@ -310,9 +310,159 @@ class Platform::TenantsControllerTest < ActionDispatch::IntegrationTest
     refute_match(/Счётчик:/, response.body)
   end
 
+  # --- TASK_115 CODE:BLACK network membership ---
+
+  test "TASK_115 S6 form shows CODE:BLACK checkbox and create saves the flag" do
+    get "/admin/tenants/new"
+    assert_response :success
+    assert_match(/Сеть CODE:BLACK/, response.body)
+    assert_match(/name="tenant\[code_black_member\]"/, response.body)
+
+    slug = "cb-create-#{SecureRandom.hex(4)}"
+    post "/admin/tenants", params: tenant_create_params(slug: slug, code_black_member: "1")
+
+    assert_response :redirect
+    assert Tenant.find_by!(slug: slug).code_black_member
+  end
+
+  test "TASK_115 S7 create with flag writes audit log from false to true" do
+    slug = "cb-audit-create-#{SecureRandom.hex(4)}"
+    post "/admin/tenants", params: tenant_create_params(slug: slug, code_black_member: "1")
+
+    tenant = Tenant.find_by!(slug: slug)
+    logs = code_black_logs(tenant)
+    assert_equal 1, logs.size
+    log = logs.first
+    assert_equal @uk.id, log.actor_id
+    assert_equal "Tenant", log.entity_type
+    assert_equal tenant.id, log.tenant_id
+    assert_equal false, log.details["from"]
+    assert_equal true, log.details["to"]
+    assert log.created_at.present?
+  end
+
+  test "TASK_115 S8 create without the checkbox keeps point outside the network and writes no audit" do
+    slug = "cb-default-#{SecureRandom.hex(4)}"
+    post "/admin/tenants", params: tenant_create_params(slug: slug)
+
+    tenant = Tenant.find_by!(slug: slug)
+    assert_equal false, tenant.code_black_member
+    assert_empty code_black_logs(tenant)
+  end
+
+  test "TASK_115 S6 S7 update toggles the flag and logs each change with actor" do
+    tenant = create_hours_tenant!
+
+    patch "/admin/tenants/#{tenant.id}", params: tenant_update_params(tenant, code_black_member: "1")
+    assert_response :redirect
+    assert tenant.reload.code_black_member
+
+    patch "/admin/tenants/#{tenant.id}", params: tenant_update_params(tenant, code_black_member: "0")
+    assert_response :redirect
+    assert_not tenant.reload.code_black_member
+
+    logs = code_black_logs(tenant).order(:created_at).to_a
+    assert_equal [ [ false, true ], [ true, false ] ], logs.map { |l| [ l.details["from"], l.details["to"] ] }
+    assert(logs.all? { |l| l.actor_id == @uk.id })
+  end
+
+  test "TASK_115 S7 changing other fields does not write the membership audit" do
+    tenant = create_hours_tenant!(code_black_member: true)
+
+    patch "/admin/tenants/#{tenant.id}", params: tenant_update_params(tenant, name: "Новое имя", status: "frozen", code_black_member: "1")
+    assert_response :redirect
+    assert_equal "Новое имя", tenant.reload.name
+    assert tenant.code_black_member, "S13: status change must not drop membership"
+    assert_empty code_black_logs(tenant)
+  end
+
+  test "TASK_115 S7 rolled back update keeps flag and writes no audit" do
+    tenant = create_hours_tenant!
+
+    original = Platform::TenantOnboarding::Provision.method(:call)
+    Platform::TenantOnboarding::Provision.define_singleton_method(:call) { |**| raise "provision failed" }
+    begin
+      patch "/admin/tenants/#{tenant.id}", params: tenant_update_params(tenant, code_black_member: "1")
+    ensure
+      Platform::TenantOnboarding::Provision.define_singleton_method(:call, original)
+    end
+
+    assert_response :unprocessable_entity
+    assert_not tenant.reload.code_black_member
+    assert_empty code_black_logs(tenant)
+  end
+
+  test "TASK_115 S9 tenants list shows the CODE:BLACK column" do
+    create_tenant!(organization: @org, name: "В сети", slug: "cb-list-#{SecureRandom.hex(3)}", code_black_member: true)
+
+    get "/admin/tenants"
+    assert_response :success
+    assert_match(/<th[^>]*>CODE:BLACK<\/th>/, response.body)
+  end
+
+  test "TASK_115 S10 non-UK roles cannot change the flag" do
+    tenant = create_hours_tenant!
+
+    %w[franchise_manager general_manager shift_manager barista].each do |code|
+      user = create_user!(
+        tenant: tenant,
+        organization: @org,
+        role_codes: [ code ],
+        email: "#{code}-#{SecureRandom.hex(4)}@test.local",
+        password: "pass123"
+      )
+      reset!
+      login_as!(user)
+
+      patch "/admin/tenants/#{tenant.id}", params: tenant_update_params(tenant, code_black_member: "1")
+      assert_response :redirect, "role #{code}"
+      assert_not tenant.reload.code_black_member, "role #{code} changed the flag"
+    end
+    assert_empty code_black_logs(tenant)
+  end
+
+  test "TASK_115 S11 production kitchen cannot join the network" do
+    kitchen = create_tenant!(organization: @org, slug: "cb-kitchen-#{SecureRandom.hex(4)}", type: "production_kitchen")
+
+    patch "/admin/tenants/#{kitchen.id}", params: tenant_update_params(kitchen, type: "production_kitchen", code_black_member: "1")
+
+    assert_response :unprocessable_entity
+    assert_not kitchen.reload.code_black_member
+    assert_empty code_black_logs(kitchen)
+  end
+
   private
 
-  def tenant_create_params(slug:, name: "Точка", weekday_schedules: default_weekday_schedules, modules: nil, point_campaign: nil, city: nil)
+  def code_black_logs(tenant)
+    AdminAuditLog.where(action: "tenant_code_black_member_changed", entity_id: tenant.id)
+  end
+
+  def create_hours_tenant!(**attrs)
+    tenant = create_tenant!(organization: @org, slug: "cb-#{SecureRandom.hex(4)}", **attrs)
+    Platform::TenantWeekdaySchedulesSync.call(
+      tenant: tenant,
+      schedule_params: { "0" => { enabled: "1", opens_at: "09:00", closes_at: "21:00" } }
+    )
+    tenant
+  end
+
+  def tenant_update_params(tenant, **overrides)
+    {
+      tenant: {
+        name: tenant.name,
+        slug: tenant.slug,
+        organization_id: @org.id,
+        type: tenant.type,
+        status: tenant.status,
+        country: "RU",
+        currency: "RUB",
+        timezone: "Europe/Moscow"
+      }.merge(overrides),
+      weekday_schedules: default_weekday_schedules
+    }
+  end
+
+  def tenant_create_params(slug:, name: "Точка", weekday_schedules: default_weekday_schedules, modules: nil, point_campaign: nil, city: nil, code_black_member: nil)
     params = {
       tenant: {
         organization_id: @org.id,
@@ -327,6 +477,7 @@ class Platform::TenantsControllerTest < ActionDispatch::IntegrationTest
       weekday_schedules: weekday_schedules
     }
     params[:tenant][:city] = city if city
+    params[:tenant][:code_black_member] = code_black_member if code_black_member
     params[:modules] = modules if modules
     params[:point_campaign] = point_campaign if point_campaign
     params
