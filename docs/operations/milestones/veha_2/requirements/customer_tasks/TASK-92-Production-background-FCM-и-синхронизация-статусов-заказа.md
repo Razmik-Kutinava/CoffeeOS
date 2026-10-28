@@ -7,6 +7,7 @@
 **Источник:** текст заказчика (правка по фоновым уведомлениям) + Google Doc  
 **Артефакты:** docs/operations/milestones/veha_2/artifacts/production_background_fcm_status_sync/  
 **Google Doc:** https://docs.google.com/document/d/1gcML9WkV4n2s6KNsDN0sobY3ITm4Dge9kOjStzf917g/edit?usp=sharing  
+**Google Doc TASK_92 (тело + патчи, очередь Push + SMS):** https://docs.google.com/document/d/1GlRrdNGaXuSTTCYEKBN1dem8hB0A0WPnC2w9O_gi-mc/edit  
 **Связь:** reopen / gap — [#38 Фоновые уведомления…](Фоновые%20уведомления%20прогресс-бар%20Android%20FCM%20и%20Apple%20Wallet%20iOS.md) · [#81 Косяки…](Косяки%20уведомлений%20Wallet%20WebPush%20фоновые%20и%20кнопка%20чат.md) · [#41 Action Buttons…](Динамический%20блок%20действий%20Action%20Buttons%20в%20статусной%20панели%20заказа.md)  
 
 ---
@@ -102,3 +103,373 @@ https://docs.google.com/document/d/1gcML9WkV4n2s6KNsDN0sobY3ITm4Dge9kOjStzf917g/
 - Второй gap: кнопка «чат с поддержкой» **показывается** по статусной модели (подстановка/смена текста CTA), но **не работает** (клик).
 - Оспаривается формулировка «Задача реализована полностью».
 - Без правок кода на intake; Next: `go` → `/spec`.
+- 2026-10-28 (очередь Push + SMS, шаг 2): документ TASK_92 из очереди (`1GlRrdN…`) прочитан через Google Docs MCP. Его тело (разделы 1–6, Subtask 1–16) в репо раньше не сохранялось — здесь был только текст #38. Патч 1 ссылается на Subtask 4, 5 и 16 тела, поэтому ниже дословно вставлены тело документа и Патч 1. Патч 2 — шаг 3 очереди, будет вставлен после Патча 1. Правки только форматирования: разорванные строки и обрывки `**` из экспорта MCP, команды в блоке кода.
+- 2026-10-28: в документе нет «Зависит от» / «Порядок сборки» / «Статус» для Патча 1 — сверять со строкой очереди нечего, расхождения нет. Факты Патча 1 (файл:строка) не сверялись — это `/spec`.
+
+---
+
+## Google Doc TASK_92 (1:1, MCP 2026-10-28) — тело документа
+
+# TASK_92: Production background FCM и синхронизация статусов заказа
+
+**Расширяет:** `docs/operations/milestones/veha_2/requirements/customer_tasks/Фоновые уведомления прогресс-бар Android FCM и Apple Wallet iOS.md`  
+**Реверсирует:** не применимо  
+**Основание:** live-аудит от 2026-09-16; #38 background FCM не подтверждён production device E2E; TASK #81 ранее зафиксировал background support как незакрытый backlog.
+
+Бизнес-цель: обеспечить фактическую доставку и корректное поведение фоновых уведомлений статуса заказа на Android, когда PWA не находится на экране, при этом сохранить единую статусную модель между табло баристы, backend, PWA и push-уведомлением.
+
+## 1. Карта интеграций — затронуто / нет
+
+### Затронуто
+
+Цепочка:
+`Barista → PATCH /barista/orders/:id/update_status → OrderStatusUpdateService → GuestOrderBroadcaster → OrderStatusPushNotifier → PushNotification/Job → FcmClient → Firebase → Service Worker → Android notification`
+
+Также затронуты:
+1. регистрация FCM;
+1. получение/хранение push token;
+1. notification permission;
+1. Service Worker;
+1. background notification actions;
+1. deep-link обратно в PWA;
+1. синхронизация статуса notification с текущим статусом заказа.
+
+Канонические integration-документы:
+1. `docs/integrations/INTEGRATIONS.md`
+1. `docs/integrations/pwa-realtime.md`
+1. `docs/integrations/notify-loyalty.md`
+
+### Не затронуто
+
+Источник истины статуса не меняется:
+`PATCH /barista/orders/:id/update_status`
+
+Запрещено менять бизнес-логику изменения статуса в:
+1. `Barista::OrdersController`;
+1. `Barista::OrderStatusUpdateService`.
+
+ActionCable остаётся самостоятельным foreground-каналом PWA.
+
+## 2. Карта компонентов
+
+### Существующие компоненты
+
+Затрагиваются:
+1. `GuestOrderBroadcaster`;
+1. `GuestOrderChannel`;
+1. `OrderStatusSheet`;
+1. `shopOrderCable.js`;
+1. `OrderStatus`;
+1. `OrderStatusPushNotifier`;
+1. `OrderStatusPushPayload`;
+1. `ReadyPushJob`;
+1. `SendPushNotificationJob`;
+1. `FcmClient`;
+1. FCM Service Worker;
+1. `firebasePush.js`;
+1. `swNotificationActions.js`.
+
+### Общий файл с другой задачей
+
+**Да.**
+
+`GuestOrderBroadcaster` используется одновременно foreground-цепочкой PWA и background push/Wallet/cascade.
+
+Граница:
+Эта задача может изменять только push-related поведение `GuestOrderBroadcaster` и вызываемые им push-компоненты в части доставки background FCM.
+Нельзя менять существующую Barista status transition logic и нельзя ломать ActionCable broadcast для PWA.
+
+Эта же граница должна быть отражена в `COMPONENT_MAP.md` после Review.
+
+### Новый компонент
+
+**Нет**, пока не доказана необходимость нового компонента.
+
+Сначала использовать существующий FCM pipeline.
+
+## 3. Текущее поведение — факт
+
+Live-аудит 2026-09-16 установил:
+1. Production использует реальный FCM path:
+`FCM_SIMULATE` не установлен, `FIREBASE_SERVICE_ACCOUNT_JSON` присутствует.
+1. Production queue работает:
+Solid Queue worker запущен; infrastructure down не обнаружен.
+1. Для проверенного guest Aram:
+`push_enabled=false`, `push_token` отсутствует.
+При таких условиях `OrderStatusPushNotifier` делает silent return до создания `PushNotification`.
+Источник:
+`app/services/shop/order_status_push_notifier.rb:35–36`.
+1. Реальная background FCM доставка на физический Android не доказана.
+1. Production device E2E для #38 в найденных артефактах отсутствует.
+1. В production DB не обнаружены `PushNotification` с #38-enriched `tag`.
+1. После 2026-06-11 свежих production `PushNotification` для проверенного сценария не обнаружено.
+1. PWA foreground имеет отдельный канал:
+`GuestOrderBroadcaster → ActionCable → shopOrderCable.js → OrderStatusSheet`.
+1. `ready` является terminal status для sticky sheet и удаление карточки после `ready` является существующим поведением, а не автоматически дефектом.
+1. Не доказано, что проблема background FCM находится внутри `FcmClient`, Firebase или Service Worker, поскольку live transition с валидным production token на физическом Android не был выполнен.
+
+## 4. Scope
+
+### Разрешено
+
+#### 4.1 FCM registration
+
+Обеспечить, чтобы пользовательский сценарий:
+`permission granted → FCM token получен → token сохранён → push_enabled=true`
+был реально работоспособен в production PWA.
+
+Проверить и при необходимости исправить только существующий registration flow.
+
+#### 4.2 Server-side delivery
+
+Обеспечить фактический production path:
+`GuestOrderBroadcaster → OrderStatusPushNotifier → PushNotification → Job → FcmClient → Firebase`.
+
+Для каждого status:
+1. `accepted`;
+1. `preparing`;
+1. `ready`;
+
+должна существовать проверяемая доставка.
+
+#### 4.3 Background notification
+
+При PWA в background Android должен получать notification с актуальным status заказа.
+
+Notification не должна зависеть от того, открыта ли PWA на экране.
+
+#### 4.4 Payload
+
+Сохранить контракт #38:
+1. order-specific tag;
+1. status;
+1. progress;
+1. contextual actions;
+1. deep link;
+1. данные заказа, необходимые Service Worker.
+
+Tag:
+`order-#{order.id}`
+
+#### 4.5 Status synchronization
+
+Notification должна соответствовать тому же статусу заказа, который был установлен через Barista flow.
+
+Источник истины:
+`PATCH /barista/orders/:id/update_status`.
+
+Не создавать отдельную status state machine внутри FCM.
+
+#### 4.6 Actions
+
+Сохранить существующую матрицу действий #38.
+
+При клике action:
+1. Cancel → существующий cancel API flow;
+1. Chat → открыть/focus PWA с существующим deep link;
+1. Tips → открыть/focus PWA с существующим deep link.
+
+Ошибки cancel API не должны блокировать notification/UI.
+
+#### 4.7 Race
+
+Проверить последовательность:
+`accepted → preparing → ready`
+в том числе при быстрых последовательных изменениях.
+
+Последнее актуальное состояние не должно быть потеряно из-за:
+1. job ordering;
+1. duplicate;
+1. stale notification;
+1. ready claim;
+1. retry.
+
+### Запрещено
+
+Не менять:
+1. `Barista::OrdersController` в части status update;
+1. `Barista::OrderStatusUpdateService` в части DB/status transition;
+1. источник истины статуса;
+1. ActionCable как foreground transport;
+1. существующую PWA status model без отдельного доказанного дефекта;
+1. Wallet/APNs в рамках этой задачи, если live-аудит не покажет прямую связь с Android FCM дефектом;
+1. CSS/UI kit;
+1. новые CSS variables;
+1. custom Tailwind classes;
+1. произвольные animations/spacing;
+1. отдельную status state machine для push.
+
+Не маскировать отсутствие production token через `FCM_SIMULATE`.
+
+## 5. Gherkin
+
+### Subtask 1 — FCM registration
+
+1. **Subtask 1:** Given пользователь открыл PWA и предоставил разрешение на уведомления, When PWA выполняет существующую регистрацию push, Then должен быть получен реальный FCM token и сервер должен сохранить его для этого guest.
+
+### Subtask 2 — accepted background notification
+
+1. **Subtask 2:** Given у guest есть `push_enabled=true` и валидный FCM token, And PWA находится в background, When barista устанавливает статус `accepted`, Then backend должен сформировать и отправить FCM notification с order-specific tag и данными статуса, And Android должен показать notification.
+
+### Subtask 3 — preparing background notification
+
+1. **Subtask 3:** Given notification для заказа уже существует, And PWA находится в background, When barista устанавливает статус `preparing`, Then Android должен получить актуальное notification state для `preparing`, And notification должна содержать предусмотренные для этого статуса actions.
+
+### Subtask 4 — ready background notification
+
+1. **Subtask 4:** Given заказ находится в `preparing`, And PWA находится в background, When barista устанавливает статус `ready`, Then Android должен получить актуальное `ready` notification, And ready notification не должна быть потеряна из-за `ready_notified_at` claim/retry race.
+
+### Subtask 5 — notification deduplication
+
+1. **Subtask 5:** Given один заказ получает несколько последовательных status updates, When FCM notifications доставляются Android, Then notifications одного заказа должны использовать `order-#{order.id}` как tag, And система не должна создавать бесконтрольный набор дублирующих notifications для одного заказа.
+
+### Subtask 6 — status synchronization
+
+1. **Subtask 6:** Given barista изменил статус заказа через существующий status endpoint, When PWA находится одновременно foreground или background, Then PWA через ActionCable и Android notification через FCM должны отражать один и тот же backend status.
+
+### Subtask 7 — foreground independence
+
+1. **Subtask 7:** Given PWA находится foreground, When barista меняет status, Then PWA должна продолжать получать status через существующий ActionCable flow, And FCM не должен становиться источником истины для foreground status model.
+
+### Subtask 8 — Cancel
+
+1. **Subtask 8:** Given заказ находится в статусе, для которого доступен Cancel, When пользователь нажимает Cancel в background notification, Then должен быть вызван существующий cancel API flow, And notification action не должна блокировать основной UI.
+
+### Subtask 9 — Chat
+
+1. **Subtask 9:** Given notification содержит Chat action, When пользователь нажимает Chat, Then должна открыться или получить focus PWA с существующим deep link на заказ.
+
+### Subtask 10 — Tips
+
+1. **Subtask 10:** Given notification содержит Tips action, When пользователь нажимает Tips, Then должна открыться или получить focus PWA с существующим deep link на заказ.
+
+### Subtask 11 — cancel failure
+
+1. **Subtask 11:** Given Cancel API возвращает HTTP 400 или 500, When пользователь нажимает Cancel в notification, Then должна появиться локальная error notification, And ошибка не должна блокировать PWA.
+
+### Subtask 12 — cold start
+
+1. **Subtask 12:** Given PWA не открыта, When пользователь нажимает Chat/Tips/deep-link action в background notification, Then PWA должна запуститься или получить focus и открыть существующий экран заказа.
+
+### Subtask 13 — fast status race
+
+1. **Subtask 13:** Given заказ находится в `accepted`, When barista быстро выполняет `accepted → preparing → ready`, Then все server-side status transitions должны сохраниться, And финальное notification state должно соответствовать `ready`, And старый status не должен оставаться единственным отображаемым состоянием.
+
+### Subtask 14 — FCM failure isolation
+
+1. **Subtask 14:** Given Firebase/FCM delivery возвращает ошибку, When `GuestOrderBroadcaster` обрабатывает status update, Then Barista status transition и ActionCable broadcast не должны быть отменены или сломаны из-за FCM failure.
+
+### Subtask 15 — invalid token
+
+1. **Subtask 15:** Given Firebase возвращает ошибку invalid registration token, When выполняется push delivery, Then ошибка должна быть зафиксирована существующим error handling, And Broadcaster не должен падать из-за этой ошибки.
+
+### Subtask 16 — real production E2E
+
+1. **Subtask 16:** Given production Android device имеет установленную PWA, разрешение notification и реальный FCM token, When barista меняет status заказа, Then background notification должна быть фактически наблюдаема в Android notification tray.
+
+## 6. TDD-проверка: команды
+
+Перед Build проверить реальные существующие пути тестов проекта и не использовать пути из старого #38, если их физически нет.
+
+Минимум:
+
+```text
+bundle exec ruby -Itest test/services/shop/order_status_push_notifier_test.rb
+bundle exec ruby -Itest test/services/shop/guest_order_broadcaster_test.rb
+bundle exec ruby -Itest test/services/shop/order_status_push_payload_test.rb
+bundle exec ruby -Itest test/jobs/shop/ready_push_job_test.rb
+bundle exec ruby -Itest test/integration/shop/push_pipeline_simulation_test.rb
+```
+
+JavaScript:
+
+```text
+npm test -- sw_notification_actions
+```
+
+или фактическая команда проекта для соответствующего JS test runner.
+
+Перед выполнением команд определить фактический test runner проекта.
+
+После реализации обязательно:
+
+```text
+bundle exec rubocop
+```
+
+и фактические команды:
+1. JS tests;
+1. TypeScript check;
+1. Playwright/E2E;
+1. production/device E2E для background FCM.
+
+### Обязательная проверка
+
+Тесты должны отдельно доказать:
+1. notifier создаёт PushNotification при валидном `push_enabled + token`;
+1. job реально исполняется;
+1. FcmClient вызывается с ожидаемым payload;
+1. SW обрабатывает background payload;
+1. notification появляется на физическом Android;
+1. action click работает;
+1. race `accepted → preparing → ready` не теряет финальное состояние;
+1. FCM failure не ломает Barista → Broadcaster → Cable.
+
+Unit/simulation test с `FCM_SIMULATE` **не считается доказательством production background FCM**.
+
+### Production DoD
+
+Задача не считается закрытой без:
+1. реального Android device E2E;
+1. PWA в background;
+1. реального FCM token;
+1. реального Firebase delivery;
+1. наблюдаемого notification tray;
+1. проверки минимум `accepted → preparing → ready`;
+1. проверки хотя бы одного notification action;
+1. проверки FCM failure isolation.
+
+Если physical Android E2E недоступен, документ нельзя считать полностью выполненным — результат должен быть зафиксирован как blocker, а не заменён simulation PASS.
+
+## Патч 1: 2026-10-18
+
+Основание: аудиты B и B2 от 2026-10-13, аудит E от 2026-10-15, факт ready_push_job.rb:20-27,38-39,46,64; ready_push_claim.rb:11-24; send_push_notification_job.rb:29-31; fcm_client.rb:38,106,172-176; application_job.rb:5; job_tenant_context.rb:7-9,29; order_ready_sms_link.rb:61; apns_client.rb:14-21; PRACTICES.md:118 (V2-#35-PUSH-RELIABILITY)
+
+### Расхождение
+
+Subtask 4: было — ready notification не теряется из-за ready_notified_at claim/retry race;
+по факту — claim коммитится до update_wallet! и deliver_fcm! (ready_push_job.rb:23, затем :25-26) и не откатывается (job_tenant_context.rb:7-9,29); решение осознанное, из спецификации C1 задачи про нижнюю панель заказа (…Интеграция статусной модели в компактную шторку PWA и Push.md:55-59); риск потери записан как backlog и не закрыт (PRACTICES.md:118);
+FcmClient::Error проглатывается: PushNotification = failed, ReadyPushJob завершается успешно, повтора нет (send_push_notification_job.rb:29-31);
+сетевая ошибка и сбой OAuth не оборачиваются в FcmClient::Error (fcm_client.rb:38,106,172-176), retry_on закомментирован (application_job.rb:5), ручной повтор останавливается на claim (ready_push_job.rb:23);
+сбой Apple Wallet происходит раньше FCM и блокирует его (ready_push_job.rb:25-26); в режиме с сертификатами ApnsClient::Error не перехватывается (ready_push_job.rb:38-39, apns_client.rb:14-21), FCM не отправляется, а повторный запуск останавливается на claim;
+при не-FcmClient ошибке PushNotification остаётся pending (ready_push_job.rb:46);
+расхождение — при временном сбое доставки ready-пуш теряется безвозвратно.
+
+### Исправленный сценарий
+
+- [ ] Subtask 4 (patch v1): Given claim выполнен, And доставка ready-пуша завершилась временной ошибкой (5xx, 429, timeout, сеть, сбой получения OAuth-токена), When ReadyPushJob обрабатывает ошибку, Then claim освобождается, And доставка повторяется с backoff ограниченное число раз.
+- [ ] Subtask 4b (patch v1): Given ошибка постоянная (недействительный токен), Then повторов нет, токен очищается как сейчас (fcm_client.rb:129-133), PushNotification = failed, claim остаётся.
+- [ ] Subtask 4c (patch v1): Given любая ошибка обновления Apple Wallet или APNs (GenerationError, UnavailableError, ApnsClient::Error), When выполняется ReadyPushJob, Then FCM отправляется независимо, ошибка Wallet логируется, And claim не приводит к потере пуша из-за ошибки Wallet (ready_push_job.rb:25-26, :38-39).
+- [ ] Subtask 4d (patch v1): Given любой исход доставки, Then PushNotification не остаётся в pending.
+- [ ] Subtask 4e (patch v1): Given параллельные постановки ready или неоднозначный сбой доставки (ответ FCM не получен), Then в штатной работе уходит не более одного пуша; при неоднозначном сбое допустима повторная отправка, дубль схлопывается по tag order-#{order.id} (Subtask 5 TASK_92). Решение владельца 2026-10-15: редкий повторный показ принят вместо потери пуша.
+- [ ] Subtask 4f (patch v1): Given claim освобождён и поставлен заново, Then начало срока жизни SMS-ссылки (order_ready_sms_link.rb:61) не меняется.
+- [ ] Subtask 4g (patch v1): Тесты ReadyPushJob: FcmClient::Error (временная и постоянная), сетевая ошибка и сбой OAuth, ошибка Wallet и ошибка APNs, claim вместе с retry, отсутствие pending.
+
+### Не трогать
+
+См. COMPONENT_MAP.md строки FcmClient (data-only, без top-level notification), GuestOrderBroadcaster (на ready PassUpdater вызывает только ReadyPushJob; каскад ставится независимо), OrderStatusPushNotifier (читает ready_notified_at без атомарности, :42).
+Решение C1 (ранний claim) сохраняется: перенос claim на момент после отправки в этот патч не входит (это был бы реверс и доп.задача).
+Защитные тесты не удалять: ready_push_claim_test.rb:35-47, ready_push_job_test.rb:66-77, :117-122. Актуализировать: ready_push_job_test.rb:90-95 (под 4c), название теста ready_push_claim_test.rb:49-55 (проверяет nil, а называется «claims and enqueues»).
+Граница с каскадом: ready_notified_at читает OrderReadySmsLink (:61), семантика этого чтения не меняется.
+Исключение из запрета TASK_92 на Wallet/APNs («если live-аудит не покажет прямую связь с дефектом Android FCM»): прямая связь показана аудитом E (ошибка Wallet после claim блокирует FCM, ready_push_job.rb:25-26); изменение ограничено изоляцией ошибки, код Wallet и APNs не меняется. Endpoint скачивания карты (orders_controller.rb:176-183) в этот патч не входит.
+
+### Scope
+
+Разрешено: освобождение claim при неуспешной доставке; retry/backoff для ReadyPushJob с классификацией ошибок; изоляция Wallet от FCM; закрытие pending; тесты; закрытие backlog V2-#35-PUSH-RELIABILITY в PRACTICES.md после Review.
+Запрещено: менять момент постановки claim (после отправки); добавлять колонки в orders (ограничение задачи про нижнюю панель заказа); менять payload FcmClient; каскад и решение об SMS; логику статусов Barista; FCM_SIMULATE; доставку accepted/preparing; ActionCable.
+
+## SBR: Патч 1 TASK_92 — потеря ready-пуша
+## Файлы (ожидаемо): ready_push_job.rb, ready_push_claim.rb (метод освобождения), send_push_notification_job.rb, application_job.rb, fcm_client.rb (только классификация сетевых ошибок), тесты ready_push_job / ready_push_claim
+## Не ломать: ранний claim (C1), payload FcmClient, Broadcaster на ready, чтение ready_notified_at в OrderReadySmsLink :61 и OrderStatusPushNotifier :42, схема orders, код Wallet и APNs (см. COMPONENT_MAP: GuestOrderBroadcaster, FcmClient)
+## Проверка: bundle exec ruby -Itest test/jobs/shop/ready_push_job_test.rb; test/services/shop/ready_push_claim_test.rb; test/services/shop/guest_order_broadcaster_test.rb; test/jobs/shop/order_ready_cascade_job_test.rb; bundle exec rubocop
+## DoD: Subtask 4–4g, защитные тесты зелёные, E2E TASK_92 Subtask 16 по-прежнему обязателен, дубль схлопывается по tag на реальном Android (проверка в E2E Subtask 5 и 16)
