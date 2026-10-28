@@ -106,6 +106,7 @@ https://docs.google.com/document/d/1gcML9WkV4n2s6KNsDN0sobY3ITm4Dge9kOjStzf917g/
 - 2026-10-28 (очередь Push + SMS, шаг 2): документ TASK_92 из очереди (`1GlRrdN…`) прочитан через Google Docs MCP. Его тело (разделы 1–6, Subtask 1–16) в репо раньше не сохранялось — здесь был только текст #38. Патч 1 ссылается на Subtask 4, 5 и 16 тела, поэтому ниже дословно вставлены тело документа и Патч 1. Патч 2 — шаг 3 очереди, будет вставлен после Патча 1. Правки только форматирования: разорванные строки и обрывки `**` из экспорта MCP, команды в блоке кода.
 - 2026-10-28: в документе нет «Зависит от» / «Порядок сборки» / «Статус» для Патча 1 — сверять со строкой очереди нечего, расхождения нет. Факты Патча 1 (файл:строка) не сверялись — это `/spec`.
 - 2026-10-28 `/spec` Патча 1: все факты совпали с кодом, поведение то же. Сдвиги номеров: очистка мёртвого токена `fcm_client.rb:129-136` (в патче `:129-133`); решение C1 — «Интеграция статусной модели…md:57» (в патче `:55-59`); защитный тест `ready_push_job_test.rb:117-123` (в патче `:117-122`). Дополнительно: при сертификатах Wallet `ApnsClient` всегда бросает ошибку (`apns_client.rb:21`), то есть в этом режиме FCM на ready не уходит никогда. Решения билда — `session/todo.md`.
+- 2026-10-28 (очередь Push + SMS, шаг 3): Патч 2 прочитан через Google Docs MCP (тот же документ `1GlRrdN…`, вкладка одна) и вставлен дословно в конец файла, после блока SBR Патча 1. Правки только форматирования: пустые строки между заголовками и абзацами, как у Патча 1. В документе нет «Зависит от» / «Порядок сборки» / «Статус» для Патча 2 — сверять со строкой очереди нечего, расхождения нет. Метка `TASK-PUSH-PREPROMPT` в Scope = TASK_110. Факты Патча 2 (файл:строка, «по факту») не сверялись — это `/spec`.
 
 ---
 
@@ -474,3 +475,41 @@ FcmClient::Error проглатывается: PushNotification = failed, ReadyP
 ## Не ломать: ранний claim (C1), payload FcmClient, Broadcaster на ready, чтение ready_notified_at в OrderReadySmsLink :61 и OrderStatusPushNotifier :42, схема orders, код Wallet и APNs (см. COMPONENT_MAP: GuestOrderBroadcaster, FcmClient)
 ## Проверка: bundle exec ruby -Itest test/jobs/shop/ready_push_job_test.rb; test/services/shop/ready_push_claim_test.rb; test/services/shop/guest_order_broadcaster_test.rb; test/jobs/shop/order_ready_cascade_job_test.rb; bundle exec rubocop
 ## DoD: Subtask 4–4g, защитные тесты зелёные, E2E TASK_92 Subtask 16 по-прежнему обязателен, дубль схлопывается по tag на реальном Android (проверка в E2E Subtask 5 и 16)
+
+## Патч 2: 2026-10-18
+
+Основание: аудит L от 2026-10-18, факт order_status_push_notifier.rb:30-36,53-63,82-84; order_status_push_payload.rb:8-22; firebase_sw/show.js.erb:44-52,108-123; guest_order_cancellation_service.rb:42; barista/order_cancellation_service.rb:60; barista/order_status_update_service.rb:41; ТЗ #38 (:25, tag «чтобы пуши заменяли друг друга»); решение владельца D1 от 2026-10-18
+
+### Расхождение
+
+Subtask 5: было — notifications одного заказа используют tag order-#{order.id} и не создают бесконтрольный набор дублей;
+по факту — матрица enrich-полей (tag, actions, progress) покрывает только accepted, preparing, ready (order_status_push_payload.rb:8-22); для cancelled payload состоит из order_id, tenant_id, status, order_number и уходит без tag, actions и progress (order_status_push_notifier.rb:53-58, :82-84; ветка наследована от B1.1 868e73f7 и 31aa3651, обоснования нет); service worker ставит tag только если он есть (show.js.erb:50);
+cancelled на Android показывается отдельным уведомлением и не заменяет предыдущее: в шторке остаётся старое уведомление с «Отменить» или «Чат/Чаевые»;
+push на cancelled уходит при отмене гостем (из pending_payment и accepted), отмене баристой и переводе баристой в cancelled (guest_order_cancellation_service.rb:42, barista/order_cancellation_service.rb:60, barista/order_status_update_service.rb:41); при отмене гостем заголовок и текст совпадают «Заказ отменён» (order_status_push_notifier.rb:17,111-114; payment_failure_journal.rb:105-111,134-136);
+тестов на push при cancelled нет.
+
+### Исправленный сценарий
+
+- [ ] Subtask 5b (patch v2): Given гость подписан на push, And заказ переходит в cancelled из accepted, preparing или ready (отмена гостем, баристой или переводом статуса баристой), When уведомитель формирует push, Then уходит push с tag order-#{order.id} и status без actions и progress, And он заменяет предыдущее уведомление заказа в шторке Android.
+- [ ] Subtask 5c (patch v2): Given заказ переходит в cancelled из pending_payment, Then push не отправляется (предыдущего уведомления нет, заменять нечего).
+- [ ] Subtask 5d (patch v2): Given отмена гостем, Then текст push отличается от заголовка: «Вы отменили заказ». Given отмена исполнителем, Then текст как сейчас: «Заказ отменён исполнителем. Средства будут возвращены в течение 3 рабочих дней».
+- [ ] Subtask 5e (patch v2): Given pending_payment, Then поведение не меняется: в рабочих сценариях push на этот статус не уходит; rake-смоук shop:push:smoke остаётся (lib/tasks/shop_push.rake:14,28-29).
+- [ ] Subtask 5f (patch v2): Тесты OrderStatusPushNotifier и OrderStatusPushPayload: cancelled из accepted, preparing, ready (tag, нет actions и progress, текст по инициатору); cancelled из pending_payment (push нет); тест service worker: уведомление cancelled с tag заменяет предыдущее (sw_notification_actions_test.mjs).
+
+### Не трогать
+
+См. COMPONENT_MAP.md строки FcmClient (data-only, без top-level notification), GuestOrderBroadcaster (каскад ставится независимо), OrderStatusPushNotifier.
+Путь ready (ReadyPushJob, ready_notified_at) в этот патч не входит: Патч 1 TASK_92. Каскад и SMS, логика отмены, Barista::OrdersController и OrderStatusUpdateService (запрет TASK_92) не затрагиваются: меняется только формирование push.
+Известные ограничения (не входят в патч): системная отмена ready-заказов при закрытии смены push не отправляет (manager/shift_close_service.rb:84-112); при открытой вкладке push, вероятно, не показывается, статус показывает WebSocket (по поведению Firebase SDK, не проверено).
+Тесты, закрепляющие push на cancelled без tag, не удалять, а актуализировать (по аудиту таких тестов нет).
+
+### Scope
+
+Разрешено: формирование push для cancelled (tag, без actions и progress, текст по инициатору); пропуск push при переходе из pending_payment; тесты.
+Запрещено: payload FcmClient, ready-путь, каскад, логика отмены, логика статусов Barista, ActionCable, доставка accepted и preparing, тексты окна предварительного экрана (TASK-PUSH-PREPROMPT).
+
+## SBR: Патч 2 TASK_92 (Д5) — push при отмене
+## Файлы (ожидаемо): order_status_push_notifier.rb, order_status_push_payload.rb, тесты order_status_push_notifier_test.rb, order_status_push_payload_test.rb, sw_notification_actions_test.mjs
+## Не ломать: payload FcmClient, ready-путь (ReadyPushJob, ready_notified_at), каскад и SMS, логика отмены, Barista::OrdersController и OrderStatusUpdateService, доставка accepted и preparing (см. COMPONENT_MAP: FcmClient, GuestOrderBroadcaster, OrderStatusPushNotifier)
+## Проверка: bundle exec ruby -Itest test/services/shop/order_status_push_notifier_test.rb; test/services/shop/order_status_push_payload_test.rb; test/services/shop/guest_order_broadcaster_test.rb; test/jobs/shop/order_ready_cascade_job_test.rb; npm test -- --run (sw_notification_actions); bundle exec rubocop
+## DoD: Subtask 5b–5f; на Android уведомление отмены заменяет предыдущее (проверка в E2E TASK_92); тесты зелёные
