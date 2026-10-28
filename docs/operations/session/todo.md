@@ -1,3 +1,45 @@
+# todo — TASK_120 Патч 1: гонка cookie-сессии затирает сброс корзины (после 🚀 1)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_120 § Патч 1](../milestones/veha_2/requirements/customer_tasks/TASK-120-Корзина-при-переходе-в-другую-точку.md#патч-1-2026-10-28) · приёмка Fly v517 FAIL 2 ([MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v517_2026-10-28/MCP_RESULT.md)) · ISSUES 🔴 «TASK_120 на проде» · решение владельца 2026-10-28: read-only запросы shop API не пишут cookie |
+| **Не в scope** | `session_store.rb` (store, `expire_after`, domain) · `Shop::PagesController` и контроллеры вне `/shop/api/*` · логика `CartService`/`CartController` · фронт (`cartSheetStore.js`, `shopCartAdd.js`) · перенос сессии/корзины в БД или кэш · одновременные **изменяющие** запросы (предел cookie-сессии) |
+| **Статус** | SPEC готов (`/patch`) → `/sbr` |
+
+## SBR: SPEC готов → RED
+
+- [x] `/patch` — аудит + Патч 1 в TASK_120 (Subtask 1, 1a, 4, 6 patch v1 + охранные 10–12)
+- [ ] RED — `session_stale_snapshot_test.rb`: запрос с подменённой старой cookie сейчас отдаёт `Set-Cookie` и возвращает корзину A
+- [ ] GREEN — пропуск записи cookie, если сессия не изменилась
+- [ ] `/regress` · `/review` · deploy по апруву → повтор `verify_prod.mjs`
+
+## Файлы (ожидаемо)
+
+1. `app/controllers/shop/api/base_controller.rb` — `around_action` (или concern в `app/controllers/shop/concerns/`, подключение только здесь): снимок сессии до экшена, сравнение в `ensure`, не изменилась → `request.session_options[:skip] = true`.
+2. `test/integration/shop/api/session_stale_snapshot_test.rb` (новый) — Subtask 1, 1a, 4, 6, 10, 11, 12.
+
+## Не ломать
+
+- Корзина живёт между запросами: `cart_persistence_test.rb`, `cart_overflow_test.rb` (сброс по переполнению пишет cookie), `cart_total_amount_test.rb`.
+- TASK_120 Subtask 1–9: `cart_tenant_switch_test.rb`, `cart_service_tenant_switch_test.rb`, `email_otp_tenant_isolation_test.rb`.
+- Вход гостя и OTP: запись `Shop::CustomerSession`, `Shop::PhoneOtp`, `Payments::BindingStepUp`, `request.session.id` — `Set-Cookie` есть.
+- Продление 90 дней: `GET /shop` (HTML, `Shop::PagesController`) по-прежнему пишет cookie с `expires`.
+- COMPONENT_MAP строка `cartSheetStore` — фронт не меняется.
+
+## Проверка
+
+- `ruby bin/rails test test/integration/shop/api/session_stale_snapshot_test.rb`
+- `ruby bin/rails test test/integration/shop/api/ test/services/shop/cart_service_tenant_switch_test.rb test/services/shop/cart_service_test.rb test/services/shop/cart_service_replace_line_test.rb test/services/shop/order_creator_test.rb`
+- `node --test test/javascript/cart_tenant_reset_test.mjs test/javascript/clear_cart_after_successful_pay_test.mjs` · `bundle exec rubocop` по изменённым файлам
+
+## DoD
+
+- Subtask 1, 1a, 4, 6, 10–12 (patch v1) тестами; Не ломать — зелёное.
+- COMPONENT_MAP: не требуется — правка в `Shop::Api::BaseController`, не в UI-компонентах карты (решение на `/review`).
+- Fly после деплоя: A → B → снова B → A — сброс и баннер один раз, в A корзина пустая; добавление в A не пропадает за 30 с опроса.
+
+---
+
 # todo — TASK_120: Корзина при переходе в другую точку (очередь, шаг 5)
 
 | Поле | Значение |
