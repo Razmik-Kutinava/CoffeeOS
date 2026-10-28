@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK_120 § Патч 1](../milestones/veha_2/requirements/customer_tasks/TASK-120-Корзина-при-переходе-в-другую-точку.md#патч-1-2026-10-28) · приёмка Fly v517 FAIL 2 ([MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v517_2026-10-28/MCP_RESULT.md)) · ISSUES 🔴 «TASK_120 на проде» · решение владельца 2026-10-28: read-only запросы shop API не пишут cookie |
 | **Не в scope** | `session_store.rb` (store, `expire_after`, domain) · `Shop::PagesController` и контроллеры вне `/shop/api/*` · логика `CartService`/`CartController` · фронт (`cartSheetStore.js`, `shopCartAdd.js`) · перенос сессии/корзины в БД или кэш · одновременные **изменяющие** запросы (предел cookie-сессии) |
-| **Статус** | REVIEW → push / CI |
+| **Статус** | done — на проде Fly v518 |
 
 ## SBR: REVIEW
 
@@ -14,7 +14,7 @@
 - [x] `/regress` PASS — зона: весь shop API (`process_action` в базовом контроллере) + оплата §2.3 + RLS · полный `test/integration/shop/` 728/0 (на Windows не завис) · вне `shop/`: контроллеры `shop/api` (вкл. `base_controller_test`), T-Bank callback + adapter, RLS-тройка, поддомен витрины, склад/касса, rack-attack, онбординг/меню УК, демо QA — 22 файла 136/0 · JS корзины/повторов 8 файлов 60/63: 3 fail `repeat_invalid_token_payment_test.mjs` — известная среда Node 22 (`navigator.onLine`, ISSUES), с `onLine = true` 20/0, фронт не менялся · Fly MCP — после деплоя
 - [x] `/review` — bugbot 0 · security 0 medium+ (комментарий «CSRF в Auth пишет `_csrf_token`» неточен: в Rails 8 токен пишет middleware при `commit_session`, после `process_action` → поправлен `b92b74a4`) · crit-audit CLEAN `a694f98b..b92b74a4` · COMPONENT_MAP: не требуется — `Shop::Api::BaseController` не UI-компонент карты, связи/владение не менялись · Entire — на ops-коммите до push
 - [x] push `b798d9a7..1f1584f8` · Entire `01M61G8RQCWNSFHQMA8WB6EQZD` на `1f1584f8` (+ GREEN `0738a924`) · **CI green** [40713781617](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40713781617) (2385 runs, 0 F/E, 1 skip) + Semgrep/CodeQL
-- [ ] повторный 🚀 1 по апруву → `verify_prod.mjs` A → B → B → A + добавление под опросом
+- [x] повторный 🚀 1 по апруву → **Fly v518** (deploy [40715180459](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40715180459)) · `verify_prod.mjs` PASS: A → B → B → A — сброс и баннер один раз, в A пусто (3/3); товар держится 35 с опроса; read-only shop API без `set-cookie`; регрессия v517 зелёная · 🟡 попутно: установка service worker пишет старый снимок cookie (ISSUES) · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v518_2026-10-28/MCP_RESULT.md)
 
 ## Файлы (ожидаемо)
 

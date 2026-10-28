@@ -11,6 +11,13 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-10-28 — deploy: повторный 🚀 1 — Fly v518, TASK_120 Патч 1 на проде, приёмка PASS
+
+- **Деплой:** `727f3429` (код `0738a924`/`b92b74a4`, после — только docs) · deploy [40715180459](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40715180459) 3м17с → **v518**, release_command OK (миграций нет), web health passing · гейты: CI/Semgrep/CodeQL green, crit-audit CLEAN до `b92b74a4`, ISSUES без новых блокеров.
+- **Проверка на проде** (Point A, B = кухня, чистые гостевые профили, CDP): a) A → B → снова B → A — сброс и баннер «Корзина очищена…» один раз, в A корзина пустая и после опроса + перезагрузки (3/3 прогона; на v517 здесь возвращалась корзина A) · b) товар в A держится 35 с опроса + перезагрузка · c) `/config`, `/tenants`, `/categories`, `/frequent_products`, `/orders/active` — без `set-cookie`; `POST /cart/add`, `GET /cart` со сбросом, `GET /shop` — с `set-cookie` и `expires` · d) beacon TASK_112 204 один за вкладку (10 строк в базе = 10 профилей), `/config` + `/tenants` 200, JS-исключений 0 · логи 15:35–15:39 UTC: 5xx 0, PSCE 0 · Sentry 24h CoffeeOS 0.
+- **Попутно (🟡, ISSUES):** установка service worker витрины сама шлёт `GET /shop` и `GET /shop/service-worker.js` с cookie гостя — эти контроллеры вне Патча 1 пишут cookie со старым снимком; может вернуть прежнюю корзину, если гость меняет её в ту же ~1 с (раз на устройство и после деплоя с новыми ассетами). Решение владельца.
+- **Очередь:** 🚀 1 → `done`, CBR #120 «Патч 1 на проде», ISSUES TASK_120 → 🟢 · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v518_2026-10-28/MCP_RESULT.md).
+
 ## 2026-10-28 — fix: TASK_120 Патч 1 — shop API не переписывает cookie без изменения сессии
 
 - **Что:** `Shop::Api::BaseController#process_action` — если запрос пришёл с сохранённой cookie и сессия (JSON) не изменилась, `request.session_options[:skip] = true`. Ответы `/config`, `/tenants`, `/categories`, `/frequent_products`, `/orders/active` и неизменённого `GET /cart` больше не возвращают старый снимок корзины поверх сброса при смене точки или поверх только что добавленного товара.

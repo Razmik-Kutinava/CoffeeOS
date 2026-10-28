@@ -1,0 +1,30 @@
+﻿# fly logs -a coffeeos (живой хвост) 15:35:04-15:39:26 UTC, v518, во время after_logged/
+# всего строк: 1175; Completed: 200 x200, 204 x3, 401 x10 (/shop/api/profile гостя); 5xx: 0; PreparedStatementCacheExpired: 0; RoutingError (uploads/favicon, известно): 51
+# ниже — только GET /shop*, IP скрыты
+
+2026-10-28T15:35:05Z app[9080d40db67238] ams [info][b5dd7e7d-f0b7-466f-842a-1ac92184b898] Started GET "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:35:05 +0000
+2026-10-28T15:35:06Z app[9080d40db67238] ams [info][9cfe73e0-d6bb-4a96-b1fe-c73b798e405b] Started GET "/shop/manifest.webmanifest?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:35:06 +0000
+2026-10-28T15:36:09Z app[9080d40db67238] ams [info][a9e1fc8d-236a-4aa4-8bac-241a5848e825] Started GET "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:36:09 +0000
+2026-10-28T15:36:10Z app[9080d40db67238] ams [info][ccc28e1a-7d1f-4bfa-a9c2-fc4be74b5a58] Started GET "/shop/manifest.webmanifest?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:36:10 +0000
+2026-10-28T15:36:10Z app[9080d40db67238] ams [info][7661b2e6-b0c0-414c-a01d-7c1041d7a6d8] Started GET "/shop/service-worker.js" for <ip> at 2026-10-28 15:36:10 +0000
+2026-10-28T15:36:10Z app[9080d40db67238] ams [info][a5913b98-4238-4023-b067-b6fae12d2145] Started GET "/shop" for <ip> at 2026-10-28 15:36:10 +0000
+2026-10-28T15:36:36Z app[9080d40db67238] ams [info][509eeddb-0de1-43a0-88db-e37f924b58d1] Started GET "/shop?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c" for <ip> at 2026-10-28 15:36:36 +0000
+2026-10-28T15:36:37Z app[9080d40db67238] ams [info][a5e81a2e-6dc1-41c3-b259-2ea05e04139f] Started GET "/shop/manifest.webmanifest?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c" for <ip> at 2026-10-28 15:36:37 +0000
+2026-10-28T15:36:49Z app[9080d40db67238] ams [info][11881497-57b2-488e-bafc-d30b6a6f8d2e] Started GET "/shop?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c" for <ip> at 2026-10-28 15:36:49 +0000
+2026-10-28T15:36:49Z app[9080d40db67238] ams [info][c2c631ce-0934-48c8-864c-afc719baa186] Started GET "/shop/manifest.webmanifest?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c" for <ip> at 2026-10-28 15:36:49 +0000
+2026-10-28T15:37:02Z app[9080d40db67238] ams [info][1fad05e9-0456-401d-893c-076fef8c9922] Started GET "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:37:02 +0000
+2026-10-28T15:37:02Z app[9080d40db67238] ams [info][5515901a-52e1-4ab5-8b35-2c4952f483b5] Started GET "/shop/manifest.webmanifest?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:37:02 +0000
+2026-10-28T15:37:33Z app[9080d40db67238] ams [info][db437491-84ca-4269-9daf-ca86352d5739] Started GET "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:37:33 +0000
+2026-10-28T15:37:33Z app[9080d40db67238] ams [info][a397aa3c-503e-4dd4-9974-67eabace75c6] Started GET "/shop/manifest.webmanifest?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:37:33 +0000
+2026-10-28T15:37:48Z app[9080d40db67238] ams [info][6a519456-c4da-406d-936d-72a8592bc1bf] Started GET "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:37:48 +0000
+2026-10-28T15:37:49Z app[9080d40db67238] ams [info][aa84c35f-df59-4721-9d32-ab9dbf17e05e] Started GET "/shop/manifest.webmanifest?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:37:49 +0000
+2026-10-28T15:37:49Z app[9080d40db67238] ams [info][5962c6b7-6c6c-4810-bce0-728bea3c4d00] Started GET "/shop/service-worker.js" for <ip> at 2026-10-28 15:37:49 +0000
+2026-10-28T15:37:49Z app[9080d40db67238] ams [info][4221a019-60ab-45eb-a28b-fa1f6a5cd552] Started GET "/shop" for <ip> at 2026-10-28 15:37:49 +0000
+2026-10-28T15:38:46Z app[9080d40db67238] ams [info][68ce3638-cca2-4871-8a23-7a06c515fe12] Started GET "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:38:46 +0000
+2026-10-28T15:38:46Z app[9080d40db67238] ams [info][ca54e5f0-84f9-4cf7-97ba-177a2dafc04f] Started GET "/shop/manifest.webmanifest?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:38:46 +0000
+2026-10-28T15:39:01Z app[9080d40db67238] ams [info][a4a5f4c3-cedc-4b66-a0e9-edefb9a9ca19] Started GET "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:39:01 +0000
+2026-10-28T15:39:01Z app[9080d40db67238] ams [info][de340620-2f4f-4e43-b64e-cb90aacc4655] Started GET "/shop/manifest.webmanifest?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:39:01 +0000
+2026-10-28T15:39:02Z app[9080d40db67238] ams [info][5b4d6cac-c5fb-4ea7-9032-6506d82c1dba] Started GET "/shop/service-worker.js" for <ip> at 2026-10-28 15:39:02 +0000
+2026-10-28T15:39:02Z app[9080d40db67238] ams [info][6190b465-8a68-4e90-9d3b-33cadc2665a2] Started GET "/shop" for <ip> at 2026-10-28 15:39:02 +0000
+2026-10-28T15:39:10Z app[9080d40db67238] ams [info][5cb97322-d5b1-4f62-9851-431c66de1e43] Started GET "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:39:10 +0000
+2026-10-28T15:39:11Z app[9080d40db67238] ams [info][f2fde5be-9537-4f6a-a757-0c5a70aff101] Started GET "/shop/manifest.webmanifest?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789" for <ip> at 2026-10-28 15:39:11 +0000

@@ -1,0 +1,1215 @@
+{
+  "label": "after_pwa",
+  "base": "https://coffeeos.fly.dev",
+  "startedAt": "2026-10-28T15:32:04.412Z",
+  "a_task120_a_b_b_a_412x915": {
+    "addA": [
+      {
+        "method": "POST",
+        "url": "/shop/api/cart/add",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart_reset": null,
+        "items": 1,
+        "setCookie": true
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart_reset": null,
+        "items": 1,
+        "setCookie": false
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart_reset": null,
+        "items": 1,
+        "setCookie": false
+      }
+    ],
+    "stateA": {
+      "href": "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/",
+      "address": "Самара, ул. Куйбышева, 78",
+      "hours": "Пн–Пт 08:00–22:00, Сб–Вс 10:00–20:00",
+      "profileLabel": "Профиль ID",
+      "cartSheet": true,
+      "cartSheetMode": "peek",
+      "checkoutText": "10₽",
+      "cartError": null,
+      "resetBannerInBody": false,
+      "cartLs": {
+        "items": 1,
+        "total": 10,
+        "cart_reset": null
+      },
+      "envGuard": "1"
+    },
+    "onB": [
+      {
+        "method": "GET",
+        "url": "/shop/api/cart",
+        "tenant": "d47165db",
+        "status": 200,
+        "cart_reset": true,
+        "items": 0,
+        "setCookie": true
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart",
+        "tenant": "d47165db",
+        "status": 200,
+        "cart_reset": true,
+        "items": 0,
+        "setCookie": true
+      }
+    ],
+    "onB_resets": 2,
+    "afterB": {
+      "href": "/shop?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c#/",
+      "address": "Москва, пр-д Заготовочный, 1",
+      "hours": null,
+      "profileLabel": "Профиль ID",
+      "cartSheet": true,
+      "cartSheetMode": "peek",
+      "checkoutText": "0₽",
+      "cartError": "Корзина очищена: вы перешли в другую точку",
+      "resetBannerInBody": true,
+      "cartLs": {
+        "items": 0,
+        "total": 0,
+        "cart_reset": true
+      },
+      "envGuard": "1"
+    },
+    "onB2": [
+      {
+        "method": "GET",
+        "url": "/shop/api/cart",
+        "tenant": "d47165db",
+        "status": 200,
+        "cart_reset": null,
+        "items": 0,
+        "setCookie": false
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart",
+        "tenant": "d47165db",
+        "status": 200,
+        "cart_reset": null,
+        "items": 0,
+        "setCookie": false
+      }
+    ],
+    "onB2_resets": 0,
+    "afterB2": {
+      "href": "/shop?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c#/",
+      "address": "Москва, пр-д Заготовочный, 1",
+      "hours": null,
+      "profileLabel": "Профиль ID",
+      "cartSheet": true,
+      "cartSheetMode": "peek",
+      "checkoutText": "0₽",
+      "cartError": null,
+      "resetBannerInBody": false,
+      "cartLs": {
+        "items": 0,
+        "total": 0,
+        "cart_reset": null
+      },
+      "envGuard": "1"
+    },
+    "backToA": [
+      {
+        "method": "GET",
+        "url": "/shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart_reset": null,
+        "items": 0,
+        "setCookie": false
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart_reset": null,
+        "items": 0,
+        "setCookie": false
+      }
+    ],
+    "backToA_resets": 0,
+    "afterBackToA": {
+      "href": "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/",
+      "address": "Самара, ул. Куйбышева, 78",
+      "hours": "Пн–Пт 08:00–22:00, Сб–Вс 10:00–20:00",
+      "profileLabel": "Профиль ID",
+      "cartSheet": true,
+      "cartSheetMode": "peek",
+      "checkoutText": "0₽",
+      "cartError": null,
+      "resetBannerInBody": false,
+      "cartLs": {
+        "items": 0,
+        "total": 0,
+        "cart_reset": null
+      },
+      "envGuard": "1"
+    },
+    "reloadA": [
+      {
+        "method": "GET",
+        "url": "/shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart_reset": null,
+        "items": 0,
+        "setCookie": false
+      },
+      {
+        "method": "GET",
+        "url": "/shop/api/cart",
+        "tenant": "2fdee1ac",
+        "status": 200,
+        "cart_reset": null,
+        "items": 0,
+        "setCookie": false
+      }
+    ],
+    "afterReloadA": {
+      "href": "/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789#/",
+      "address": "Самара, ул. Куйбышева, 78",
+      "hours": "Пн–Пт 08:00–22:00, Сб–Вс 10:00–20:00",
+      "profileLabel": "Профиль ID",
+      "cartSheet": true,
+      "cartSheetMode": "peek",
+      "checkoutText": "0₽",
+      "cartError": null,
+      "resetBannerInBody": false,
+      "cartLs": {
+        "items": 0,
+        "total": 0,
+        "cart_reset": null
+      },
+      "envGuard": "1"
+    },
+    "consoleErrors": [
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 401 () https://coffeeos.fly.dev/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/favicon.ico"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 401 () https://coffeeos.fly.dev/shop/api/profile?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 401 () https://coffeeos.fly.dev/shop/api/profile?tenant_id=d47165db-81c9-4e9d-bc50-e37fe610d86c"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 401 () https://coffeeos.fly.dev/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 401 () https://coffeeos.fly.dev/shop/api/profile?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/33ca34bf-695b-442b-9068-39004d664531-eee012fc.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/98ca8c6c-e5e9-4d59-948c-1b449ccd1a00-6e7e09da.png"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/0a84ccd9-25bd-4973-b042-b0feda8b1b4c-6673354c.jpg"
+      },
+      {
+        "kind": "log.network",
+        "text": "Failed to load resource: the server responded with a status of 404 () https://coffeeos.fly.dev/uploads/products/7b4e6d90-ce85-47c1-814a-652488e7a727-3911feb8.jpg"
+      }
+    ],
+    "jsExceptions": [],
+    "apiNot2xx": [
+      "GET /shop/api/profile 401",
+      "GET /shop/api/profile 401",
+      "GET /shop/api/profile 401",
+      "GET /shop/api/profile 401",
+      "GET /shop/api/profile 401"
+    ],
+    "headers": [
+      {
+        "at": "15:32:04",
+        "req": "GET /shop",
+        "status": 200,
+        "hadCookie": false,
+        "setCookie": true,
+        "expires": true
+      },
+      {
+        "at": "15:32:07",
+        "req": "GET /shop/manifest.webmanifest",
+        "status": 200,
+        "hadCookie": false,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:08",
+        "req": "GET /shop/api/profile",
+        "status": 401,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:08",
+        "req": "GET /shop/api/orders/active",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:08",
+        "req": "GET /shop/api/cart",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": true,
+        "expires": true
+      },
+      {
+        "at": "15:32:08",
+        "req": "GET /shop/api/cart",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": true,
+        "expires": true
+      },
+      {
+        "at": "15:32:08",
+        "req": "GET /shop/api/categories",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:08",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:08",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:08",
+        "req": "GET /shop/api/config",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:08",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:08",
+        "req": "GET /shop/api/tenants",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:09",
+        "req": "GET /shop/api/tenants",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:09",
+        "req": "POST /shop/api/environment_events",
+        "status": 204,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:16",
+        "req": "GET /shop/api/orders/active",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:16",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:16",
+        "req": "GET /shop/api/products/3c5259e0-f42f-4d47-953d-2ce82e335f8c",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:16",
+        "req": "GET /shop/api/favorites",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:23",
+        "req": "POST /shop/api/cart/add",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": true,
+        "expires": true
+      },
+      {
+        "at": "15:32:23",
+        "req": "GET /shop/api/cart",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:23",
+        "req": "GET /shop/api/cart",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:23",
+        "req": "GET /shop/api/categories",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:24",
+        "req": "GET /shop/api/orders/active",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:24",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:32",
+        "req": "GET /shop/api/orders/active",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:32",
+        "req": "GET /shop/api/categories",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:32",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:35",
+        "req": "GET /shop",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": true,
+        "expires": true
+      },
+      {
+        "at": "15:32:35",
+        "req": "GET /shop/manifest.webmanifest",
+        "status": 200,
+        "hadCookie": false,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:35",
+        "req": "GET /shop/api/profile",
+        "status": 401,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:35",
+        "req": "GET /shop/api/orders/active",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:35",
+        "req": "GET /shop/api/cart",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": true,
+        "expires": true,
+        "cart_reset": true
+      },
+      {
+        "at": "15:32:35",
+        "req": "GET /shop/api/cart",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": true,
+        "expires": true,
+        "cart_reset": true
+      },
+      {
+        "at": "15:32:35",
+        "req": "GET /shop/api/categories",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:35",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:35",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:35",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:35",
+        "req": "GET /shop/api/config",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:35",
+        "req": "GET /shop/api/tenants",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:35",
+        "req": "GET /shop/api/tenants",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:43",
+        "req": "GET /shop/api/orders/active",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:43",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:43",
+        "req": "GET /shop/api/categories",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:47",
+        "req": "GET /shop",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": true,
+        "expires": true
+      },
+      {
+        "at": "15:32:48",
+        "req": "GET /shop/manifest.webmanifest",
+        "status": 200,
+        "hadCookie": false,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:48",
+        "req": "GET /shop/api/profile",
+        "status": 401,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:48",
+        "req": "GET /shop/api/orders/active",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:48",
+        "req": "GET /shop/api/cart",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:48",
+        "req": "GET /shop/api/cart",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:48",
+        "req": "GET /shop/api/categories",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:48",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:48",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:48",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:48",
+        "req": "GET /shop/api/config",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:48",
+        "req": "GET /shop/api/tenants",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:48",
+        "req": "GET /shop/api/tenants",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:56",
+        "req": "GET /shop/api/orders/active",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:56",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:32:56",
+        "req": "GET /shop/api/categories",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:00",
+        "req": "GET /shop",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": true,
+        "expires": true
+      },
+      {
+        "at": "15:33:00",
+        "req": "GET /shop/manifest.webmanifest",
+        "status": 200,
+        "hadCookie": false,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:00",
+        "req": "GET /shop/api/profile",
+        "status": 401,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:00",
+        "req": "GET /shop/api/orders/active",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:00",
+        "req": "GET /shop/api/cart",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:00",
+        "req": "GET /shop/api/cart",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:00",
+        "req": "GET /shop/api/categories",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:00",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:00",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:01",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:01",
+        "req": "GET /shop/api/config",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:01",
+        "req": "GET /shop/api/tenants",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:01",
+        "req": "GET /shop/api/tenants",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:08",
+        "req": "GET /shop/api/orders/active",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:09",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:09",
+        "req": "GET /shop/api/categories",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:16",
+        "req": "GET /shop/api/orders/active",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:17",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:17",
+        "req": "GET /shop/api/categories",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:24",
+        "req": "GET /shop/api/orders/active",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:25",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:25",
+        "req": "GET /shop/api/categories",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:31",
+        "req": "GET /shop",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": true,
+        "expires": true
+      },
+      {
+        "at": "15:33:31",
+        "req": "GET /shop/manifest.webmanifest",
+        "status": 200,
+        "hadCookie": false,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:31",
+        "req": "GET /shop/api/profile",
+        "status": 401,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:31",
+        "req": "GET /shop/api/orders/active",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:31",
+        "req": "GET /shop/api/cart",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:31",
+        "req": "GET /shop/api/cart",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:31",
+        "req": "GET /shop/api/categories",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:31",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:31",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:32",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:32",
+        "req": "GET /shop/api/config",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:32",
+        "req": "GET /shop/api/tenants",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:32",
+        "req": "GET /shop/api/tenants",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:39",
+        "req": "GET /shop/api/orders/active",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:40",
+        "req": "GET /shop/api/frequent_products",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      },
+      {
+        "at": "15:33:40",
+        "req": "GET /shop/api/categories",
+        "status": 200,
+        "hadCookie": true,
+        "setCookie": false,
+        "expires": false
+      }
+    ]
+  },
+  "c_headers_summary": {
+    "GET /shop": {
+      "total": 5,
+      "withCookieReq": 4,
+      "setCookie": 5,
+      "setCookieWithExpires": 5,
+      "setCookieUnknown": 0
+    },
+    "GET /shop/manifest.webmanifest": {
+      "total": 5,
+      "withCookieReq": 0,
+      "setCookie": 0,
+      "setCookieWithExpires": 0,
+      "setCookieUnknown": 0
+    },
+    "GET /shop/api/profile": {
+      "total": 5,
+      "withCookieReq": 5,
+      "setCookie": 0,
+      "setCookieWithExpires": 0,
+      "setCookieUnknown": 0
+    },
+    "GET /shop/api/orders/active": {
+      "total": 14,
+      "withCookieReq": 14,
+      "setCookie": 0,
+      "setCookieWithExpires": 0,
+      "setCookieUnknown": 0
+    },
+    "GET /shop/api/cart": {
+      "total": 10,
+      "withCookieReq": 10,
+      "setCookie": 2,
+      "setCookieWithExpires": 2,
+      "setCookieUnknown": 0
+    },
+    "GET /shop/api/categories": {
+      "total": 13,
+      "withCookieReq": 13,
+      "setCookie": 0,
+      "setCookieWithExpires": 0,
+      "setCookieUnknown": 0
+    },
+    "GET /shop/api/frequent_products": {
+      "total": 24,
+      "withCookieReq": 24,
+      "setCookie": 0,
+      "setCookieWithExpires": 0,
+      "setCookieUnknown": 0
+    },
+    "GET /shop/api/config": {
+      "total": 5,
+      "withCookieReq": 5,
+      "setCookie": 0,
+      "setCookieWithExpires": 0,
+      "setCookieUnknown": 0
+    },
+    "GET /shop/api/tenants": {
+      "total": 10,
+      "withCookieReq": 10,
+      "setCookie": 0,
+      "setCookieWithExpires": 0,
+      "setCookieUnknown": 0
+    },
+    "POST /shop/api/environment_events": {
+      "total": 1,
+      "withCookieReq": 1,
+      "setCookie": 0,
+      "setCookieWithExpires": 0,
+      "setCookieUnknown": 0
+    },
+    "GET /shop/api/products/3c5259e0-f42f-4d47-953d-2ce82e335f8c": {
+      "total": 1,
+      "withCookieReq": 1,
+      "setCookie": 0,
+      "setCookieWithExpires": 0,
+      "setCookieUnknown": 0
+    },
+    "GET /shop/api/favorites": {
+      "total": 1,
+      "withCookieReq": 1,
+      "setCookie": 0,
+      "setCookieWithExpires": 0,
+      "setCookieUnknown": 0
+    },
+    "POST /shop/api/cart/add": {
+      "total": 1,
+      "withCookieReq": 1,
+      "setCookie": 1,
+      "setCookieWithExpires": 1,
+      "setCookieUnknown": 0
+    },
+    "GET /shop/api/cart [cart_reset]": {
+      "total": 2,
+      "withCookieReq": 2,
+      "setCookie": 2,
+      "setCookieWithExpires": 2,
+      "setCookieUnknown": 0
+    }
+  },
+  "finishedAt": "2026-10-28T15:33:43.598Z"
+}
