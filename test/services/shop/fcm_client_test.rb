@@ -184,6 +184,107 @@ class Shop::FcmClientTest < ActiveSupport::TestCase
     assert_equal true, customer.push_enabled
   end
 
+  # --- TASK_92 Патч 1: временные ошибки отдельно от постоянных ---
+
+  def deliver_with_fcm_response(code, body)
+    with_fcm_service_account!
+    client = Shop::FcmClient.new
+    stub_fcm_http!(
+      client,
+      oauth_bodies: [ JSON.generate("access_token" => "oauth-1", "expires_in" => 3600) ],
+      fcm_response: [ code, body ]
+    )
+    client.deliver!(token: "device-token", title: "T", body: "B")
+  end
+
+  def with_net_http_raising(error)
+    original = Net::HTTP.method(:start)
+    Net::HTTP.define_singleton_method(:start) { |*_args, **_kw, &_blk| raise error }
+    yield
+  ensure
+    Net::HTTP.singleton_class.send(:define_method, :start, original)
+  end
+
+  test "TASK_92 P1 FCM 5xx is transient" do
+    assert_raises(Shop::FcmClient::TransientError) do
+      deliver_with_fcm_response(503, JSON.generate("error" => { "code" => 503, "status" => "UNAVAILABLE" }))
+    end
+  end
+
+  test "TASK_92 P1 FCM 429 is transient" do
+    assert_raises(Shop::FcmClient::TransientError) do
+      deliver_with_fcm_response(429, JSON.generate("error" => { "code" => 429, "status" => "RESOURCE_EXHAUSTED" }))
+    end
+  end
+
+  test "TASK_92 P1 transient error is still a FcmClient::Error" do
+    assert_operator Shop::FcmClient::TransientError, :<, Shop::FcmClient::Error
+  end
+
+  test "TASK_92 P1 FCM 4xx dead token is permanent, not transient" do
+    error = assert_raises(Shop::FcmClient::Error) do
+      deliver_with_fcm_response(
+        404,
+        JSON.generate("error" => { "code" => 404, "status" => "NOT_FOUND", "details" => [ { "errorCode" => "UNREGISTERED" } ] })
+      )
+    end
+    refute_kind_of Shop::FcmClient::TransientError, error
+  end
+
+  test "TASK_92 P1 FCM 400 payload error is permanent, not transient" do
+    error = assert_raises(Shop::FcmClient::Error) do
+      deliver_with_fcm_response(400, JSON.generate("error" => { "code" => 400, "status" => "INVALID_ARGUMENT" }))
+    end
+    refute_kind_of Shop::FcmClient::TransientError, error
+  end
+
+  test "TASK_92 P1 network errors and timeouts to FCM are transient" do
+    account = with_fcm_service_account!
+    [
+      Net::ReadTimeout.new("fcm"),
+      Net::OpenTimeout.new("fcm"),
+      SocketError.new("getaddrinfo"),
+      Errno::ECONNRESET.new,
+      OpenSSL::SSL::SSLError.new("handshake")
+    ].each do |net_error|
+      Rails.cache.write("fcm:oauth:#{account["client_email"]}", "oauth-cached", expires_in: 1.hour)
+      with_net_http_raising(net_error) do
+        assert_raises(Shop::FcmClient::TransientError, "#{net_error.class} must be transient") do
+          Shop::FcmClient.new.deliver!(token: "device-token", title: "T", body: "B")
+        end
+      end
+    end
+  end
+
+  test "TASK_92 P1 OAuth network failure is transient" do
+    with_fcm_service_account!
+    with_net_http_raising(Net::OpenTimeout.new("oauth2")) do
+      assert_raises(Shop::FcmClient::TransientError) do
+        Shop::FcmClient.new.deliver!(token: "device-token", title: "T", body: "B")
+      end
+    end
+  end
+
+  test "TASK_92 P1 OAuth non-JSON response is transient" do
+    with_fcm_service_account!
+    client = Shop::FcmClient.new
+    stub_fcm_http!(client, oauth_bodies: [ "<html>502 Bad Gateway</html>" ], fcm_response: [ 200, "{}" ])
+
+    assert_raises(Shop::FcmClient::TransientError) do
+      client.deliver!(token: "device-token", title: "T", body: "B")
+    end
+  end
+
+  test "TASK_92 P1 OAuth response without access_token is transient" do
+    with_fcm_service_account!
+    client = Shop::FcmClient.new
+    stub_fcm_http!(client, oauth_bodies: [ JSON.generate("error" => "invalid_grant") ], fcm_response: [ 200, "{}" ])
+
+    assert_raises(Shop::FcmClient::TransientError) do
+      client.deliver!(token: "device-token", title: "T", body: "B")
+    end
+  end
+
   test "T-J2c simulate mode unchanged with customer arg" do
     ENV["FCM_SIMULATE"] = "1"
     customer = create_mobile_customer!(phone: "+79001112233")

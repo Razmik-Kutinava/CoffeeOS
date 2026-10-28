@@ -46,12 +46,38 @@ class Shop::ReadyPushClaimTest < ActiveSupport::TestCase
     end
   end
 
-  test "#35 notifier claims and enqueues on first ready" do
+  test "#35 notifier enqueues ReadyPushJob on first ready without claiming itself" do
     assert_nil @order.ready_notified_at
 
     assert_enqueued_with(job: Shop::ReadyPushJob, args: [ @order.id, "preparing" ]) do
       Shop::OrderStatusPushNotifier.call(order: @order, old_status: "preparing")
     end
     assert_nil @order.reload.ready_notified_at
+  end
+
+  # --- TASK_92 Патч 1 ---
+
+  test "TASK_92 P1 claim! with at: stores the given time" do
+    at = Time.zone.parse("2026-10-28 10:00:00")
+
+    assert Shop::ReadyPushClaim.claim!(@order, at: at)
+    assert_equal at, @order.reload.ready_notified_at
+  end
+
+  test "TASK_92 P1 release! frees own claim" do
+    assert Shop::ReadyPushClaim.claim!(@order)
+    claimed_at = @order.reload.ready_notified_at
+
+    assert Shop::ReadyPushClaim.release!(@order, claimed_at)
+    assert_nil @order.reload.ready_notified_at
+    assert Shop::ReadyPushClaim.claim!(@order.reload), "released claim can be taken again"
+  end
+
+  test "TASK_92 P1 release! does not free a foreign claim" do
+    assert Shop::ReadyPushClaim.claim!(@order)
+    claimed_at = @order.reload.ready_notified_at
+
+    assert_not Shop::ReadyPushClaim.release!(@order, claimed_at - 1.second)
+    assert_equal claimed_at, @order.reload.ready_notified_at
   end
 end

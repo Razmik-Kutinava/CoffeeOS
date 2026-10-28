@@ -57,6 +57,7 @@
 5. `test/jobs/shop/ready_push_job_test.rb` — 4, 4b–4g; актуализировать `:90-95` под 4c.
 6. `test/services/shop/ready_push_claim_test.rb` — `release!` (только свой), `claim!(at:)`; переименовать `:49-55`.
 7. `test/services/shop/fcm_client_test.rb` — 5xx/429/сеть/таймаут/OAuth → `TransientError`; 400/404 мёртвый токен → `Error` не `TransientError`.
+8. `test/jobs/shop/send_push_notification_job_test.rb` — новый (зеркальный, добор на RED): по умолчанию как сейчас, `raise_transient: true` — временная ошибка наружу.
 
 Соседи (не меняем, гоняем): `test/services/shop/guest_order_broadcaster_test.rb` (на ready ставит `ReadyPushJob`), `test/jobs/shop/order_ready_cascade_job_test.rb` (граница с каскадом), `test/services/shop/order_status_push_notifier_test.rb` (`:42`, путь accepted/preparing через `SendPushNotificationJob`), `test/services/shop/order_ready_sms_link_test.rb` (4f, `:61`), `test/integration/shop/push_pipeline_simulation_test.rb`.
 
