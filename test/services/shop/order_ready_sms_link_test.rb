@@ -51,6 +51,21 @@ class Shop::OrderReadySmsLinkTest < ActiveSupport::TestCase
     refute_includes msg, "codeblack.xyz"
   end
 
+  test "TASK_118 S9 sms_message length within 70 with prod host from fly.toml" do
+    fly_toml = Rails.root.join("fly.toml").read
+    app_host = fly_toml[/^\s*APP_HOST\s*=\s*"([^"]+)"/, 1]
+    sms_host = fly_toml[/^\s*SHOP_SMS_LINK_HOST\s*=\s*"([^"]+)"/, 1]
+    assert app_host.present?, "fly.toml [env] APP_HOST not found — prod SMS would use DEFAULT_HOST"
+
+    ENV["APP_HOST"] = app_host
+    ENV["SHOP_SMS_LINK_HOST"] = sms_host if sms_host.present?
+    host = sms_host.presence || app_host
+
+    msg = Shop::OrderReadySmsLink.sms_message_for(@order)
+    assert msg.start_with?("CODE:BLACK. Готов! #{host}/o/"), msg
+    assert_operator msg.length, :<=, 70, "#{msg.length} chars: #{msg}"
+  end
+
   test "SHOP_SMS_LINK_HOST wins over APP_HOST" do
     ENV["APP_HOST"] = "app.example.test"
     ENV["SHOP_SMS_LINK_HOST"] = "sms.example.test"
