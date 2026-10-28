@@ -34,7 +34,7 @@
 |---|---|---|---|---|---|---|---|
 | 0.1 | Шаг 0 + TASK_99 | Intake TASK_99 (новый файл + строка CBR) и все строки «Уточнение 2026-10-18» в TASK_90, TASK_92, TASK_94, TASK_99, «Интеграция статусной модели в компактную шторку PWA и Push» — по [ответам](../artifacts/push_sms_task_order/customer_answers_2026-10-28.md) п. 1–2; место — по содержимому строк | docs | [TASK_99](https://docs.google.com/document/d/1RFadqCs70QvUX2dFZmL98SEtPd1N5sGSEy-hNNrlVwU/edit) | — | done | `85c4b66c` 2026-10-28 · [TASK-99-…](customer_tasks/TASK-99-iOS-восстановление-системного-диалога-разрешения-WebPush.md) (код был сделан 2026-09-29, G4 iPhone — после 🚀 4) · 10 строк уточнений вставлены · COMPONENT_MAP: не требуется — только docs |
 | 0.2 | TASK_114 Subtask 1 | Intake TASK_114 + Subtask 1 (3 строки в документах). Код Subtask 2–6 **не делать** до подтверждённого сбоя | docs | [TASK_114](https://docs.google.com/document/d/13Hll7Y_DAdmo-pHBUAL0onJj8IcvloT9LUV-vmSN4wQ/edit) | — | done | `a698be2d` 2026-10-28 · [TASK-114-…](customer_tasks/TASK-114-Запасное-хранилище-и-защита-обращений-к-storage-в-WebView.md) + CBR #114 · строка-уточнение вставлена в `shop-api.md`, ТЗ Mobile UI (#67), ТЗ UX/Perf (#68) · Subtask 2–6 отложены (Q2) · COMPONENT_MAP: не требуется — только docs |
-| 0.3 | TASK_118 Subtask 9 | Intake TASK_118 + только Subtask 9: тест длины SMS с реальным хостом, строки-уточнения в ТЗ #39 и #82 | тест + docs | [TASK_118](https://docs.google.com/document/d/1DVbALzcHHRccOAMk3SMJUU1gA7StyB_pxmNA_RhScII/edit) | — | todo | |
+| 0.3 | TASK_118 Subtask 9 | Intake TASK_118 + только Subtask 9: тест длины SMS с реальным хостом, строки-уточнения в ТЗ #39 и #82 | тест + docs | [TASK_118](https://docs.google.com/document/d/1DVbALzcHHRccOAMk3SMJUU1gA7StyB_pxmNA_RhScII/edit) | — | in_progress | intake 2026-10-28 · [TASK-118-…](customer_tasks/TASK-118-SMS-Заказ-готов-история-заказов-CODE-BLACK.md) + CBR #118 · тест и строки-уточнения — `/spec` → `/sbr` |
 | 0.4 | TASK_119 этап 1 | Intake TASK_119. Cursor: перечень мест кода с обходом RLS (только чтение). 👤 Владелец: 4 запроса из документа на prod read-only (ответы п. 4) → текст без секретов в `artifacts/` | аудит, без кода | [TASK_119](https://docs.google.com/document/d/1-YuCzTQCuGP_Mvioctw0lCQT1IOtzf1_0lsnZGVXXaA/edit) | 👤 доступ Fly | todo | |
 | 1 | TASK_112 | Снимок окружения при открытии витрины (Д9): `pushEnvironment.js`, `event_kind`, таблица событий, endpoint | доп. задача · миграция | [TASK_112](https://docs.google.com/document/d/1zj0HL_Ws1FbqJFQPC3wSuKmo9msLYN8qrjLqV63afEI/edit) | — | todo | |
 | 2 | TASK_92 Патч 1 | Ready-пуш не теряется при сбое доставки (Д1) | патч → конец `TASK-92-…md` | [TASK_92](https://docs.google.com/document/d/1GlRrdNGaXuSTTCYEKBN1dem8hB0A0WPnC2w9O_gi-mc/edit) | — | todo | |
@@ -81,7 +81,7 @@
 | TASK-CODE-BLACK-NETWORK-MEMBERSHIP | TASK_115 | A |
 | TASK-CODE-BLACK-CROSS-POINT-ORDER-HISTORY | TASK_116 | B |
 | TASK-SHOP-SMS-SESSION-TRANSITION-EXT | TASK_117 | C |
-| — (SMS → история) | TASK_118 | D |
+| TASK-39-SMS-READY-LINK-ORDER-HISTORY-EXT (SMS → история) | TASK_118 | D |
 | TASK-PRODUCTION-RLS-VERIFY-HARDEN | TASK_119 | E |
 | TASK-SHOP-CART-ON-TENANT-SWITCH | TASK_120 | F |
 | TASK-HISTORY-REPEAT-PRICE-CHECK-EXT | TASK_121 | G |
