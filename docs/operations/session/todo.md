@@ -1,3 +1,93 @@
+# todo — TASK_112: снимок окружения при открытии витрины (очередь, шаг 1)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_112](../milestones/veha_2/requirements/customer_tasks/TASK-112-Снимок-окружения-при-открытии-витрины.md) Subtask 1–12 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 1 · [Google Doc](https://docs.google.com/document/d/1zj0HL_Ws1FbqJFQPC3wSuKmo9msLYN8qrjLqV63afEI/edit) |
+| **Не в scope** | push-регистрация, VAPID/FCM, SW, каскад, оплата, tenant resolution, CSRF/CORS, `safeWebStorage`/`probeStorage`, event_kind кроме `session_open`, развёртывание Metabase |
+| **Решения владельца 2026-10-28** | (1) сигнал перенаправления — флаг в `shopTenantHeader.js` · (2) Metabase: только таблица + view, подключение — отдельно (Q4 очереди), Subtask 9 принимается после подключения · (3) Migration Gate — **go** |
+| **Статус** | SPEC · дальше `/sbr` |
+
+## SBR
+
+- [x] intake `ad527706` (ТЗ 1:1 + CBR #112)
+- [x] SPEC — факты сверены, решения владельца, файлы, Не ломать, Проверка, Migration Gate go
+- [ ] RED — JS `push_environment_test.mjs` + Rails (модель, endpoint, rate-limit, view) падают
+- [ ] GREEN — реализация, тесты зелёные, миграция локально up/down/up
+- [ ] `/regress`
+- [ ] `/review` (bugbot + security + crit-audit + Entire + push/CI)
+- [ ] 🚀 1 (после шагов 1–5) → 👤 события в БД с телефона (Android PWA, iPhone с иконки и из Safari, Telegram, Instagram, Chrome с заблокированными данными сайта)
+
+## Факт (аудит 2026-10-28) — документ совпал с кодом, кроме одного пробела
+
+- `shop/api/base_controller.rb` — точка с сервера: `with_shop_tenant!` `:19-38` (в доке `:16,33-38`, сдвиг). Источник: `tenant_resolution.rb:12-22` — `params[:tenant_id]` → `X-Shop-Tenant` → хост → `SHOP_DEFAULT_TENANT_ID` → единственная точка. `skip_forgery_protection` уже в базовом контроллере (`:10`) — CSRF не трогаем.
+- `deviceDetect.js:13` `getDeviceOS` → `ios`/`android`/`desktop` (в событии `desktop` → `other`). `shopWebView.js:7` `isTelegramInAppBrowser`; вне тестов не вызывается (`shop_telegram_webview_test.mjs:27-33`, Rails `shop_telegram_webview_test.rb:26` — проверка исходника). `probeStorage` `:20`, `safeWebStorage` `:49` — вне тестов не используются (ключ пробы `__coffeeos_wv_probe__` — наш ключ должен отличаться).
+- `App.svelte:111-148` `onMount`: `restoreGuestSession` → `bootstrapShopTenant(api)` → `.then(cfg => …)`; хука «каталог отрисован» нет — совпало.
+- **Пробел:** `bootstrapShopTenant` (`shopTenantHeader.js:151-202`) при перенаправлении (`:186-194`, `navigateToTenant` → `window.location.assign` `:141-148`) возвращает тот же `cfg`, что и без него → `App.svelte` не может понять «без перенаправления». Решение владельца: в `navigateToTenant` модульный флаг + экспорт-геттер; поведение bootstrap не меняется.
+- Транспорт-образец: `subscriptionOffer.js:102-150` `trackOfferOpened` — `sendBeacon(Blob json)`, иначе `fetch keepalive` без await; URL через `withTenantQuery` (`api.js:20`) — точка в query, т.к. beacon без заголовков. `shopPwa.js:18-26` — best-effort `api()` без throw.
+- `orderStatusCtaMachine.js:44` `notifyKind` по `os` — совпало; `firebasePush.js:110` `isSupported()` после `requestPermission` (TASK_99) — совпало.
+- `marketing_events`: `customer_id NOT NULL` `schema.rb:394`, CHECK типов `:404`, `require_customer!` `subscription_offers_controller.rb:49-55`, «без RLS» в миграции `20260929150000…:3-4` — совпало. `point_id` там без FK — берём так же (FK на `tenants` мешал бы чистке точек).
+- `mobile_sessions` `schema.rb:495-510` — UA/IP нет; есть `device_type` и `metadata` (в доке «не хранит ОС» — по факту колонка `device_type` есть, но про ОС гостя витрины данных нет; на задачу не влияет).
+- Rate-limit есть: Rack::Attack (`config/initializers/rack_attack.rb`, Redis на проде, в тестах выключен, включается `with_rack_attack` из `test/support/rack_attack_test_helper.rb`); общий `shop/api` 150/мин на IP. IP живёт только ключом счётчика в Redis с TTL, в таблицу не пишется.
+- Metabase в репо нет (код, конфиг, доки) → Q4 очереди.
+- `schema.rb` не выгружает SQL-view (в нём нет `v_kiosk_menu`/`v_active_orders_for_barista` из `20250115000009`), CI делает `db:test:prepare` из `schema.rb` → в тестовой БД view не будет. Прод накатывает миграции (`fly:release` → `db:prepare`) — там view появится.
+- Команды ТЗ `npm test -- --run` / `npm run lint` / `npm run typecheck` в проекте не существуют (`package.json` — только `vite:*`). Аналоги: `node --test test/javascript/….mjs` + `npx vite build`.
+- Нюанс (не меняем, scope «tenant resolution»): `params[:tenant_id]` в Rails видит и JSON-тело; это общий механизм всех shop API. Клиент шлёт точку только в query, ключ `tenant_id` в теле — неизвестный ключ, в строку не пишется.
+
+## Решение для билда
+
+1. **`app/frontend/lib/pushEnvironment.js`** (новый, без зависимостей кроме `deviceDetect.js`, `shopWebView.js`, `api.js#withTenantQuery`):
+   - `collectPushEnvironment(env = globalThis)` → `{ event_kind: "session_open", os_family, standalone, notification_state, push_manager, service_worker, storage_local, storage_session, inapp_label, ua_snippet }`; каждый флаг в своём `try/catch` → `unavailable`. `standalone`: `matchMedia("(display-mode: standalone)")` или `navigator.standalone === true` → `standalone`, иначе `browser`, исключение → `unavailable`. `notification_state`: нет `Notification` → `unavailable`, иначе `permission` (`default`/`granted`/`denied`, прочее → `unavailable`). `push_manager` / `service_worker`: `available`/`unavailable` по наличию (`"PushManager" in window`, `"serviceWorker" in navigator`), **без** `register`/`requestPermission`.
+   - Своя проба хранилища `storageAvailable(getStorage)`: обращение к геттеру (`window.localStorage` может бросить SecurityError), `setItem`/`removeItem` пробного ключа `__coffeeos_env_probe__` в `try/finally` → `available`/`unavailable`; существующие ключи не трогаем.
+   - `inAppLabel(ua)`: `isTelegramInAppBrowser` → `telegram`; `Instagram` → `instagram`; `FBAN|FBAV|FB_IAB` → `facebook`; Android + `; wv)` → `other_inapp`; iOS (`iPhone|iPad|iPod`) + `Mobile/` без `Safari/` → `other_inapp`; иначе `none`. Метка — только для записи, логика витрины по ней не ветвится.
+   - `ua_snippet` — только при `other_inapp`: последние 300 символов UA; иначе `null`.
+   - `reportSessionOpenOnce(opts)`: защита — флаг в памяти модуля + `sessionStorage` ключ `coffeeos_env_session_open_v1` (через свою пробу; недоступен → только память). Флаг ставится **до** отправки → нет повторов при ошибке. Отправка: `sendBeacon(withTenantQuery(URL), Blob json)`, иначе `fetch(…, { keepalive: true })` без await, `.catch(() => {})`. Ничего не бросает.
+2. **`app/frontend/lib/shopTenantHeader.js`** — `let tenantRedirectPending = false`; `navigateToTenant` ставит `true` перед `assign`; `export function shopTenantRedirectPending()`. Больше ничего.
+3. **`app/frontend/App.svelte`** — в существующем `.then((cfg) => …)` после bootstrap, последней строкой: `try { if (!shopTenantRedirectPending()) reportSessionOpenOnce() } catch {}`. Порядок остальных вызовов не меняется; `cfg === null` (офлайн) — тоже без перенаправления, отправка best-effort.
+4. **Миграция `db/migrate/20261028…_create_shop_environment_events.rb`** (go владельца) — таблица `shop_environment_events`:
+   - `id` uuid; `point_id` uuid NOT NULL (без FK, как `marketing_events`); `event_kind` string(32) NOT NULL default `session_open`; `os_family` (`ios`/`android`/`other`); `standalone` (`standalone`/`browser`/`unavailable`); `notification_state` (`default`/`granted`/`denied`/`unavailable`); `push_manager`, `service_worker`, `storage_local`, `storage_session` (`available`/`unavailable`); `inapp_label` (`telegram`/`instagram`/`facebook`/`other_inapp`/`none`); `ua_snippet` string(300) NULL; `created_at` NOT NULL. Все — NOT NULL + CHECK по списку; `ua_snippet IS NULL OR inapp_label = 'other_inapp'`.
+   - Индекс `(point_id, created_at)`.
+   - Без RLS: комментарий с причиной (прецедент `marketing_events` `20260929150000:3-4`, решение владельца 2026-10-15, пересмотреть до дашбордов франчайзи; в prod RLS к роли приложения и так не применяется — TASK_119 этап 1).
+   - View `v_shop_environment_events`: все поля + `day` = `(created_at AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Moscow')::date` + `point_name` из `tenants`. SQL view — константа в модели, миграция её исполняет (тест создаёт view той же константой внутри транзакции теста — `schema.rb` view не хранит).
+   - `down`: `DROP VIEW IF EXISTS` → `drop_table`.
+5. **`app/models/shop_environment_event.rb`** — константы допустимых значений (`EVENT_KINDS = %w[session_open]`, …), валидации inclusion, `ua_snippet` только при `other_inapp`; `readonly?` после создания не нужен (не усложняем).
+6. **`app/services/shop/environment_event_recorder.rb`** — разбор тела (JSON из `raw_post`, как `opened_payload`), белый список ключей, нормализация неверных значений: флаги → `unavailable`, `os_family` → `other`, `inapp_label` → `other_inapp` (не `none` — иначе завысит долю обычных браузеров); `ua_snippet` — последние 300 символов и только при `other_inapp`, иначе `NULL`; `event_kind` пусто → `session_open`, неизвестный → отказ; `point_id` — только аргумент из `@shop_tenant`.
+7. **`app/controllers/shop/api/environment_events_controller.rb`** + маршрут `post "environment_events"` в `config/routes.rb` (namespace `shop/api`): без `require_customer!`; тело > 2 КБ → 413; неизвестный `event_kind` → 422; успех → 204. Точка не определена → 422/404 из `with_shop_tenant!` (как у всех).
+8. **`config/initializers/rack_attack.rb`** — `throttle("shop/environment_events/ip", limit: 30, period: 1.minute)` на `POST /shop/api/environment_events` (несколько событий за сессию; 30 — запас на общий Wi-Fi кофейни).
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/lib/pushEnvironment.js` — новый: флаги, проба хранилища, метка, отправка один раз за вкладку.
+2. `app/frontend/App.svelte` — один неблокирующий вызов после bootstrap.
+3. `app/frontend/lib/shopTenantHeader.js` — флаг «уходим на другую точку» (решение владельца; вне списка «Разрешено» ТЗ).
+4. `db/migrate/20261028…_create_shop_environment_events.rb` + `db/schema.rb` — таблица, индекс, CHECK, view.
+5. `app/models/shop_environment_event.rb` — модель + SQL view.
+6. `app/services/shop/environment_event_recorder.rb` + `app/controllers/shop/api/environment_events_controller.rb` + `config/routes.rb` — приём события.
+7. `config/initializers/rack_attack.rb` — лимит частоты.
+
+Тесты (новые): `test/javascript/push_environment_test.mjs`, `test/models/shop_environment_event_test.rb`, `test/services/shop/environment_event_recorder_test.rb`, `test/integration/shop/api/environment_events_test.rb` (Subtask 6, 7, 8, 12 + view), `test/integration/rack_attack_environment_events_test.rb`.
+
+Соседи (не меняем, гоняем): `test/javascript/shop_telegram_webview_test.mjs` (`shopWebView.js` переиспользуется на чтение), `test/integration/shop/b114_header_tenant_address_test.rb` + `test/javascript/frequent_refresh_on_terminal_test.mjs` (читают `shopTenantHeader.js` / `App.svelte`), `test/integration/shop/api/tenant_isolation_test.rb` (точка с сервера).
+
+## Не ломать
+
+- Старт витрины: `restoreGuestSession` → `bootstrapShopTenant` → часы работы; перенаправление на точку с историей/выбранную — как было (Subtask 10).
+- Каталог, корзина, оплата: ни одного нового блокирующего запроса, ошибок в консоли/UI при сбое отправки нет (Subtask 3).
+- Push: `registerShopPush`, `requestPermission`, регистрация SW — не вызываются; `/shop/api/push/register` не трогаем.
+- Tenant resolution, CSRF, CORS, `safeWebStorage`/`probeStorage` — без изменений; в таблице нет `customer_id`, IP, телефона, сырого UA.
+
+## Проверка
+
+- `node --test test/javascript/push_environment_test.mjs test/javascript/shop_telegram_webview_test.mjs test/javascript/frequent_refresh_on_terminal_test.mjs` + `npx vite build`
+- `ruby bin/rails test test/models/shop_environment_event_test.rb test/services/shop/environment_event_recorder_test.rb test/integration/shop/api/environment_events_test.rb test/integration/rack_attack_environment_events_test.rb test/integration/shop/b114_header_tenant_address_test.rb test/integration/shop/api/tenant_isolation_test.rb test/integration/rls_tenant_isolation_test.rb` (последний — минимум Migration Gate)
+- `bin/rails db:migrate` → `db:rollback` → `db:migrate` локально; `bundle exec rubocop` по новым/изменённым файлам
+
+## DoD
+
+- Subtask 1–8, 10–12 — тестами; Subtask 9 — view есть, данные видны после подключения Metabase (Q4); ручная проверка на устройствах — после 🚀 1.
+- COMPONENT_MAP: не требуется — CartSheet / OrderStatus* / GuestOrder* не трогаем (только `App.svelte` и новый модуль).
+
+---
+
 # todo — TASK_118 Subtask 9: длина SMS «Заказ готов» с реальным хостом (очередь 0.3)
 
 | Поле | Значение |
