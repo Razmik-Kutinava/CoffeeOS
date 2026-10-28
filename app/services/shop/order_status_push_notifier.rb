@@ -17,6 +17,9 @@ module Shop
       "cancelled" => "Заказ отменён"
     }.freeze
 
+    # TASK_92 Патч 2: текст push ≠ заголовку; cancel_message в API/Cable не меняется.
+    GUEST_CANCEL_BODY = "Вы отменили заказ"
+
     def self.call(order:, old_status: nil)
       new(order: order, old_status: old_status).call
     end
@@ -30,6 +33,8 @@ module Shop
       return unless @order.source == "mobile"
       return if @order.customer_id.blank?
       return if @old_status.present? && @old_status == @order.status
+      # TASK_92 Патч 2: до оплаты push не было — заменять нечего.
+      return if @order.cancelled? && @old_status.to_s == "pending_payment"
 
       customer = MobileCustomer.find_by(id: @order.customer_id)
       return unless customer&.push_enabled?
@@ -58,8 +63,8 @@ module Shop
       }
       if meta
         payload["tag"] = meta[:tag]
-        payload["actions"] = meta[:actions]
-        payload["progress"] = meta[:progress]
+        payload["actions"] = meta[:actions] if meta.key?(:actions)
+        payload["progress"] = meta[:progress] if meta.key?(:progress)
       end
 
       notification = PushNotification.create!(
@@ -91,7 +96,7 @@ module Shop
 
     def compose_body(meta)
       text = body_for_status
-      return text unless meta.is_a?(Hash)
+      return text unless meta.is_a?(Hash) && meta[:progress].present?
 
       "#{meta[:progress]} #{text}"
     end
@@ -109,9 +114,10 @@ module Shop
       when "accepted"
         "Заказ ##{number} оплачен и принят в работу"
       when "cancelled"
-        Shop::OrderCancellationPresenter.cancel_message_for(
-          Shop::OrderCancellationPresenter.cancelled_by(@order)
-        )
+        cancelled_by = Shop::OrderCancellationPresenter.cancelled_by(@order)
+        return GUEST_CANCEL_BODY if cancelled_by == "guest"
+
+        Shop::OrderCancellationPresenter.cancel_message_for(cancelled_by)
       else
         "Заказ ##{number}: #{@order.status}"
       end
