@@ -9,13 +9,13 @@ module Shop
 
       def add
         Rails.logger.info("[Shop::Cart] Adding product #{params[:product_id]} to cart for tenant #{@shop_tenant.id}")
-        Shop::CartService.new(session, @shop_tenant.id).add!(
+        cart_service.add!(
           product_id: params.require(:product_id),
           quantity: (params[:quantity] || 1).to_i,
           selected_modifiers: params[:selected_modifiers] || []
         )
-        data = Shop::CartService.new(session, @shop_tenant.id).json_lines
-        render json: { cart: data[:items], total: data[:total] }
+        data = cart_service.json_lines
+        render json: with_cart_reset(cart: data[:items], total: data[:total])
       rescue ActiveRecord::RecordNotFound => e
         Rails.logger.warn("[Shop::Cart] Failed to add product: #{e.message}")
         render json: { error: e.message }, status: :not_found
@@ -25,16 +25,16 @@ module Shop
       end
 
       def show
-        data = Shop::CartService.new(session, @shop_tenant.id).json_lines
-        render json: { items: data[:items], total: data[:total] }
+        data = cart_service.json_lines
+        render json: with_cart_reset(items: data[:items], total: data[:total])
       rescue => e
         raise unless cookie_overflow_error?(e)
         handle_cart_overflow!
       end
 
       def clear
-        Shop::CartService.new(session, @shop_tenant.id).clear!
-        render json: { items: [], total: 0 }
+        cart_service.clear!
+        render json: with_cart_reset(items: [], total: 0)
       rescue => e
         raise unless cookie_overflow_error?(e)
         handle_cart_overflow!
@@ -44,9 +44,9 @@ module Shop
         index = params[:index].to_i
         return render json: { error: "Неверный индекс" }, status: :unprocessable_entity if index < 0
         Rails.logger.info("[Shop::Cart] Removing item at index #{index} for tenant #{@shop_tenant.id}")
-        Shop::CartService.new(session, @shop_tenant.id).remove!(params[:index])
-        data = Shop::CartService.new(session, @shop_tenant.id).json_lines
-        render json: { items: data[:items], total: data[:total] }
+        cart_service.remove!(params[:index])
+        data = cart_service.json_lines
+        render json: with_cart_reset(items: data[:items], total: data[:total])
       rescue => e
         raise unless cookie_overflow_error?(e)
         handle_cart_overflow!
@@ -56,7 +56,7 @@ module Shop
         index = params[:index].to_i
         return render json: { error: "Неверный индекс" }, status: :unprocessable_entity if index < 0
 
-        svc = Shop::CartService.new(session, @shop_tenant.id)
+        svc = cart_service
         if params.key?(:selected_modifiers)
           # S4-блок-2: замена модификаторов (edit из Product)
           svc.replace_line!(index, selected_modifiers: params[:selected_modifiers] || [], quantity: params[:quantity])
@@ -64,8 +64,8 @@ module Shop
           svc.update_quantity!(index, params.require(:delta))
         end
 
-        data = Shop::CartService.new(session, @shop_tenant.id).json_lines
-        render json: { items: data[:items], total: data[:total] }
+        data = svc.json_lines
+        render json: with_cart_reset(items: data[:items], total: data[:total])
       rescue ActiveRecord::RecordNotFound => e
         render json: { error: e.message }, status: :not_found
       rescue => e
@@ -75,8 +75,17 @@ module Shop
 
       private
 
+      # Один сервис на запрос: сброс корзины чужой точки (TASK_120) виден только экземпляру, который его сделал.
+      def cart_service
+        @cart_service ||= Shop::CartService.new(session, @shop_tenant.id)
+      end
+
+      def with_cart_reset(payload)
+        cart_service.tenant_reset? ? payload.merge(cart_reset: true) : payload
+      end
+
       def handle_cart_overflow!(_error = nil)
-        Shop::CartService.new(session, @shop_tenant.id).clear!
+        cart_service.clear!
         render json: { error: CART_OVERFLOW_MESSAGE }, status: :unprocessable_entity
       end
 

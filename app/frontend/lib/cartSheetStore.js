@@ -1,6 +1,6 @@
 import { get, writable } from "svelte/store"
 import { api } from "./api.js"
-import { CART_JUST_ADDED_KEY } from "./shopCartAdd.js"
+import { CART_JUST_ADDED_KEY, CART_RESET_EVENT } from "./shopCartAdd.js"
 import { addToCart } from "./shopCartAdd.js"
 import { readCartCache, writeCartCache } from "./shopCartCache.js"
 import {
@@ -50,6 +50,13 @@ export function clearCartSheetError() {
   cartSheetError.set(null)
 }
 
+/** TASK_120 (R9 А): сервер очистил корзину другой точки (`cart_reset` в ответе /cart). */
+export const CART_TENANT_RESET_MESSAGE = "Корзина очищена: вы перешли в другую точку"
+
+function showCartTenantReset() {
+  cartSheetError.set(CART_TENANT_RESET_MESSAGE)
+}
+
 /** Синхрон с Shop::CartService::MAX_ITEM_QUANTITY */
 export const MAX_ITEM_QUANTITY = 99
 
@@ -74,7 +81,10 @@ function enqueueBump(index, delta) {
   cartSheetBusy.set(true)
   bumpChain = bumpChain
     .then(() => api(`/cart/items/${index}`, { method: "PATCH", body: JSON.stringify({ delta }) }))
-    .then(() => refreshCartSheet())
+    .then(async (res) => {
+      await refreshCartSheet()
+      if (res?.cart_reset) showCartTenantReset()
+    })
     .catch(async (err) => {
       // Откат optimistic qty через refresh; сообщение — после refresh, иначе set(null) сотрёт.
       try {
@@ -250,11 +260,14 @@ export async function refreshCartSheet() {
     const data = await api("/cart")
     writeCartCache(data)
     applyCartData(data)
+    if (data?.cart_reset) showCartTenantReset()
     return data
   } catch (_e) {
     cartSheetError.set(_e?.message || "Ошибка обновления корзины")
 
     if (isUnavailableCartError(_e)) {
+      // Иначе строка остаётся в сессии и следующие add / POST /orders снова падают (TASK_120 Subtask 5).
+      await api("/cart", { method: "DELETE" }).catch(() => {})
       cartItems.set([])
       cartTotal.set(0)
       cartSheetMode.set(MODE_PEEK)
@@ -427,6 +440,7 @@ export function bindCartSheetEvents() {
   if (eventsBound || typeof window === "undefined") return
   eventsBound = true
   window.addEventListener("shop:cart-added", onCartAdded)
+  window.addEventListener(CART_RESET_EVENT, showCartTenantReset)
   if (!modePersistBound) {
     modePersistBound = true
     cartSheetMode.subscribe(() => persistCartSheetMode())
@@ -459,8 +473,9 @@ export async function removeCartLine(index) {
 
   cartSheetBusy.set(true)
   try {
-    await api(`/cart/items/${index}`, { method: "DELETE" })
+    const res = await api(`/cart/items/${index}`, { method: "DELETE" })
     await refreshCartSheet()
+    if (res?.cart_reset) showCartTenantReset()
   } catch (_e) {
     await refreshCartSheet()
   } finally {

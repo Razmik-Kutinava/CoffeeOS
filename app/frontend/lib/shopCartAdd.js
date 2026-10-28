@@ -2,7 +2,7 @@ import { api } from "./api.js"
 import { isOfflineError } from "./shopNetwork.js"
 import { getCatalogCache } from "./stores/catalog.js"
 import { enqueueCartAdd } from "./shopOfflineCart.js"
-import { readCartCache, writeCartCache } from "./shopCartCache.js"
+import { clearCartCache, readCartCache, writeCartCache } from "./shopCartCache.js"
 
 function findProduct(productId) {
   const cats = getCatalogCache() || []
@@ -60,6 +60,9 @@ function applyOptimisticAdd(product, quantity, selected_modifiers) {
 }
 
 export const CART_JUST_ADDED_KEY = "shop_cart_just_added"
+/** TASK_120: сервер очистил корзину другой точки — сообщение показывает cartSheetStore. */
+export const CART_RESET_EVENT = "shop:cart-reset"
+const STALE_CART_LINE_ERROR = "Товар недоступен"
 
 function markJustAdded(productName) {
   const name = productName || "Товар"
@@ -90,8 +93,15 @@ export async function addToCart(payload, { product = null } = {}) {
     writeCartCache(data)
     const prod = product || findProduct(body.product_id)
     markJustAdded(prod?.name)
+    if (res?.cart_reset) window.dispatchEvent(new CustomEvent(CART_RESET_EVENT))
     return data
   } catch (e) {
+    // add! уже прошёл, а старая строка корзины ломает json_lines — без очистки сессии гость застревает.
+    if (e?.httpStatus === 404 && e?.message === STALE_CART_LINE_ERROR) {
+      await api("/cart", { method: "DELETE" }).catch(() => {})
+      clearCartCache()
+      throw e
+    }
     if (!isOfflineError(e) && navigator.onLine) throw e
 
     const prod = product || findProduct(body.product_id)

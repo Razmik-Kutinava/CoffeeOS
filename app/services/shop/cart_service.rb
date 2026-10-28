@@ -5,6 +5,8 @@ module Shop
     class OverflowError < StandardError; end
 
     SESSION_KEY = :shop_cart
+    # TASK_120: точка, в которой корзину наполняли. Нет ключа (старые сессии) — без сброса по точке.
+    TENANT_SESSION_KEY = :shop_cart_tenant_id
     MAX_CART_ITEMS = 50
     MAX_ITEM_QUANTITY = 99
     # Distinct lines in cookie session (not sum of qty).
@@ -17,7 +19,13 @@ module Shop
       @session = session
       @tenant_id = tenant_id
       @session[SESSION_KEY] ||= []
+      @tenant_reset = false
+      reset_if_other_tenant!
       compact_session_cart!
+    end
+
+    def tenant_reset?
+      @tenant_reset
     end
 
     def add!(product_id:, quantity:, selected_modifiers:)
@@ -55,6 +63,7 @@ module Shop
           end
           @session[SESSION_KEY] << line
         end
+        stamp_tenant!
         touch_cart_session!
       end
       self
@@ -93,6 +102,7 @@ module Shop
           @session[SESSION_KEY][i] = new_line
         end
 
+        stamp_tenant!
         touch_cart_session!
       end
       self
@@ -127,6 +137,7 @@ module Shop
 
     def clear!
       @session[SESSION_KEY] = []
+      @session.delete(TENANT_SESSION_KEY)
       touch_cart_session!(enforce_budget: false)
     end
 
@@ -164,6 +175,20 @@ module Shop
     end
 
     private
+
+    # TASK_120 (R9 А): корзина чужой точки на том же хосте не переносится — очищается.
+    def reset_if_other_tenant!
+      mark = @session[TENANT_SESSION_KEY]
+      return if mark.blank? || mark.to_s == @tenant_id.to_s
+
+      @tenant_reset = @session[SESSION_KEY].any?
+      @session[SESSION_KEY] = []
+      @session.delete(TENANT_SESSION_KEY)
+    end
+
+    def stamp_tenant!
+      @session[TENANT_SESSION_KEY] = @tenant_id.to_s
+    end
 
     # Rails не помечает session dirty при in-place изменении массива — cookie не обновляется между HTTP-запросами.
     def touch_cart_session!(enforce_budget: true)
