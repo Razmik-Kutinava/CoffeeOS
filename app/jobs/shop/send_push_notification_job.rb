@@ -4,7 +4,8 @@ module Shop
   class SendPushNotificationJob < ApplicationJob
     queue_as :default
 
-    def perform(notification_id)
+    # raise_transient: TransientError после пометки failed уходит наружу (повтор в ReadyPushJob).
+    def perform(notification_id, raise_transient: false)
       notification = PushNotification.includes(:customer).find_by(id: notification_id)
       return unless notification&.pending?
 
@@ -29,6 +30,7 @@ module Shop
     rescue Shop::FcmClient::Error => e
       notification&.update!(status: :failed, error_message: e.message)
       Rails.logger.warn("[Shop::SendPushNotificationJob] #{e.message}")
+      raise if raise_transient && e.is_a?(Shop::FcmClient::TransientError)
     end
 
     private

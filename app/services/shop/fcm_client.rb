@@ -9,6 +9,10 @@ module Shop
   # Отправка push через Firebase Cloud Messaging HTTP v1.
   class FcmClient
     class Error < StandardError; end
+    # 5xx / 429 / сеть / таймаут / сбой OAuth — повтор безопасен (TASK_92 Патч 1).
+    class TransientError < Error; end
+
+    NETWORK_ERRORS = [ Timeout::Error, SocketError, SystemCallError, OpenSSL::SSL::SSLError, IOError ].freeze
 
     OAUTH_URL = URI("https://oauth2.googleapis.com/token")
     FCM_SCOPE = "https://www.googleapis.com/auth/firebase.messaging"
@@ -105,10 +109,12 @@ module Shop
         )
         parsed = JSON.parse(response.body)
         token = parsed["access_token"]
-        raise Error, "OAuth token missing: #{parsed}" if token.blank?
+        raise TransientError, "OAuth token missing: #{parsed}" if token.blank?
 
         token
       end
+    rescue JSON::ParserError => e
+      raise TransientError, "OAuth invalid JSON: #{e.message}"
     end
 
     def send_message!(project_id:, access_token:, token:, title:, body:, data:, customer: nil)
@@ -118,12 +124,17 @@ module Shop
       response = post_json(uri, payload, "Authorization" => "Bearer #{access_token}")
       unless response.is_a?(Net::HTTPSuccess)
         clear_dead_token_if_needed!(response.body, customer)
-        raise Error, "FCM v1 #{response.code}: #{response.body}"
+        error_class = transient_status?(response.code) ? TransientError : Error
+        raise error_class, "FCM v1 #{response.code}: #{response.body}"
       end
 
       JSON.parse(response.body)
     rescue JSON::ParserError => e
       raise Error, "FCM v1 invalid JSON: #{e.message}"
+    end
+
+    def transient_status?(code)
+      code.to_i == 429 || code.to_i >= 500
     end
 
     def clear_dead_token_if_needed!(response_body, customer)
@@ -173,6 +184,8 @@ module Shop
       Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https", open_timeout: 10, read_timeout: 15) do |http|
         http.request(request)
       end
+    rescue *NETWORK_ERRORS => e
+      raise TransientError, "#{uri.host} #{e.class}: #{e.message}"
     end
   end
 end

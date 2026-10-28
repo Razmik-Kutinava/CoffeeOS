@@ -4,14 +4,14 @@
 |------|----------|
 | **Основание** | [TASK_92](../milestones/veha_2/requirements/customer_tasks/TASK-92-Production-background-FCM-и-синхронизация-статусов-заказа.md) § «Патч 1: 2026-10-18», Subtask 4–4g · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 2 · [Google Doc](https://docs.google.com/document/d/1GlRrdNGaXuSTTCYEKBN1dem8hB0A0WPnC2w9O_gi-mc/edit) |
 | **Не в scope** | момент постановки claim (C1 остаётся ранним) · колонки в `orders` · payload FCM · каскад и решение об SMS · статусы Barista · `FCM_SIMULATE` · Патч 2 (cancelled) · ActionCable · код Wallet/APNs (только изоляция их ошибок) · endpoint скачивания карты |
-| **Статус** | SPEC готов · ждёт `/sbr` |
+| **Статус** | GREEN · ждёт `/regress` |
 
 ## SBR
 
 - [x] intake `e3915c6d` (тело TASK_92 + Патч 1 дословно, CBR #92)
-- [x] SPEC — все ссылки патча на код сверены, решения ниже, файлы, Не ломать, Проверка
-- [ ] RED — тесты 4–4g + классификация ошибок `FcmClient` + `release!` / `claim!(at:)`
-- [ ] GREEN
+- [x] SPEC `0758b973` `799fd4a9` — все ссылки патча на код сверены, решения ниже, файлы, Не ломать, Проверка; побочный эффект accepted/preparing принят владельцем
+- [x] RED `4acc0f9f` — 45 runs: 1 failure, 24 errors (нет `TransientError`, `release!`, `claim!(at:)`, `attempt:`/`claimed_at:`, `raise_transient:`; `GenerationError`/`ApnsClient::Error` блокируют FCM; `SocketError`/`Net::OpenTimeout` вылетают как есть; запись остаётся `pending`)
+- [x] GREEN — `FcmClient::TransientError` (5xx/429, `NETWORK_ERRORS` в `http_request`, OAuth без токена / битый JSON) · `ReadyPushClaim.claim!(at:)` + `release!` (только свой claim, без касания `updated_at`) · `ReadyPushJob`: `MAX_ATTEMPTS = 5`, `RETRY_WAITS` 10s/30s/2m/5m, своя перепостановка с `claimed_at`, `update_wallet!` ловит `StandardError`, `fail_if_pending!` · `SendPushNotificationJob(raise_transient:)` · задача 4 файла 45/0 · соседи (Broadcaster, каскад, нотификатор, SMS-ссылка, push pipeline) 45/0 · остальные потребители (`offer_push_notifier`, `Barista::OrderStatusUpdateService`, `b21_guest_notify`, payload) 22/0 · rubocop 8 файлов 0
 - [ ] `/regress`
 - [ ] `/review` → push → CI · закрыть backlog `V2-#35-PUSH-RELIABILITY` в `PRACTICES.md:118` · COMPONENT_MAP: строки `FcmClient` / `GuestOrderBroadcaster` — решение на review
 
