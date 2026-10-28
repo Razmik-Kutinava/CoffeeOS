@@ -12,7 +12,7 @@
 - [x] SPEC — факты документа совпали с кодом (сдвиг только в `schema.rb`), решения ниже, файлы, Не ломать, Проверка · Migration Gate go · контроллер >200 строк — разовое исключение (решение владельца)
 - [x] RED `18ae4410` — 30 runs: 3 failures, 15 errors — все 18 = новые тесты TASK_115 (нет колонки `code_black_member`, нет поля в форме, кухню не отклоняют, журнал пуст); 12 старых тестов контроллера зелёные
 - [x] GREEN `205465e5` — миграция `20261028130000` (dev up/down/up OK; локальную тестовую базу пришлось мигрировать вручную — схема сама не перезагрузилась) · `schema.rb` — только колонка, CHECK и версия (шум рендера CHECK локального PG откатан дважды: после dev и после test) · `Tenant.code_black_network` + 2 валидации · `Platform::TenantCodeBlackAudit` · контроллер +3 строки (239) · форма/список · задача 30/0 · соседи (RLS-изоляция, список с картой, валидации slug, переключатель точек витрины) 17/0 · rubocop 6 файлов 0 · **Entire: пусто** (`no trailer`, транскрипта текущего чата нет) → attach на `/review` до push
-- [ ] `/regress`
+- [x] `/regress` PASS — зона platform + модель `Tenant` + RLS: `test/integration/platform`, `test/controllers/platform`, `test/services/platform`, `test/models` (64 файла) + RLS-тройка из таблицы зон (`rls_tenant_isolation`, `multi_tenant_isolation`, `shop/api/tenant_isolation`) + `health/tenants_controller`, `franchise_platform_admin`, `staff/rbac_tenant_isolation`, `customer_tenant_history` → 369 runs, 0 F/E, 1 skip (`prod_single_point_cleanup_test.rb:65` — нет канонической Point A в тестовой базе, не по задаче) · Fly MCP — после 🚀 1 (админка, витрина не тронута)
 - [ ] `/review`
 
 ## Факт (сверка 2026-10-28) — поведение кода = документ
