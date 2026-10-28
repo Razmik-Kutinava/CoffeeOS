@@ -1,3 +1,62 @@
+# todo — TASK_118 Subtask 9: длина SMS «Заказ готов» с реальным хостом (очередь 0.3)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK_118](../milestones/veha_2/requirements/customer_tasks/TASK-118-SMS-Заказ-готов-история-заказов-CODE-BLACK.md) Subtask 9 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 0.3 · [Google Doc](https://docs.google.com/document/d/1DVbALzcHHRccOAMk3SMJUU1gA7StyB_pxmNA_RhScII/edit) |
+| **Не в scope** | Subtask 1–8, 10–13 (редирект в историю, экраны «устарела/недействительна», точка заказа…) — шаг 15 очереди |
+| **Статус** | SPEC готов |
+
+## SBR
+
+- [x] intake `84192185` (ТЗ 1:1 + CBR #118)
+- [x] SPEC — факты сверены, файлы, Не ломать, Проверка
+- [ ] RED — охранный тест длины с хостом из `fly.toml` (на текущем коде зелёный сразу) + доказательство мутацией
+- [ ] GREEN — строка «Уточнение 2026-10-24» в ТЗ #39 и #82
+- [ ] `/regress` → `/review` (push) → закрытие шага 0.3 в очереди
+
+## Факт (аудит 2026-10-28) — документ совпал с кодом
+
+- `order_ready_sms_link.rb:20-23` — `message_prefix` = `"CODE:BLACK. Готов! #{link_host}/o/"`; `:56-58` — `sms_message_for` = префикс + `hash_for` (27 символов, `:25-30`).
+- `:16-18` — `link_host`: `SHOP_SMS_LINK_HOST` → `APP_HOST` → `DEFAULT_HOST` (`coffeeos.fly.dev`, `:10`).
+- `fly.toml:10` — `APP_HOST = "codeblack.coffee"`; `SHOP_SMS_LINK_HOST` в `fly.toml` нет.
+- Подсчёт: префикс без хоста 19 + `codeblack.coffee` 16 + `/o/` 3 + hash 27 = **65** ≤ 70. С «Заказ готов!» (+6) = **71** > 70 — как в документе.
+- Лимит: `sms_ru_client.rb:58` `MAX_MSG_LENGTH = 70`, проверка `:152-154` до HTTP.
+- Пробел в тестах: `order_ready_sms_link_test.rb` T-C1b (`:42-45`) проверяет длину только с `DEFAULT_HOST` (ENV очищен в `setup`); `order_ready_paid_notifier_test.rb:48-63` — тоже без хоста из `fly.toml`. Совпадение 65 с prod — случайное (оба хоста по 16 символов): смена `APP_HOST` в `fly.toml` на более длинный домен ни один тест не ловит.
+- ТЗ #39 `Каскад уведомлений Заказ готов PWA WS Push WebPush Apple Wallet SMS.md:71` и #82 `Каскад SMS после Заказ готов и шторка статуса на главном.md:49` — строка «CODE:BLACK. Заказ готов! codeblack.xyz/o/{order_hash}»; номера совпали с документом.
+- Попутно (не трогаем, вне scope): комментарий `order_ready_paid_notifier.rb:6` всё ещё про `codeblack.xyz`.
+
+## Решение для билда
+
+1. **RED (охранный тест)** — в `order_ready_sms_link_test.rb` новый тест «TASK_118 S9»: читает `fly.toml` из `Rails.root`, берёт `APP_HOST` (и `SHOP_SMS_LINK_HOST`, если когда-то появится — он главнее, как в `link_host`); без `APP_HOST` в `fly.toml` — fail с понятным сообщением. Выставляет ENV, проверяет: сообщение начинается с `"CODE:BLACK. Готов! #{host}/o/"`, длина ≤ 70. ENV восстанавливает существующий `teardown`.
+   - На текущем коде тест зелёный сразу (так и должно быть — это охрана). Что тест не пустой, доказываем временной мутацией, не коммитим: `message_prefix` → «Заказ готов!» → fail 71 > 70; `fly.toml` `APP_HOST` → более длинный домен → fail. Результат мутаций — в todo и в сообщение коммита.
+   - Коммит `test: TASK_118 S9 SMS length guard with fly.toml host [RED]` (метка RED по канону шага; красного нет — охранный тест, как в прошлых шагах «охранные green»).
+2. **GREEN (документы)** — дословно строка из документа: «Уточнение 2026-10-24: фактический текст SMS «CODE:BLACK. Готов! {host}/o/{hash}», хост из SHOP_SMS_LINK_HOST, затем APP_HOST (prod: codeblack.coffee), длина 65 из 70; см. TASK-39-SMS-READY-LINK-ORDER-HISTORY-EXT» — в ТЗ #39 после :71 и в ТЗ #82 после :49. Текст заказчика в ТЗ не правим, только вставка строки.
+3. Код приложения (`order_ready_sms_link.rb`, нотификатор, SMS-клиент, `fly.toml`) **не меняется**.
+
+## Файлы (ожидаемо)
+
+1. `test/services/shop/order_ready_sms_link_test.rb` — новый охранный тест длины с хостом из `fly.toml` (setup/teardown ENV уже есть).
+2. `docs/operations/milestones/veha_2/requirements/customer_tasks/Каскад уведомлений Заказ готов PWA WS Push WebPush Apple Wallet SMS.md` — строка-уточнение после :71 (#39).
+3. `docs/operations/milestones/veha_2/requirements/customer_tasks/Каскад SMS после Заказ готов и шторка статуса на главном.md` — строка-уточнение после :49 (#82).
+4. `fly.toml` — только читаем (источник хоста), не меняем.
+5. `app/services/shop/order_ready_sms_link.rb` — только читаем; временная мутация для доказательства RED, откатывается до коммита.
+
+Соседи (не меняем, гоняем в регрессии): `test/services/shop/order_ready_paid_notifier_test.rb` (тот же текст SMS ≤ 70), `test/integration/shop/order_short_links_test.rb` (разбор ссылки).
+
+## Не ломать
+
+- Текст SMS «CODE:BLACK. Готов! {host}/o/{hash}», подпись HMAC, срок 48 ч — без изменений (Subtask 13).
+- Отправка SMS «Заказ готов» через `OrderReadyPaidNotifier` → `SmsRuClient` (лимит 70 до HTTP).
+- Короткая ссылка `/o/:hash` — редирект как сейчас.
+- Существующие тесты ссылки и нотификатора — не переписываем.
+
+## Проверка
+
+- `bin/rails test test/services/shop/order_ready_sms_link_test.rb test/services/shop/order_ready_paid_notifier_test.rb test/services/shop/sms_ru_client_test.rb`
+- `bin/rails test test/integration/shop/order_short_links_test.rb`
+
+---
+
 # todo — TASK_107: «Профиль ID» в правом верхнем углу витрины
 
 | Поле | Значение |
