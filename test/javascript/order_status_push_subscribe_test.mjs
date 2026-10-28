@@ -19,7 +19,10 @@ import {
   PUSH_WATCH_READINESS_CTA,
   PUSH_SETTINGS_FALLBACK
 } from "../../app/frontend/lib/orderStatusNotifyActions.js"
+import * as notifyActions from "../../app/frontend/lib/orderStatusNotifyActions.js"
 import { registerShopPush } from "../../app/frontend/lib/firebasePush.js"
+
+const { PUSH_NOT_ENABLED_TOAST } = notifyActions
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "../..")
 const accordionPath = join(
@@ -427,15 +430,19 @@ describe("registerShopPush — iOS user gesture (#99)", () => {
     }
   })
 
-  for (const permission of ["denied", "default"]) {
-    it(`${permission}: no Firebase calls, resolves without throwing`, async () => {
+  // TASK_90 Патч 2: default (диалог закрыт без выбора) ≠ denied.
+  for (const [permission, reason] of [
+    ["denied", "denied"],
+    ["default", "dismissed"]
+  ]) {
+    it(`${permission}: no Firebase calls, reason ${reason}, resolves without throwing`, async () => {
       const calls = []
       installNotification(permission, calls)
       try {
         const result = await registerShopPush({ deps: fakeDeps(calls) })
         assert.deepEqual(calls, ["requestPermission"])
         assert.equal(result.ok, false)
-        assert.equal(result.reason, "denied")
+        assert.equal(result.reason, reason)
         assert.equal(result.permission, permission)
       } finally {
         removeNotification()
@@ -492,5 +499,93 @@ describe("registerShopPush — iOS user gesture (#99)", () => {
     } finally {
       removeNotification()
     }
+  })
+
+  it("TASK_90 Патч 2: accordion path with default — sync requestPermission, dismissed, no recovery", async () => {
+    const calls = []
+    installNotification("default", calls)
+    try {
+      const pending = subscribeOrderPush({ onToast: () => {}, storage: null })
+      assert.deepEqual(calls, ["requestPermission"])
+      const result = await pending
+      assert.equal(result.ok, false)
+      assert.equal(result.error, "dismissed")
+      assert.notEqual(result.openSettings, true)
+      assert.equal(result.notice, PUSH_NOT_ENABLED_TOAST)
+    } finally {
+      removeNotification()
+    }
+  })
+})
+
+describe("TASK_90 Патч 2 — default ≠ denied (Subtask 1, 1b, 8 patch v2)", () => {
+  it("copy: neutral «Уведомления не включены», not «запрещены»", () => {
+    assert.equal(PUSH_NOT_ENABLED_TOAST, "Уведомления не включены")
+    assert.doesNotMatch(PUSH_NOT_ENABLED_TOAST, /запрещ/i)
+  })
+
+  it("Subtask 1: dismissed → neutral notice, idle CTA, no openSettings, no network toast", async () => {
+    const toasts = []
+    const result = await subscribeOrderPush({
+      registerShopPushImpl: async () => ({
+        ok: false,
+        reason: "dismissed",
+        permission: "default"
+      }),
+      onToast: (msg) => toasts.push(msg)
+    })
+
+    assert.equal(result.ok, false)
+    assert.equal(result.isLoading, false)
+    assert.equal(result.error, "dismissed")
+    assert.equal(result.notice, PUSH_NOT_ENABLED_TOAST)
+    assert.notEqual(result.openSettings, true)
+    assert.match(result.primaryLabel, /Уведомление о готовности/)
+    assert.deepEqual(toasts, [PUSH_NOT_ENABLED_TOAST])
+  })
+
+  it("Subtask 1b: denied → recovery flag and denied toast, no neutral notice", async () => {
+    const toasts = []
+    const result = await subscribeOrderPush({
+      registerShopPushImpl: async () => ({ ok: false, reason: "denied", permission: "denied" }),
+      onToast: (msg) => toasts.push(msg)
+    })
+
+    assert.equal(result.error, "denied")
+    assert.equal(result.openSettings, true)
+    assert.equal(result.notice, undefined)
+    assert.deepEqual(toasts, [PUSH_DENIED_TOAST])
+  })
+
+  it("dismissed does not arm resume after settings", async () => {
+    const first = await subscribeOrderPush({
+      registerShopPushImpl: async () => ({ ok: false, reason: "dismissed", permission: "default" }),
+      onToast: () => {}
+    })
+    let calls = 0
+    const resumed = await resumePushAfterSettings({
+      armed: first.openSettings === true,
+      permission: "granted",
+      registerShopPushImpl: async () => {
+        calls += 1
+        return { ok: true }
+      }
+    })
+    assert.equal(resumed.resumed, false)
+    assert.equal(calls, 0)
+  })
+
+  it("accordion: notice → plain toast, recovery only on openSettings", () => {
+    const src = readFileSync(accordionPath, "utf8")
+    assert.match(src, /result\?\.notice/)
+    assert.match(src, /toastMsg\s*=\s*result\.notice/)
+    assert.match(src, /kind === "push" && result\?\.openSettings\)\s*\{\s*pushRecovery = true/)
+  })
+
+  it("OrderStatus.svelte: non-denied reason → error state, enable button stays", () => {
+    const src = readFileSync(join(root, "app/frontend/routes/OrderStatus.svelte"), "utf8")
+    assert.match(src, /result\.reason === "denied"\)\s*\{\s*pushState = "denied"/)
+    assert.match(src, /\}\s*else\s*\{\s*pushState = "error"/)
+    assert.match(src, /pushAvailable && !progress\.cancelled && pushState !== "registered"/)
   })
 })
