@@ -1,3 +1,123 @@
+# todo — TASK_110: Предварительный экран перед системным запросом уведомлений (очередь, шаг 10)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK-110-…](../milestones/veha_2/requirements/customer_tasks/TASK-110-Предварительный-экран-перед-системным-запросом-уведомлений.md) — Subtask 0–15 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 10 · [Google Doc](https://docs.google.com/document/d/1egmnNNtibkrI-11u1X4o9AdS_TyeQ2zx42xyXLacaho/edit) · реверс решения #37 шаг 5 |
+| **Не в scope** | модальное окно / overlay / `fixed` / `z-index` над шторкой · recovery и `resumePushAfterSettings` (TASK_90), кроме подключения · `firebasePush.js`, `subscribeOrderPush` (сигнатуры и порядок вызовов) · регистрация токена, `/push/register`, VAPID, Service Worker · диагностика (TASK_108) · высоты и пороги шторки (`STATUS_IN_SHEET_EXTRA_VH`, `cartSheetThresholds`, `.oss__panel`) · чек и прогресс (#83/#84) · Wallet и выбор Wallet или push (`notifyKind`) · ветка подписки и оффер (#77, TASK_96) · статусная модель · хранение состояния на сервере · снимок `session_open` TASK_112 (раз за вкладку) · плашка установки iPhone (TASK_111) |
+| **Статус** | `in_progress` — SPEC |
+
+## SBR
+
+- [x] intake `b005db0f` — текст 1:1, CBR #110, очередь 10 → `in_progress`
+- [x] SPEC — факты = код (ниже) · решения владельца · файлы · Не ломать · Проверка · Migration Gate (план и откат ниже)
+- [ ] Subtask 0 — новые тесты пишутся первыми; защитные тесты синхронного пути (`order_status_push_subscribe_test.mjs:401-411`, `:490-519`) зелёные до и после
+- [ ] RED — новые тесты + явная перепись охранных (список ниже)
+- [ ] GREEN — модуль, карточка, панель, экран, машина, миграция, события · регрессия зоны
+- [ ] `/regress`
+- [ ] `/review` — bugbot + security + crit-audit · COMPONENT_MAP · Entire · push → CI green
+
+## Сверка фактов (SPEC 2026-10-29)
+
+| Документ | Код | Итог |
+|---|---|---|
+| `ActiveOrdersAccordion.svelte:57-62` локальный стейт | `:59-64` (`actionLoading`, `toastMsg`, `toastOpensSettings`, `pushSubscribed`, `pushRecovery`, `settingsFallback`) | ✅ сдвиг +2 (шаг 9) |
+| `:236-241` `onAction` | `:240-245` | ✅ сдвиг +4 |
+| `:268-286` путь push | `:272-294`: `subscribeOrderPush({ onToast })` `:280`, `openSettings` → recovery `:282-286`, `notice` → тост `:287-289` | ✅ сдвиг +4…+8 |
+| `:339-371` блок recovery | `:347-379` (`{#if pushRecovery}` → `{:else if toastMsg}` `:380`) | ✅ сдвиг +8 |
+| `OrderStatus.svelte:100-110` `enablePushNotifications` | `:132-154`, после шага 9 — `subscribeOrderPush({ onToast })` `:144`, `openSettings` → `denied`, `notice` → `pushErr` | ✅ сдвиг +32; путь «экран → `registerShopPush` напрямую» устарел (шаг 9) |
+| `:291-305` баннер «Разрешить уведомления» | `:350-364`: `pushAvailable && pushPossible && !progress.cancelled && !pushSubscribed` — **во всех статусах, кроме отменённого** (и в `pending_payment`, и в `ready`); recovery на экране `:337-349` (шаг 9) | ✅ сдвиг +59 |
+| `:413` `onCtaClick` | `onCtaClick` `:210-248` (`kind === "push"` → `await enablePushNotifications()` `:220-223`), ряд CTA `:461-486`, клик `:472` | ✅ |
+| `orderStatusCtaMachine.js:43-44`, `:65-75` | `:44-45` `walletOk` / `notifyKind`; `preparing`/`ready` `:70-81`, без подписки → `pushNotify()` `:79` (с шага 9 — с учётом `showPushCta`) | ✅ сдвиг +1…+5 |
+| `orderStatusNotifyActions.js` `subscribeOrderPush :215-228` | `:240-…` (итог `ok` / `openSettings` / `notice` / `error`) | ✅ сдвиг +25 (шаги 7–9), не меняем |
+| `firebasePush.js:57-59`, `:64-98`, `:104-106` | комментарий TASK_99 `:56-59`, `registerShopPush` `:64-…`, `requestPermission` `:100`, `default` → `reason: "dismissed"` `:106-109` | ✅; «`default` = denied» устарело (шаг 6) |
+| `OrderStatusSheet.svelte:335`, `:337-342` | `max-height: min(22vh, 8.5rem)` `:335`, `.oss__list` `:337`, разметка списка `:257` `data-oss-scroll-root` | ✅ |
+| Тесты TASK_99 `order_status_push_subscribe_test.mjs:399-409`, `:483-495` | `:401-411` (`registerShopPush` — первый вызов `requestPermission`), `:490-519` (`subscribeOrderPush` → `requestPermission` синхронно, `denied` и `default`) | ✅ сдвиг +2…+7 |
+| source-оракулы аккордеона `:146-157` | `order_status_push_subscribe_test.mjs:148-159` (`subscribeOrderPush`, `kind === "push"`, `onAction`, `openNotificationSettings`, `result?.openSettings`) | ✅ |
+| `order_status_acceptance_cbr_test.rb:132-135` | `:127-137`, проверка строки `:135` `assert_includes screen, "Разрешить уведомления"` | ✅ |
+| `order_status_cta_machine_test.mjs:134-160`, `:211-246` | случаи `ready` без подписки: `:238-249` («ready + !hasPushSubscription → chat + Push»); `:147-178` — ветка подписки (не меняется), `:211-236` — `preparing` (не меняется) | ✅ |
+| GATES TASK_99 (G4) | `artifacts/ios_webpush_permission/GATES.md:23` «системный диалог сразу после клика» | ✅ |
+| Таблица TASK_112 и белый список `event_kind` | `ShopEnvironmentEvent::EVENT_KINDS = %w[session_open]` (`shop_environment_event.rb:6`) + CHECK `chk_shop_environment_events_event_kind` (`schema.rb:1197`, миграция `20261028120000`); `EnvironmentEventRecorder` берёт список из модели (`:35`), неизвестный вид → 422; колонки снимка `NOT NULL` → каждое событие несёт снимок окружения; `event_kind limit: 32`; Rack::Attack 30/мин/IP (`rack_attack.rb:172`) | ⚠️ «backend не затронут» не выполнимо → решение владельца (ниже) |
+
+**Находки:**
+- Тесты шага 9 закрепляют прямой вход по нажатию и баннер — переписываем явно на RED (список ниже). Остальные тесты этих файлов не трогаем.
+- На экране заказа старый баннер виден и в `pending_payment`, и в `ready` — документ про эти статусы молчит → решение владельца.
+- На iPhone с Wallet кнопка уведомлений — Wallet; автопоказ карточки, которая ведёт в push, противоречил бы «Wallet не меняется» → решение владельца.
+- `pushEnvironment.js` 231 строка — функцию отправки не дублируем, только экспортируем существующую `send` (одна строка); сбор снимка `collectPushEnvironment` переиспользуем, подменяя `event_kind`.
+- `ActiveOrdersAccordion.svelte` 621 и `OrderStatus.svelte` 969 строк (> 200): правки ≈ +40 / +30; разметка и логика карточки — в новом компоненте и модуле; сплит больших файлов вне scope (прецедент шагов 6–9).
+- «Не более одного блока на экран» — у каждой строки заказа свой стейт (`OrderStatusSheet.svelte:258-266`) → автопоказ «занимает» строка через общий модуль: первая смонтированная строка получает карточку, при размонтировании освобождает.
+- Отложенных миграций нет (`db:migrate:status` — все `up`).
+- `npm test` / `lint` / `typecheck` в проекте нет → `node --test` + `npm run vite:build` (прецедент шагов 6–9).
+
+## Решения
+
+Из документа (владелец 2026-10-18 / 2026-10-19): автопоказ при первом показе панели заказа и по нажатию на 🔔; «Не сейчас» запоминается, на следующем заказе — снова, автопоказ не больше 3 раз; на «Готов» кнопки уведомлений нет; тексты дословно; форма — встроенная карточка.
+Владелец 2026-10-29 (на SPEC):
+- **Subtask 12 — миграция в этой задаче:** CHECK `event_kind` расширяется до 7 видов + `EVENT_KINDS` в модели. Колонки не меняются → перезапуск compute Neon (как после 🚀 1) не нужен.
+- **Экран заказа в `pending_payment` и `ready`** — ни баннера, ни карточки; карточка только в accepted / paid / preparing.
+- **iPhone с Wallet** — карточка только там, где кнопка уведомлений — push (`notifyKind === "push"` и `showPushCta`); при Wallet всё как сейчас.
+
+План:
+1. **`lib/pushPrePrompt.js`** (новый): константы текстов (Subtask 13) и `PUSH_PREPROMPT_MAX_DISMISSALS = 3`; ключ `coffeeos_shop_push_preprompt_v1` (`{ dismissals, lastDismissedOrderId }`), чтение и запись под `try/catch`, при ошибке хранилища — состояние в памяти страницы (Subtask 6); чистая `shouldAutoShowPrePrompt({ status, pushCtaShown, permission, subscribed, recovery, orderId, state })` — accepted / paid / preparing, push-кнопка показывается, `permission === "default"`, не подписан, нет recovery, заказ не закрывался, закрытий < 3 (Subtask 1, 5, 7, 9, 10); `recordPrePromptDismissal(orderId)` (Subtask 4); «занять» автопоказ одной строкой (`claimAutoPrePrompt` / `releaseAutoPrePrompt`, Subtask 1); события: `reportPushConsentEvent(kind)` — снимок `collectPushEnvironment` с подменой `event_kind`, отправка той же `send`, ошибки глушатся (Subtask 12), `permissionEventKind(permission)`.
+2. **`components/PushPrePrompt.svelte`** (новый): заголовок, пояснение, «Включить», «Не сейчас», состояние ожидания; встроенный блок в потоке, без `position: fixed/absolute` и `z-index` (Subtask 11, канон CartSheet).
+3. **Машина**: на `ready` CTA вида push не добавляется, Wallet-CTA и ветка подписки как были (Subtask 7).
+4. **Панель (`ActiveOrdersAccordion`)**: push-CTA открывает карточку вместо `subscribeOrderPush` (Subtask 2); «Включить» в том же обработчике клика синхронно вызывает прежний путь (`subscribeOrderPush` → recovery / `notice` / тост; Subtask 3); `dismissed` → как «Не сейчас» + «Уведомления не включены»; автопоказ при монтировании по правилам п. 1; порядок в разметке: recovery → карточка → тост (Subtask 10); при `pushRecovery` и после возврата из настроек карточки нет (Subtask 9).
+5. **Экран заказа (`OrderStatus.svelte`)**: баннер «Разрешить уведомления» убирается; в accepted / paid / preparing на его месте карточка (автопоказ по п. 1 при `pushAvailable`; push-CTA открывает её); «Включить» → `enablePushNotifications()` синхронно; recovery `denied` (шаг 9), «Уведомления включены» и тихий автовызов при `granted` — без изменений (Subtask 8); в `pending_payment` и `ready` — ничего (решение владельца).
+6. **События (Subtask 12)**: `push_preprompt_shown` (каждое открытие карточки), `push_preprompt_accept`, `push_preprompt_later`, после ответа системного запроса — `push_permission_granted` / `_denied` / `_default` по `Notification.permission`; без идентификатора гостя; отправка после синхронного запуска `subscribeOrderPush` — ничего не встаёт перед `requestPermission`.
+7. **Сервер**: миграция CHECK + `EVENT_KINDS` (модель); `EnvironmentEventRecorder`, контроллер, view, колонки, лимит запросов — без изменений.
+8. **GATES TASK_99 (G4)**: «системное окно появляется сразу после нажатия «Включить»» (Subtask 14).
+
+## Migration Gate
+
+- **Что меняется:** новая миграция `db/migrate/<ts>_extend_shop_environment_event_kinds.rb` — `remove_check_constraint` `chk_shop_environment_events_event_kind` + `add_check_constraint` с 7 видами (`session_open` + 6 видов воронки согласия); `db/schema.rb` — строка CHECK. Колонки, индексы, view, данные — без изменений. Таблица маленькая (только снимки с 🚀 1), блокировка на проверке ограничения — мгновенная.
+- **Отложенные миграции:** нет.
+- **Откат:** `down` возвращает CHECK с одним `session_open` с `validate: false` — строки воронки остаются, новые не принимаются; данные не удаляются. Плюс откат `EVENT_KINDS` в модели.
+- **После:** `bin/rails test test/integration/rls_tenant_isolation_test.rb` + тесты зоны событий (раздел «Проверка»). На проде миграция — при 🚀 4 (release_command).
+- `go` на миграцию — намерение `/sbr`.
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/lib/pushPrePrompt.js` — **новый**: тексты, лимит, состояние на устройстве, правило автопоказа, одна карточка на экран, события (Subtask 1, 4–7, 9–10, 12–13).
+2. `app/frontend/components/PushPrePrompt.svelte` — **новый**: встроенная карточка (Subtask 2–3, 11, 13).
+3. `app/frontend/components/ActiveOrdersAccordion.svelte` — push-CTA → карточка, «Включить» → прежний путь, автопоказ, приоритет recovery → карточка → тост (Subtask 1–4, 9–10).
+4. `app/frontend/routes/OrderStatus.svelte` — карточка вместо баннера, CTA → карточка (Subtask 2–3, 8).
+5. `app/frontend/lib/orderStatusCtaMachine.js` — на `ready` push-CTA нет (Subtask 7).
+6. `db/migrate/<ts>_extend_shop_environment_event_kinds.rb` — **новая** миграция CHECK (Subtask 12) + `db/schema.rb`.
+7. `app/models/shop_environment_event.rb` — `EVENT_KINDS` + 6 видов (Subtask 12).
+
+Соседи (blast-radius): `app/frontend/lib/pushEnvironment.js` — только экспорт существующей `send` для событий воронки (снимок `session_open` не меняется) · `docs/operations/milestones/veha_2/artifacts/ios_webpush_permission/GATES.md:23` — формулировка G4 (Subtask 14).
+
+**Тесты:**
+- `test/javascript/push_preprompt_test.mjs` — **новый**: тексты дословно; правило автопоказа (статусы, `permission`, подписка, `pushPossible` / Wallet, recovery, закрытый заказ, лимит 3, после перезагрузки); хранилище недоступно → память, рендер и «Включить» не ломаются; одна карточка на экран; события (вид, без идентификатора гостя, ошибка отправки глушится); SSR карточки (тексты, нет `fixed` / `z-index`); исходник панели и экрана: CTA → карточка, «Включить» → синхронный вход (до `subscribeOrderPush` / `enablePushNotifications` нет `await` / `setTimeout` / `import(`), порядок recovery → карточка → тост, баннера нет, `pending_payment` / `ready` без карточки.
+- `test/models/shop_environment_event_test.rb`, `test/services/shop/environment_event_recorder_test.rb`, `test/integration/shop/api/environment_events_test.rb` — 6 новых видов принимаются (и проходят CHECK в базе), неизвестный вид по-прежнему 422.
+
+**Явная перепись на RED** (реверс #37 шаг 5, смысл документа):
+- `order_status_cta_machine_test.mjs:238-249` «ready + !hasPushSubscription → chat + Push» → на `ready` только чат (Android); + случай `ready` на iPhone с Wallet → чат + Wallet.
+- `order_status_screen_push_test.mjs:55-59` (текст баннера «Разрешить уведомления») → карточка с текстами `pushPrePrompt.js`; `:61-67` (условие баннера) → условие карточки (accepted / paid / preparing, `pushPossible`, без подписки); `:96-100` (CTA и баннер → `enablePushNotifications`) → CTA открывает карточку, «Включить» → `enablePushNotifications()`; `:176-188` (инвариант TASK_99) → тот же инвариант на пути «Включить».
+- `order_status_push_subscribe_test.mjs:585-591` (условие баннера экрана) → условие карточки.
+- `order_status_push_subscribe_test.mjs:148-159` (source-оракулы аккордеона) — по возможности остаются зелёными без правки (путь `subscribeOrderPush` / `openSettings` сохраняется за «Включить»); если ломаются — переписать явно.
+- `test/integration/shop/order_status_acceptance_cbr_test.rb:135` «Разрешить уведомления» → «Включить» (константа карточки).
+- Не трогаем: `order_status_push_subscribe_test.mjs:401-411`, `:490-519` (TASK_99), `push_diag_flag_test.mjs:330` (автовызов при `granted`).
+
+## Не ломать
+
+- Инвариант TASK_99: «Включить» → `subscribeOrderPush` → `requestPermission` — первый async-вызов, в том же обработчике клика; события и запись состояния — после запуска входа (`order_status_push_subscribe_test.mjs:401-411`, `:490-519`).
+- Recovery: в панели `denied` → «Открыть настройки» / «Смотреть готовность», возврат из настроек (`resumePushAfterSettings`), `dismissed` → «Уведомления не включены»; на экране — блок восстановления шага 9.
+- Шторка и каталог: высоты панели и пороги CartSheet не меняются, карточка — секция в потоке (без `fixed` / overlay), прокрутка внутри `.oss__list`; чек (#83/#84) и прогресс как были.
+- Wallet на iPhone, ветка подписки и оффер-баннер (#77, TASK_96), остальные CTA и лимит 2, снимок `session_open` раз за вкладку (TASK_112), скрытие push по классу окружения (TASK_109).
+
+## Проверка
+
+- `node --test test/javascript/push_preprompt_test.mjs test/javascript/order_status_screen_push_test.mjs test/javascript/order_status_cta_machine_test.mjs test/javascript/order_status_push_subscribe_test.mjs test/javascript/push_diag_flag_test.mjs test/javascript/active_orders_accordion_test.mjs test/javascript/order_action_buttons_test.mjs test/javascript/push_environment_test.mjs test/javascript/push_environment_class_test.mjs`
+- `bin/rails test test/models/shop_environment_event_test.rb test/services/shop/environment_event_recorder_test.rb test/integration/shop/api/environment_events_test.rb test/integration/shop/order_status_acceptance_cbr_test.rb test/integration/rls_tenant_isolation_test.rb` · вся JS-зона `node --test "test/javascript/**/*.mjs"` (известные legacy — ISSUES) · `npm run vite:build`
+
+## DoD
+
+- Subtask 0–15; защитные тесты синхронного пути зелёные до и после; миграция применена локально, откат проверен (`db:rollback` → `db:migrate`).
+- Ручная приёмка документа (Android PWA: автопоказ, «Не сейчас», второй и четвёртый заказ, 🔔; «Включить» → системное окно сразу; `denied` → recovery; iPhone с установленным приложением — G4; 390×844) — после 🚀 4.
+- COMPONENT_MAP на `/review` (новые `PushPrePrompt`, `pushPrePrompt.js`; строки аккордеона, экрана, машины).
+
+---
+
 # todo — TASK_109: Определение окружения для push и единый вход на двух экранах заказа (очередь, шаг 9)
 
 | Поле | Значение |

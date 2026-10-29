@@ -4,7 +4,7 @@
 **Источник:** Google Doc Spec (одна вкладка)  
 **Артефакты:** нет (заказчик не прислал)  
 **Google Doc:** https://docs.google.com/document/d/1egmnNNtibkrI-11u1X4o9AdS_TyeQ2zx42xyXLacaho/edit  
-**Статус:** intake 2026-10-29 · реверс решения #37 шаг 5 · миграция — вероятно (Subtask 12, см. «Заметки агента»)
+**Статус:** SPEC 2026-10-29 · реверс решения #37 шаг 5 · миграция — да (Subtask 12, решение владельца, см. «Заметки агента»)
 
 ---
 
@@ -79,3 +79,7 @@ npm test -- --run (order_status_push_subscribe, active_orders_accordion, orderSt
 - Номера строк в разделах 2–3 написаны до шагов 6–9: шаг 6 закрыл `default` ≠ `denied` (абзац «Закрытый системный диалог… обрабатывается как denied» устарел — теперь «Уведомления не включены», без recovery); шаг 9 перевёл экран заказа на общий вход `subscribeOrderPush`, добавил блок восстановления на экран и скрытие push-CTA/баннера по `pushPossible` и подписке (путь «экран заказа OrderStatus.svelte:298 или :413 → :100-110 → firebasePush.js» устарел). Сверка файл:строка — на `/spec`, новые номера сюда.
 - Зона карты (`ActiveOrdersAccordion`, `OrderStatus`, `orderStatusCtaMachine`, `OrderActionButtons`, `OrderStatusSheet`) → на `/spec` читать `COMPONENT_MAP.md`.
 - Прецедент шагов 6–9: команд `npm test -- --run` / `npm run lint` / `npm run typecheck` в проекте нет — JS-тесты `node --test test/javascript/*.mjs`, сборка `npx vite build`.
+- `/spec` 2026-10-29 (подробно — [todo](../../../../session/todo.md)): поведение кода = «Текущее поведение», кроме двух мест, исправленных шагами 6 и 9 (`default` ≠ `denied`; экран заказа на `subscribeOrderPush` с блоком восстановления). Новые номера строк: `ActiveOrdersAccordion.svelte` стейт `:59-64`, `onAction` `:240-245`, путь push `:272-294`, recovery `:347-379`; `OrderStatus.svelte` `enablePushNotifications` `:132-154`, баннер `:350-364`, recovery `:337-349`, `onCtaClick` `:210-248`, ряд CTA `:461-486`; `orderStatusCtaMachine.js` `:44-45`, `:70-81`; `subscribeOrderPush` `:240`; `firebasePush.js` `:56-59`, `:100`, `:106-109`; `OrderStatusSheet.svelte:335`, `:337` — без сдвига; тесты TASK_99 `order_status_push_subscribe_test.mjs:401-411`, `:490-519`; source-оракулы аккордеона `:148-159`; `order_status_acceptance_cbr_test.rb:135`; ready-случай машины `order_status_cta_machine_test.mjs:238-249`; GATES TASK_99 G4 — `artifacts/ios_webpush_permission/GATES.md:23`.
+- Уточнение к «Текущему поведению»: баннер экрана заказа виден во всех статусах, кроме отменённого (в т.ч. `pending_payment` и `ready`).
+- Решения владельца на `/spec` 2026-10-29: (1) Subtask 12 — миграция в этой задаче: CHECK `event_kind` + `EVENT_KINDS` в модели (колонки не меняются); (2) экран заказа в `pending_payment` и `ready` — ни баннера, ни карточки; (3) на iPhone с Wallet карточка не показывается — только там, где кнопка уведомлений — push.
+- Охранные тесты шага 9 (`order_status_screen_push_test.mjs:55-67`, `:96-100`, `:176-188`; `order_status_push_subscribe_test.mjs:585-591`) закрепляют прямой вход по нажатию и баннер — переписываются явно на RED вместе со списком Subtask 14.
