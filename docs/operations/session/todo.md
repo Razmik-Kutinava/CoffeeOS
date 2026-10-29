@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK-108-…](../milestones/veha_2/requirements/customer_tasks/TASK-108-Диагностика-push-только-по-флагу.md) — Subtask 1–10 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 7 · [Google Doc](https://docs.google.com/document/d/1-R9rUy4zy0sLdo9hM3r1xhqy4hvP00kxqLNqwFhWd2I/edit) |
 | **Не в scope** | порядок шагов `registerShopPush` и значения `reason` · recovery UI и ветки `denied`/`dismissed` (TASK_90 + Патч 2) · регистрация токена, `/push/register`, VAPID, Service Worker · iOS / Wallet · другие CTA · `resumePushAfterSettings` (логика `armed`) · сообщения для окружений без push (TASK_109) · защита остальных обращений к storage (TASK_113) · удаление диагностики целиком · флаг параметром в адресе |
-| **Статус** | `in_progress` — `/regress` PASS, дальше `/review` |
+| **Статус** | `in_progress` — REVIEW, дальше push → CI green |
 
 ## SBR
 
@@ -13,7 +13,8 @@
 - [x] RED `ff791a28` — новый `push_diag_flag_test.mjs` 27 runs: 26 F на новой логике (модуля флага нет, лог шагов виден без флага, итоговые тосты подавлены на реальном пути, `deps` не пробрасываются, исходники экрана заказа и аккордеона), 1 охранный зелёный (ветки `denied` / `else → error` Патча 2) · существующие тесты не менялись
 - [x] GREEN `d34e5a7a` — `pushDiagFlag.js` (ключ `coffeeos_push_diag_v1`, `try/catch` + память, `createTapGesture` 7 / 3 с, тексты подтверждения) · `firebasePush.js` `diag()` только при флаге (`opts.diag` или синхронное чтение до `requestPermission`) · `orderStatusNotifyActions.js` `injectedRegister` → `showOutcome = onToast && !diagOn`, `PUSH_FAILED_TOAST`, `register({ onToast, deps, diag })` · `OrderStatus.svelte` `enablePushNotifications({ auto })`, без флага — `PUSH_FAILED_TOAST` в `pushErr` только по нажатию (не `denied` / `dismissed`), жест `onpointerup` на `.page-title` + `diag-notice` 2,5 с, комментарии TEMP DIAG заменены · `.aoa__toast` `pre-line` · задача (`push_diag_flag` + `order_status_push_subscribe` + `active_orders_accordion` + `order_status_notify_actions`) 119/0 · вся JS-зона `node --test "test/javascript/**/*.mjs"` 783: 711/72 — те же 72 legacy, что на шаге 6 (756: 684/72), среди падений нет push / аккордеона / экрана заказа · `npm run vite:build` OK, новых предупреждений нет · **Entire: пусто** (нет метки в коммите; `entire checkpoint explain` в WSL завис без вывода) → attach на `/review` до push
 - [x] `/regress` PASS — зона: push-подписка в панели заказов и на экране заказа витрины (только фронт) · все JS-потребители `firebasePush` / `orderStatusNotifyActions` / `ActiveOrdersAccordion` / `OrderStatus.svelte` / `pushDiagFlag` + `push_environment` (15 файлов) 244: 243/1 — 1 fail `order_action_buttons_cancel_test` «422/500: force preparing» (`#41 sticky cancel`) = известный legacy ISSUES, был и на шаге 6 · Rails, читающие эти компоненты (`order_status_sheet_mount_acceptance`, `order_status_meta_product_name_canon`, `order_status_acceptance_cbr`, `b21_guest_notify`) 20/0 · вся JS-зона и `vite:build` — на GREEN · Fly MCP — после 🚀 2
-- [ ] `/review` (bugbot + security + crit-audit + COMPONENT_MAP: строка о жесте — Subtask 8) → push → CI green
+- [x] `/review` — bugbot (`Base Branch: origin/develop`) 1 medium: устаревшее «Не удалось включить уведомления…» после успешной автоподписки из настроек → RED `a53dfd30` / GREEN `3c34dc76` · security 0 medium+ · crit-audit CLEAN `b59a0d6c..3c34dc76` `99734b5e` · COMPONENT_MAP: да — 5 строк, место жеста в `OrderStatus (route)` (Subtask 8) · Entire `01M632EQ5ET2K9CWT5E7DZJBTR` · CBR #108 → REVIEW
+- [ ] push → CI green → очередь шаг 7 → `done`
 
 ## Сверка фактов (SPEC 2026-10-29)
 
