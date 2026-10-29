@@ -86,7 +86,9 @@ module Shop
           favorites_count: (session[:shop_favorites] || []).size,
           eligible_for_subscription_offer: Shop::SubscriptionOfferEligibility.check(customer, @shop_tenant),
           should_show_banner: offer[:should_show_banner],
-          has_unread_offer_in_lk: offer[:has_unread_offer_in_lk]
+          has_unread_offer_in_lk: offer[:has_unread_offer_in_lk],
+          # TASK_111: плашка установки скрывается у установивших; дату наружу не отдаём.
+          pwa_installed: customer.pwa_installed_at.present?
         }
       end
     end

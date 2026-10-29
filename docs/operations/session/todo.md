@@ -4,15 +4,15 @@
 |------|----------|
 | **Основание** | [TASK-111-…](../milestones/veha_2/requirements/customer_tasks/TASK-111-Путь-iPhone-к-уведомлениям-плашка-установки-на-главный-экран.md) — Subtask 0–12 (5 и 13 отложены документом) · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 11 · [Google Doc](https://docs.google.com/document/d/15pMZBaV5JeHDv_0sgzty7n64Mapc_I2dicZEG1agru8/edit) · реверс «Wallet на паузе» 22.09 (только документы + настройка Fly) |
 | **Не в scope** | код Wallet и APNs · backend push, VAPID, FCM, Service Worker · каскад · оплата · авторизация и `/session/refresh` · поля и условия оффера в профиле · `application.js` · логика `beforeinstallprompt` / `appinstalled` сверх Subtask 7 и 10 · блокирующие действия на boot · новый запрос профиля помимо `loadOfferProfile` · идентификатор гостя в событиях · дата установки на клиенте · Subtask 5 (встроенный браузер iPhone — плашки там нет) · Subtask 13 (тексты recovery iPhone) · перекрытие заголовка товара (ISSUES 🟡, решение владельца) · `WALLET_FORCE_UNAVAILABLE` (секрет prod, отдельный апрув) |
-| **Статус** | `in_progress` — SPEC |
+| **Статус** | `in_progress` — GREEN |
 
 ## SBR
 
 - [x] intake `56bfffa5` — текст 1:1, CBR #111, очередь 11 → `in_progress`
 - [x] SPEC — факты = код (ниже) · решения владельца · файлы · Не ломать · Проверка · Migration Gate
-- [ ] Subtask 0 — тесты текущего поведения Android (показ по `beforeinstallprompt`, установка, `appinstalled` → `/pwa_install`) зелёные на неизменённом коде — **отдельным коммитом до RED**
-- [ ] RED — новые тесты (JS + Rails) падают на новой логике
-- [ ] GREEN — реализация + миграция (up / rollback / up) + зона
+- [x] Subtask 0 `87003d83` — тесты текущего поведения Android (показ по `beforeinstallprompt`, установка, `appinstalled` → `/pwa_install`) зелёные на неизменённом коде — **отдельным коммитом до RED**
+- [x] RED `7ec5f565` — новые тесты (JS + Rails) падают на новой логике
+- [x] GREEN — реализация + миграция (up / rollback / up) + зона: задача JS 46/0, Rails 34/0 · соседи JS 82/0, Rails 19/0 · вся JS-зона 926: 854/72 (58 — RED-скелет `personal_cabinet_test.mjs`, падает и без правок; 14 — legacy ISSUES) · `vite:build` OK
 - [ ] `/regress`
 - [ ] `/review` (bugbot + security-review + crit-audit, Entire, push, CI green) → очередь 11 `done`
 

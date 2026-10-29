@@ -2,6 +2,8 @@
 
 **ТЗ:** [`customer_tasks/Фоновые уведомления… Apple Wallet iOS.md`](../requirements/customer_tasks/Фоновые%20уведомления%20прогресс-бар%20Android%20FCM%20и%20Apple%20Wallet%20iOS.md) · шаг 3 `.pkpass`
 
+**Уточнение 2026-10-29:** Wallet не используется как канал уведомлений для iPhone ([TASK_111](../requirements/customer_tasks/TASK-111-Путь-iPhone-к-уведомлениям-плашка-установки-на-главный-экран.md)) — на iPhone уведомления идут через установленное на главный экран приложение (WebPush), до установки — SMS. Wallet скрывается настройкой на Fly `WALLET_FORCE_UNAVAILABLE` (секрет prod — по апруву владельца; условие «после выкладки TASK_109» выполнено на Fly v520); код Wallet и этот поток не меняются.
+
 ## Поток
 
 1. Бариста → `ready` → `GuestOrderBroadcaster` → `OrderStatusPushNotifier`

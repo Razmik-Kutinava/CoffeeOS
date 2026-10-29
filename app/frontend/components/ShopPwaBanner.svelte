@@ -1,11 +1,25 @@
 <script>
   import { onMount } from "svelte"
+  import IosInstallSheet from "./IosInstallSheet.svelte"
   import { shopOnline } from "../lib/shopNetwork.js"
-  import { installPromptAvailable, promptPwaInstall } from "../lib/shopPwa.js"
+  import { installPromptAvailable, promptPwaInstall, reportStandaloneLaunch } from "../lib/shopPwa.js"
+  import {
+    INSTALL_BANNER_CLOSE_LABEL,
+    INSTALL_BANNER_HOW,
+    INSTALL_BANNER_INSTALL,
+    INSTALL_BANNER_TEXT,
+    decideBannerVariant,
+    dismissBanner,
+    reportBannerShownOnce,
+    reportInstallEvent
+  } from "../lib/shopInstallBanner.js"
   import { pendingOrderCount } from "../lib/shopOfflineQueue.js"
   import { pendingCartAddCount } from "../lib/shopOfflineCart.js"
 
-  let installable = $state(false)
+  /** TASK_111: "ios" | "android" | null */
+  let variant = $state(null)
+  let howOpen = $state(false)
+  let decideSeq = 0
   let queuedOrders = $state(0)
   let queuedCartAdds = $state(0)
 
@@ -19,10 +33,26 @@
     }
   }
 
+  async function refreshVariant() {
+    const seq = ++decideSeq
+    let next = null
+    try {
+      next = await decideBannerVariant({ installable: installPromptAvailable() })
+    } catch {
+      next = null
+    }
+    if (seq === decideSeq) variant = next
+  }
+
+  $effect(() => {
+    if (variant && $shopOnline) reportBannerShownOnce()
+  })
+
   onMount(() => {
-    installable = installPromptAvailable()
+    refreshVariant()
+    reportStandaloneLaunch()
     const onInstallable = () => {
-      installable = true
+      refreshVariant()
     }
     const onQueue = () => refreshQueue()
     window.addEventListener("shop:pwa-installable", onInstallable)
@@ -41,8 +71,29 @@
   })
 
   async function install() {
-    const ok = await promptPwaInstall()
-    if (ok) installable = false
+    const pending = promptPwaInstall()
+    reportInstallEvent("install_banner_tap")
+    let ok = false
+    try {
+      ok = await pending
+    } catch {
+      ok = false
+    }
+    if (!ok) dismissBanner()
+    howOpen = false
+    variant = null
+  }
+
+  function showHow() {
+    reportInstallEvent("install_banner_tap")
+    howOpen = true
+  }
+
+  function closeBanner() {
+    reportInstallEvent("install_banner_dismiss")
+    dismissBanner()
+    howOpen = false
+    variant = null
   }
 </script>
 
@@ -66,10 +117,22 @@
   </div>
 {/if}
 
-{#if installable && $shopOnline}
-  <div class="shop-pwa-banner shop-pwa-banner--install">
-    <span>Установить CoffeeOS на главный экран</span>
-    <button type="button" class="shop-pwa-install-btn" onclick={install}>Установить</button>
+{#if variant && $shopOnline}
+  <div class="shop-pwa-banner shop-pwa-banner--install" data-testid="install-banner" data-variant={variant}>
+    <span class="shop-pwa-install-text">{INSTALL_BANNER_TEXT}</span>
+    {#if variant === "ios"}
+      <button type="button" class="shop-pwa-install-btn" aria-expanded={howOpen} onclick={showHow}>
+        {INSTALL_BANNER_HOW}
+      </button>
+    {:else}
+      <button type="button" class="shop-pwa-install-btn" onclick={install}>{INSTALL_BANNER_INSTALL}</button>
+    {/if}
+    <button type="button" class="shop-pwa-close-btn" aria-label={INSTALL_BANNER_CLOSE_LABEL} onclick={closeBanner}>
+      ×
+    </button>
+    {#if variant === "ios" && howOpen}
+      <IosInstallSheet onclose={() => (howOpen = false)} />
+    {/if}
   </div>
 {/if}
 
@@ -100,6 +163,7 @@
   }
   .shop-pwa-banner--install {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
@@ -117,6 +181,19 @@
     color: #1a1a1a;
     font-weight: 600;
     font-size: 0.75rem;
+    cursor: pointer;
+  }
+  .shop-pwa-install-text {
+    flex: 1;
+  }
+  .shop-pwa-close-btn {
+    flex-shrink: 0;
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 1.1rem;
+    line-height: 1;
+    padding: 0.2rem 0.35rem;
     cursor: pointer;
   }
 </style>
