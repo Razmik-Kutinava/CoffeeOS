@@ -66,6 +66,23 @@ export function pushRegisteredStorageKey() {
   return "coffeeos_shop_push_registered_v1"
 }
 
+// TASK_113: WebView / заблокированные данные сайта бросают уже на геттере localStorage.
+function defaultStorage() {
+  try {
+    return globalThis.localStorage ?? null
+  } catch {
+    return null
+  }
+}
+
+function readStoredTrue(storage, key) {
+  try {
+    return storage?.getItem(key) === "true"
+  } catch {
+    return false
+  }
+}
+
 const WALLET_SUCCESS_LABEL = "✓ Карта добавлена"
 const WALLET_ERROR_TOAST = "Не удалось добавить карту. Попробуйте позже."
 
@@ -89,7 +106,7 @@ export async function downloadWalletPass(opts = {}) {
     locationAssign = (url) => {
       globalThis.location.href = url
     },
-    storage = globalThis.localStorage,
+    storage = defaultStorage(),
     onToast
   } = opts
 
@@ -112,7 +129,11 @@ export async function downloadWalletPass(opts = {}) {
     const blob = await res.blob()
     const blobUrl = createObjectURL(blob)
     locationAssign(blobUrl)
-    storage?.setItem(walletAddedStorageKey(orderId), "true")
+    try {
+      storage?.setItem(walletAddedStorageKey(orderId), "true")
+    } catch {
+      /* pass уже добавлен — кнопка может показаться снова */
+    }
 
     return { ok: true, isLoading: false, primaryLabel: WALLET_SUCCESS_LABEL }
   } catch (err) {
@@ -220,7 +241,7 @@ export async function subscribeOrderPush(opts = {}) {
   const {
     registerShopPushImpl,
     onToast,
-    storage = typeof localStorage !== "undefined" ? localStorage : null
+    storage = defaultStorage()
   } = opts
   const idleLabel = LABELS.push
   // TASK_108: с флагом диагностики registerShopPush пишет лог шагов в onToast —
@@ -316,14 +337,14 @@ export async function resumePushAfterSettings(opts = {}) {
 export function resolveNotifyPrimaryInit(opts = {}) {
   const os = opts.os
   const orderId = opts.orderId
-  const storage = opts.storage ?? (typeof localStorage !== "undefined" ? localStorage : null)
+  const storage = opts.storage ?? defaultStorage()
   const permission =
     opts.notificationPermission ??
     (typeof Notification !== "undefined" ? Notification.permission : "default")
 
   if (os === "ios") {
     const key = walletAddedStorageKey(orderId)
-    const added = storage?.getItem(key) === "true"
+    const added = readStoredTrue(storage, key)
     if (added) {
       return {
         primaryLabel: WALLET_SUCCESS_LABEL,
@@ -335,7 +356,7 @@ export function resolveNotifyPrimaryInit(opts = {}) {
   }
 
   if (os === "android" || os === "desktop") {
-    const registered = storage?.getItem(pushRegisteredStorageKey()) === "true"
+    const registered = readStoredTrue(storage, pushRegisteredStorageKey())
     // permission alone ≠ FCM token на сервере (ложный «подписан» → tips вместо Push)
     if (permission === "granted" && registered) {
       return {
