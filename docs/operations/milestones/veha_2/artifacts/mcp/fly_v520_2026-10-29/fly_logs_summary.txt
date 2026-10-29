@@ -1,0 +1,22 @@
+﻿# fly logs -a coffeeos — живой хвост после deploy v520 (выжимка, без cookie/тел)
+Окно: 2026-10-29T07:10:39Z — 2026-10-29T07:20:26Z UTC; строк: 2611
+Completed 2xx: 513
+Completed 4xx: 18 (все 401 — /shop/api/profile гостя)
+Completed 5xx / status=5xx: 0
+Exception|FATAL|PreparedStatementCacheExpired: 0
+RoutingError: 57 (/uploads/*, favicon — известно, ISSUES)
+POST environment_events: 9
+
+## Смена машин (первые строки потока)
+2026-10-29T07:10:39Z runner[9080d40db67238] ams [info]Configuring firecracker
+2026-10-29T07:10:39Z app[9080d40db67238] ams [info] INFO Sending signal SIGINT to main child process w/ PID 635
+2026-10-29T07:10:39Z app[9080d40db67238] ams [info]Stopping Solid Queue...
+2026-10-29T07:10:39Z app[48ee61ea71d948] ams [info]SolidQueue-1.3.2 Shutdown Scheduler (93.9ms)  pid: 662, hostname: "48ee61ea71d948", process_id: 1759, name: "scheduler-6808ff99ebbbb89dcacc", recurring_schedule: ["clear_solid_queue_finished_jobs", "rotate_expiring_device_tokens", "stuck_payments_check", "channel_order_stats"]
+2026-10-29T07:10:39Z app[48ee61ea71d948] ams [info]SolidQueue-1.3.2 Shutdown Dispatcher (99.0ms)  pid: 653, hostname: "48ee61ea71d948", process_id: 1757, name: "dispatcher-444c7eaee10014983fcd", polling_interval: 1, batch_size: 500, concurrency_maintenance_interval: 600
+2026-10-29T07:10:39Z app[48ee61ea71d948] ams [info]SolidQueue-1.3.2 Release claimed jobs (43.9ms)  size: 0
+2026-10-29T07:10:39Z app[48ee61ea71d948] ams [info]SolidQueue-1.3.2 Shutdown Worker (158.0ms)  pid: 657, hostname: "48ee61ea71d948", process_id: 1758, name: "worker-22571ef46998c8d32c9b", polling_interval: 0.1, queues: "*", thread_pool_size: 3
+2026-10-29T07:10:39Z app[9080d40db67238] ams [info]SolidQueue-1.3.2 Shutdown Dispatcher (106.9ms)  pid: 686, hostname: "9080d40db67238", process_id: 1761, name: "dispatcher-4a741ee5996e205114b0", polling_interval: 1, batch_size: 500, concurrency_maintenance_interval: 600
+2026-10-29T07:10:39Z app[9080d40db67238] ams [info]SolidQueue-1.3.2 Shutdown Scheduler (106.5ms)  pid: 696, hostname: "9080d40db67238", process_id: 1762, name: "scheduler-275eb2f0946eaf441bf5", recurring_schedule: ["clear_solid_queue_finished_jobs", "rotate_expiring_device_tokens", "stuck_payments_check", "channel_order_stats"]
+2026-10-29T07:10:39Z app[48ee61ea71d948] ams [info]SolidQueue-1.3.2 Supervisor terminated gracefully (322.0ms)  process_id: 1756, supervisor_pid: 635, supervised_processes: [653, 657, 662]
+2026-10-29T07:10:39Z app[9080d40db67238] ams [info]SolidQueue-1.3.2 Release claimed jobs (59.7ms)  size: 0
+2026-10-29T07:10:39Z app[9080d40db67238] ams [info]SolidQueue-1.3.2 Shutdown Worker (242.2ms)  pid: 690, hostname: "9080d40db67238", process_id: 1763, name: "worker-1a66d51f2969a47f75f7", polling_interval: 0.1, queues: "*", thread_pool_size: 3
