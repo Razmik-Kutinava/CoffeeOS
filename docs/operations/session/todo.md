@@ -10,9 +10,9 @@
 
 - [x] intake `b005db0f` — текст 1:1, CBR #110, очередь 10 → `in_progress`
 - [x] SPEC — факты = код (ниже) · решения владельца · файлы · Не ломать · Проверка · Migration Gate (план и откат ниже)
-- [ ] Subtask 0 — новые тесты пишутся первыми; защитные тесты синхронного пути (`order_status_push_subscribe_test.mjs:401-411`, `:490-519`) зелёные до и после
-- [ ] RED — новые тесты + явная перепись охранных (список ниже)
-- [ ] GREEN — модуль, карточка, панель, экран, машина, миграция, события · регрессия зоны
+- [x] Subtask 0 — новые тесты написаны первыми (RED); защитные тесты синхронного пути (`order_status_push_subscribe_test.mjs:401-411`, `:490-519`) зелёные до и после
+- [x] RED `11a80c6a` — JS 84 runs: 78/6 + `ERR_MODULE_NOT_FOUND pushPrePrompt.js` · Rails 29 runs: 3 F (список видов в модели, b11_08, приём воронки в API) · CHECK-тест базы зелёный ожидаемо
+- [x] GREEN — новые `pushPrePrompt.js` (+ `pushCtaVisible` через машину: охрана #92 «аккордеон не импортирует машину» сохранена) и `PushPrePrompt.svelte`; аккордеон: 🔔 → карточка, «Включить» → `notify("push")` синхронно, автопоказ с claim/release, recovery → карточка → тост; экран: баннер удалён, карточка в `accepted`/`paid`/`preparing`, ошибка по нажатию — строкой; машина: на `ready` push-CTA нет (Wallet как было); `pushEnvironment.js` — экспорт `send`; миграция `20261029090000` (up/rollback/up OK, schema.rb — только версия + CHECK, чужой дамп локального PG не взят); GATES G4 · задача JS 123/0 · Rails задачи + зона 52/0 · `vite:build` OK (новых предупреждений нет) · вся JS-зона 880: 808/72 — те же legacy из ISSUES (кабинет `[TDD]` 58, `navigator` Node 22 в оплате/WebView, email, cancel 422/500), push/экрана среди них нет
 - [ ] `/regress`
 - [ ] `/review` — bugbot + security + crit-audit · COMPONENT_MAP · Entire · push → CI green
 

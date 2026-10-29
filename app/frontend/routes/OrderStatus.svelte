@@ -27,6 +27,17 @@
   } from "../lib/orderStatusNotifyActions.js"
   import { currentPushPossible } from "../lib/pushEnvironmentClass.js"
   import {
+    isPrePromptStatus,
+    shouldAutoShowPrePrompt,
+    readPrePromptState,
+    recordPrePromptDismissal,
+    claimAutoPrePrompt,
+    releaseAutoPrePrompt,
+    currentNotificationPermission,
+    reportPushConsentEvent,
+    finishPrePromptAccept
+  } from "../lib/pushPrePrompt.js"
+  import {
     isPushDiagEnabled,
     togglePushDiag,
     pushDiagToggleText,
@@ -47,6 +58,7 @@
   import PageSkeleton from "../components/PageSkeleton.svelte"
   import OrderCancelModal from "../components/OrderCancelModal.svelte"
   import SubscriptionOfferBanner from "../components/SubscriptionOfferBanner.svelte"
+  import PushPrePrompt from "../components/PushPrePrompt.svelte"
 
   let { params } = $props()
 
@@ -95,6 +107,10 @@
         })
       : { buttons: [], style: CTA_STYLE }
   )
+  // TASK_110: карточка вместо баннера — там же, где машина показала push-CTA.
+  const pushCtaShown = $derived(ctaView.buttons.some((b) => b.kind === "push"))
+  let prePromptOpen = $state(false)
+  let prePromptClaimId = null
   const reconnectBanner = $derived(showReconnectBanner(cableState))
   const cancelModalCopy = $derived(
     order
@@ -151,6 +167,49 @@
       pushState = "error"
       if (result.notice) pushErr = result.notice
     }
+    if (!auto) {
+      prePromptOpen = false
+      finishPrePromptAccept(result, { orderId: order?.id })
+    }
+  }
+
+  $effect(() => {
+    if (!order || !pushAvailable || prePromptClaimId !== null) return
+    const show = shouldAutoShowPrePrompt({
+      status: order.status,
+      pushCtaShown,
+      permission: currentNotificationPermission(),
+      subscribed: pushSubscribed,
+      recovery: pushState === "denied",
+      orderId: order.id,
+      state: readPrePromptState()
+    })
+    if (!show || !claimAutoPrePrompt(order.id)) return
+    prePromptClaimId = order.id
+    openPrePrompt()
+  })
+
+  // «Готов» / подписка — push-CTA пропал, карточка тоже.
+  $effect(() => {
+    if (prePromptOpen && !pushCtaShown && pushState !== "requesting") prePromptOpen = false
+  })
+
+  function openPrePrompt() {
+    if (prePromptOpen) return
+    prePromptOpen = true
+    reportPushConsentEvent("push_preprompt_shown")
+  }
+
+  function onPrePromptAccept() {
+    if (pushState === "requesting") return
+    enablePushNotifications()
+    reportPushConsentEvent("push_preprompt_accept")
+  }
+
+  function onPrePromptLater() {
+    prePromptOpen = false
+    recordPrePromptDismissal(order.id)
+    reportPushConsentEvent("push_preprompt_later")
   }
 
   function onOpenSettingsClick() {
@@ -218,7 +277,7 @@
       return
     }
     if (kind === "push") {
-      await enablePushNotifications()
+      openPrePrompt()
       return
     }
     if (kind === "wallet") {
@@ -290,6 +349,7 @@
   })
 
   onDestroy(() => {
+    if (prePromptClaimId !== null) releaseAutoPrePrompt(prePromptClaimId)
     clearTimeout(diagNoticeTimer)
     unsubscribeCable?.()
     unsubscribeCable = null
@@ -347,26 +407,19 @@
           onclick={onOpenSettingsClick}
         >{PUSH_OPEN_SETTINGS_CTA}</button>
       </div>
-    {:else if pushAvailable && pushPossible && !progress.cancelled && !pushSubscribed}
-      <div class="push-banner">
-        <p class="push-banner-text">Получайте статус заказа в шторке уведомлений</p>
-        <button
-          type="button"
-          class="push-banner-btn"
-          disabled={pushState === "requesting"}
-          onclick={() => enablePushNotifications()}
-        >
-          {pushState === "requesting" ? "Подключаем…" : "Разрешить уведомления"}
-        </button>
-        {#if pushErr}
-          <p class="push-banner-error" role="status">{pushErr}</p>
-        {/if}
-      </div>
+    {:else if prePromptOpen && isPrePromptStatus(order.status) && !progress.cancelled}
+      <PushPrePrompt
+        pending={pushState === "requesting"}
+        onAccept={onPrePromptAccept}
+        onLater={onPrePromptLater}
+      />
     {:else if pushState === "registered"}
       <p class="push-ok" role="status">Уведомления включены</p>
       {#if ctaToast}
         <p class="push-banner-error" role="status">{ctaToast}</p>
       {/if}
+    {:else if pushState === "error" && pushErr && !progress.cancelled}
+      <p class="push-banner-error" role="status">{pushErr}</p>
     {/if}
 
     {#if progress.cancelled}

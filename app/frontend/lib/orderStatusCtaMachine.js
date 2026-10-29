@@ -28,7 +28,8 @@ const LABELS = Object.freeze({
  *   secondCtaMode?: "tips"|"subscription",
  *   eligibleForSubscriptionOffer?: boolean,
  *   showPushCta?: boolean
- * }} opts — `showPushCta: false` (TASK_109) убирает только push-CTA: Wallet и ветку подписки не трогает
+ * }} opts — `showPushCta: false` (TASK_109) убирает только push-CTA: Wallet и ветку подписки не трогает;
+ *   на `ready` push-CTA нет вовсе (TASK_110)
  * @returns {{
  *   buttons: Array<{ kind: string, label: string, hint?: string }>,
  *   style: typeof CTA_STYLE
@@ -75,7 +76,8 @@ export function orderStatusCtas(opts = {}) {
         buttons.push({ kind: "subscription", label: LABELS.subscription })
       }
       // tips intentionally absent (запрет восстановления чаевых)
-    } else {
+    } else if (status === "preparing" || notifyKind !== "push") {
+      // TASK_110: на «Готов» push-CTA нет; Wallet-CTA — как было
       pushNotify()
     }
   }

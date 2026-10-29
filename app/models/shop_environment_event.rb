@@ -3,7 +3,12 @@
 # TASK_112: снимок окружения витрины. Запись — только через Shop::EnvironmentEventRecorder.
 # Наружу (shop API, панели) не отдаётся: читают Metabase (через view) и тесты.
 class ShopEnvironmentEvent < ApplicationRecord
-  EVENT_KINDS = %w[session_open].freeze
+  # TASK_110: воронка согласия на push — тот же снимок окружения, свой event_kind.
+  EVENT_KINDS = %w[
+    session_open
+    push_preprompt_shown push_preprompt_accept push_preprompt_later
+    push_permission_granted push_permission_denied push_permission_default
+  ].freeze
   OS_FAMILIES = %w[ios android other].freeze
   STANDALONE_STATES = %w[standalone browser unavailable].freeze
   NOTIFICATION_STATES = %w[default granted denied unavailable].freeze

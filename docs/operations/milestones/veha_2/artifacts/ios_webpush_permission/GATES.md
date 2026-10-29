@@ -20,7 +20,7 @@ Scope: `registerShopPush()` вызывает `Notification.requestPermission()` 
   CWD: C:/Tools/workarea/CoffeeOS
   EVIDENCE: automatic-evidence=v1; definition-sha256=cc6a6b020080e5a467285676fdebb20ca45cf0dd92e74ec8171365eeb4dda8c1; exit=0; EXPECT=matched; output-sha256=749c699ac1fc708c77cea5987933b585b34ef9868413ea73ee6c97f507a9338b; output-bytes=19434; shell=C:\Windows\system32\cmd.exe; cwd=C:\Tools\workarea\CoffeeOS; path=54c8ad8163c5/77 entries
 
-- [ ] G4: физический iPhone — системный диалог сразу после клика, приложение в «Настройки → Уведомления», токен сохранён (Subtask 8)
+- [ ] G4: физический iPhone — системное окно появляется сразу после нажатия «Включить» в карточке перед запросом (TASK_110; раньше — сразу после клика по 🔔), приложение в «Настройки → Уведомления», токен сохранён (Subtask 8)
   EVIDENCE: pending — manual, после deploy по апруву (скрин/запись + строка `push_token` у гостя)
 
 - [ ] G5: hot-path Fly MCP Point A — витрина / статус заказа / `/push/register` отвечают, без 5xx после deploy

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_28_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_29_090000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "pg_stat_statements"
@@ -1194,7 +1194,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_28_130000) do
     t.string "storage_session", limit: 16, null: false
     t.string "ua_snippet", limit: 300
     t.index ["point_id", "created_at"], name: "idx_shop_environment_events_point_created"
-    t.check_constraint "event_kind::text = ANY (ARRAY['session_open'::text])", name: "chk_shop_environment_events_event_kind"
+    t.check_constraint "event_kind::text = ANY (ARRAY['session_open'::text, 'push_preprompt_shown'::text, 'push_preprompt_accept'::text, 'push_preprompt_later'::text, 'push_permission_granted'::text, 'push_permission_denied'::text, 'push_permission_default'::text])", name: "chk_shop_environment_events_event_kind"
     t.check_constraint "inapp_label::text = ANY (ARRAY['telegram'::text, 'instagram'::text, 'facebook'::text, 'other_inapp'::text, 'none'::text])", name: "chk_shop_environment_events_inapp_label"
     t.check_constraint "notification_state::text = ANY (ARRAY['default'::text, 'granted'::text, 'denied'::text, 'unavailable'::text])", name: "chk_shop_environment_events_notification_state"
     t.check_constraint "os_family::text = ANY (ARRAY['ios'::text, 'android'::text, 'other'::text])", name: "chk_shop_environment_events_os_family"

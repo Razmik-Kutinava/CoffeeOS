@@ -208,6 +208,9 @@ function send(body, opts, env) {
   }
 }
 
+/** TASK_110: события воронки согласия на push уходят тем же способом. */
+export { send as sendEnvironmentEvent }
+
 /**
  * Одно событие session_open за вкладку (sessionStorage), при недоступном хранилище — за жизнь страницы.
  * Флаг ставится до отправки: при сбое сети повтора нет.

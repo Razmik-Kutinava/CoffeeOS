@@ -1,6 +1,6 @@
 <script>
   /** #36/#37/#41/#84 accordion: статус + OrderActionButtons + текстовый чек. */
-  import { tick } from "svelte"
+  import { onDestroy, tick } from "svelte"
   import {
     accordionRowView,
     fitReceiptInView,
@@ -25,7 +25,19 @@
   import { TIPS_SERVICE_URL } from "../lib/tipsConfig.js"
   import { shopWalletAvailable } from "../lib/shopWalletConfig.js"
   import { currentPushPossible } from "../lib/pushEnvironmentClass.js"
+  import {
+    pushCtaVisible,
+    shouldAutoShowPrePrompt,
+    readPrePromptState,
+    recordPrePromptDismissal,
+    claimAutoPrePrompt,
+    releaseAutoPrePrompt,
+    currentNotificationPermission,
+    reportPushConsentEvent,
+    finishPrePromptAccept
+  } from "../lib/pushPrePrompt.js"
   import OrderActionButtons from "./OrderActionButtons.svelte"
+  import PushPrePrompt from "./PushPrePrompt.svelte"
 
   let {
     order,
@@ -81,6 +93,65 @@
     })
     if (init.restored) pushSubscribed = true
   })
+
+  // TASK_110: карточка перед системным запросом — только там, где машина показала push-CTA.
+  let pushCtaShown = $derived(
+    pushCtaVisible({
+      status,
+      os: deviceOs,
+      canCancel,
+      hasPushSubscription,
+      walletAvailable: shopWalletAvailable(),
+      showPushCta: pushPossible
+    })
+  )
+  let prePromptOpen = $state(false)
+  let prePromptClaimId = null
+
+  $effect(() => {
+    if (prePromptClaimId !== null) return
+    const show = shouldAutoShowPrePrompt({
+      status,
+      pushCtaShown,
+      permission: currentNotificationPermission(),
+      subscribed: hasPushSubscription,
+      recovery: pushRecovery,
+      orderId,
+      state: readPrePromptState()
+    })
+    if (!show || !claimAutoPrePrompt(orderId)) return
+    prePromptClaimId = orderId
+    openPrePrompt()
+  })
+
+  // «Готов» / подписка — push-CTA пропал, карточка тоже.
+  $effect(() => {
+    if (prePromptOpen && !pushCtaShown && !actionLoading) prePromptOpen = false
+  })
+
+  onDestroy(() => {
+    if (prePromptClaimId !== null) releaseAutoPrePrompt(prePromptClaimId)
+  })
+
+  function openPrePrompt() {
+    if (prePromptOpen) return
+    prePromptOpen = true
+    reportPushConsentEvent("push_preprompt_shown")
+  }
+
+  function onPrePromptAccept() {
+    if (actionLoading) return
+    toastMsg = ""
+    toastOpensSettings = false
+    notify("push")
+    reportPushConsentEvent("push_preprompt_accept")
+  }
+
+  function onPrePromptLater() {
+    prePromptOpen = false
+    recordPrePromptDismissal(orderId)
+    reportPushConsentEvent("push_preprompt_later")
+  }
 
   function isClipBox(el) {
     const cs = getComputedStyle(el)
@@ -140,7 +211,7 @@
       return
     }
     // Блоки между CTA и чеком меняют отступ — перевписать.
-    void pushRecovery, toastMsg, settingsFallback
+    void pushRecovery, prePromptOpen, toastMsg, settingsFallback
     const gen = ++fitGeneration
     let container = null
     let observer = null
@@ -269,29 +340,46 @@
       return
     }
 
-    if (kind === "wallet" || kind === "push") {
-      actionLoading = true
-      const onToast = (msg) => {
-        toastMsg = msg
-      }
-      const result =
-        kind === "wallet"
-          ? await downloadWalletPass({ orderId, onToast })
-          : await subscribeOrderPush({ onToast })
-      actionLoading = false
-      if (kind === "push" && result?.openSettings) {
-        pushRecovery = true
-        toastMsg = ""
-        toastOpensSettings = false
-        settingsFallback = ""
-      } else if (result?.notice) {
-        toastMsg = result.notice
-        toastOpensSettings = false
-      } else {
-        toastOpensSettings = Boolean(result?.openSettings)
-      }
-      if (result.ok) pushSubscribed = true
+    if (kind === "push") {
+      openPrePrompt()
+      return
     }
+
+    if (kind === "wallet") {
+      await notify("wallet")
+    }
+  }
+
+  /**
+   * Push — только из «Включить» карточки: до `subscribeOrderPush` нет await (TASK_99).
+   * @param {"wallet"|"push"} kind
+   */
+  async function notify(kind) {
+    actionLoading = true
+    const onToast = (msg) => {
+      toastMsg = msg
+    }
+    const result =
+      kind === "wallet"
+        ? await downloadWalletPass({ orderId, onToast })
+        : await subscribeOrderPush({ onToast })
+    actionLoading = false
+    if (kind === "push") {
+      prePromptOpen = false
+      finishPrePromptAccept(result, { orderId })
+    }
+    if (kind === "push" && result?.openSettings) {
+      pushRecovery = true
+      toastMsg = ""
+      toastOpensSettings = false
+      settingsFallback = ""
+    } else if (result?.notice) {
+      toastMsg = result.notice
+      toastOpensSettings = false
+    } else {
+      toastOpensSettings = Boolean(result?.openSettings)
+    }
+    if (result.ok) pushSubscribed = true
   }
 </script>
 
@@ -377,6 +465,13 @@
         >{PUSH_WATCH_READINESS_CTA}</button>
       </div>
     </div>
+  {:else if prePromptOpen}
+    <PushPrePrompt
+      compact
+      pending={actionLoading}
+      onAccept={onPrePromptAccept}
+      onLater={onPrePromptLater}
+    />
   {:else if toastMsg}
     {#if toastOpensSettings}
       <button
