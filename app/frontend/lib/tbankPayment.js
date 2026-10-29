@@ -15,7 +15,11 @@ let initPromise = null
 let initTerminalKey = null
 
 export function savePaymentSession(data) {
-  sessionStorage.setItem(SESSION_KEY, JSON.stringify(data))
+  try {
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(data))
+  } catch {
+    /* хранилище недоступно — 3DS и экран результата оплаты не блокируем */
+  }
 }
 
 export function loadPaymentSession() {
@@ -28,7 +32,11 @@ export function loadPaymentSession() {
 }
 
 export function clearPaymentSession() {
-  sessionStorage.removeItem(SESSION_KEY)
+  try {
+    sessionStorage.removeItem(SESSION_KEY)
+  } catch {
+    /* ignore */
+  }
 }
 
 function loadScript(url) {
