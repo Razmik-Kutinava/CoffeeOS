@@ -1,0 +1,15 @@
+Fly v523 — logs after deploy 4 (2026-10-29)
+
+Live stream `fly logs -a coffeeos` 13:40:26–13:50:26 UTC (1855 lines, raw not committed)
++ buffer `fly logs --no-tail` 13:45:53–13:51:26 UTC (100 lines)
+
+Completed 2xx ............ 379
+Completed 4xx ............ 11   (401 /shop/api/profile for guests, 401 /shop/api/pwa_install for guest standalone launch)
+Completed 5xx ............ 0
+Exception / FATAL ........ 0   (excluding RoutingError)
+PreparedStatementCache ... 0
+RoutingError ............. 30  (/uploads/*, favicon — known)
+POST environment_events .. 14, 422 — 0  (new event_kind values accepted: install_banner_*, pwa_first_launch, push_*)
+POST pwa_install ......... 1   (401, guest — expected, silent in UI)
+
+Machines: web 9080d40db67238 + worker 48ee61ea71d948 on v523 since 13:41:08 UTC, web health 1/1 passing.
