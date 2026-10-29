@@ -17,7 +17,14 @@
     loadSubscriptionOfferCta,
     subscriptionOfferCtaDefaults
   } from "../lib/subscriptionOfferCta.js"
-  import { downloadWalletPass } from "../lib/orderStatusNotifyActions.js"
+  import { downloadWalletPass, PUSH_FAILED_TOAST } from "../lib/orderStatusNotifyActions.js"
+  import {
+    isPushDiagEnabled,
+    togglePushDiag,
+    pushDiagToggleText,
+    createTapGesture,
+    PUSH_DIAG_GESTURE
+  } from "../lib/pushDiagFlag.js"
   import { openSupportChat } from "../lib/supportChatAdapter.js"
   import { SUPPORT_TELEGRAM_URL } from "../lib/supportConfig.js"
   import { openTipsService } from "../lib/tipsAdapter.js"
@@ -49,6 +56,9 @@
   let pushErr = $state(null)
   let ctaToast = $state("")
   let ctaLoading = $state(false)
+  let diagNotice = $state("")
+  let diagNoticeTimer = null
+  const diagGesture = createTapGesture(PUSH_DIAG_GESTURE)
   let unsubscribeCable = null
   let offerCta = $state(subscriptionOfferCtaDefaults())
 
@@ -97,33 +107,48 @@
     }
   }
 
-  async function enablePushNotifications() {
+  /** TASK_108: без флага — одно сообщение у кнопки и только по нажатию; лог шагов — по флагу. */
+  async function enablePushNotifications({ auto = false } = {}) {
     pushErr = null
     pushState = "requesting"
-    // TEMP DIAG: тот же механизм, что downloadWalletPass → ctaToast;
-    // дублируем в pushErr, чтобы лог был у кнопки «Разрешить уведомления».
+    const diagOn = isPushDiagEnabled()
+    // Лог шагов — в ctaToast и в pushErr (у кнопки «Разрешить уведомления»).
     const onToast = (msg) => {
       ctaToast = msg
       pushErr = msg
     }
+    const showFailure = () => {
+      if (!diagOn && !auto) pushErr = PUSH_FAILED_TOAST
+    }
     try {
-      const result = await registerShopPush({ onToast })
+      const result = await registerShopPush({ onToast, diag: diagOn })
       if (result.ok) {
         pushState = "registered"
       } else if (result.reason === "denied") {
         pushState = "denied"
-        // TEMP DIAG: не затирать лог шагов коротким текстом
       } else {
         pushState = "error"
+        if (result.reason !== "dismissed") showFailure()
       }
     } catch (e) {
       pushState = "error"
-      if (!ctaToast) {
+      if (!diagOn) {
+        showFailure()
+      } else if (!ctaToast) {
         const msg = e.message || "Ошибка подписки на push"
         pushErr = msg
         ctaToast = msg
       }
     }
+  }
+
+  function onTitleTap() {
+    if (!diagGesture.tap()) return
+    diagNotice = pushDiagToggleText(togglePushDiag())
+    clearTimeout(diagNoticeTimer)
+    diagNoticeTimer = setTimeout(() => {
+      diagNotice = ""
+    }, 2500)
   }
 
   async function performCancel() {
@@ -239,7 +264,7 @@
 
       pushAvailable = firebaseClientConfigured()
       if (pushAvailable && typeof Notification !== "undefined" && Notification.permission === "granted") {
-        enablePushNotifications()
+        enablePushNotifications({ auto: true })
       }
     } catch (e) {
       err = e.message || "Заказ не найден"
@@ -249,6 +274,7 @@
   })
 
   onDestroy(() => {
+    clearTimeout(diagNoticeTimer)
     unsubscribeCable?.()
     unsubscribeCable = null
   })
@@ -266,8 +292,12 @@
 <div class="order-status-page">
   <div class="page-header">
     <button type="button" class="back-btn" onclick={() => push("/orders")} aria-label="Назад">‹</button>
-    <span class="page-title">Заказ</span>
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
+    <span class="page-title" onpointerup={onTitleTap}>Заказ</span>
   </div>
+  {#if diagNotice}
+    <p class="diag-notice" role="status" data-testid="push-diag-notice">{diagNotice}</p>
+  {/if}
 
   {#if loading}
     <PageSkeleton />
@@ -295,7 +325,7 @@
           type="button"
           class="push-banner-btn"
           disabled={pushState === "requesting"}
-          onclick={enablePushNotifications}
+          onclick={() => enablePushNotifications()}
         >
           {pushState === "requesting" ? "Подключаем…" : "Разрешить уведомления"}
         </button>
@@ -469,6 +499,18 @@
   .page-title {
     font-size: 16px;
     color: #a0a0a0;
+    /* скрытый жест диагностики push (TASK_108): серия нажатий без зума и выделения */
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  .diag-notice {
+    margin: 0 0 12px;
+    font-size: 12px;
+    color: #a0a0a0;
+    text-align: center;
   }
 
   .cable-banner {
@@ -663,7 +705,7 @@
     font-size: 12px;
     color: #ff8c42;
     text-align: left;
-    /* TEMP DIAG iOS push */
+    /* лог шагов registerShopPush при флаге диагностики (TASK_108) */
     white-space: pre-line;
     word-break: break-word;
   }
@@ -861,7 +903,7 @@
     font-size: 13px;
     text-align: left;
     line-height: 1.35;
-    /* TEMP DIAG iOS push: многострочный лог шагов registerShopPush */
+    /* лог шагов registerShopPush при флаге диагностики (TASK_108) */
     white-space: pre-line;
     word-break: break-word;
   }

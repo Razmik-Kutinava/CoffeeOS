@@ -4,6 +4,7 @@
 
 import { toggleExpandedOrder } from "./activeOrdersAccordion.js"
 import { registerShopPush } from "./firebasePush.js"
+import { isPushDiagEnabled } from "./pushDiagFlag.js"
 
 /** Токены UI-kit (accent проекта, h-9 ≈ 36px, rounded-lg, w-44). */
 export const CTA_STYLE = Object.freeze({
@@ -136,7 +137,8 @@ export const PUSH_WATCH_READINESS_CTA = "Смотреть готовность"
 /** Универсальная инструкция, если deep-link недоступен (#92). */
 export const PUSH_SETTINGS_FALLBACK =
   "Откройте настройки сайта в браузере → Уведомления → Разрешить для этого сайта"
-const PUSH_NETWORK_TOAST = "Не удалось включить уведомления. Проверьте сеть."
+/** TASK_108: одно сообщение гостю при неудаче (решение владельца 2026-10-15). */
+export const PUSH_FAILED_TOAST = "Не удалось включить уведомления. Попробуйте ещё раз"
 
 /**
  * Best-effort открытие настроек уведомлений браузера / site settings (#81 / #92).
@@ -210,7 +212,8 @@ export function openNotificationSettings(deps = {}) {
  *
  * @param {{
  *   registerShopPushImpl?: () => Promise<{ok:boolean, reason?:string}>,
- *   onToast?: (msg: string) => void
+ *   onToast?: (msg: string) => void,
+ *   deps?: object
  * }} [opts]
  */
 export async function subscribeOrderPush(opts = {}) {
@@ -220,14 +223,15 @@ export async function subscribeOrderPush(opts = {}) {
     storage = typeof localStorage !== "undefined" ? localStorage : null
   } = opts
   const idleLabel = LABELS.push
-  // TEMP DIAG: реальный registerShopPush пишет лог шагов в onToast —
-  // не затираем его outcome-тостами (в тестах mock всё ещё шлёт soft toast).
-  const injectedRegister = typeof registerShopPushImpl === "function"
+  // TASK_108: с флагом диагностики registerShopPush пишет лог шагов в onToast —
+  // итоговыми тостами его не затираем.
+  const diagOn = isPushDiagEnabled()
+  const showOutcome = typeof onToast === "function" && !diagOn
 
   try {
     // iOS (#99): без await до register — requestPermission должен остаться в user gesture.
-    const register = injectedRegister ? registerShopPushImpl : registerShopPush
-    const result = await register({ onToast })
+    const register = typeof registerShopPushImpl === "function" ? registerShopPushImpl : registerShopPush
+    const result = await register({ onToast, deps: opts.deps, diag: diagOn })
 
     if (result?.ok) {
       try {
@@ -239,7 +243,7 @@ export async function subscribeOrderPush(opts = {}) {
     }
 
     if (result?.reason === "denied") {
-      if (typeof onToast === "function" && injectedRegister) onToast(PUSH_DENIED_TOAST)
+      if (showOutcome) onToast(PUSH_DENIED_TOAST)
       return {
         ok: false,
         isLoading: false,
@@ -250,7 +254,7 @@ export async function subscribeOrderPush(opts = {}) {
     }
 
     if (result?.reason === "dismissed") {
-      if (typeof onToast === "function" && injectedRegister) onToast(PUSH_NOT_ENABLED_TOAST)
+      if (showOutcome) onToast(PUSH_NOT_ENABLED_TOAST)
       return {
         ok: false,
         isLoading: false,
@@ -260,7 +264,7 @@ export async function subscribeOrderPush(opts = {}) {
       }
     }
 
-    if (typeof onToast === "function" && injectedRegister) onToast(PUSH_NETWORK_TOAST)
+    if (showOutcome) onToast(PUSH_FAILED_TOAST)
     return {
       ok: false,
       isLoading: false,
@@ -268,7 +272,7 @@ export async function subscribeOrderPush(opts = {}) {
       error: result?.reason || "failed"
     }
   } catch (_err) {
-    if (typeof onToast === "function" && injectedRegister) onToast(PUSH_NETWORK_TOAST)
+    if (showOutcome) onToast(PUSH_FAILED_TOAST)
     return { ok: false, isLoading: false, primaryLabel: idleLabel, error: "network" }
   }
 }

@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app"
 import { getMessaging, getToken, isSupported } from "firebase/messaging"
 import { api } from "./api.js"
+import { isPushDiagEnabled } from "./pushDiagFlag.js"
 
 function meta(name) {
   return document.querySelector(`meta[name="${name}"]`)?.getAttribute("content") || ""
@@ -51,21 +52,22 @@ const DEFAULT_DEPS = Object.freeze({
 })
 
 /**
- * TEMP DIAG (#81 iOS push): видимый лог шагов через onToast.
- * Убрать отдельным коммитом после on-device диагностики.
+ * Лог шагов в onToast — только при флаге диагностики (TASK_108, `pushDiagFlag.js`).
  *
  * iOS (#99): `Notification.requestPermission()` должен быть первым async-вызовом —
  * любой `await` / setTimeout / dynamic import до него теряет user gesture,
  * и системный диалог не показывается. Firebase-проверки — только после `granted`.
  *
- * @param {{ onToast?: (msg: string) => void, deps?: Partial<typeof DEFAULT_DEPS> }} [opts]
+ * @param {{ onToast?: (msg: string) => void, deps?: Partial<typeof DEFAULT_DEPS>, diag?: boolean }} [opts]
  * @returns {Promise<{ok:boolean, reason?:string, registered?:boolean, permission?:string, token?:string}>}
  */
 export async function registerShopPush(opts = {}) {
   const { onToast } = opts
   const deps = { ...DEFAULT_DEPS, ...opts.deps }
+  const diagOn = typeof opts.diag === "boolean" ? opts.diag : isPushDiagEnabled()
   const lines = []
   const diag = (msg) => {
+    if (!diagOn) return
     lines.push(String(msg))
     if (typeof onToast === "function") onToast(lines.join("\n"))
   }

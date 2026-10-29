@@ -516,6 +516,9 @@
     text-align: left;
     font-size: 0.62rem;
     color: #ffb74d;
+    /* лог шагов registerShopPush при флаге диагностики (TASK_108) */
+    white-space: pre-line;
+    word-break: break-word;
   }
   .aoa__toast--action {
     cursor: pointer;
