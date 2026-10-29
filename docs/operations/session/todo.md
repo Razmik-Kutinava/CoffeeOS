@@ -1,3 +1,102 @@
+# todo — TASK_121: Повтор заказа из истории с проверкой цен в текущей точке (очередь, шаг 12)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK-121-…](../milestones/veha_2/requirements/customer_tasks/TASK-121-Повтор-заказа-из-истории-с-проверкой-цен-в-текущей-точке.md) — Subtask 1–7, 9–13 (Subtask 8 — шаг 16, после TASK_116) · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 12 · [Google Doc](https://docs.google.com/document/d/1PE0qQOQD3P2khmm19K8w0s1awGl9hOmQJkK90oVEKLQ/edit) · EXT TASK_94 (и Патч 1) |
+| **Не в scope** | Init/Charge и `widgetRepeatPayFlow` · Quick Repeat (`createRepeatInlineOrder`, `RepeatSection`) и общий FSM (`repeatInlinePayUiStore` — без новых состояний) · checkout · `clearCartAfterSuccessfulPay` · `OrderCreator`, `GrowthPromo`, расчёт цен в `CartService` · PATCH исходного заказа · смена точки и корзина при смене точки (TASK_120) · показ скидки в чеке · кнопка «Оформить по новым ценам» · заказы других и закрытых точек (Subtask 8) · `OrdersController#active/cancel/wallet_pass` · риск переиспользования pending-заказа в `OrderCreator` (раздел 3, вне задачи) |
+| **Статус** | `in_progress` — SPEC |
+
+## SBR
+
+- [x] intake `19e4e4d0` — текст 1:1, CBR #121, очередь 12 → `in_progress`
+- [x] SPEC — факты = код (ниже) · решения · файлы · Не ломать · Проверка · миграции нет
+- [ ] RED — новые тесты (Rails + JS) падают на новой логике; явная перепись `runWith` в `lk_history_repeat_one_click_test.mjs` (Subtask 13)
+- [ ] GREEN — реализация + регрессия зоны
+- [ ] `/regress`
+- [ ] `/review` — bugbot + security-review + crit-audit, Entire, push, CI green, COMPONENT_MAP (`historyRepeatAdapter` + новая строка `OrdersController` — требование документа)
+
+## Сверка фактов (SPEC 2026-10-29)
+
+| Документ | Код | Итог |
+|---|---|---|
+| `historyRepeatAdapter.js` `:60-91` создание, `:73` `DELETE /cart`, `:74-80` `addToCart` без `try`, `:82-91` `POST /orders`, `:174-179` оплата, `:212-230` catch, `:37-45,60` маппинг, `:65-71` профиль 422 | то же (маппинг `:33-46`); `runHistoryRepeatPayFlow` `:146-234`, `:241-244` — это `startHistoryRepeatFromOrderId` (из `Profile`) | ✅ без сдвига |
+| `Profile.svelte:47-50,135-140`, `OrderReceipt.svelte:74-82`, `:159-170` | то же; обе кнопки ловят исключение адаптера → `repeatError = e.message` у кнопки, `disabled` / выход по `payUi.busy`; переход на `/` делает адаптер (`navigate`) | ✅ |
+| `shopCartAdd.js:78-82` тело, `:89-93` ответ | `:81-85`, `:92` | ✅ сдвиг +3 |
+| `cart_service.rb:16-21` любой Hash-сессии, `:25-26` RecordNotFound, `:155` `price`, `:159` `unit_total`, `:163` total без акции, `:206-215,280-299` цена | `initialize` `:18-25` (+ сброс TASK_120 `:180-187` — на пустом Hash метки нет → не срабатывает), `add!` `:33-34`, `price` `:166`, `unit_total` `:170`, total `:174`, `line_unit_price` / `verified_modifier_delta` `:305-324` | ✅ сдвиг от TASK_120 |
+| `orders_controller.rb:243-251` items, `:248` `price` = `unit_price`, `:233` `total` = `final_amount` | то же; ещё `discount_amount` `:235` уже в ответе | ✅ |
+| `routes.rb:198-202` — эндпоинта расчёта нет | корзина `:199-203`; `get "orders/:id"` `:233` | ✅ |
+| `order_creator.rb:101-113` `unit_price` с модификаторами, `:59-61` акция только при `save_card`, `:43-47,368-378` reuse pending | то же (`:360-378`); `modifier_options.selected_modifiers` хранит `id/name/price` | ✅ |
+| `growth_promo.rb:155` `update_column(:counter)` в `point_allows_promo?` | то же (`app/services/payments/growth_promo.rb`) | ✅ превью его не вызывает |
+| `OrderOwnership` | `app/controllers/concerns/shop/api/order_ownership.rb`: `find_visible_order!` при pending / `reconnect_token` **пишет в сессию** (`set_customer_id!`, `GuestOrderReconnect.bind!`); `scope_visible_orders` — только `customer_id` сессии, без записи | ⚠️ → превью через `scope_visible_orders` (как `show`, без `try_reconnect_from_params!`) |
+| «то же ограничение частоты, что у корзины» | у `/shop/api/cart*` своего правила нет — только общий `shop/api` 150/мин/IP (`rack_attack.rb:177-179`) | ✅ превью под ним автоматически, Rack::Attack не меняем |
+| COMPONENT_MAP `:19` Profile, `:20` OrderReceipt, `:11` cartSheetStore, `:22` PaymentMethodsSheet, `:42` historyRepeatAdapter, `:44` widgetRepeatPayFlow | `:19`, `:20`, `:11`, `:22` — на месте; `historyRepeatAdapter` `:45`, `widgetRepeatPayFlow` `:48` (сдвиг от строк TASK_110); строки `OrdersController` в карте нет | ✅ |
+| Тесты `lk_history_repeat_one_click_test.mjs:54-211`, `:79-119`; `.rb:7-40` | то же; `runWith` (`:147-166`) зовёт `runHistoryRepeatPayFlow` с `api: async () => ({})` — с превью по умолчанию все 6 тестов Патча 1 упадут | ⚠️ → явная перепись `runWith` (подставляем совпавшее превью) |
+| Раздел «Проверка»: `npm test -- --run`, `npm run lint`, `npm run typecheck` | в `package.json` только `vite:dev` / `vite:build`; JS-тесты — `node --test` | ⚠️ команды — по структуре проекта (документ разрешает: «определить при сборке») |
+
+**Находки:**
+- **Механизма сообщений на главной нет.** `cartSheetError` (баннер TASK_120) живёт в шторке корзины, и `Catalog` при открытии зовёт `refreshCartSheet()` → `cartSheetError.set(null)` (`cartSheetStore.js:259`) — сообщение стёрлось бы сразу. → по документу «небольшой закрывающийся блок над каталогом», в потоке страницы (канон CartSheet: без `fixed`).
+- **Неактивная опция модификатора корзину не останавливает:** `ModifierSelection.build` и `verified_modifier_delta` не смотрят `is_active` — опция с `is_active: false` считается по цене. Удалённая опция → `RecordNotFound`. Subtask 7 требует считать неактивную опцию недоступностью → проверка `is_active` в сервисе превью одним запросом, `CartService` не меняем.
+- **Профиль и чек, скорее всего, без правок:** переход на `/` и сброс `history:*` делает адаптер, ошибка превью приходит в существующий `repeatError`. Документ перечисляет оба файла «ожидаемо» — правим, только если тест покажет нужду.
+- `historyRepeatAdapter.js` 244 строки, `orders_controller.rb` 281 — уже больше 200; правки минимальные (+≈15 / +≈15), логика сравнения и тексты — в новом модуле; сплит вне scope.
+- Плашка установки (`ShopPwaBanner`, `fixed`, `top: 3.25rem`) может закрыть верх блока сообщения на iPhone — то же, что ISSUES 🟡 «плашка закрывает заголовок первой категории»; не чиним здесь.
+
+## Решения
+
+Решения агента в рамках документа (владелец может поправить):
+- **Ответ превью** — `GET /shop/api/orders/:id/repeat_preview` → `{ order_id, items: [{ product_id, product_name, quantity, price, unit_total, line_total, unavailable }], total, previous_total, previous_discount }`. Старые значения (`price` = `unit_price`, `previous_total` = `final_amount`, `previous_discount` = `discount_amount`) берёт сервер из того же заказа — сравнение на клиенте не зависит от порядка строк в `GET /orders/:id`. Тело запроса не нужно: состав читается только из выбранного заказа.
+- **Сравнение** (клиент, чистая функция) — в копейках (`Math.round(x * 100)`). Порядок причин: недоступная позиция → «некоторых позиций нет в этой точке»; акция (`previous_discount > 0` или `previous_total` ≠ сумме старых строк) → «он был оформлен по акции»; любая цена за единицу или общая сумма отличается → «цены изменились»; иначе — повтор как раньше.
+- **Расчёт по строке** — отдельный `CartService` на своём пустом Hash на каждую строку заказа (`add!` → `json_lines`), `RecordNotFound` / `OverflowError` → `unavailable: true`; строки не сливаются, одна плохая не ломает остальные. Запросы в цикле — осознанно: цену считает только `CartService` (документ запрещает менять/дублировать расчёт), строк не больше `MAX_CART_LINES` (20). Строка без `product_id`, удалённая или неактивная опция (один запрос `ProductModifierOption.where(id:)`) → `unavailable`.
+- **Владелец** — `scope_visible_orders.includes(:order_items).find(id)`; без входа — 401 (как `show`), чужой / другой точки — 404 `Order not found` без подробностей; `reconnect_token` / pending в превью не принимаем (они пишут в сессию).
+- **Адаптер** — превью в начале `runHistoryRepeatPayFlow` (параметр `previewRepeat`, по умолчанию — запрос превью), после `busy: true` (кнопка заблокирована на время проверки, подпись прежняя), **до** `createOrder` и вне основного `try`: несовпадение → `resetRepeatInlinePayUi()` + сообщение в память + `navigate("/")`, возврат `{ repeatBlocked: <причина> }`; ошибка превью → `resetRepeatInlinePayUi()` и исключение с текстом «Не удалось проверить цены. Попробуйте ещё раз.» (экраны покажут его в `repeatError`, `errorText` в общий store не пишем). `widgetRepeatPayFlow` и FSM не трогаем.
+- **Сообщение на главной** — store в памяти; блок в начале `Catalog.svelte` (над категориями и над скелетоном), крестик + свайп в сторону; закрывается и при уходе с главной (`onDestroy`) → «один раз», после перезагрузки нет.
+
+План:
+1. **`app/services/shop/history_repeat_preview.rb`** (новый) — `Shop::HistoryRepeatPreview.new(order:, tenant_id:).call` → хеш ответа (Subtask 1, 5, 7, 10: без сессии гостя, без `GrowthPromo`).
+2. **`OrdersController#repeat_preview`** + `get "orders/:id/repeat_preview"` перед `get "orders/:id"` (Subtask 1, 10).
+3. **`app/frontend/lib/historyRepeatPriceCheck.js`** (новый) — тексты (Subtask 11), `fetchRepeatPreview`, `compareRepeatPreview` → `{ ok } | { ok: false, reason }` (Subtask 2–5, 7), store сообщения `historyRepeatNotice` + `showHistoryRepeatNotice` / `dismissHistoryRepeatNotice` (Subtask 6).
+4. **`historyRepeatAdapter.js`** — шаг превью в `runHistoryRepeatPayFlow` (Subtask 1–6, 9, 12).
+5. **`app/frontend/components/HistoryRepeatNotice.svelte`** (новый) + монтирование в **`Catalog.svelte`** (Subtask 6).
+
+## Файлы (ожидаемо)
+
+1. `app/services/shop/history_repeat_preview.rb` — **новый**: расчёт текущих цен и наличия по строкам заказа на временных сессиях `CartService`, проверка опций (Subtask 1, 5, 7, 10).
+2. `app/controllers/shop/api/orders_controller.rb` — действие `repeat_preview`: владелец, вызов сервиса, JSON (Subtask 1, 10).
+3. `config/routes.rb` — `get "orders/:id/repeat_preview"`.
+4. `app/frontend/lib/historyRepeatPriceCheck.js` — **новый**: тексты, запрос превью, сравнение, store сообщения (Subtask 2–7, 11).
+5. `app/frontend/lib/historyRepeatAdapter.js` — проверка до `DELETE /cart`, переход на `/` при несовпадении, ошибка превью (Subtask 1–6, 9, 12).
+6. `app/frontend/components/HistoryRepeatNotice.svelte` — **новый**: закрывающийся блок над каталогом (Subtask 6).
+7. `app/frontend/routes/Catalog.svelte` — монтирование блока (Subtask 6).
+
+Соседи (blast-radius, без правок): `app/services/shop/cart_service.rb` — только вызов (`initialize` / `add!` / `json_lines`) · `app/controllers/concerns/shop/api/order_ownership.rb` — `scope_visible_orders` · `app/frontend/routes/Profile.svelte`, `OrderReceipt.svelte` — кнопки повтора и `repeatError` (правка только если тест покажет нужду).
+
+**Тесты:**
+- `test/services/shop/history_repeat_preview_test.rb` — **новый**: цены совпадают; цена выше; ниже; товар недоступен (снят с продажи / выключен / нет настройки точки / неактивен); опция удалена; опция неактивна; изменилась надбавка опции; строка без `product_id`; заказ по акции — `previous_discount` / `previous_total`; `Payments::GrowthPromo.price!` и `point_allows_promo?` не вызываются, `counter` не меняется.
+- `test/integration/shop/api/orders_repeat_preview_test.rb` — **новый**: владелец → 200 и форма ответа; корзина гостя до и после — та же, `Set-Cookie` нет (TASK_120 Патч 1); без входа — 401; чужой заказ и заказ другой точки — 404 без данных; `reconnect_token` не привязывает сессию; правило `shop/api` покрывает путь превью (`rack_attack_test_helper`).
+- `test/javascript/history_repeat_price_check_test.mjs` — **новый**: совпадение → `ok`; цена выше / ниже; общая сумма отличается; акция; недоступная позиция; модификаторы (сравнение `unit_total` ↔ `price`); приоритет причин; тексты-константы; путь запроса превью; store сообщения (показ, закрытие, не в `localStorage`); SSR `HistoryRepeatNotice` (текст, крестик, `aria-label`, без `position: fixed`) и монтирование в `Catalog`.
+- `test/javascript/lk_history_repeat_one_click_test.mjs` — дополнить: превью вызывается до `DELETE /cart`; несовпадение (цены / акция / недоступно) → нет `DELETE /cart`, `addToCart`, `POST /orders`, оплаты; `navigate("/")` один раз, сообщение в store, `history:*` сброшен; ошибка превью → без навигации и без заказа, исключение с текстом, `busy: false`, `errorText` пустой; без отличий — прежняя цепочка. **Явная перепись:** `runWith` (`:147-166`) получает `previewRepeat` с совпавшим превью — тесты Патча 1 проверяют прежнее поведение после проверки (Subtask 12–13).
+- `test/integration/shop/lk_history_repeat_one_click_test.rb` — охранный: адаптер по-прежнему на `runRepeatWidgetPayFlow`, превью до `DELETE /cart` по исходнику.
+
+## Не ломать
+
+- Повтор из истории без отличий (TASK_94 + Патч 1): очистка корзины → позиции → `POST /orders` → оплата; CONFIRMED → `/`; отказ карты / нет карт → экран оплаты, не `/`; сеть — повтор на месте; `releaseHistoryRepeatUi` при уходе с ЛК и чека.
+- Quick Repeat на главной и общий store / FSM: `history:*` не остаётся после блокировки повтора; `widgetRepeatPayFlow`, Init/Charge, `clearCartAfterSuccessfulPay` — без изменений.
+- Корзина гостя и cookie-сессия: превью не пишет в сессию (TASK_120 Патч 1 — без `Set-Cookie`), корзина и баннер смены точки (TASK_120) — как были; каталог и `CartSheet` — единственный нижний слой.
+- Чек `#/order/:id/receipt`: ОФД-секция и её опрос, «Итого» = `final_amount`.
+
+## Проверка
+
+- `node --test test/javascript/history_repeat_price_check_test.mjs test/javascript/lk_history_repeat_one_click_test.mjs test/javascript/widget_repeat_pay_flow_fallback_ui_test.mjs test/javascript/widget_repeat_pay_flow_patch1_test.mjs test/javascript/open_repeat_payment_sheet_test.mjs test/javascript/repeat_invalid_token_payment_test.mjs test/javascript/clear_cart_after_successful_pay_test.mjs test/javascript/subscription_offer_card_test.mjs test/javascript/cart_tenant_reset_test.mjs test/javascript/shop_catalog_load_test.mjs` (`repeat_invalid_token_payment` — 3 известных legacy, ISSUES)
+- `bin/rails test test/services/shop/history_repeat_preview_test.rb test/integration/shop/api/orders_repeat_preview_test.rb test/integration/shop/lk_history_repeat_one_click_test.rb test/integration/shop/api/orders_controller_test.rb test/services/shop/cart_service_test.rb test/services/shop/cart_service_tenant_switch_test.rb test/integration/shop/api/cart_persistence_test.rb test/integration/shop/api/cart_tenant_switch_test.rb` · `bundle exec rubocop` по изменённым Ruby-файлам · вся JS-зона `node --test "test/javascript/**/*.mjs"` (известные legacy — ISSUES) · `npm run vite:build`
+
+## DoD
+
+- Subtask 1–7, 9–13; миграции нет.
+- При отличии цены или суммы, заказе по акции, недоступной позиции — заказ и платёж не создаются, корзина не меняется, гость на главной с сообщением; ошибка превью — сообщение у кнопки, гость на экране; без отличий — TASK_94 и Патч 1 как были.
+- Fly MCP на Point A после 🚀 5: повтор совпавшего заказа (оплата не обязательна — до шторки), заказ с изменённой ценой / по акции → главная с сообщением, корзина цела.
+- COMPONENT_MAP на `/review`: `historyRepeatAdapter` + новая строка `OrdersController` (документ) + решение по новым блоку и модулю.
+
+---
+
 # todo — TASK_111: Путь iPhone к уведомлениям: плашка установки на главный экран (очередь, шаг 11)
 
 | Поле | Значение |
