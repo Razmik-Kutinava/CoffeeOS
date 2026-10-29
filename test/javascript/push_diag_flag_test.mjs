@@ -324,22 +324,24 @@ describe("OrderStatus.svelte — вывод и жест (Subtask 1–3, 5, 8)", 
     assert.doesNotMatch(src, /import\(\s*["'][^"']*pushDiagFlag/)
   })
 
+  // TASK_109: экран заказа перешёл на общий вход subscribeOrderPush — проверки переписаны, смысл тот же.
   it("Subtask 2: автовызов при granted помечен auto и без флага ничего не показывает", () => {
     const src = orderStatusSrc()
     assert.match(src, /Notification\.permission === "granted"\)\s*\{\s*enablePushNotifications\(\{ auto: true \}\)/)
-    assert.match(src, /if \(!diagOn && !auto\) pushErr = PUSH_FAILED_TOAST/)
+    assert.match(src, /const onToast = auto && !diagOn\s*\?\s*undefined/)
   })
 
-  it("Subtask 1/4: лог в pushErr/ctaToast — только при флаге, без флага одно сообщение у кнопки", () => {
+  it("Subtask 1/4: лог в ctaToast — только при флаге, без флага одно сообщение у кнопки (из общего входа)", () => {
     const src = orderStatusSrc()
-    assert.match(src, /registerShopPush\(\{ onToast, diag: diagOn \}\)/)
-    assert.match(src, /PUSH_FAILED_TOAST/)
+    assert.match(src, /await subscribeOrderPush\(\{ onToast \}\)/)
+    assert.match(src, /pushErr = msg\s*if \(diagOn\) ctaToast = msg/)
+    assert.doesNotMatch(src, /registerShopPush/)
     assert.doesNotMatch(src, /TEMP DIAG/)
   })
 
-  it("Subtask 9: ветки denied / else → error сохранены (охрана Патча 2)", () => {
+  it("Subtask 9: denied → denied, остальное → error сохранены (охрана Патча 2)", () => {
     const src = orderStatusSrc()
-    assert.match(src, /result\.reason === "denied"\)\s*\{\s*pushState = "denied"/)
+    assert.match(src, /result\.openSettings\)\s*\{\s*pushState = "denied"/)
     assert.match(src, /\}\s*else\s*\{\s*pushState = "error"/)
   })
 

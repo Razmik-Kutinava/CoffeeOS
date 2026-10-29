@@ -582,10 +582,11 @@ describe("TASK_90 Патч 2 — default ≠ denied (Subtask 1, 1b, 8 patch v2)"
     assert.match(src, /kind === "push" && result\?\.openSettings\)\s*\{\s*pushRecovery = true/)
   })
 
+  // TASK_109: экран заказа на общем входе — openSettings вместо reason, баннер учитывает окружение и подписку.
   it("OrderStatus.svelte: non-denied reason → error state, enable button stays", () => {
     const src = readFileSync(join(root, "app/frontend/routes/OrderStatus.svelte"), "utf8")
-    assert.match(src, /result\.reason === "denied"\)\s*\{\s*pushState = "denied"/)
+    assert.match(src, /result\.openSettings\)\s*\{\s*pushState = "denied"/)
     assert.match(src, /\}\s*else\s*\{\s*pushState = "error"/)
-    assert.match(src, /pushAvailable && !progress\.cancelled && pushState !== "registered"/)
+    assert.match(src, /pushAvailable && pushPossible && !progress\.cancelled && !pushSubscribed/)
   })
 })
