@@ -64,11 +64,24 @@ class Shop::Api::EnvironmentEventsTest < ActionDispatch::IntegrationTest
     assert_equal "session_open", ShopEnvironmentEvent.where(point_id: @tenant.id).last.event_kind
   end
 
+  # TASK_111: install_banner_shown стал разрешённым видом — пример неизвестного вида заменён явно.
   test "Subtask 7: unknown event_kind → 422, nothing stored" do
     assert_no_difference -> { ShopEnvironmentEvent.count } do
-      post_beacon(payload(event_kind: "install_banner_shown"))
+      post_beacon(payload(event_kind: "bogus_kind"))
     end
     assert_response :unprocessable_entity
+  end
+
+  test "TASK_111 Subtask 6: install funnel events stored with environment snapshot" do
+    kinds = %w[install_banner_shown install_banner_tap install_banner_dismiss pwa_first_launch]
+    kinds.each do |kind|
+      post_beacon(payload(event_kind: kind, os_family: "ios", standalone: "browser"),
+        content_type: "text/plain;charset=UTF-8")
+      assert_response :no_content, kind
+    end
+    stored = ShopEnvironmentEvent.where(point_id: @tenant.id).order(:created_at)
+    assert_equal kinds, stored.pluck(:event_kind)
+    assert stored.all? { |e| e.os_family == "ios" }
   end
 
   test "TASK_110 Subtask 12: push consent funnel events stored with environment snapshot" do

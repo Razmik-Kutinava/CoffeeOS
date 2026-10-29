@@ -25,11 +25,13 @@ class ShopEnvironmentEventTest < ActiveSupport::TestCase
   end
 
   # TASK_110 Subtask 12: + 6 событий воронки согласия на push — переписан явно.
-  test "whitelists: session_open + push consent funnel event kinds" do
+  # TASK_111 Subtask 6: + 4 события воронки установки — переписан явно.
+  test "whitelists: session_open + push consent + install funnel event kinds" do
     assert_equal %w[
       session_open
       push_preprompt_shown push_preprompt_accept push_preprompt_later
       push_permission_granted push_permission_denied push_permission_default
+      install_banner_shown install_banner_tap install_banner_dismiss pwa_first_launch
     ], ShopEnvironmentEvent::EVENT_KINDS
     assert_equal %w[ios android other], ShopEnvironmentEvent::OS_FAMILIES
     assert_equal %w[standalone browser unavailable], ShopEnvironmentEvent::STANDALONE_STATES

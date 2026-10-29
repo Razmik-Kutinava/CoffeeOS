@@ -58,9 +58,10 @@ class Shop::EnvironmentEventRecorderTest < ActiveSupport::TestCase
     assert_equal "other_inapp", e.inapp_label
   end
 
+  # TASK_111: install_banner_shown стал разрешённым видом — пример неизвестного вида заменён явно.
   test "Subtask 7: unknown event_kind rejected, nothing stored" do
     assert_no_difference -> { ShopEnvironmentEvent.count } do
-      result = record(full_payload(event_kind: "install_banner_shown"))
+      result = record(full_payload(event_kind: "bogus_kind"))
       assert_not result.ok?
       assert_equal :unknown_event_kind, result.error
     end

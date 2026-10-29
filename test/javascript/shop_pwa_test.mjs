@@ -52,9 +52,8 @@ Object.defineProperty(globalThis, "navigator", {
   writable: true
 })
 
-const { initShopPwa, installPromptAvailable, promptPwaInstall } = await import(
-  "../../app/frontend/lib/shopPwa.js"
-)
+const pwa = await import("../../app/frontend/lib/shopPwa.js")
+const { initShopPwa, installPromptAvailable, promptPwaInstall } = pwa
 
 function installPromptEvent(outcome) {
   const event = new Event("beforeinstallprompt", { cancelable: true })
@@ -152,5 +151,168 @@ describe("Subtask 0 — shopPwa.js на Android до правки", () => {
   it("SSR плашки: до beforeinstallprompt плашки установки нет", async () => {
     const html = await renderSvelte(bannerPath, {})
     assert.ok(!html.includes("Установить CoffeeOS на главный экран"))
+  })
+})
+
+const UA_IPHONE =
+  "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1"
+
+function memoryStorage(initial = {}) {
+  const data = { ...initial }
+  return {
+    data,
+    getItem: (k) => (k in data ? data[k] : null),
+    setItem: (k, v) => {
+      data[k] = String(v)
+    },
+    removeItem: (k) => {
+      delete data[k]
+    }
+  }
+}
+
+const throwingStorage = {
+  getItem() {
+    throw new Error("SecurityError")
+  },
+  setItem() {
+    throw new Error("SecurityError")
+  },
+  removeItem() {
+    throw new Error("SecurityError")
+  }
+}
+
+function launchEnv({ standalone = true, local = memoryStorage(), session = memoryStorage() } = {}) {
+  return {
+    navigator: { userAgent: UA_IPHONE, platform: "iPhone", maxTouchPoints: 5, standalone },
+    matchMedia: () => ({ matches: false }),
+    localStorage: local,
+    sessionStorage: session
+  }
+}
+
+function launchSpy({ status = 200 } = {}) {
+  const sent = []
+  const apiCalls = []
+  return {
+    sent,
+    apiCalls,
+    opts: {
+      resolveUrl: (u) => u,
+      beacon: (url, blob) => {
+        sent.push(blob)
+        return true
+      },
+      apiFn: (path, init) => {
+        apiCalls.push({ path, init })
+        if (status >= 400) {
+          const err = new Error("Требуется авторизация")
+          err.httpStatus = status
+          return Promise.reject(err)
+        }
+        return Promise.resolve({ ok: true })
+      }
+    },
+    async kinds() {
+      return Promise.all(sent.map(async (b) => JSON.parse(await b.text()).event_kind))
+    }
+  }
+}
+
+function launch(env, spy) {
+  pwa.__resetShopPwaForTests()
+  return pwa.reportStandaloneLaunch({ env, ...spy.opts })
+}
+
+describe("Subtask 6, 7 — запуск с иконки (standalone)", () => {
+  it("ключи метки первого запуска и отправленной отметки — константы", () => {
+    assert.equal(pwa.PWA_FIRST_LAUNCH_KEY, "coffeeos_pwa_first_launch_v1")
+    assert.equal(pwa.PWA_INSTALL_REPORTED_KEY, "coffeeos_pwa_install_reported_v1")
+  })
+
+  it("не standalone → ни события, ни /pwa_install", async () => {
+    const spy = launchSpy()
+    assert.equal(launch(launchEnv({ standalone: false }), spy), false)
+    await tick()
+    assert.deepEqual(await spy.kinds(), [])
+    assert.equal(spy.apiCalls.length, 0)
+  })
+
+  it("Subtask 6: pwa_first_launch — один раз на устройство (метка в localStorage)", async () => {
+    const local = memoryStorage()
+    const spy = launchSpy()
+    assert.equal(launch(launchEnv({ local }), spy), true)
+    launch(launchEnv({ local }), spy)
+    await tick()
+    assert.deepEqual(await spy.kinds(), ["pwa_first_launch"])
+    assert.equal(local.data[pwa.PWA_FIRST_LAUNCH_KEY], "1")
+  })
+
+  it("Subtask 6: событие несёт снимок окружения без идентификатора гостя", async () => {
+    const spy = launchSpy()
+    launch(launchEnv(), spy)
+    await tick()
+    const body = JSON.parse(await spy.sent[0].text())
+    assert.equal(body.event_kind, "pwa_first_launch")
+    assert.equal(body.os_family, "ios")
+    assert.equal(body.standalone, "standalone")
+    for (const key of ["customer_id", "phone", "email", "user_agent"]) assert.ok(!(key in body), key)
+  })
+
+  it("Subtask 6: без localStorage — pwa_first_launch раз за сессию", async () => {
+    const session = memoryStorage()
+    const spy = launchSpy()
+    launch(launchEnv({ local: throwingStorage, session }), spy)
+    launch(launchEnv({ local: throwingStorage, session }), spy)
+    launch(launchEnv({ local: throwingStorage, session: memoryStorage() }), spy)
+    await tick()
+    assert.deepEqual(await spy.kinds(), ["pwa_first_launch", "pwa_first_launch"])
+  })
+
+  it("Subtask 7: вошедший гость — POST /pwa_install, успех → больше не отправляется", async () => {
+    const local = memoryStorage()
+    const spy = launchSpy()
+    launch(launchEnv({ local }), spy)
+    await tick()
+    assert.deepEqual(spy.apiCalls, [{ path: "/pwa_install", init: { method: "POST" } }])
+    assert.equal(local.data[pwa.PWA_INSTALL_REPORTED_KEY], "1")
+
+    launch(launchEnv({ local, session: memoryStorage() }), spy)
+    await tick()
+    assert.equal(spy.apiCalls.length, 1)
+  })
+
+  it("Subtask 7: 401 (гость не вошёл) — без метки, в этой сессии не повторяем, в следующей — снова", async () => {
+    const local = memoryStorage()
+    const session = memoryStorage()
+    const spy = launchSpy({ status: 401 })
+    launch(launchEnv({ local, session }), spy)
+    await tick()
+    launch(launchEnv({ local, session }), spy)
+    await tick()
+    assert.equal(spy.apiCalls.length, 1)
+    assert.equal(local.data[pwa.PWA_INSTALL_REPORTED_KEY], undefined)
+
+    launch(launchEnv({ local, session: memoryStorage() }), spy)
+    await tick()
+    assert.equal(spy.apiCalls.length, 2)
+  })
+
+  it("Subtask 7: ошибка запроса или хранилища не ломает запуск", async () => {
+    const spy = launchSpy()
+    spy.opts.apiFn = () => {
+      throw new Error("boom")
+    }
+    assert.doesNotThrow(() => launch(launchEnv({ local: throwingStorage, session: throwingStorage }), spy))
+    await tick()
+  })
+
+  it("плашка вызывает запуск при монтировании, application.js не меняется", async () => {
+    const { readFileSync } = await import("node:fs")
+    const banner = readFileSync(bannerPath, "utf8")
+    assert.match(banner, /reportStandaloneLaunch\(\)/)
+    const app = readFileSync(join(root, "app/frontend/entrypoints/application.js"), "utf8")
+    assert.doesNotMatch(app, /reportStandaloneLaunch/)
   })
 })
