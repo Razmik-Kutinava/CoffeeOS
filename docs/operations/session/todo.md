@@ -1,3 +1,82 @@
+# todo — TASK_108: Диагностика push только по флагу (очередь, шаг 7)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK-108-…](../milestones/veha_2/requirements/customer_tasks/TASK-108-Диагностика-push-только-по-флагу.md) — Subtask 1–10 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 7 · [Google Doc](https://docs.google.com/document/d/1-R9rUy4zy0sLdo9hM3r1xhqy4hvP00kxqLNqwFhWd2I/edit) |
+| **Не в scope** | порядок шагов `registerShopPush` и значения `reason` · recovery UI и ветки `denied`/`dismissed` (TASK_90 + Патч 2) · регистрация токена, `/push/register`, VAPID, Service Worker · iOS / Wallet · другие CTA · `resumePushAfterSettings` (логика `armed`) · сообщения для окружений без push (TASK_109) · защита остальных обращений к storage (TASK_113) · удаление диагностики целиком · флаг параметром в адресе |
+| **Статус** | `in_progress` — SPEC |
+
+## SBR
+
+- [x] intake `1dbaae80` — текст 1:1, CBR #108, очередь 7 → `in_progress`
+- [x] SPEC — факты = код (ниже) · решения владельца 2026-10-29 · файлы · Не ломать · Проверка
+- [ ] RED
+- [ ] GREEN
+- [ ] `/regress`
+- [ ] `/review` (bugbot + security + crit-audit + COMPONENT_MAP: строка о жесте — Subtask 8) → push → CI green
+
+## Сверка фактов (SPEC 2026-10-29)
+
+| Документ | Код | Итог |
+|---|---|---|
+| `firebasePush.js` diag `:54-55`, `:68-71`, `:78` | `:54-55` комментарий TEMP DIAG, `:68-71` `diag()` копит строки и шлёт весь лог в `onToast`, `:78` шаг 1 | ✅ без сдвига · шагов в логе 10 (1–10 + «ОШИБКА на шаге N»), документ пишет «1–5» — показываем все, «как сейчас» |
+| `firebasePush.js:46-51`, `:66` — `opts.deps` | `:46-51` `DEFAULT_DEPS`, `:66` `{ ...DEFAULT_DEPS, ...opts.deps }` | ✅ |
+| `orderStatusNotifyActions.js:221-223, 228, 240, 250, 258` | `:223-225` TEMP DIAG + `injectedRegister`, `:228` «без await до register», `:242` `denied`, `:253` `dismissed` (Патч 2), `:263` общая ошибка, `:271` `catch` — итоговые тосты только при `injectedRegister` | ✅ сдвиг +2…+5 (Патч 2 добавил ветку `dismissed`) |
+| `OrderStatus.svelte:103, 105-110, 115` | `:103` TEMP DIAG, `:105-110` `onToast` пишет лог в `ctaToast` и `pushErr`, `:115` у `denied` текст убран | ✅ |
+| `OrderStatus.svelte:240-243` — автовызов при `granted` | `:240-243` `enablePushNotifications()` из `onMount` при `Notification.permission === "granted"` | ✅ |
+| `OrderStatus.svelte:302-304, 391-400, 864` | `:302-304` `pushErr` под кнопкой, `:392-400` нижний `cancel-toast` с `ctaToast`, `:864-865` `pre-line` | ✅ |
+| `ActiveOrdersAccordion.svelte:280, 286, 506-516` | `:280` `toastMsg = ""` у recovery, `:286-287` ветка `else` — лог после успеха не стирается, `:509-519` `.aoa__toast` без `white-space: pre-line` | ✅ сдвиг 0…+3 |
+| Коммит `9b3c1488` | до него: `denied` → «Уведомления отключены в браузере», ошибка → «Не удалось включить уведомления», `catch` → `e.message`; `subscribeOrderPush` показывал итоговые тосты всегда | ✅ |
+
+**Находки:**
+- Подавление итоговых тостов привязано к тому, подменена ли функция (`injectedRegister`), а не к диагностике — поэтому тесты с подменой видят тосты, а реальный путь нет (документ § 3). Меняем условие на флаг: без флага тосты есть и на реальном пути, с флагом — подавлены, как сейчас.
+- `subscribeOrderPush` не пробрасывает `deps` в `registerShopPush` → тесты пути ошибок на реальной функции (Subtask 10) невозможны без проброса `opts.deps`.
+- Тестов, закрепляющих диагностику (`TEMP DIAG`, `pushErr`, `ctaToast`, `pre-line`), нет. Существующий тест ошибки (`order_status_push_subscribe_test.mjs:67-81`) проверяет `/сеть|уведомлен/i` — новый текст ему соответствует, тест не меняем.
+- Охранные регулярки Патча 2 по исходнику `OrderStatus.svelte` (`:585-590`: `denied` → `pushState = "denied"`, `else { pushState = "error"`) — структуру веток сохраняем.
+- Размеры: `OrderStatus.svelte` 891, `ActiveOrdersAccordion.svelte` 613, `orderStatusNotifyActions.js` 346 строк — уже > 200; правка + ≤ 20 строк в каждом, сплит вне scope (прецедент шага 6). Логика флага и жеста — в новом `pushDiagFlag.js`.
+- `npm test` / `lint` / `typecheck` в проекте нет → `node --test` + `npm run vite:build`.
+
+## Решения
+
+Владелец 2026-10-29: **жест** — 7 нажатий за 3 с на заголовок «Заказ» в шапке экрана `#/order/:id`; **экран заказа без флага при `denied` / `dismissed`** — не трогаем (кнопка «Разрешить уведомления» остаётся, текста нет — как требует запрет документа на ветки `denied`/`default`).
+
+1. **`pushDiagFlag.js` (новый):** ключ `coffeeos_push_diag_v1` в `localStorage`; `isPushDiagEnabled()` — синхронное чтение под `try/catch`; `setPushDiagEnabled(on)` / `togglePushDiag()` — запись под `try/catch`, при недоступном хранилище — значение в памяти на время жизни страницы; `createTapGesture({ taps: 7, windowMs: 3000, now })` → `tap()` возвращает `true` на 7-м нажатии в окне и сбрасывает счётчик; тексты подтверждения «Диагностика уведомлений включена» / «… выключена». Статический импорт (без динамического).
+2. **`firebasePush.js`:** `diag()` пишет в `onToast` только при включённом флаге — флаг читается синхронно в начале `registerShopPush` (до `requestPermission`, без `await`; `opts.diag` переопределяет для тестов); `stepCatch` — тоже через `diag`. Шаги, `reason`, порядок вызовов, `localStorage` `push_registered` — без изменений. Комментарий TEMP DIAG → постоянное описание флага.
+3. **`orderStatusNotifyActions.js`:** `PUSH_NETWORK_TOAST` → экспорт `PUSH_FAILED_TOAST = "Не удалось включить уведомления. Попробуйте ещё раз"`; условие итоговых тостов `injectedRegister` → `!diagOn` (флаг читается синхронно до `register`); `register({ onToast, deps: opts.deps })`. Ветки `denied` / `dismissed` и их результаты — без изменений.
+4. **`ActiveOrdersAccordion.svelte`:** `.aoa__toast` + `white-space: pre-line` (Subtask 3). Логика `onAction` не меняется: без флага в `toastMsg` попадает только итоговый тост (ошибка — `PUSH_FAILED_TOAST`, `dismissed` — `notice`, `denied` — recovery), после успеха пусто.
+5. **`OrderStatus.svelte`:** `enablePushNotifications({ auto })`; без флага: по нажатию при ошибке (не `denied`, не `dismissed`, и в `catch`) — одно сообщение `PUSH_FAILED_TOAST` в `pushErr` под кнопкой (без нижнего `ctaToast`, без `e.message`); при автовызове — ни лога, ни ошибки (Subtask 2). С флагом — как сейчас (лог в `pushErr` и `ctaToast`, в том числе при автовызове). Заголовок «Заказ» — обработчик жеста (`touch-action: manipulation`), подтверждение — короткая строка `role="status"` под шапкой на ~2,5 с. Ветки `denied` / `else → "error"` сохраняют форму.
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/lib/pushDiagFlag.js` — новый: флаг (чтение/запись под `try/catch`, память при недоступном хранилище), счётчик нажатий жеста, тексты подтверждения.
+2. `app/frontend/lib/firebasePush.js` — `diag()` только при флаге.
+3. `app/frontend/lib/orderStatusNotifyActions.js` — итоговые тосты по флагу, `PUSH_FAILED_TOAST`, проброс `deps`.
+4. `app/frontend/routes/OrderStatus.svelte` — вывод лога только при флаге, одно сообщение без флага, тишина при автовызове, жест на заголовке «Заказ».
+5. `app/frontend/components/ActiveOrdersAccordion.svelte` — `pre-line` у `.aoa__toast`.
+6. `test/javascript/push_diag_flag_test.mjs` — новый: Subtask 1–8, 10 (флаг выкл/вкл на реальном `registerShopPush` и `subscribeOrderPush` с подменой только `deps` и `Notification`; сохранение и память при недоступном хранилище; счётчик жеста 7/3 с; исходники `OrderStatus.svelte` / аккордеона: жест на `.page-title`, без флага нет лога, автовызов тихий, `pre-line`).
+
+Соседи (регрессия, без правок): `test/javascript/order_status_push_subscribe_test.mjs` (Subtask 9 — не меняется) · `test/javascript/active_orders_accordion_test.mjs` (Subtask 9) · `test/javascript/order_status_notify_actions_test.mjs` (другие экспорты модуля).
+
+## Не ломать
+
+- Инвариант TASK_99: `requestPermission` — первый async-вызов, синхронно и на пути аккордеона (`order_status_push_subscribe_test.mjs:402-412`, `:490-519`); флаг читается синхронно, без `await` / `setTimeout` / динамического импорта до запроса.
+- TASK_90 + Патч 1–2: `denied` → recovery «Открыть настройки» / «Смотреть готовность»; `dismissed` → «Уведомления не включены», без recovery; `resumePushAfterSettings` — только `armed` + `granted`.
+- Экран заказа: кнопка «Разрешить уведомления» остаётся после отказа и ошибки; «Назад», отмена, чат, чаевые, подписка, Wallet — без изменений; нажатия на заголовок не задевают «Назад».
+- Регистрация токена: `granted` → Firebase → `POST /push/register` → отметка `coffeeos_shop_push_registered_v1` — как было.
+
+## Проверка
+
+- `node --test test/javascript/push_diag_flag_test.mjs test/javascript/order_status_push_subscribe_test.mjs test/javascript/active_orders_accordion_test.mjs test/javascript/order_status_notify_actions_test.mjs`
+- `node --test "test/javascript/**/*.mjs"` (вся JS-зона; известные legacy-fail — ISSUES) · `npm run vite:build`
+
+## DoD
+
+- Subtask 1–10 документа; диагностика включается жестом на iPhone с главного экрана.
+- COMPONENT_MAP на `/review`: строка `pushDiagFlag.js` + место жеста в строке `OrderStatus (route)` (Subtask 8); строки `firebasePush.js` / `orderStatusNotifyActions.js` — граница «лог только по флагу».
+- 🚀 2 — только после ручного теста на iPhone (с флагом) — условие документа и очереди.
+
+---
+
 # todo — TASK_90 Патч 2: default ≠ denied (очередь, шаг 6)
 
 | Поле | Значение |
