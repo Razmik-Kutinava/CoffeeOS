@@ -6,9 +6,14 @@
 export const CODEBLACK_PENDING_KEY = "codeblack_pending_order"
 export const PENDING_TTL_MS = 15 * 60 * 1000
 
+// Safari «Блокировать все cookie» и часть WebView бросают SecurityError уже на доступе к localStorage.
 function defaultStorage() {
-  if (typeof localStorage === "undefined") return null
-  return localStorage
+  try {
+    if (typeof localStorage === "undefined") return null
+    return localStorage
+  } catch {
+    return null
+  }
 }
 
 export function isPendingFresh(pending, now = Date.now()) {
@@ -30,7 +35,11 @@ export function savePendingOrder(orderId, opts = {}) {
     orderId: id,
     timestamp: opts.now ?? Date.now()
   }
-  storage.setItem(CODEBLACK_PENDING_KEY, JSON.stringify(payload))
+  try {
+    storage.setItem(CODEBLACK_PENDING_KEY, JSON.stringify(payload))
+  } catch {
+    /* хранилище недоступно — без pending, редирект в банк не блокируем */
+  }
 }
 
 /**
@@ -40,7 +49,12 @@ export function savePendingOrder(orderId, opts = {}) {
 export function loadPendingOrder(opts = {}) {
   const storage = opts.storage ?? defaultStorage()
   if (!storage) return null
-  const raw = storage.getItem(CODEBLACK_PENDING_KEY)
+  let raw
+  try {
+    raw = storage.getItem(CODEBLACK_PENDING_KEY)
+  } catch {
+    return null
+  }
   if (!raw) return null
   let parsed
   try {
@@ -61,7 +75,11 @@ export function loadPendingOrder(opts = {}) {
 export function clearPendingOrder(opts = {}) {
   const storage = opts.storage ?? defaultStorage()
   if (!storage) return
-  storage.removeItem(CODEBLACK_PENDING_KEY)
+  try {
+    storage.removeItem(CODEBLACK_PENDING_KEY)
+  } catch {
+    /* ignore */
+  }
 }
 
 /**

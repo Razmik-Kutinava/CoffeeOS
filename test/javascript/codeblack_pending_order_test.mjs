@@ -89,6 +89,85 @@ describe("codeblackPendingOrder — LS lifecycle", () => {
   })
 })
 
+function throwingStorage() {
+  const fail = () => {
+    throw new DOMException("The operation is insecure.", "SecurityError")
+  }
+  return { getItem: fail, setItem: fail, removeItem: fail }
+}
+
+async function withBlockedLocalStorage(fn) {
+  const original = Object.getOwnPropertyDescriptor(globalThis, "localStorage")
+  Object.defineProperty(globalThis, "localStorage", {
+    configurable: true,
+    get() {
+      throw new DOMException("The operation is insecure.", "SecurityError")
+    }
+  })
+  try {
+    return await fn()
+  } finally {
+    if (original) Object.defineProperty(globalThis, "localStorage", original)
+    else delete globalThis.localStorage
+  }
+}
+
+describe("codeblackPendingOrder — storage unavailable (ISSUES v520)", () => {
+  it("blocked localStorage getter: save/load/clear do not throw, load → null", async () => {
+    await withBlockedLocalStorage(() => {
+      assert.doesNotThrow(() => savePendingOrder("ord-blocked", { now: 1 }))
+      assert.equal(loadPendingOrder(), null)
+      assert.doesNotThrow(() => clearPendingOrder())
+    })
+  })
+
+  it("storage methods throw: save/load/clear do not throw, load → null", () => {
+    const storage = throwingStorage()
+    assert.doesNotThrow(() => savePendingOrder("ord-x", { storage, now: 1 }))
+    assert.equal(loadPendingOrder({ storage }), null)
+    assert.doesNotThrow(() => clearPendingOrder({ storage }))
+  })
+
+  it("beginSbpBankRedirect still goes to bank when localStorage is blocked", async () => {
+    await withBlockedLocalStorage(() => {
+      const nav = []
+      const redirects = []
+      const loc = { hash: "" }
+      beginSbpBankRedirect({
+        orderId: "ord-sbp",
+        paymentUrl: "https://qr.nspk.ru/AS1",
+        navigate: (path) => nav.push(path),
+        redirect: (url) => redirects.push(url),
+        location: loc
+      })
+      assert.equal(nav[0], "/payment-result?status=waiting&order_id=ord-sbp")
+      assert.deepEqual(redirects, ["https://qr.nspk.ru/AS1"])
+    })
+  })
+
+  it("beginSbpBankRedirect still goes to bank when savePending throws", () => {
+    const redirects = []
+    beginSbpBankRedirect({
+      orderId: "ord-sp",
+      paymentUrl: "https://qr.nspk.ru/AS2",
+      savePending: () => {
+        throw new Error("quota")
+      },
+      redirect: (url) => redirects.push(url),
+      location: { hash: "" }
+    })
+    assert.deepEqual(redirects, ["https://qr.nspk.ru/AS2"])
+  })
+
+  it("recoverPendingPayment on cold start with blocked localStorage → ui none, no rejection", async () => {
+    resetPendingRecoverySession()
+    await withBlockedLocalStorage(async () => {
+      const out = await recoverPendingPayment(async () => ({ status: "CONFIRMED" }))
+      assert.equal(out.ui, "none")
+    })
+  })
+})
+
 describe("codeblackPendingOrder — visibility race guard", () => {
   it("createVisibilityStatusGuard serializes overlapping runs", async () => {
     const guard = createVisibilityStatusGuard()

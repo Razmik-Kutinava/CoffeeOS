@@ -169,7 +169,11 @@ export function beginSbpBankRedirect({
 } = {}) {
   const id = String(orderId || "").trim()
   if (!id) throw new Error("Не указан orderId")
-  savePending(id, { storage, now })
+  try {
+    savePending(id, { storage, now })
+  } catch {
+    /* без pending восстановление после банка не сработает, но в банк гость попасть должен */
+  }
   const waitingPath = `/payment-result?status=waiting&order_id=${encodeURIComponent(id)}`
   if (typeof navigate === "function") {
     navigate(waitingPath)
