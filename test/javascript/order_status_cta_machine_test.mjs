@@ -235,7 +235,8 @@ describe("orderStatusCtas (#41 step 3 ButtonMapper)", () => {
     assert.equal(view.buttons[1].label, "Карта в Apple Wallet")
   })
 
-  it("edge: ready + !hasPushSubscription → chat + Push (android)", () => {
+  // TASK_110 Subtask 7 (реверс #37 шаг 5): на «Готов» кнопки уведомлений нет — переписан явно.
+  it("edge: ready + !hasPushSubscription → chat only, no Push (android)", () => {
     const view = orderStatusCtas({
       status: "ready",
       os: "android",
@@ -243,9 +244,21 @@ describe("orderStatusCtas (#41 step 3 ButtonMapper)", () => {
     })
     assert.deepEqual(
       view.buttons.map((b) => b.kind),
-      ["chat", "push"]
+      ["chat"]
     )
-    assert.equal(view.buttons[1].label, "🔔 Уведомление о готовности")
+  })
+
+  it("TASK_110: ready на iPhone с Wallet — Wallet-CTA не меняется", () => {
+    const view = orderStatusCtas({
+      status: "ready",
+      os: "ios",
+      walletAvailable: true,
+      hasPushSubscription: false
+    })
+    assert.deepEqual(
+      view.buttons.map((b) => b.kind),
+      ["chat", "wallet"]
+    )
   })
 
   it("max 2 buttons always", () => {

@@ -24,8 +24,13 @@ class ShopEnvironmentEventTest < ActiveSupport::TestCase
     }.merge(over)
   end
 
-  test "whitelists: only session_open event kind" do
-    assert_equal %w[session_open], ShopEnvironmentEvent::EVENT_KINDS
+  # TASK_110 Subtask 12: + 6 событий воронки согласия на push — переписан явно.
+  test "whitelists: session_open + push consent funnel event kinds" do
+    assert_equal %w[
+      session_open
+      push_preprompt_shown push_preprompt_accept push_preprompt_later
+      push_permission_granted push_permission_denied push_permission_default
+    ], ShopEnvironmentEvent::EVENT_KINDS
     assert_equal %w[ios android other], ShopEnvironmentEvent::OS_FAMILIES
     assert_equal %w[standalone browser unavailable], ShopEnvironmentEvent::STANDALONE_STATES
     assert_equal %w[default granted denied unavailable], ShopEnvironmentEvent::NOTIFICATION_STATES
@@ -74,6 +79,15 @@ class ShopEnvironmentEventTest < ActiveSupport::TestCase
         ShopEnvironmentEvent.insert_all!([ base.merge(ua_snippet: "Mozilla") ])
       end
     end
+  end
+
+  test "TASK_110 Subtask 12: DB CHECK accepts every funnel event kind" do
+    now = Time.current
+    ShopEnvironmentEvent::EVENT_KINDS.each do |kind|
+      ShopEnvironmentEvent.insert_all!([ valid_attrs.merge(event_kind: kind, created_at: now) ])
+    end
+    assert_equal ShopEnvironmentEvent::EVENT_KINDS.sort,
+      ShopEnvironmentEvent.where(point_id: @tenant.id).distinct.pluck(:event_kind).sort
   end
 
   test "migration creates the same view SQL as the model" do

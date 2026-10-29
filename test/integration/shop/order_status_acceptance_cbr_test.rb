@@ -132,7 +132,9 @@ class Shop::OrderStatusAcceptanceCbrTest < ActionDispatch::IntegrationTest
     screen = vitrina_source("routes/OrderStatus.svelte")
     push_js = File.read(Rails.root.join("app/frontend/lib/firebasePush.js"))
     assert_includes broadcaster, "OrderStatusPushNotifier"
-    assert_includes screen, "Разрешить уведомления"
+    # TASK_110 (реверс #37 шаг 5): баннер «Разрешить уведомления» заменён карточкой с «Включить».
+    assert_includes screen, "<PushPrePrompt"
+    assert_includes vitrina_source("lib/pushPrePrompt.js"), "\"Включить\""
     assert_includes push_js, "/push/register"
   end
 

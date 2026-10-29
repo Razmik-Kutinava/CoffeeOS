@@ -52,18 +52,20 @@ describe("Subtask 0 — текущий push-сценарий экрана зак
     assert.match(call, /showPushCta/)
   })
 
-  it("баннер «Разрешить уведомления» и «Уведомления включены» после подписки", () => {
+  // TASK_110 Subtask 8 (реверс #37 шаг 5): баннер «Разрешить уведомления» заменён карточкой — переписан явно.
+  it("карточка вместо баннера и «Уведомления включены» после подписки", () => {
     const src = screenSrc()
-    assert.match(src, /Разрешить уведомления/)
+    assert.doesNotMatch(src, /Разрешить уведомления/)
+    assert.match(src, /<PushPrePrompt/)
     assert.match(src, /\{:else if pushState === "registered"\}\s*<p class="push-ok" role="status">Уведомления включены<\/p>/)
   })
 
-  // Переписан на RED (Subtask 2, 6): баннер учитывает окружение и подписку.
-  it("баннер виден только при pushPossible и без подписки", () => {
-    assert.match(
-      screenSrc(),
-      /\{:else if pushAvailable && pushPossible && !progress\.cancelled && !pushSubscribed\}/
-    )
+  // TASK_110: push-CTA (а с ним и карточка) есть только при pushPossible и без подписки (TASK_109),
+  // сама карточка — только в accepted / paid / preparing.
+  it("карточка — только в accepted / paid / preparing, push-CTA — по pushPossible и подписке", () => {
+    const src = screenSrc()
+    assert.match(src, /\{:else if prePromptOpen && isPrePromptStatus\(order\.status\) && !progress\.cancelled\}/)
+    assert.match(src, /showPushCta: pushPossible && !pushSubscribed/)
   })
 
   // Переписан на RED (Subtask 5): denied → блок восстановления.
@@ -93,10 +95,12 @@ describe("Subtask 0 — текущий push-сценарий экрана зак
     assert.match(fnBody(screenSrc(), "async function enablePushNotifications"), /pushErr = msg/)
   })
 
-  it("push-CTA и баннер ведут в один обработчик enablePushNotifications", () => {
+  // TASK_110 Subtask 2–3: push-CTA открывает карточку, «Включить» — тот же обработчик — переписан явно.
+  it("push-CTA открывает карточку, «Включить» ведёт в enablePushNotifications", () => {
     const src = screenSrc()
-    assert.match(src, /kind === "push"\)\s*\{\s*await enablePushNotifications\(\)/)
-    assert.match(src, /onclick=\{\(\) => enablePushNotifications\(\)\}/)
+    assert.match(src, /kind === "push"\)\s*\{\s*openPrePrompt\(\)\s*return\s*\}/)
+    assert.match(fnBody(src, "function onPrePromptAccept"), /enablePushNotifications\(\)/)
+    assert.match(src, /onAccept=\{onPrePromptAccept\}/)
   })
 })
 
@@ -178,18 +182,15 @@ describe("Subtask 5 — экран заказа: общий вход и блок
     const enable = fnBody(src, "async function enablePushNotifications")
     const beforeCall = enable.slice(0, enable.indexOf("await subscribeOrderPush("))
     assert.doesNotMatch(beforeCall, /await |setTimeout|import\(/)
-    const click = fnBody(src, "async function onCtaClick")
-    // Ветка отмены завершается return — на путь push её await не влияет.
-    const beforePush = click
-      .slice(0, click.indexOf('kind === "push"'))
-      .replace(/if \(kind === "cancel"\) \{[\s\S]*?return\s*\}/, "")
-    assert.doesNotMatch(beforePush, /await |setTimeout|import\(/)
+    // TASK_110: путь до системного запроса — «Включить» в карточке → enablePushNotifications (переписан явно).
+    const accept = fnBody(src, "function onPrePromptAccept")
+    assert.doesNotMatch(accept.slice(0, accept.indexOf("enablePushNotifications(")), /await |setTimeout|import\(/)
     assert.doesNotMatch(src, /import\(\s*["'][^"']*(orderStatusNotifyActions|firebasePush)/)
   })
 
   it("блок восстановления: текст запрета, «Открыть настройки» + инструкция, без «Смотреть готовность»", () => {
     const src = screenSrc()
-    const block = src.slice(src.indexOf('{#if pushState === "denied"'), src.indexOf("{:else if pushAvailable"))
+    const block = src.slice(src.indexOf('{#if pushState === "denied"'), src.indexOf("{:else if prePromptOpen"))
     assert.match(block, /data-testid="order-push-recovery"/)
     assert.match(block, /\{PUSH_DENIED_TOAST\}/)
     assert.match(block, /\{PUSH_OPEN_SETTINGS_CTA\}/)

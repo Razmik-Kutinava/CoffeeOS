@@ -71,6 +71,18 @@ class Shop::Api::EnvironmentEventsTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test "TASK_110 Subtask 12: push consent funnel events stored with environment snapshot" do
+    kinds = %w[push_preprompt_shown push_preprompt_accept push_preprompt_later
+      push_permission_granted push_permission_denied push_permission_default]
+    kinds.each do |kind|
+      post_beacon(payload(event_kind: kind, notification_state: "granted"), content_type: "text/plain;charset=UTF-8")
+      assert_response :no_content, kind
+    end
+    stored = ShopEnvironmentEvent.where(point_id: @tenant.id).order(:created_at)
+    assert_equal kinds, stored.pluck(:event_kind)
+    assert stored.all? { |e| e.notification_state == "granted" && e.os_family == "android" }
+  end
+
   test "Subtask 7: oversized body → 413, nothing stored" do
     assert_no_difference -> { ShopEnvironmentEvent.count } do
       post_beacon(payload(junk: "x" * 3000))
