@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK-113-…](../milestones/veha_2/requirements/customer_tasks/TASK-113-Устойчивость-push-кода-к-недоступному-хранилищу.md) — Subtask 1–6 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 8 · [Google Doc](https://docs.google.com/document/d/1rWjRNPguPkcFr3lZ4v9xvjDlW1FwtlLnKcwEws7qOyc/edit) |
 | **Не в scope** | `safeWebStorage` / запасное хранилище (TASK_114) · ключ `coffeeos_shop_push_registered_v1` и его семантика · ключ `order_<id>_wallet_added` · recovery, `armed`, `resumePushAfterSettings` · логика Wallet (запрос, `.pkpass`, тексты) · `firebasePush.js`, `pushDiagFlag.js` и другие модули · сигнатуры экспортов · `ActiveOrdersAccordion.svelte`, `OrderStatus.svelte` · `await` / динамический импорт до `registerShopPush` |
-| **Статус** | `in_progress` — GREEN, дальше `/regress` |
+| **Статус** | `in_progress` — `/regress` PASS, дальше `/review` |
 
 ## SBR
 
@@ -12,7 +12,7 @@
 - [x] SPEC `fa35bf23` — факты = код (ниже) · файлы · Не ломать · Проверка
 - [x] RED `3522b380` — новый `order_status_push_storage_safe_test.mjs` 12 runs: 9 F на новой логике (Subtask 1–2 — `SecurityError` из геттера / `getItem`; Subtask 3 — `requestPermission` не вызван, промис отклонён раньше; Subtask 4 — `ok: false` + тост ошибки после добавленного pass), 3 охранных зелёных (Subtask 3 — бросающий `setItem` уже под `try/catch`; Subtask 6 ×2)
 - [x] GREEN `bebd7b0c` — `defaultStorage()` + `readStoredTrue()` под `try/catch` (локально, не экспорт); `downloadWalletPass` / `subscribeOrderPush` — `storage = defaultStorage()`; запись `wallet_added` — в своём `try/catch`; `resolveNotifyPrimaryInit` — оба чтения через `readStoredTrue` · ключи, тексты, сигнатуры, `resumePushAfterSettings` не менялись · файл 350 → 371 строка · задача (`order_status_push_storage_safe` + `order_status_push_subscribe` + `order_status_notify_init` + `order_status_wallet_pass` + `active_orders_accordion` + `push_diag_flag`) 130/0 · вся JS-зона 796: 724/72 — те же 72 legacy (784 + 12 новых), падающих файлов push / Wallet / аккордеона / экрана заказа нет · `npm run vite:build` OK · **Entire: пусто** (`no Entire-Checkpoint trailer`; папка транскриптов Cursor с машины не читается) → attach на `/review` до push
-- [ ] `/regress`
+- [x] `/regress` PASS — зона: push-подписка и Wallet в панели заказов и на экране заказа витрины (только фронт) · все JS-потребители `orderStatusNotifyActions` / `firebasePush` / `ActiveOrdersAccordion` / `OrderStatus.svelte` / `pushDiagFlag` + `push_environment` (16 файлов) 257: 256/1 — 1 fail `order_action_buttons_cancel_test` «422/500: force preparing» (`#41 sticky cancel`) = известный legacy ISSUES, был на шагах 6–7 · Rails, читающие эти компоненты (`order_status_sheet_mount_acceptance`, `order_status_meta_product_name_canon`, `order_status_acceptance_cbr`, `b21_guest_notify`) 20/0 · вся JS-зона и `vite:build` — на GREEN · Fly MCP — после 🚀 2
 - [ ] `/review` → push → CI green → очередь 8 `done`
 
 ## Сверка фактов (SPEC 2026-10-29)
