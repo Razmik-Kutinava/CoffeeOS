@@ -357,4 +357,11 @@ describe("ActiveOrdersAccordion.svelte — переносы строк лога 
     const block = accordionSrc().match(/\.aoa__toast \{[^}]*\}/)?.[0] || ""
     assert.match(block, /white-space:\s*pre-line/)
   })
+
+  it("review: попытка автоподписки после настроек начинается без прошлого сообщения об ошибке", () => {
+    const body = accordionSrc().match(/async function resumeAfterSettings\(\) \{[\s\S]*?\n {2}\}/)?.[0] || ""
+    const clearAt = body.indexOf('toastMsg = ""')
+    const callAt = body.indexOf("resumePushAfterSettings(")
+    assert.ok(clearAt > -1 && callAt > -1 && clearAt < callAt)
+  })
 })
