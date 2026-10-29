@@ -7,6 +7,8 @@ class RackAttackOtpVerifyTest < ActionDispatch::IntegrationTest
   include TestFactories
 
   setup do
+    # Rack::Attack считает в окнах по календарной минуте: серия из 6 запросов не должна пересечь границу.
+    travel_to Time.current.beginning_of_minute + 1.second
     @tenant = create_tenant!(slug: "otp-atk-#{SecureRandom.hex(3)}")
     @phone = "+7900#{SecureRandom.random_number(10_000_000).to_s.rjust(7, "0")}"
     @email = "otp-atk-#{SecureRandom.hex(3)}@example.com"
