@@ -2,11 +2,12 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-10-29 (очередь Push + SMS: шаг 8 TASK_113 — REVIEW)  
+**Дата:** 2026-10-29 (очередь Push + SMS: шаг 8 TASK_113 — done)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь 8 done** (2026-10-29) · Entire `01M6344Q03GCD361KBVE27GWCC` на `a6662989` (attach `2c497a66 --force`, авто-amend ops-коммита до push, `explain HEAD` не пустой) · push `2affe714..a6662989` · **CI green** [40827227648](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40827227648) — test 2385 runs 0 F/E 1 skip + Semgrep/CodeQL · очередь 8 → `done` · CBR #113 — CI green · COMPONENT_MAP: да (1 строка) · Fly MCP — после 🚀 2 · [todo](todo.md) | новый чат → `/start` → шаг 9 TASK_109 |
 | **Очередь 8 REVIEW** (2026-10-29) · security 0 medium+ (информативно: CTA может показаться снова при недоступном хранилище — намеренный UX) · bugbot: 1-й прогон по диффу develop↔main (3150 файлов) пропустил файл задачи → повтор `Diff: natural language` по 2 файлам → 0 · crit-audit CLEAN `3c34dc76..b8a439ad` (`973776b3`, `last_audited_sha` → `b8a439ad`; C4: правка убирает падение, `defaultStorage()` синхронный — `requestPermission()` первый async) · COMPONENT_MAP: да — `orderStatusNotifyActions.js` (`0991640a`) · CBR #113 → REVIEW · Entire — attach на ops-коммит до push · Fly MCP — после 🚀 2 · [todo](todo.md) | push → CI green → очередь 8 `done` |
 | **Очередь 8 /regress PASS** (2026-10-29) · зона: push-подписка и Wallet в панели заказов и на экране заказа витрины (только фронт) · JS 16 файлов (новый storage-safe, push, флаг диагностики, аккордеон, начальное состояние CTA, Wallet, CTA-машина, кнопки и отмена заказа, оффер, `push_environment`, скролл списка, стрелка чека) 257: 256/1 — `order_action_buttons_cancel_test` «422/500: force preparing» = известный legacy (ISSUES), был на шагах 6–7 · Rails `order_status_sheet_mount_acceptance` + `order_status_meta_product_name_canon` + `order_status_acceptance_cbr` + `b21_guest_notify` 20/0 · вся JS-зона 796: 724/72 и `vite:build` — на GREEN · Fly MCP — после 🚀 2 · Entire attach — на `/review` до push · [todo](todo.md) | `/review` |
 | **Очередь 8 GREEN** (2026-10-29) · RED `3522b380` (12 runs: 9 F на новой логике, 3 охранных зелёных) → GREEN `bebd7b0c` · `orderStatusNotifyActions.js`: локальные `defaultStorage()` + `readStoredTrue()` под `try/catch`, запись `wallet_added` в своём `try/catch`; ключи, тексты, сигнатуры, `resumePushAfterSettings` — без изменений · задача 130/0 · вся JS-зона 796: 724/72 — те же 72 legacy · `vite:build` OK · **Entire: пусто** → attach на `/review` до push · не запушено · [todo](todo.md) | `/regress` |
