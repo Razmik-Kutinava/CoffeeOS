@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK-110-…](../milestones/veha_2/requirements/customer_tasks/TASK-110-Предварительный-экран-перед-системным-запросом-уведомлений.md) — Subtask 0–15 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 10 · [Google Doc](https://docs.google.com/document/d/1egmnNNtibkrI-11u1X4o9AdS_TyeQ2zx42xyXLacaho/edit) · реверс решения #37 шаг 5 |
 | **Не в scope** | модальное окно / overlay / `fixed` / `z-index` над шторкой · recovery и `resumePushAfterSettings` (TASK_90), кроме подключения · `firebasePush.js`, `subscribeOrderPush` (сигнатуры и порядок вызовов) · регистрация токена, `/push/register`, VAPID, Service Worker · диагностика (TASK_108) · высоты и пороги шторки (`STATUS_IN_SHEET_EXTRA_VH`, `cartSheetThresholds`, `.oss__panel`) · чек и прогресс (#83/#84) · Wallet и выбор Wallet или push (`notifyKind`) · ветка подписки и оффер (#77, TASK_96) · статусная модель · хранение состояния на сервере · снимок `session_open` TASK_112 (раз за вкладку) · плашка установки iPhone (TASK_111) |
-| **Статус** | `in_progress` — SPEC |
+| **Статус** | `done` — CI green [40853661272](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40853661272) на `2f16d293`, очередь 10 закрыта; не задеплоено (🚀 4 — после шага 11) |
 
 ## SBR
 
@@ -15,7 +15,7 @@
 - [x] GREEN — новые `pushPrePrompt.js` (+ `pushCtaVisible` через машину: охрана #92 «аккордеон не импортирует машину» сохранена) и `PushPrePrompt.svelte`; аккордеон: 🔔 → карточка, «Включить» → `notify("push")` синхронно, автопоказ с claim/release, recovery → карточка → тост; экран: баннер удалён, карточка в `accepted`/`paid`/`preparing`, ошибка по нажатию — строкой; машина: на `ready` push-CTA нет (Wallet как было); `pushEnvironment.js` — экспорт `send`; миграция `20261029090000` (up/rollback/up OK, schema.rb — только версия + CHECK, чужой дамп локального PG не взят); GATES G4 · задача JS 123/0 · Rails задачи + зона 52/0 · `vite:build` OK (новых предупреждений нет) · вся JS-зона 880: 808/72 — те же legacy из ISSUES (кабинет `[TDD]` 58, `navigator` Node 22 в оплате/WebView, email, cancel 422/500), push/экрана среди них нет
 - [x] `/regress` PASS — JS 19 файлов зоны 324: 323/1 (`order_action_buttons_cancel_test` «422/500: force preparing» — legacy из ISSUES, так же на `1bf94b58` до задачи) · Rails 9 файлов 57/0 · `vite:build` OK · вся JS-зона — на GREEN · Fly MCP — после 🚀 4
 - [x] `/review` — bugbot / security-review: субагенты не запустились (лимит Cursor, повтор на Composer 2.5 Fast) → ревью диффа вручную по решению владельца, 0 находок · crit-audit CLEAN `697bc5b2..19ea3156` (`703aa028`) · COMPONENT_MAP: да — 3 строки + 2 новые (`760c4e4a`) · CBR #110 → REVIEW · Fly MCP — после 🚀 4
-- [ ] push → CI green · Entire на ops-коммите
+- [x] push `a22c1e26..2f16d293` → CI green [40853661272](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/40853661272) (2387 runs, 0 F/E, 1 skip) + Semgrep/CodeQL · Entire `01M63G3J7F5M9D8ZTQH47E056X` на `ecdaf4f8` + `2f16d293` → очередь 10 `done`
 
 ## Сверка фактов (SPEC 2026-10-29)
 
