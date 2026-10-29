@@ -28,6 +28,15 @@ class Shop::LkHistoryRepeatOneClickTest < ActiveSupport::TestCase
     refute_match(/Tinkoff|Stripe|new Tbank/i, src)
   end
 
+  test "TASK_121: historyRepeatAdapter checks prices before clearing cart and creating order" do
+    src = File.read(Rails.root.join("app/frontend/lib/historyRepeatAdapter.js"))
+    flow = src[src.index("export async function runHistoryRepeatPayFlow")..]
+    preview_at = flow.index("previewRepeat(")
+    assert preview_at, "runHistoryRepeatPayFlow calls previewRepeat"
+    assert preview_at < flow.index("createOrder(order"), "price check before createOrder (DELETE /cart)"
+    assert_includes src, "runRepeatWidgetPayFlow"
+  end
+
   test "order_json exposes product_id for history repeat cart rebuild" do
     ctrl = File.read(Rails.root.join("app/controllers/shop/api/orders_controller.rb"))
     assert_match(/product_id:\s*item\.product_id/, ctrl)

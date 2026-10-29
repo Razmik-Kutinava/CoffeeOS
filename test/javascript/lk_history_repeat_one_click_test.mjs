@@ -144,6 +144,18 @@ describe("TASK_94 Патч 1 — результат оплаты ЛК → Repeat
     }
   }
 
+  // TASK_121 Subtask 12–13: превью с теми же ценами — дальше поведение Патча 1 без изменений.
+  const samePricesPreview = {
+    order_id: "hist-1",
+    items: [
+      { product_id: "p1", quantity: 1, price: 100, unit_total: 100, line_total: 100, unavailable: false },
+      { product_id: "p2", quantity: 2, price: 50, unit_total: 50, line_total: 100, unavailable: false }
+    ],
+    total: 200,
+    previous_total: 200,
+    previous_discount: 0
+  }
+
   async function runWith(out) {
     const mod = await import("../../app/frontend/lib/historyRepeatAdapter.js")
     const store = await import("../../app/frontend/lib/repeatInlinePayUiStore.js")
@@ -153,6 +165,7 @@ describe("TASK_94 Патч 1 — результат оплаты ЛК → Repeat
     const result = await mod.runHistoryRepeatPayFlow({
       order: histOrder,
       api: async () => ({}),
+      previewRepeat: async () => samePricesPreview,
       createOrder: async () => ({ orderId: "new-99" }),
       payFlow: async () => out,
       navigate,
@@ -207,6 +220,157 @@ describe("TASK_94 Патч 1 — результат оплаты ЛК → Repeat
     const r = await runWith(payOut("ERROR", { showRetry: true, showFallbackMethods: false }))
     assert.equal(r.navigate.mock.callCount(), 0)
     assert.equal(r.openPaymentSheet.mock.callCount(), 0)
+  })
+})
+
+describe("TASK_121 — проверка цен перед повтором из истории", () => {
+  const histOrder = {
+    id: "hist-1",
+    items: [
+      { product_id: "p1", quantity: 1, price: 100, line_total: 100, selected_modifiers: [] },
+      { product_id: "p2", quantity: 2, price: 50, line_total: 100, selected_modifiers: [] }
+    ],
+    total: 200
+  }
+
+  function previewWith(over = {}) {
+    return {
+      order_id: "hist-1",
+      items: [
+        { product_id: "p1", quantity: 1, price: 100, unit_total: 100, line_total: 100, unavailable: false },
+        { product_id: "p2", quantity: 2, price: 50, unit_total: 50, line_total: 100, unavailable: false }
+      ],
+      total: 200,
+      previous_total: 200,
+      previous_discount: 0,
+      ...over
+    }
+  }
+
+  async function readUi() {
+    const store = await import("../../app/frontend/lib/repeatInlinePayUiStore.js")
+    let v
+    store.repeatInlinePayUi.subscribe((s) => { v = s })()
+    return v
+  }
+
+  async function readNotice() {
+    const check = await import("../../app/frontend/lib/historyRepeatPriceCheck.js")
+    let v
+    check.historyRepeatNotice.subscribe((s) => { v = s })()
+    return v
+  }
+
+  beforeEach(async () => {
+    const check = await import("../../app/frontend/lib/historyRepeatPriceCheck.js")
+    check.dismissHistoryRepeatNotice()
+  })
+
+  it("превью запрашивается до DELETE /cart и до создания заказа (Subtask 1, 13)", async () => {
+    const mod = await import("../../app/frontend/lib/historyRepeatAdapter.js")
+    const calls = []
+    const api = async (path, opts = {}) => {
+      calls.push(`${opts.method || "GET"} ${path}`)
+      if (path === "/orders/hist-1/repeat_preview") return previewWith()
+      if (path === "/cart" && opts.method === "DELETE") return {}
+      if (path === "/orders" && opts.method === "POST") return { order_id: "new-99" }
+      throw new Error(`unexpected ${opts.method} ${path}`)
+    }
+    await mod.runHistoryRepeatPayFlow({
+      order: histOrder,
+      api,
+      createOrder: (order, opts) =>
+        mod.createOrderFromHistoryOrder(order, {
+          ...opts,
+          loadProfile: () => ({ name: "Test", email: "t@test.com" }),
+          addToCartFn: async (p) => { calls.push(`ADD ${p.product_id}`) }
+        }),
+      payFlow: async () => ({ fsm: { state: "SUCCESS" } }),
+      navigate: async () => {}
+    })
+    assert.equal(calls[0], "GET /orders/hist-1/repeat_preview")
+    assert.ok(calls.indexOf("DELETE /cart") > 0)
+    assert.ok(calls.indexOf("POST /orders") > calls.indexOf("DELETE /cart"))
+  })
+
+  for (const [name, preview, reason, text] of [
+    [ "цены изменились", previewWith({ items: [ { product_id: "p1", quantity: 1, price: 100, unit_total: 120, line_total: 120, unavailable: false } ], total: 120, previous_total: 100 }), "prices", "Повторить заказ нельзя: цены изменились" ],
+    [ "заказ по акции", previewWith({ previous_total: 11, previous_discount: 189 }), "promo", "Повторить заказ нельзя: он был оформлен по акции" ],
+    [ "позиции нет в точке", previewWith({ items: [ { product_id: "p1", quantity: 1, price: 100, unit_total: null, line_total: null, unavailable: true } ], total: 0 }), "unavailable", "Повторить заказ нельзя: некоторых позиций нет в этой точке" ]
+  ]) {
+    it(`${name} → без корзины, заказа и оплаты; главная + сообщение (Subtask 3–6)`, async () => {
+      const mod = await import("../../app/frontend/lib/historyRepeatAdapter.js")
+      const apiCalls = []
+      const createOrder = mock.fn(async () => ({ orderId: "new-99" }))
+      const payFlow = mock.fn(async () => ({ fsm: { state: "SUCCESS" } }))
+      const navigate = mock.fn(async () => {})
+      const out = await mod.runHistoryRepeatPayFlow({
+        order: histOrder,
+        api: async (path, opts = {}) => { apiCalls.push(`${opts.method || "GET"} ${path}`); return {} },
+        previewRepeat: async () => preview,
+        createOrder,
+        payFlow,
+        navigate
+      })
+      assert.equal(out.repeatBlocked, reason)
+      assert.equal(createOrder.mock.callCount(), 0)
+      assert.equal(payFlow.mock.callCount(), 0)
+      assert.ok(!apiCalls.some((c) => c.includes("/cart")), "корзина гостя не трогается")
+      assert.equal(navigate.mock.callCount(), 1)
+      assert.equal(navigate.mock.calls[0].arguments[0], "/")
+      assert.deepEqual(await readNotice(), { reason, text })
+      const ui = await readUi()
+      assert.equal(ui.busy, false)
+      assert.equal(ui.activeKey, null, "history:* не остаётся в общем store")
+    })
+  }
+
+  it("ошибка превью → без заказа и перехода; текст для кнопки, кнопка снова доступна (Subtask 9)", async () => {
+    const mod = await import("../../app/frontend/lib/historyRepeatAdapter.js")
+    const createOrder = mock.fn(async () => ({ orderId: "new-99" }))
+    const navigate = mock.fn(async () => {})
+    await assert.rejects(
+      mod.runHistoryRepeatPayFlow({
+        order: histOrder,
+        api: async () => ({}),
+        previewRepeat: async () => { throw Object.assign(new Error("Server error"), { httpStatus: 500 }) },
+        createOrder,
+        payFlow: async () => ({}),
+        navigate
+      }),
+      { message: "Не удалось проверить цены. Попробуйте ещё раз." }
+    )
+    assert.equal(createOrder.mock.callCount(), 0)
+    assert.equal(navigate.mock.callCount(), 0)
+    assert.equal(await readNotice(), null)
+    const ui = await readUi()
+    assert.equal(ui.busy, false)
+    assert.equal(ui.activeKey, null)
+    assert.equal(ui.errorText, "")
+  })
+
+  it("битый ответ превью — как ошибка превью", async () => {
+    const mod = await import("../../app/frontend/lib/historyRepeatAdapter.js")
+    const createOrder = mock.fn(async () => ({ orderId: "new-99" }))
+    await assert.rejects(
+      mod.runHistoryRepeatPayFlow({
+        order: histOrder,
+        api: async () => ({}),
+        previewRepeat: async () => ({}),
+        createOrder,
+        payFlow: async () => ({}),
+        navigate: async () => {}
+      }),
+      { message: "Не удалось проверить цены. Попробуйте ещё раз." }
+    )
+    assert.equal(createOrder.mock.callCount(), 0)
+  })
+
+  it("проверка не в общем widgetRepeatPayFlow и не в Quick Repeat (Subtask 13)", () => {
+    for (const rel of [ "app/frontend/lib/widgetRepeatPayFlow.js", "app/frontend/components/RepeatSection.svelte", "app/frontend/lib/createRepeatInlineOrder.js" ]) {
+      const src = readFileSync(join(root, rel), "utf8")
+      assert.doesNotMatch(src, /repeat_preview|historyRepeatPriceCheck/, rel)
+    }
   })
 })
 
