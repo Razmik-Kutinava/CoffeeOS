@@ -169,7 +169,7 @@ describe("Subtask 5 — экран заказа: общий вход и блок
   it("вход — subscribeOrderPush (статический импорт), registerShopPush экран не зовёт", () => {
     const src = screenSrc()
     assert.match(src, /import \{[^}]*subscribeOrderPush[^}]*\} from "\.\.\/lib\/orderStatusNotifyActions\.js"/)
-    assert.doesNotMatch(src, /registerShopPush/)
+    assert.doesNotMatch(src, /import \{[^}]*registerShopPush|registerShopPush\(/)
     assert.match(src, /await subscribeOrderPush\(\{ onToast \}\)/)
   })
 
@@ -179,7 +179,10 @@ describe("Subtask 5 — экран заказа: общий вход и блок
     const beforeCall = enable.slice(0, enable.indexOf("await subscribeOrderPush("))
     assert.doesNotMatch(beforeCall, /await |setTimeout|import\(/)
     const click = fnBody(src, "async function onCtaClick")
-    const beforePush = click.slice(0, click.indexOf('kind === "push"'))
+    // Ветка отмены завершается return — на путь push её await не влияет.
+    const beforePush = click
+      .slice(0, click.indexOf('kind === "push"'))
+      .replace(/if \(kind === "cancel"\) \{[\s\S]*?return\s*\}/, "")
     assert.doesNotMatch(beforePush, /await |setTimeout|import\(/)
     assert.doesNotMatch(src, /import\(\s*["'][^"']*(orderStatusNotifyActions|firebasePush)/)
   })

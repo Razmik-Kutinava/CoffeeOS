@@ -335,7 +335,7 @@ describe("OrderStatus.svelte — вывод и жест (Subtask 1–3, 5, 8)", 
     const src = orderStatusSrc()
     assert.match(src, /await subscribeOrderPush\(\{ onToast \}\)/)
     assert.match(src, /pushErr = msg\s*if \(diagOn\) ctaToast = msg/)
-    assert.doesNotMatch(src, /registerShopPush/)
+    assert.doesNotMatch(src, /import \{[^}]*registerShopPush|registerShopPush\(/)
     assert.doesNotMatch(src, /TEMP DIAG/)
   })
 

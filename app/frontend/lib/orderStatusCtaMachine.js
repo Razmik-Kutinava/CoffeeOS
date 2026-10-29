@@ -26,8 +26,9 @@ const LABELS = Object.freeze({
  *   walletAvailable?: boolean,
  *   subscriptionOfferEnabled?: boolean,
  *   secondCtaMode?: "tips"|"subscription",
- *   eligibleForSubscriptionOffer?: boolean
- * }} opts
+ *   eligibleForSubscriptionOffer?: boolean,
+ *   showPushCta?: boolean
+ * }} opts — `showPushCta: false` (TASK_109) убирает только push-CTA: Wallet и ветку подписки не трогает
  * @returns {{
  *   buttons: Array<{ kind: string, label: string, hint?: string }>,
  *   style: typeof CTA_STYLE
@@ -45,9 +46,13 @@ export function orderStatusCtas(opts = {}) {
   const offerOn =
     Boolean(opts.subscriptionOfferEnabled) && String(opts.secondCtaMode || "") === "subscription"
   const eligible = Boolean(opts.eligibleForSubscriptionOffer)
+  const notifyShown = notifyKind !== "push" || opts.showPushCta !== false
 
   /** @type {Array<{ kind: string, label: string, hint?: string }>} */
   let buttons = []
+  const pushNotify = () => {
+    if (notifyShown) buttons.push({ kind: notifyKind, label: LABELS[notifyKind] })
+  }
 
   if (status === "pending_payment") {
     if (canCancel) {
@@ -61,7 +66,7 @@ export function orderStatusCtas(opts = {}) {
         hint: LABELS.cancelHintAccepted
       })
     }
-    buttons.push({ kind: notifyKind, label: LABELS[notifyKind] })
+    pushNotify()
   } else if (status === "preparing" || status === "ready") {
     buttons.push({ kind: "chat", label: LABELS.chat })
     if (hasPushSubscription) {
@@ -71,7 +76,7 @@ export function orderStatusCtas(opts = {}) {
       }
       // tips intentionally absent (запрет восстановления чаевых)
     } else {
-      buttons.push({ kind: notifyKind, label: LABELS[notifyKind] })
+      pushNotify()
     }
   }
 

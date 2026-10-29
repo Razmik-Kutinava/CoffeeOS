@@ -5,7 +5,7 @@
   import { reconnectGuestOrder, guestReconnectToken, lastGuestOrderId, saveGuestOrderSession } from "../lib/shopGuestSession.js"
   import { subscribeGuestOrderStatus } from "../lib/shopOrderCable.js"
   import { orderProgressView } from "../lib/orderStatusProgress.js"
-  import { firebaseClientConfigured, registerShopPush } from "../lib/firebasePush.js"
+  import { firebaseClientConfigured } from "../lib/firebasePush.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import { getDeviceOS } from "../lib/deviceDetect.js"
   import {
@@ -17,7 +17,15 @@
     loadSubscriptionOfferCta,
     subscriptionOfferCtaDefaults
   } from "../lib/subscriptionOfferCta.js"
-  import { downloadWalletPass, PUSH_FAILED_TOAST } from "../lib/orderStatusNotifyActions.js"
+  import {
+    downloadWalletPass,
+    subscribeOrderPush,
+    resolveNotifyPrimaryInit,
+    openNotificationSettings,
+    PUSH_DENIED_TOAST,
+    PUSH_OPEN_SETTINGS_CTA
+  } from "../lib/orderStatusNotifyActions.js"
+  import { currentPushPossible } from "../lib/pushEnvironmentClass.js"
   import {
     isPushDiagEnabled,
     togglePushDiag,
@@ -54,6 +62,7 @@
   let pushAvailable = $state(false)
   let pushState = $state("idle")
   let pushErr = $state(null)
+  let settingsFallback = $state("")
   let ctaToast = $state("")
   let ctaLoading = $state(false)
   let diagNotice = $state("")
@@ -64,6 +73,14 @@
 
   const progress = $derived(order ? orderProgressView(order) : null)
   const deviceOs = $derived(getDeviceOS())
+  const pushPossible = currentPushPossible()
+  // iOS: отметка в resolveNotifyPrimaryInit — про Wallet, push там видно после автоподписки.
+  const pushSubscribed = $derived(
+    pushState === "registered" ||
+      (deviceOs !== "ios" && order
+        ? resolveNotifyPrimaryInit({ os: deviceOs, orderId: order.id }).restored
+        : false)
+  )
   const ctaView = $derived(
     order
       ? orderStatusCtas({
@@ -73,7 +90,8 @@
           walletAvailable: shopWalletAvailable(),
           subscriptionOfferEnabled: offerCta.subscriptionOfferEnabled,
           secondCtaMode: offerCta.secondCtaMode,
-          eligibleForSubscriptionOffer: offerCta.eligibleForSubscriptionOffer
+          eligibleForSubscriptionOffer: offerCta.eligibleForSubscriptionOffer,
+          showPushCta: pushPossible && !pushSubscribed
         })
       : { buttons: [], style: CTA_STYLE }
   )
@@ -107,39 +125,37 @@
     }
   }
 
-  /** TASK_108: без флага — одно сообщение у кнопки и только по нажатию; лог шагов — по флагу. */
+  /**
+   * TASK_109: тот же вход, что в панели (`subscribeOrderPush`); без await до него — инвариант TASK_99.
+   * TASK_108: без флага — одно сообщение у кнопки и только по нажатию; лог шагов — по флагу.
+   */
   async function enablePushNotifications({ auto = false } = {}) {
     pushErr = null
+    settingsFallback = ""
     pushState = "requesting"
     const diagOn = isPushDiagEnabled()
-    // Лог шагов — в ctaToast и в pushErr (у кнопки «Разрешить уведомления»).
-    const onToast = (msg) => {
-      ctaToast = msg
-      pushErr = msg
-    }
-    const showFailure = () => {
-      if (!diagOn && !auto) pushErr = PUSH_FAILED_TOAST
-    }
-    try {
-      const result = await registerShopPush({ onToast, diag: diagOn })
-      if (result.ok) {
-        pushState = "registered"
-      } else if (result.reason === "denied") {
-        pushState = "denied"
-      } else {
-        pushState = "error"
-        if (result.reason !== "dismissed") showFailure()
-      }
-    } catch (e) {
+    // Лог шагов — ещё и в ctaToast (видно и без баннера).
+    const onToast = auto && !diagOn
+      ? undefined
+      : (msg) => {
+          pushErr = msg
+          if (diagOn) ctaToast = msg
+        }
+    const result = await subscribeOrderPush({ onToast })
+    if (result.ok) {
+      pushState = "registered"
+    } else if (result.openSettings) {
+      pushState = "denied"
+      pushErr = null
+    } else {
       pushState = "error"
-      if (!diagOn) {
-        showFailure()
-      } else if (!ctaToast) {
-        const msg = e.message || "Ошибка подписки на push"
-        pushErr = msg
-        ctaToast = msg
-      }
+      if (result.notice) pushErr = result.notice
     }
+  }
+
+  function onOpenSettingsClick() {
+    const result = openNotificationSettings()
+    settingsFallback = result?.fallbackInstruction || ""
   }
 
   function onTitleTap() {
@@ -318,7 +334,20 @@
       {/if}
     </div>
 
-    {#if pushAvailable && !progress.cancelled && pushState !== "registered"}
+    {#if pushState === "denied" && !progress.cancelled}
+      <div class="push-banner" data-testid="order-push-recovery" role="status">
+        <p class="push-banner-text">{PUSH_DENIED_TOAST}</p>
+        {#if settingsFallback}
+          <p class="push-recovery-fallback" data-testid="order-settings-fallback">{settingsFallback}</p>
+        {/if}
+        <button
+          type="button"
+          class="push-banner-btn"
+          data-testid="order-open-settings"
+          onclick={onOpenSettingsClick}
+        >{PUSH_OPEN_SETTINGS_CTA}</button>
+      </div>
+    {:else if pushAvailable && pushPossible && !progress.cancelled && !pushSubscribed}
       <div class="push-banner">
         <p class="push-banner-text">Получайте статус заказа в шторке уведомлений</p>
         <button
@@ -708,6 +737,13 @@
     /* лог шагов registerShopPush при флаге диагностики (TASK_108) */
     white-space: pre-line;
     word-break: break-word;
+  }
+
+  .push-recovery-fallback {
+    margin: 0 0 10px;
+    font-size: 12px;
+    color: #a0a0a0;
+    line-height: 1.4;
   }
 
   .push-banner-btn {

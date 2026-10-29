@@ -20,6 +20,7 @@
     os = "desktop",
     canCancel = false,
     hasPushSubscription = false,
+    showPushCta = true,
     isLoading = false,
     onAction = undefined
   } = $props()
@@ -41,7 +42,8 @@
       walletAvailable: shopWalletAvailable(),
       subscriptionOfferEnabled: offerCta.subscriptionOfferEnabled,
       secondCtaMode: offerCta.secondCtaMode,
-      eligibleForSubscriptionOffer: offerCta.eligibleForSubscriptionOffer
+      eligibleForSubscriptionOffer: offerCta.eligibleForSubscriptionOffer,
+      showPushCta
     })
   )
 

@@ -24,6 +24,7 @@
   import { openTipsService } from "../lib/tipsAdapter.js"
   import { TIPS_SERVICE_URL } from "../lib/tipsConfig.js"
   import { shopWalletAvailable } from "../lib/shopWalletConfig.js"
+  import { currentPushPossible } from "../lib/pushEnvironmentClass.js"
   import OrderActionButtons from "./OrderActionButtons.svelte"
 
   let {
@@ -51,6 +52,7 @@
       (receiptFit?.bottomGapPx ? `; margin-bottom: ${receiptFit.bottomGapPx}px` : "")
   )
   let deviceOs = $derived(getDeviceOS())
+  const pushPossible = currentPushPossible()
   let receiptLabel = $derived(
     notifyActionsView({ os: deviceOs, walletAvailable: shopWalletAvailable() }).secondaryLabel
   )
@@ -326,6 +328,7 @@
       os={deviceOs}
       canCancel={canCancel}
       hasPushSubscription={hasPushSubscription}
+      showPushCta={pushPossible}
       isLoading={actionLoading}
       onAction={onAction}
     />

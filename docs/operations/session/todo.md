@@ -4,15 +4,15 @@
 |------|----------|
 | **Основание** | [TASK-109-…](../milestones/veha_2/requirements/customer_tasks/TASK-109-Определение-окружения-для-push-и-единый-вход-на-двух-экранах-заказа.md) — Subtask 0–9 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 9 · [Google Doc](https://docs.google.com/document/d/13KxN_U7XjGfdsFojHFoBnZUBrIWH843XdB4OQ14kDr0/edit) |
 | **Не в scope** | выбор Wallet или push на iOS (`notifyKind`) · ветка подписки в машине и оффер (#77, TASK_96) · тексты и логика recovery в панели (Патч 1–2 TASK_90) · автоподписка после возврата из настроек на экране заказа (Патч 1 TASK_90 Subtask 7) · диагностика (TASK_108) · защита хранилища (TASK_113) · предварительный экран (TASK_110) · плашка установки iPhone (TASK_111) · остальные CTA (отмена, чат, чаевые) · статусная модель, прогресс · `firebasePush.js`, `orderStatusNotifyActions.js`, `pushEnvironment.js` (снимок TASK_112) · backend, Service Worker, регистрация токена |
-| **Статус** | `in_progress` — SPEC |
+| **Статус** | `in_progress` — GREEN, дальше `/regress` |
 
 ## SBR
 
 - [x] intake `8dcfcff3` — текст 1:1, CBR #109, очередь 9 → `in_progress`
-- [x] SPEC — факты = код (ниже) · решения владельца · файлы · Не ломать · Проверка
-- [ ] Subtask 0 — тесты текущего push-сценария экрана заказа, зелёные на неизменённом коде (отдельный коммит `test: … [Subtask 0]`)
-- [ ] RED — новые тесты + явная перепись охранных тестов экрана (список ниже)
-- [ ] GREEN
+- [x] SPEC `1f0e4184` — факты = код (ниже) · решения владельца · файлы · Не ломать · Проверка
+- [x] Subtask 0 `e58e25b1` — `order_status_screen_push_test.mjs` 7/7 на неизменённом коде: кнопка без подписки, баннер, «Уведомления включены», denied без восстановления, автовызов `auto`, `PUSH_FAILED_TOAST`, общий обработчик
+- [x] RED `5d719086` — 106 runs: 31 F на новой логике (классы A–E и `currentPushPossible` — модуля нет; `showPushCta` в машине и SSR `OrderActionButtons`; аккордеон; общий вход экрана, блок восстановления, `dismissed`, подписка, тихий автовызов; 4 утверждения Subtask 0 и охранные проверки экрана `push_diag_flag_test` ×3, `order_status_push_subscribe_test:585` — переписаны явно), охранные зелёные (по умолчанию как сейчас, Wallet, ветка подписки, автовызов, общий обработчик)
+- [x] GREEN — новый `pushEnvironmentClass.js`; машина `showPushCta` (`pushNotify()`); `OrderActionButtons` проп; аккордеон `showPushCta={pushPossible}`; экран: `subscribeOrderPush({ onToast })`, `pushPossible` / `pushSubscribed`, блок восстановления на месте баннера при `denied`, `dismissed` → `result.notice`, автовызов без флага без `onToast` · на GREEN уточнены 2 проверки теста (не код): `registerShopPush` остался в CSS-комментариях — проверяем импорт и вызов; ветка отмены с `return` исключена из проверки порядка вызовов · задача + соседи (12 файлов) 243/0 · вся JS-зона 833: 761/72 — те же legacy (оплата, кабинет, sticky cancel, Telegram WebView), push / экрана заказа среди них нет · `vite:build` OK · Rails `order_status_acceptance_cbr` + `b21_guest_notify` 11/0
 - [ ] `/regress`
 - [ ] `/review` (COMPONENT_MAP: `OrderStatus (route)`, `orderStatusCtaMachine.js`, `OrderActionButtons`, `ActiveOrdersAccordion`, новый модуль классификации; владение push-входом экрана заказа)
 - [ ] push → CI green → очередь 9 `done`
