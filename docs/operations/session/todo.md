@@ -13,7 +13,7 @@
 - [x] Subtask 0 `87003d83` — тесты текущего поведения Android (показ по `beforeinstallprompt`, установка, `appinstalled` → `/pwa_install`) зелёные на неизменённом коде — **отдельным коммитом до RED**
 - [x] RED `7ec5f565` — новые тесты (JS + Rails) падают на новой логике
 - [x] GREEN — реализация + миграция (up / rollback / up) + зона: задача JS 46/0, Rails 34/0 · соседи JS 82/0, Rails 19/0 · вся JS-зона 926: 854/72 (58 — RED-скелет `personal_cabinet_test.mjs`, падает и без правок; 14 — legacy ISSUES) · `vite:build` OK
-- [ ] `/regress`
+- [x] `/regress` PASS — JS «Проверка» 128/0 · Rails 17 файлов (todo + RLS ×3 + все читатели профиля) 117/0 · вся JS-зона 926: 854/72 (те же 72, что на шаге 10 при 880) · `vite:build` OK
 - [ ] `/review` (bugbot + security-review + crit-audit, Entire, push, CI green) → очередь 11 `done`
 
 ## Сверка фактов (SPEC 2026-10-29)
