@@ -1,3 +1,79 @@
+# todo — TASK_113: Устойчивость push-кода к недоступному хранилищу (очередь, шаг 8)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK-113-…](../milestones/veha_2/requirements/customer_tasks/TASK-113-Устойчивость-push-кода-к-недоступному-хранилищу.md) — Subtask 1–6 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 8 · [Google Doc](https://docs.google.com/document/d/1rWjRNPguPkcFr3lZ4v9xvjDlW1FwtlLnKcwEws7qOyc/edit) |
+| **Не в scope** | `safeWebStorage` / запасное хранилище (TASK_114) · ключ `coffeeos_shop_push_registered_v1` и его семантика · ключ `order_<id>_wallet_added` · recovery, `armed`, `resumePushAfterSettings` · логика Wallet (запрос, `.pkpass`, тексты) · `firebasePush.js`, `pushDiagFlag.js` и другие модули · сигнатуры экспортов · `ActiveOrdersAccordion.svelte`, `OrderStatus.svelte` · `await` / динамический импорт до `registerShopPush` |
+| **Статус** | `in_progress` — SPEC |
+
+## SBR
+
+- [x] intake `02393523` — текст 1:1, CBR #113, очередь 8 → `in_progress`
+- [x] SPEC — факты = код (ниже) · файлы · Не ломать · Проверка
+- [ ] RED — новый `order_status_push_storage_safe_test.mjs` (Subtask 1–4, 6)
+- [ ] GREEN — локальная защита в `orderStatusNotifyActions.js`
+- [ ] `/regress`
+- [ ] `/review` → push → CI green → очередь 8 `done`
+
+## Сверка фактов (SPEC 2026-10-29)
+
+| Документ | Код | Итог |
+|---|---|---|
+| `orderStatusNotifyActions.js:91` — геттер в параметре по умолчанию до `try` `:98` | `:92` `storage = globalThis.localStorage` в деструктуризации `downloadWalletPass`, `try` `:99` | ✅ сдвиг +1 |
+| `:114` — запись после добавления pass во внешнем `try` | `:115` `storage?.setItem(walletAddedStorageKey(orderId), "true")` после `locationAssign` `:114`; исключение → `catch` `:118` → `WALLET_ERROR_TOAST`, `ok: false` | ✅ сдвиг +1 |
+| `:218` — то же до `try` `:225` | `:223` `storage = typeof localStorage !== "undefined" ? localStorage : null` в деструктуризации `subscribeOrderPush`, `try` `:231`; `typeof` вызывает геттер → функция `async` → промис отклоняется до `register` / `requestPermission` | ✅ сдвиг +5…+6 (шаги 6–7) |
+| `:226` — инвариант TASK_99 | `:232-234` комментарий «без await до register» + `await register({ onToast, deps, diag })`; перед ним синхронные `isPushDiagEnabled()` `:228` (уже под `try/catch` в `pushDiagFlag.js`) | ✅ сдвиг +6…+8 |
+| `:302` — геттер, `try` нет | `:319` `opts.storage ?? (typeof localStorage !== "undefined" ? localStorage : null)` в `resolveNotifyPrimaryInit` | ✅ сдвиг +17 |
+| `:309`, `:321` — `getItem` без `try` | `:326` (iOS, `wallet_added`), `:338` (android/desktop, `push_registered`) | ✅ сдвиг +17 |
+| Запись флага push в `subscribeOrderPush` | `:237-241` уже под `try/catch` («private mode») | ✅ документ её и не перечисляет |
+| `ActiveOrdersAccordion.svelte:65-68`, `:75-81` | `:65-68` `$derived(hasPushSubscription)`, `:75-81` `$effect` — оба вызывают `resolveNotifyPrimaryInit({ os, orderId })` без `storage` | ✅ без сдвига |
+| `firebasePush.js:157-161` — образец | `:160-164` `globalThis.localStorage?.setItem(...)` под `try/catch` | ✅ сдвиг +3 (шаг 7) |
+| `shopGuestSession.js:4-36`, `shop_telegram_webview_test.mjs:138-152` | `try/catch` на каждом обращении к `sessionStorage`; тест подменяет `globalThis.sessionStorage` на бросающий объект | ✅ |
+
+**Находки:**
+- `downloadWalletPass` вызывают **два** места: аккордеон `:277` и экран заказа `OrderStatus.svelte:210`. Subtask 4 исправляет оба без правок в компонентах: при недоступном хранилище экран заказа покажет «✓ Карта добавлена» вместо «Не удалось добавить карту».
+- Node 22 в тестах без глобального `localStorage` → бросающий геттер ставим через `Object.defineProperty(globalThis, "localStorage", { get() { throw … }, configurable: true })` и удаляем в `finally`.
+- Рендер аккордеона в `node --test` не поднимается (тесты аккордеона — по исходнику). Subtask 1 закрываем на уровне `resolveNotifyPrimaryInit` без `storage` (ровно как его зовёт аккордеон): не бросает → `restored: false` → `hasPushSubscription = pushSubscribed || false`.
+- Размер: `orderStatusNotifyActions.js` 350 строк (> 200) — правка ≈ +15, сплит вне scope (прецедент шагов 6–7).
+- `npm test` / `lint` / `typecheck` в проекте нет → `node --test` + `npm run vite:build`.
+
+## Решения
+
+Вариант А владельца 2026-10-15 (в документе): только локальная защита внутри `orderStatusNotifyActions.js`.
+
+1. **Две маленькие локальные функции** (не экспорт): `defaultStorage()` — `globalThis.localStorage` под `try/catch`, при ошибке `null`; `readStoredTrue(storage, key)` — `storage?.getItem(key) === "true"` под `try/catch`, при ошибке `false`.
+2. **`downloadWalletPass`:** параметр по умолчанию `storage = defaultStorage()`; запись `wallet_added` — в собственном `try/catch` (как в `subscribeOrderPush` `:237-241`), успех добавления не зависит от записи — `ok: true`, «✓ Карта добавлена», без `WALLET_ERROR_TOAST`.
+3. **`subscribeOrderPush`:** параметр по умолчанию `storage = defaultStorage()` — синхронно, без `await`, до `register` ничего не добавляется (инвариант TASK_99). Запись флага `:237-241` не меняется.
+4. **`resolveNotifyPrimaryInit`:** `opts.storage ?? defaultStorage()`; оба чтения — через `readStoredTrue`. При ошибке — `restored: false` (кнопка показывается снова — Subtask 6, допустимо).
+5. Ключи, тексты, результаты, сигнатуры, `resumePushAfterSettings` — без изменений.
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/lib/orderStatusNotifyActions.js` — защита пяти незащищённых обращений из документа (`:92`, `:223`, `:319`, `:326`, `:338`) и записи после Wallet (`:115`) двумя локальными функциями.
+2. `test/javascript/order_status_push_storage_safe_test.mjs` — новый: Subtask 1 (бросающий глобальный геттер → `resolveNotifyPrimaryInit` android+`granted` и iOS не бросает, `restored: false`), Subtask 2 (бросающий `getItem` в переданном `storage`), Subtask 3 (бросающий геттер + `Notification` `granted` + подмена `deps` → `requestPermission` первым и синхронно, `ok: true`; охранный: бросающий `setItem` → `ok: true`), Subtask 4 (бросающий `setItem` и бросающий геттер → `ok: true`, переход к pass выполнен, тоста ошибки нет), Subtask 6 (после неудачной записи `restored: false`).
+
+Соседи (регрессия, без правок): `test/javascript/order_status_push_subscribe_test.mjs` (Subtask 5, инвариант TASK_99 `:402-412`, `:490-519`) · `test/javascript/order_status_notify_init_test.mjs` (исправное хранилище) · `test/javascript/order_status_wallet_pass_test.mjs` (Wallet 200/500) · `test/javascript/active_orders_accordion_test.mjs` · потребители без правок: `ActiveOrdersAccordion.svelte` `:65-81`, `:198`, `:277-278`; `OrderStatus.svelte:210`.
+
+## Не ломать
+
+- Инвариант TASK_99: `requestPermission` — первый async-вызов, синхронно и на пути аккордеона (`order_status_push_subscribe_test.mjs:402-412`, `:490-519`); новая функция хранилища — синхронная.
+- TASK_90 + Патч 1–2 и TASK_108: `denied` → recovery, `dismissed` → «Уведомления не включены», `resumePushAfterSettings` — только `armed` + `granted`; итоговые тосты по флагу диагностики.
+- Исправное хранилище: восстановление «✓ Уведомления включены» / «✓ Карта добавлена» после перезагрузки — как было (`order_status_notify_init_test.mjs`).
+- Wallet: при ответе не 200 и при сетевой ошибке — по-прежнему «Не удалось добавить карту. Попробуйте позже.» (`order_status_wallet_pass_test.mjs:72-98`).
+
+## Проверка
+
+- `node --test test/javascript/order_status_push_storage_safe_test.mjs test/javascript/order_status_push_subscribe_test.mjs test/javascript/order_status_notify_init_test.mjs test/javascript/order_status_wallet_pass_test.mjs test/javascript/active_orders_accordion_test.mjs test/javascript/push_diag_flag_test.mjs`
+- `node --test "test/javascript/**/*.mjs"` (вся JS-зона; известные legacy-fail — ISSUES) · `npm run vite:build`
+
+## DoD
+
+- Subtask 1–6 документа; существующие тесты зелёные.
+- Ручная проверка документа (Chrome с заблокированными данными сайта; Telegram WebView) — после 🚀 2, в составе приёмки.
+- COMPONENT_MAP на `/review`: строка `orderStatusNotifyActions.js` — граница «обращения к хранилищу под защитой, при ошибке — как будто записи нет».
+
+---
+
 # todo — TASK_108: Диагностика push только по флагу (очередь, шаг 7)
 
 | Поле | Значение |
