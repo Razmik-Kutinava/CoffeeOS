@@ -1,3 +1,114 @@
+# todo — TASK_111: Путь iPhone к уведомлениям: плашка установки на главный экран (очередь, шаг 11)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK-111-…](../milestones/veha_2/requirements/customer_tasks/TASK-111-Путь-iPhone-к-уведомлениям-плашка-установки-на-главный-экран.md) — Subtask 0–12 (5 и 13 отложены документом) · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 11 · [Google Doc](https://docs.google.com/document/d/15pMZBaV5JeHDv_0sgzty7n64Mapc_I2dicZEG1agru8/edit) · реверс «Wallet на паузе» 22.09 (только документы + настройка Fly) |
+| **Не в scope** | код Wallet и APNs · backend push, VAPID, FCM, Service Worker · каскад · оплата · авторизация и `/session/refresh` · поля и условия оффера в профиле · `application.js` · логика `beforeinstallprompt` / `appinstalled` сверх Subtask 7 и 10 · блокирующие действия на boot · новый запрос профиля помимо `loadOfferProfile` · идентификатор гостя в событиях · дата установки на клиенте · Subtask 5 (встроенный браузер iPhone — плашки там нет) · Subtask 13 (тексты recovery iPhone) · перекрытие заголовка товара (ISSUES 🟡, решение владельца) · `WALLET_FORCE_UNAVAILABLE` (секрет prod, отдельный апрув) |
+| **Статус** | `in_progress` — SPEC |
+
+## SBR
+
+- [x] intake `56bfffa5` — текст 1:1, CBR #111, очередь 11 → `in_progress`
+- [x] SPEC — факты = код (ниже) · решения владельца · файлы · Не ломать · Проверка · Migration Gate
+- [ ] Subtask 0 — тесты текущего поведения Android (показ по `beforeinstallprompt`, установка, `appinstalled` → `/pwa_install`) зелёные на неизменённом коде — **отдельным коммитом до RED**
+- [ ] RED — новые тесты (JS + Rails) падают на новой логике
+- [ ] GREEN — реализация + миграция (up / rollback / up) + зона
+- [ ] `/regress`
+- [ ] `/review` (bugbot + security-review + crit-audit, Entire, push, CI green) → очередь 11 `done`
+
+## Сверка фактов (SPEC 2026-10-29)
+
+| Документ | Код | Итог |
+|---|---|---|
+| `ShopPwaBanner.svelte:69-74` показ по `installable` и сети; `:77-89` `position: fixed`, `top: 3.25rem`, `z-index: 40`; импорты `:1-6`; `:8` `installable`; `:43-46` `install()` | то же: `{#if installable && $shopOnline}` `:69-74`, `.shop-pwa-banner` `:77-90`, `install()` `:43-46` (при отказе `installable` остаётся `true` → кнопка мёртвая) | ✅ без сдвига |
+| смонтирован в `App.svelte:154` | `App.svelte:160` (`<ShopPwaBanner />`, корень, до `Header`) | ✅ сдвиг +6 |
+| `shopPwa.js:9-15`, `:18-26`, `:31-35`, `:37-40` | то же; `initShopPwa` выходит без `serviceWorker` (`:29`), вызывается из `application.js:42` (не трогаем) | ✅ |
+| `subscriptionOffer.js:49-55` `loadOfferProfile` | то же: каждый вызов = запрос `/profile`, 401 / ошибка → `null`; кэша нет | ✅ → память «раз за сессию» — в модуле плашки |
+| `profile_controller.rb:70-90` `profile_json` | то же; `require_customer!` → 401 невошедшему (`:62-68`) | ✅ |
+| `pwa_installs_controller.rb:8-12`, `mobile_customer.rb:41-45` | `:8-12` (401 без входа), `mark_pwa_installed!` `:41-45` — first-write-wins | ✅ идемпотентно |
+| `session_refresh` профиль без признака | не трогаем | ✅ |
+| `manifest.json.erb:5-7`, `shop.html.erb:6-8,12` | `start_url` / `scope: /shop` / `display: standalone`, `id` нет; meta iOS `:6-7`, `apple-touch-icon` `:12` | ✅ |
+| `orderStatusNotifyActions.js:135-136, 181-187` (recovery) | текст «Откройте настройки сайта в браузере…» `:160` | ✅ сдвиг (шаги 7–10); Subtask 13 отложен |
+| Клиентских тестов плашки нет | `rg ShopPwaBanner\|shopPwa\|beforeinstallprompt test/` — 0 | ✅ → Subtask 0 с нуля |
+| `pushEnvironment.js` — ОС, standalone, метка встроенного браузера | `collectPushEnvironment` (`os_family`, `standalone`, `inapp_label`), отправка `sendEnvironmentEvent` (экспорт TASK_110 `:212`) | ✅ только использование |
+| Белый список `event_kind` | `EVENT_KINDS` (`shop_environment_event.rb:7-11`, 7 видов) + CHECK `schema.rb:1197` (миграция TASK_110 `20261029090000`, не выкачена); recorder читает модель (`environment_event_recorder.rb:35`); `event_kind limit: 32` (`install_banner_dismiss` = 22); Rack::Attack 30/мин/IP (`rack_attack.rb:172`) | ⚠️ миграция → решение владельца: да |
+| Текст каскада «Wallet для iOS» | `customer_tasks/Каскад уведомлений Заказ готов PWA WS Push WebPush Apple Wallet SMS.md` (#39) `:11`, `:41`; прецедент строки-уточнения — `:73` (TASK_118 S9) | ✅ |
+| `APPLE_WALLET_ORDER_PASS.md` | `runbooks/APPLE_WALLET_ORDER_PASS.md` | ✅ |
+
+**Находки:**
+- Как фронт узнаёт «гость вошёл»: стора профиля нет; `restoreGuestSession` знает только про refresh-токен / email. Для Subtask 7 сервер сам отвечает 401 невошедшему → в standalone один `POST /pwa_install` за сессию, пока на устройстве нет метки «отправлено»; 2xx → метка в `localStorage`, 401 / ошибка — тихо, без метки (повтор в следующей сессии). Отдельного запроса профиля нет.
+- Subtask 3b: показ плашки — только после ответа `loadOfferProfile` (без мигания у установивших); ответ (`pwa_installed` true / false / нет профиля) запоминается на сессию (`sessionStorage`, при недоступном — в памяти страницы) → не больше одного запроса за сессию; запрос только там, где плашка иначе была бы показана (Android — после `beforeinstallprompt`, iPhone — по условиям Subtask 1, не в standalone, не при закрытой плашке).
+- `onMount` в SSR-тестах не выполняется (`svelte_ssr_helper.mjs`) → правила показа, память закрытия, события — чистые функции в новом модуле; компонент — SSR начальной разметки + проверки исходника (прецедент шагов 9–10).
+- `ShopPwaBanner.svelte` 122 строки: вариант iPhone + крестик + стили → логику выносим в модуль, чтобы не перейти 200.
+- Реверс «Wallet на паузе» в этой задаче — только строки-уточнения в документах; код Wallet и тесты Wallet не трогаем → защитных тестов для переписи нет.
+- Отложенных миграций, кроме `20261029090000` (TASK_110, ждёт 🚀 4), нет.
+
+## Решения
+
+Владелец 2026-10-29 (на SPEC):
+- **Инструкция «Как установить»** — панель, раскрывающаяся вниз из самой плашки сверху (тот же `fixed`-блок у шапки, `top: 3.25rem`, `z-index: 40`): 3 шага, кнопка «Понятно», закрытие свайпом вверх; корзину не перекрывает, второй нижней шторки нет (канон CartSheet). Рабочее имя файла из документа сохраняем — `IosInstallSheet.svelte`.
+- **Перекрытие заголовка товара** (ISSUES 🟡) — не трогаем, крестик снимает проблему; исправление — отдельной задачей.
+- **Миграция** — в этой задаче: CHECK `event_kind` + 4 вида, выкатится в 🚀 4 вместе с `20261029090000`.
+
+Решения агента (в рамках документа, владелец может поправить):
+- Отказ в системном окне установки на Android (Subtask 10) скрывает плашку как крестик, но отдельного события `install_banner_dismiss` не пишет — нажатие уже записано как `install_banner_tap`, «закрыл крестиком» и «отказался в окне» в отчёте не смешиваются.
+- `install_banner_tap` — нажатие «Как установить» (iPhone) и «Установить» (Android).
+- Ключи: закрытие — `sessionStorage` `coffeeos_shop_install_banner_dismissed_v1`; ответ профиля на сессию — `sessionStorage` `coffeeos_shop_install_profile_v1`; показ за сессию — `coffeeos_shop_install_banner_shown_v1`; первый запуск — `localStorage` `coffeeos_pwa_first_launch_v1`; отметка установки отправлена — `localStorage` `coffeeos_pwa_install_reported_v1`. Всё под `try/catch`, при ошибке — память страницы.
+
+План:
+1. **`lib/shopInstallBanner.js`** (новый): `INSTALL_BANNER_REAPPEAR = "next_session"` (одна константа, Subtask 3); `iosInstallEligible(env)` — `os_family === "ios"`, не standalone, `inapp_label === "none"` (Subtask 1, 4, 5); `isStandalone(env)`; `bannerDismissed()` / `dismissBanner()` (Subtask 3); `resolveInstalled({ loadProfile })` — memo на сессию поверх `loadOfferProfile`, `pwa_installed === true` → установлено, иначе нет (Subtask 3b); `reportInstallEvent(kind)` — снимок `collectPushEnvironment` с подменой `event_kind`, отправка `sendEnvironmentEvent`, только 4 вида, ошибки глушатся; `reportBannerShownOnce()` (Subtask 6).
+2. **`lib/shopPwa.js`**: `reportStandaloneLaunch()` — в standalone: `pwa_first_launch` один раз на устройство (без хранилища — раз за сессию) и `POST /pwa_install` один раз за сессию до метки «отправлено» (Subtask 6, 7); `promptPwaInstall` — без изменения сигнатуры; обработчики `beforeinstallprompt` / `appinstalled` — без изменений.
+3. **`components/ShopPwaBanner.svelte`**: вариант iPhone «Установить CoffeeOS на главный экран» + «Как установить» + крестик (Subtask 1); крестик и на Android (Subtask 3); показ только после `resolveInstalled` и если не закрыта (Subtask 3b); Android: отказ → скрыть как крестик (Subtask 10); события shown / tap / dismiss; в `onMount` — `reportStandaloneLaunch()` (неблокирующе, Subtask 7); положение и офлайн-плашки — как были.
+4. **`components/IosInstallSheet.svelte`** (новый): панель под плашкой — «Нажмите «Поделиться»» → «Выберите «На экран «Домой»»» → «Откройте CoffeeOS с иконки», без версии iOS; «Понятно» и свайп вверх; без overlay (Subtask 2).
+5. **`profile_controller.rb`**: `pwa_installed: customer.pwa_installed_at.present?` в `profile_json` (Subtask 3c); остальные поля и 401 — как были.
+6. **Сервер событий**: миграция CHECK + `EVENT_KINDS` (+ `install_banner_shown`, `install_banner_tap`, `install_banner_dismiss`, `pwa_first_launch`); recorder, контроллер, view, колонки, лимит — без изменений.
+7. **Документы (Subtask 11)**: строка «Уточнение 2026-10-29: Wallet не используется как канал уведомлений для iPhone (TASK_111)» в `APPLE_WALLET_ORDER_PASS.md` и в ТЗ #39 (после строки `:73`).
+
+## Migration Gate
+
+- **Что меняется:** новая `db/migrate/<ts>_extend_shop_environment_event_kinds_install.rb` — `remove_check_constraint` `chk_shop_environment_events_event_kind` + `add_check_constraint` с 11 видами (7 текущих + 4 воронки установки); `db/schema.rb` — строка CHECK и версия. Колонки, индексы, view, данные — без изменений → перезапуск compute Neon не нужен.
+- **Отложенные миграции:** `20261029090000` (TASK_110) — локально `up`, на проде ждёт 🚀 4; новая идёт после неё.
+- **Откат:** `down` — CHECK снова 7 видов (как после TASK_110) с `validate: false`: строки воронки установки остаются, новые не принимаются; данные не удаляются. Плюс откат `EVENT_KINDS`.
+- **После:** `bin/rails test test/integration/rls_tenant_isolation_test.rb` + тесты зоны событий. На проде — при 🚀 4 (release_command).
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/lib/shopInstallBanner.js` — **новый**: правила показа (iPhone, standalone, встроенный браузер, установлено), память закрытия, memo профиля на сессию, события воронки установки (Subtask 1, 3, 3b, 4, 5, 6).
+2. `app/frontend/components/ShopPwaBanner.svelte` — вариант iPhone, крестик, показ после проверки установки, отказ Android = крестик, события, запуск отметки в standalone (Subtask 1, 3, 3b, 4, 7, 10).
+3. `app/frontend/components/IosInstallSheet.svelte` — **новый**: панель-инструкция под плашкой (Subtask 2).
+4. `app/frontend/lib/shopPwa.js` — `reportStandaloneLaunch()`: `pwa_first_launch` + `/pwa_install` в standalone (Subtask 6, 7).
+5. `app/controllers/shop/api/profile_controller.rb` — `pwa_installed` (Subtask 3c).
+6. `app/models/shop_environment_event.rb` + `db/migrate/<ts>_extend_shop_environment_event_kinds_install.rb` (**новая**) + `db/schema.rb` — 4 новых вида (Subtask 6).
+7. Документы: `docs/operations/milestones/veha_2/runbooks/APPLE_WALLET_ORDER_PASS.md`, `customer_tasks/Каскад уведомлений Заказ готов PWA WS Push WebPush Apple Wallet SMS.md` — строка-уточнение (Subtask 11).
+
+Соседи (blast-radius, без правок): `app/frontend/lib/pushEnvironment.js` — `collectPushEnvironment` / `sendEnvironmentEvent` (снимок `session_open` не меняется) · `app/frontend/lib/subscriptionOffer.js` — `loadOfferProfile` как есть (оффер-баннер и карточка ЛК не меняются) · `app/frontend/App.svelte` — точка монтирования, не правим.
+
+**Тесты:**
+- `test/javascript/shop_pwa_test.mjs` — **новый**, **Subtask 0** (до правки): `beforeinstallprompt` → `preventDefault`, `installPromptAvailable() === true`, событие `shop:pwa-installable`; `promptPwaInstall` → `prompt()`, `accepted` → `true`, `dismissed` → `false`, prompt сбрасывается; `appinstalled` → `POST /pwa_install`, ошибка не бросает; SSR `ShopPwaBanner` без `installable` — без плашки установки. Затем RED: `reportStandaloneLaunch` (первый запуск раз на устройство, без хранилища — раз за сессию; `/pwa_install` раз за сессию до метки; 401 — без метки; не standalone — ничего).
+- `test/javascript/shop_install_banner_test.mjs` — **новый**: `iosInstallEligible` (iPhone Safari / Chrome iOS — да; standalone, Telegram/Instagram iOS, Android, desktop — нет); крестик — скрыто в этой сессии, в новой снова; хранилище недоступно → память; `resolveInstalled` (`pwa_installed` true → установлено; false / `null` / ошибка → нет; второй вызов без запроса); события (4 вида, снимок без идентификатора гостя, `shown` раз за сессию, ошибка отправки глушится); SSR / исходник `ShopPwaBanner` и `IosInstallSheet`: тексты, крестик, `aria-label`, нет `bottom:` / overlay, нет `await` / импорта до показа в boot, `promptPwaInstall` → при отказе `dismissBanner()`.
+- `test/integration/shop/api/profile_pwa_installed_test.rb` — **новый**: `pwa_installed` false / true, даты в ответе нет, прежние поля и оффер на месте, 401 невошедшему без изменений; `/session/refresh` — без поля.
+- `test/models/shop_environment_event_test.rb`, `test/services/shop/environment_event_recorder_test.rb`, `test/integration/shop/api/environment_events_test.rb` — 4 новых вида принимаются (и проходят CHECK в базе), неизвестный — 422.
+
+## Не ломать
+
+- Android: плашка по `beforeinstallprompt`, «Установить» → системное окно, `appinstalled` → `/pwa_install` (Subtask 0 зелёный до и после).
+- Boot витрины: ни одного `await` / запроса до первого рендера; `restoreGuestSession` → `bootstrapShopTenant` → `session_open` (TASK_112) раз за вкладку — как было; офлайн-плашки и очередь заказов в `ShopPwaBanner` — как были.
+- Оффер подписки (#77, TASK_96): поля и условия профиля, баннер на статусе, карточка ЛК; `/pwa_install` идемпотентен; `/session/refresh` не меняется.
+- Корзина / `CartSheet` — единственный нижний слой; каталог, оплата, push-вход и инвариант TASK_99, Wallet-код.
+
+## Проверка
+
+- `node --test test/javascript/shop_pwa_test.mjs test/javascript/shop_install_banner_test.mjs test/javascript/push_environment_test.mjs test/javascript/push_environment_class_test.mjs test/javascript/push_preprompt_test.mjs`
+- `bin/rails test test/integration/shop/api/profile_pwa_installed_test.rb test/integration/shop/api/profile_subscription_offer_test.rb test/integration/shop/api/pwa_lk_api_test.rb test/models/shop_environment_event_test.rb test/services/shop/environment_event_recorder_test.rb test/integration/shop/api/environment_events_test.rb test/integration/rls_tenant_isolation_test.rb` · вся JS-зона `node --test "test/javascript/**/*.mjs"` (известные legacy — ISSUES) · `npm run vite:build`
+
+## DoD
+
+- Subtask 0–12 (кроме 5 и 13); Subtask 0 зелёный до и после; миграция применена локально, откат проверен (`db:rollback` → `db:migrate`).
+- Ручная приёмка документа (iPhone Safari: плашка, крестик, возврат в новой сессии, инструкция, установка, запуск с иконки → событие, та же точка, вход по телефону, активный заказ; вошедший с установкой — без плашки; Android — крестик, отказ в окне) — после 🚀 4; iPhone закрывает G4 TASK_99.
+- COMPONENT_MAP на `/review`: `ShopPwaBanner` / `shopPwa.js` в карте нет (вне зоны CartSheet / OrderStatus* / GuestOrder*) → решение «нет» с причиной, если зона не задета.
+
+---
+
 # todo — TASK_110: Предварительный экран перед системным запросом уведомлений (очередь, шаг 10)
 
 | Поле | Значение |

@@ -4,7 +4,7 @@
 **Источник:** Google Doc Spec (одна вкладка)  
 **Артефакты:** нет (заказчик не прислал)  
 **Google Doc:** https://docs.google.com/document/d/15pMZBaV5JeHDv_0sgzty7n64Mapc_I2dicZEG1agru8/edit  
-**Статус:** intake 2026-10-29 · реверс «Wallet на паузе» 22.09 · миграция — вероятно (Subtask 6, см. «Заметки агента»)
+**Статус:** SPEC 2026-10-29 · реверс «Wallet на паузе» 22.09 · миграция — да (Subtask 6, решение владельца, см. «Заметки агента»)
 
 ---
 
@@ -79,3 +79,5 @@ npm test -- --run (новые тесты shopPwa и ShopPwaBanner, pushEnvironme
 - Связанное в ISSUES (🟡, не в scope задачи): «Плашка «Установить CoffeeOS» перекрывает заголовок товара» на `#/product/:id` (приёмка v516) — тот же компонент и то же положение, которое Subtask 1 сохраняет для iPhone; на `/spec` — решение владельца, трогать ли.
 - Прецедент шагов 6–10: команд `npm test -- --run` / `npm run lint` / `npm run typecheck` в проекте нет — JS-тесты `node --test test/javascript/*.mjs`, сборка `npx vite build`.
 - Факты файл:строка из разделов 2–3 не сверялись (это `/spec`); `App.svelte:154`, `orderStatusNotifyActions.js:135-136, 181-187` и др. могли сдвинуться после шагов 6–10. Зона карты: `orderStatusNotifyActions.js` (только Subtask 13, отложен) → `COMPONENT_MAP.md` на `/spec` — по необходимости; `ShopPwaBanner`/`shopPwa.js` в карте нет (так и сказано в документе).
+- `/spec` 2026-10-29 (подробно — [todo](../../../../session/todo.md)): поведение кода = «Текущее поведение». Сдвиги строк: `App.svelte:154` → `:160`; текст recovery `orderStatusNotifyActions.js:135-136, 181-187` → `:160` (Subtask 13 отложен). Остальное без сдвига: `ShopPwaBanner.svelte:69-74`, `:77-90`, `:43-46`; `shopPwa.js:9-15`, `:18-26`, `:31-35`, `:37-40`; `subscriptionOffer.js:49-55`; `profile_controller.rb:70-90`; `pwa_installs_controller.rb:8-12`; `mobile_customer.rb:41-45`; `manifest.json.erb:5-7`; `shop.html.erb:6-7,12`. Клиентских тестов плашки нет (подтверждено). Текст каскада — ТЗ #39 `Каскад уведомлений Заказ готов PWA WS Push WebPush Apple Wallet SMS.md:11,41`.
+- Решения владельца на `/spec` 2026-10-29: (1) инструкция «Как установить» — панель, раскрывающаяся вниз из плашки сверху (без второй нижней шторки поверх корзины — канон CartSheet), закрытие кнопкой и свайпом вверх; (2) перекрытие заголовка товара плашкой (ISSUES 🟡) — не в этой задаче; (3) миграция CHECK `event_kind` (+4 вида) — в этой задаче, выкатится в 🚀 4 вместе с миграцией TASK_110.
