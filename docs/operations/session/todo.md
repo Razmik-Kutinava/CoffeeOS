@@ -1,3 +1,107 @@
+# todo — TASK_109: Определение окружения для push и единый вход на двух экранах заказа (очередь, шаг 9)
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK-109-…](../milestones/veha_2/requirements/customer_tasks/TASK-109-Определение-окружения-для-push-и-единый-вход-на-двух-экранах-заказа.md) — Subtask 0–9 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 9 · [Google Doc](https://docs.google.com/document/d/13KxN_U7XjGfdsFojHFoBnZUBrIWH843XdB4OQ14kDr0/edit) |
+| **Не в scope** | выбор Wallet или push на iOS (`notifyKind`) · ветка подписки в машине и оффер (#77, TASK_96) · тексты и логика recovery в панели (Патч 1–2 TASK_90) · автоподписка после возврата из настроек на экране заказа (Патч 1 TASK_90 Subtask 7) · диагностика (TASK_108) · защита хранилища (TASK_113) · предварительный экран (TASK_110) · плашка установки iPhone (TASK_111) · остальные CTA (отмена, чат, чаевые) · статусная модель, прогресс · `firebasePush.js`, `orderStatusNotifyActions.js`, `pushEnvironment.js` (снимок TASK_112) · backend, Service Worker, регистрация токена |
+| **Статус** | `in_progress` — SPEC |
+
+## SBR
+
+- [x] intake `8dcfcff3` — текст 1:1, CBR #109, очередь 9 → `in_progress`
+- [x] SPEC — факты = код (ниже) · решения владельца · файлы · Не ломать · Проверка
+- [ ] Subtask 0 — тесты текущего push-сценария экрана заказа, зелёные на неизменённом коде (отдельный коммит `test: … [Subtask 0]`)
+- [ ] RED — новые тесты + явная перепись охранных тестов экрана (список ниже)
+- [ ] GREEN
+- [ ] `/regress`
+- [ ] `/review` (COMPONENT_MAP: `OrderStatus (route)`, `orderStatusCtaMachine.js`, `OrderActionButtons`, `ActiveOrdersAccordion`, новый модуль классификации; владение push-входом экрана заказа)
+- [ ] push → CI green → очередь 9 `done`
+
+## Сверка фактов (SPEC 2026-10-29)
+
+| Документ | Код | Итог |
+|---|---|---|
+| `OrderStatus.svelte:8` — импорт `registerShopPush` | `:8` `import { firebaseClientConfigured, registerShopPush }` | ✅ |
+| `:57-69` — набор CTA без `hasPushSubscription` | `:67-79` `orderStatusCtas({ status, os, canCancel, walletAvailable, subscription… })` — `hasPushSubscription` не передаётся | ✅ сдвиг +10 (шаг 7) |
+| `:100-127` / `:110` — `enablePushNotifications` → `registerShopPush` напрямую | `:110-143`, вызов `:124` `registerShopPush({ onToast, diag: diagOn })` | ✅ сдвиг +10…+16 |
+| `:113-115` — recovery нет | `:127-128` `denied` → `pushState = "denied"`, текста и блока нет | ✅ сдвиг +14 |
+| `:179-182` — клик push-CTA | `:204-207` `kind === "push"` → `await enablePushNotifications()`; `await` до него в этой ветке нет | ✅ сдвиг +25 |
+| `:240-243` — автовызов при `granted` | `:265-268` `enablePushNotifications({ auto: true })` | ✅ сдвиг +25 |
+| `:290-305`, `:291`, `:306` — баннер, скрывается только после подписки | `:321-341`: `pushAvailable && !progress.cancelled && pushState !== "registered"` `:321`, «Уведомления включены» `:336` | ✅ сдвиг +30 |
+| `:402-428` — ряд CTA | `:432-458` | ✅ сдвиг +30 |
+| `orderStatusCtaMachine.js:43-44`, `:52-78`, `:67-70` | `:43-44` `walletOk` / `notifyKind`, `:52-78` правила + `slice(0, 2)`, `:67-71` ветка подписки | ✅ без сдвига |
+| `deviceDetect.js:28-32`, `shopWalletConfig.js:2-5` | совпадают | ✅ |
+| `order_status_cta_machine_test.mjs:270-276` | совпадает | ✅ |
+| `order_status_push_subscribe_test.mjs:191-200` | `:194-203` | ✅ сдвиг +3 |
+| «Push-сценарий экрана тестами не покрыт» | поведение не покрыто; после шагов 6–7 есть проверки по исходнику: `push_diag_flag_test.mjs:320-352`, `order_status_push_subscribe_test.mjs:585-590` | ⚠️ уточнение, не расхождение |
+| «Без Notification гость видит только диагностику» | после шага 7: без флага по нажатию — `PUSH_FAILED_TOAST` (`registerShopPush` → `no_notification_api` → `showFailure`), с флагом — лог | ⚠️ устарело после шага 7; Subtask 2 всё равно убирает кнопку |
+| «Панель заказа статус ready не показывает» | `orders_controller.rb:159` только accepted/preparing; `orderStatusSheet.js:149-151` ready — terminal | ✅ |
+| `pushEnvironment.js` (TASK_112) | `app/frontend/lib/pushEnvironment.js` 231 строка: `collectPushEnvironment` → `standalone`, `notification_state`, `push_manager`, `service_worker`, `os_family`, `inapp_label`; классификации нет | ✅ |
+
+**Находки:**
+- Если экрану заказа просто передать `hasPushSubscription`, в ready при включённом оффере появится «Оформить подписку» — это запрещают Subtask 6–7. Поэтому подписка на экране выключает push через `showPushCta = false`, а `hasPushSubscription` в машину по-прежнему не передаётся.
+- Охранные тесты шагов 6–7 читают исходник экрана и закрепляют прямой `registerShopPush` и ветку `result.reason === "denied"`. После перехода на `subscribeOrderPush` (он возвращает `error` / `openSettings` / `notice`, не `reason`) их нужно явно переписать на RED, сохранив смысл (список ниже). Один из них лежит в `order_status_push_subscribe_test.mjs:585-590` — его добавил шаг 6 (документ писался раньше, Subtask 9 «тесты не изменены» имеет в виду тесты панели и общего входа); остальные тесты этого файла не трогаем.
+- `pushEnvironment.js` уже 231 строка (> 200) — классификацию кладём в соседний модуль (документ разрешает).
+- `OrderStatus.svelte` 933 строки (> 200), правка ≈ +45 (разметка и стили блока восстановления); сплит вне scope (прецедент шагов 6–8).
+- Экран заказа при SSR-рендере в `node --test` дальше скелета не идёт (заказ грузится в `onMount`) → экран проверяем по исходнику (прецедент шагов 6–7) + поведение `subscribeOrderPush`; `OrderActionButtons` — настоящим SSR-рендером (`svelte_ssr_helper.mjs`).
+- iPhone с push вместо Wallet: `resolveNotifyPrimaryInit` для `ios` смотрит только отметку Wallet, поэтому подписку после перезагрузки сразу не видит — как и панель сегодня; на экране заказа кнопку уберёт автоподписка при `granted` (Subtask 8, `pushState = "registered"`). Логику `hasPushSubscription` не меняем (документ).
+- `npm test` / `lint` / `typecheck` в проекте нет → `node --test` + `npm run vite:build`.
+
+## Решения
+
+Из документа: Subtask 2 — вариант А (C, D, E: нет кнопки, нет баннера, нет подсказок); Subtask 7 — вариант А (оффер на экране — только баннер).
+Владелец 2026-10-29 (на SPEC):
+- **Закрытый без выбора диалог на экране заказа** — как в панели: у кнопки «Уведомления не включены», кнопка остаётся, блока восстановления нет.
+- **Окружения вне A–E без push** (старый браузер на компьютере или Android, iPhone на главном экране с iOS до 16.4) — класс не присваивается (`pushClass: null`), кнопка и баннер скрываются по `pushPossible = false`.
+
+План:
+1. **Классификация** — новый `pushEnvironmentClass.js`: чистая `classifyPushEnvironment(flags)` поверх полей `collectPushEnvironment` → `{ pushClass, pushPossible }`; `pushPossible` = Notification есть (`notification_state` ≠ `unavailable`) и `push_manager` и `service_worker` = `available`. При `pushPossible`: `standalone` → A, иначе B (метка встроенного браузера кнопку не скрывает). Без push: метка встроенного браузера ≠ `none` → `ios` D / `android` E; иначе `ios` вне главного экрана → C; остальное → `null`. Плюс `currentPushPossible(env = globalThis)` — один вызов на монтирование компонента, не на каждый рендер. `pushEnvironment.js` и снимок TASK_112 не меняются.
+2. **Машина** — `orderStatusCtas({ …, showPushCta = true })`: при `false` и `notifyKind === "push"` push-кнопка не добавляется, место не заполняется; Wallet и ветка подписки (`hasPushSubscription`) параметром не затрагиваются; лимит 2 прежний.
+3. **Панель** — `ActiveOrdersAccordion` считает `pushPossible` один раз и передаёт `showPushCta={pushPossible}` в `OrderActionButtons` → машина. `hasPushSubscription`, recovery, `resumeAfterSettings` не меняются.
+4. **Экран заказа** (`OrderStatus.svelte`):
+   - `pushSubscribed = pushState === "registered" || resolveNotifyPrimaryInit({ os, orderId }).restored`; `showPushCta = pushPossible && !pushSubscribed`; в машину — `showPushCta`, `hasPushSubscription` не передаём (Subtask 6–7).
+   - Баннер «Разрешить уведомления»: прежнее условие + `pushPossible && !pushSubscribed`; при `pushState === "denied"` на месте баннера — блок восстановления.
+   - Вход — `subscribeOrderPush({ onToast })` вместо `registerShopPush`; синхронно из клика, до `requestPermission` нет `await` (TASK_99). Результаты: `ok` → `registered`; `openSettings` → `denied` + блок восстановления (`PUSH_DENIED_TOAST`, «Открыть настройки» → `openNotificationSettings()` + инструкция `fallbackInstruction`; без «Смотреть готовность»); `notice` → у кнопки «Уведомления не включены»; иначе → `error`, сообщение из `onToast` (`PUSH_FAILED_TOAST` без флага, лог с флагом).
+   - Автовызов при `granted` (Subtask 8): `subscribeOrderPush({ onToast: diagOn ? onToast : undefined })` — без флага ничего не показывает, с флагом лог как в шаге 7.
+   - Блок восстановления — своя разметка на экране на общих константах и `openNotificationSettings` из `orderStatusNotifyActions.js`; разметка и тесты панели не меняются; автоподписки после возврата из настроек на экране нет.
+5. Тексты, ключи хранилища, `firebasePush.js`, `orderStatusNotifyActions.js` — без изменений.
+
+## Файлы (ожидаемо)
+
+1. `app/frontend/lib/pushEnvironmentClass.js` — **новый**: `classifyPushEnvironment`, `currentPushPossible` (Subtask 1).
+2. `app/frontend/lib/orderStatusCtaMachine.js` — параметр `showPushCta` (Subtask 2, 3, 6).
+3. `app/frontend/routes/OrderStatus.svelte` — общий вход, `showPushCta`, баннер, блок восстановления (Subtask 2, 5, 6, 7, 8).
+4. `app/frontend/components/OrderActionButtons.svelte` — проп `showPushCta = true` → машина.
+5. `app/frontend/components/ActiveOrdersAccordion.svelte` — `showPushCta={pushPossible}` (одна строка вычисления + проп).
+6. `test/javascript/push_environment_class_test.mjs` — **новый**: классы A–E, `null`, `pushPossible`, метка встроенного браузера при наличии push не скрывает.
+7. `test/javascript/order_status_screen_push_test.mjs` — **новый**: Subtask 0 (текущее поведение экрана; отдельным коммитом до правки), затем Subtask 2–8: машина с `showPushCta`, SSR `OrderActionButtons` с `showPushCta=false`, исходник экрана (общий вход статически, без `registerShopPush`, блок восстановления без «Смотреть готовность», баннер по `pushPossible` и подписке, `hasPushSubscription` не передаётся, автовызов тихий), инвариант TASK_99 на пути экрана.
+
+**Явная перепись на RED** (охранные тесты экрана шагов 6–7, смысл сохраняется):
+- `test/javascript/push_diag_flag_test.mjs:327-331` (вторая проверка: `if (!diagOn && !auto) pushErr = PUSH_FAILED_TOAST`) → тихий автовызов без `onToast` без флага; `:333-338` (`registerShopPush({ onToast, diag: diagOn })`) → `subscribeOrderPush`; `:340-344` (`result.reason === "denied"`) → `openSettings` → `denied`, прочее → `error`.
+- `test/javascript/order_status_push_subscribe_test.mjs:585-590` (экран: `denied` / `error`, условие баннера) → те же смыслы в новом виде: `dismissed` → кнопка остаётся, блока восстановления нет; баннер скрыт после подписки.
+
+Соседи (регрессия, без правок): `order_status_cta_machine_test.mjs` · `order_status_push_subscribe_test.mjs` (кроме `:585-590`) · `active_orders_accordion_test.mjs` · `order_action_buttons_test.mjs` / `_cancel_test` / `_cable_test` · `subscription_offer_banner_test.mjs` (точка монтирования оффера) · `order_cancel_flow_test.mjs` · `push_environment_test.mjs` · Rails `order_status_acceptance_cbr_test.rb:135` («Разрешить уведомления» остаётся в исходнике), `b21_guest_notify_test.rb`.
+
+## Не ломать
+
+- Инвариант TASK_99: `requestPermission` — первый async-вызов и на экране заказа, и в панели (`order_status_push_subscribe_test.mjs:402-412`, `:490-519`, `push_diag_flag_test.mjs:310-317`); классификация считается при монтировании, не в обработчике клика.
+- Wallet на iPhone: при доступном Wallet кнопка «Карта в Apple Wallet» показывается как раньше в любом классе окружения (Subtask 4); `WALLET_FORCE_UNAVAILABLE` на проде — только после выкладки шага 9.
+- Панель заказов: recovery (`denied` → «Открыть настройки» / «Смотреть готовность»), `dismissed` → «Уведомления не включены», автоподписка после возврата из настроек, ветка подписки — без изменений.
+- Остальные CTA и лимит 2: отмена (accepted / pending_payment), чат (preparing / ready), оффер-баннер TASK_96 на экране, прогресс и статус заказа.
+
+## Проверка
+
+- `node --test test/javascript/push_environment_class_test.mjs test/javascript/order_status_screen_push_test.mjs test/javascript/order_status_cta_machine_test.mjs test/javascript/order_status_push_subscribe_test.mjs test/javascript/push_diag_flag_test.mjs test/javascript/active_orders_accordion_test.mjs test/javascript/order_action_buttons_test.mjs test/javascript/push_environment_test.mjs`
+- `node --test "test/javascript/**/*.mjs"` (вся JS-зона; известные legacy-fail — ISSUES) · `npm run vite:build` · `bin/rails test test/integration/shop/order_status_acceptance_cbr_test.rb test/integration/b21_guest_notify_test.rb`
+
+## DoD
+
+- Subtask 0–9; тесты экрана заказа (Subtask 0) закоммичены до правки; подписанный гость не видит push-кнопку на экране заказа.
+- Ручная проверка документа (Android PWA и вкладка; iPhone Safari-вкладка; Telegram и Instagram на Android и iPhone; подписанный гость) — после 🚀 3.
+- COMPONENT_MAP на `/review`.
+
+---
+
 # todo — TASK_113: Устойчивость push-кода к недоступному хранилищу (очередь, шаг 8)
 
 | Поле | Значение |
