@@ -193,6 +193,8 @@
   async function resumeAfterSettings() {
     if (actionLoading) return
     actionLoading = true
+    // Сообщение прошлой попытки скрыто под recovery и всплыло бы после успеха.
+    toastMsg = ""
     const result = await resumePushAfterSettings({
       armed: pushRecovery,
       onToast: (msg) => {
