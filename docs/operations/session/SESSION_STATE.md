@@ -2,14 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-02 (правила: bugbot/security = батч+nudge)  
+**Дата:** 2026-11-02 (TASK_116 /review → push/CI)  
 **Ветка:** `develop`  
-**Субагенты-батч:** `last=never (недавно skip по токенам)` · `tasks_since≥3` · `⚠️ Субагенты: пора` (перед 🚀 / после `/review` 13 — не блокер; оплата — настаиваем)
+**Субагенты-батч:** `last=never (skip на /review 13 по токенам)` · `tasks_since≥3` · `⚠️ Субагенты: пора` (перед 🚀 — не блокер; оплата — настаиваем)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Правила: bugbot/security батч+nudge** (2026-11-02) · не авто на каждый `/review`; уведомление `⚠️ Субагенты: пора` после 2–3 задач / перед deploy; оплата/hot-path — настаиваем; **не блокер** · канон `coffeeos-agent-workflow.mdc` + SBR PHASE 3 · Субагент: нет | очередь 13 `/review` (без авто-субагентов) |
-| **Очередь 13 /regress PASS** (2026-11-02) · зона: история/чек CODE:BLACK + RLS/изоляция + repeat из ЛК · Rails «Проверка» 8 файлов **66/0** · JS 4 файла **52/0** · rubocop 0 · `vite:build` OK · GREEN `75055edb` (Entire `01M6E2SNX67JASNF4ZVNFRQCSA`) · Fly MCP Point A — после 🚀 6 · не запушено · Субагент: нет · [todo](todo.md) | `/review` |
+| **Очередь 13 REVIEW** (2026-11-02) · local `/regress` PASS · bugbot / security-review: не запускались (решение владельца) → ревью диффа вручную: 0 находок (C1–C5: сеть только если текущая ∈ `code_black_network`; фильтры `customer_id`+tenant_ids; без city-lookup; Relation материализуется; tenant JSON от заказа +`closed`; FE highlight с cleanup) · crit-audit CLEAN `b64a7657..75055edb` · COMPONENT_MAP: да — Profile, OrderReceipt, shopAccountOrders, OrdersController · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · Fly MCP — после 🚀 6 · Субагент: нет · [todo](todo.md) | push → CI green → очередь 13 `done` |
+| **Правила: bugbot/security батч+nudge** (2026-11-02) · не авто на каждый `/review`; `⚠️ Субагенты: пора` после 2–3 задач / перед deploy; оплата/hot-path — настаиваем; **не блокер** · Субагент: нет | перед 🚀 |
+| **Очередь 13 /regress PASS** (2026-11-02) · зона: история/чек CODE:BLACK + RLS/изоляция + repeat из ЛК · Rails «Проверка» 8 файлов **66/0** · JS 4 файла **52/0** · rubocop 0 · `vite:build` OK · GREEN `75055edb` (Entire `01M6E2SNX67JASNF4ZVNFRQCSA`) · Fly MCP Point A — после 🚀 6 · Субагент: нет · [todo](todo.md) | `/review` |
 | **Очередь 13 GREEN** (2026-11-02) · RED `3869881a` → GREEN `75055edb` · `CodeBlackCrossPointOrders` + history/show tenant JSON + Profile/OrderReceipt · задача Rails 15/0, соседи orders+ownership PASS · Субагент: нет · [todo](todo.md) | `/regress` |
 | **Очередь 13 SPEC** (2026-11-02) · факты = код · файлы 5 · Не ломать / Проверка · миграции нет · Субагент: нет · [todo](todo.md) | `/sbr` |
 | **Очередь 12 done** (2026-11-02) · Entire `01M6E12XSECHGEDV4WMJVTHYFX` на `60b2e799` (attach `--force`) · push `48412465..3c555276` · **CI green** [41439722267](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41439722267) + Semgrep/CodeQL · 1-я попытка CI: fail `scan_ruby` (addressable/rack advisories) → `3c555276` · очередь 12 → `done` · CBR #121 — CI green · COMPONENT_MAP: да (4 строки) · Fly MCP — после 🚀 5 · [todo](todo.md) | 🚀 5 по апруву |

@@ -2,16 +2,17 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-02 (правила: bugbot/security = батч+nudge)  
+**Дата:** 2026-11-02 (TASK_116 /review → push/CI)  
 **Ветка:** `develop`  
 **Очередь:** [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) — один шаг = новый чат, `/start` берёт шаг сам  
-**Следующий шаг:** `/review` шага 13 TASK_116 (без авто bugbot/security) · `⚠️ Субагенты: пора` перед 🚀 — не блокер · у владельца: 🚀 5 (шаг 12) по апруву · 👤 приёмка Android + iPhone (G4 TASK_99) · `WALLET_FORCE_UNAVAILABLE` — отдельный апрув · шаг 13a / Q3 — отдельно  
-**Субагенты-батч:** last=never (skip по токенам) · tasks_since≥3 · nudge активен
+**Следующий шаг:** push → CI green → закрыть шаг 13 · затем 🚀 6 по апруву (после 13a/Q3) · у владельца: 🚀 5 (шаг 12) · 👤 Android+iPhone (G4 TASK_99) · `WALLET_FORCE_UNAVAILABLE` — отдельный апрув · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
+**Субагенты-батч:** last=never (skip по токенам на `/review` 13) · tasks_since≥3 · nudge активен
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Правила: bugbot/security батч+nudge** (2026-11-02) — не на каждый `/review`; агент пишет `⚠️ Субагенты: пора` после 2–3 задач / перед deploy; на оплате — «настаиваем»; запуск только по просьбе; **не блокер** push/deploy | очередь 13 `/review` |
-| **Очередь, шаг 13 — /regress PASS TASK_116** (2026-11-02) — локальная регрессия зоны из todo: Rails 8 файлов 66/0 (история CODE:BLACK, orders, ownership, lk repeat, RLS ×3); JS 52/0 (lk repeat + personal account + price check + code_black); rubocop и сборка OK · GREEN `75055edb` · Fly MCP Point A — после деплоя шага · не запушено · [todo](todo.md) | `/review` |
+| **Очередь, шаг 13 — REVIEW TASK_116** (2026-11-02) — история/чеки по сети CODE:BLACK; метка точки/`closed`; highlight `?order=` · RED `3869881a` → GREEN `75055edb` · `/regress` PASS · ревью диффа вручную (субагенты не запускались — решение владельца), 0 находок · crit-audit CLEAN · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · COMPONENT_MAP: да (4 строки) · без миграции · [todo](todo.md) | push → CI green → шаг 13 `done` |
+| **Правила: bugbot/security батч+nudge** (2026-11-02) — не на каждый `/review`; `⚠️ Субагенты: пора` после 2–3 задач / перед deploy; на оплате — «настаиваем»; запуск только по просьбе; **не блокер** push/deploy | перед 🚀 |
+| **Очередь, шаг 13 — /regress PASS TASK_116** (2026-11-02) — локальная регрессия зоны из todo: Rails 8 файлов 66/0; JS 52/0; rubocop и сборка OK · GREEN `75055edb` · Fly MCP Point A — после деплоя шага · [todo](todo.md) | `/review` |
 | **Очередь, шаг 13 — GREEN TASK_116** (2026-11-02) — история и чеки по сети CODE:BLACK (если текущая точка в сети), метка точки/`closed`, highlight `?order=`; RED `3869881a` → GREEN `75055edb` · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · не запушено · [todo](todo.md) | `/regress` |
 | **Очередь, шаг 13 — SPEC TASK_116** (2026-11-02) — план сервиса + FE; миграции нет · [todo](todo.md) | `/sbr` |
 | **Очередь, шаг 12 закрыт — TASK_121** (2026-11-02) · **CI green** [41439722267](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41439722267) на `3c555276` + Semgrep/CodeQL · Entire `01M6E12XSECHGEDV4WMJVTHYFX` · без миграции · не задеплоено (🚀 5) · [todo](todo.md) | 🚀 5 по апруву → приёмка Point A (повтор / блок на главной) |

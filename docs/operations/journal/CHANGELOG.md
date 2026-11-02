@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-11-02 — feat: TASK_116 REVIEW — история заказов CODE:BLACK (очередь, шаг 13)
+
+- Ревью диффа вручную (bugbot/security не запускались — решение владельца): 0 находок. crit-audit CLEAN `b64a7657..75055edb`. COMPONENT_MAP: Profile, OrderReceipt, shopAccountOrders, OrdersController. Entire `01M6E2SNX67JASNF4ZVNFRQCSA` на GREEN. Next: push → CI green → шаг 13 `done` → 🚀 6 по апруву (после 13a/Q3).
+
 ## 2026-11-02 — docs: bugbot/security — батч + nudge, не блокер
 
 - Канон: не автозапуск на каждый `/review`. Уведомление `⚠️ Субагенты: пора` после 2–3 задач / перед deploy; на оплате/hot-path — настаиваем. Запуск только по просьбе владельца; отсутствие субагентов не стопает push/CI/deploy. Правки: `coffeeos-agent-workflow`, SBR PHASE 3, `dev-gates`, `/review`, `SUBAGENTS`/`AGENTS`, `RULES_INDEX`.
