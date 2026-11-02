@@ -2,9 +2,9 @@
 
 | Поле | Значение |
 |------|----------|
-| **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · шаг **14** `in_progress` · зависимости 1 / 5 / 0.4 / 13 = done |
+| **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · шаг **14** `done` · зависимости 1 / 5 / 0.4 / 13 = done |
 | **Основание** | [TASK-117-…](../milestones/veha_2/requirements/customer_tasks/TASK-117-Безопасное-подтверждение-смены-клиентской-сессии-по-SMS-ссылке.md) · CBR #117 · Google Doc v3 |
-| **Статус** | REVIEW 2026-11-02 · очередь 14 → `done` после CI · миграции нет |
+| **Статус** | **done** 2026-11-02 · CI green [41449958217](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41449958217) · миграции нет · не задеплоено (🚀 7) |
 
 ## SBR
 
@@ -12,7 +12,7 @@
 - [x] SPEC — факты = код (ниже) · решения · файлы · Не ломать · Проверка · миграции нет
 - [x] RED `d358c4a2` — падающие тесты `[RED]`
 - [x] GREEN `ff924f2d` — `SmsSessionTransition` + short link + API + FE dialog/generation; задача Rails 17/0, JS 12/0; соседи reconnect+refresh 13/0; rubocop 0; vite OK · Entire `01M6E2SNX67JASNF4ZVNFRQCSA`
-- [x] `/review` — local «Проверка» Rails 48/0 + JS 12/0 (вместо отдельного `/regress`) · ревью диффа вручную (bugbot/security skip — владелец) · crit-audit CLEAN · COMPONENT_MAP: да · push → CI
+- [x] `/review` — local «Проверка» Rails 48/0 + JS 12/0 (вместо отдельного `/regress`) · ревью диффа вручную (bugbot/security skip — владелец) · crit-audit CLEAN · COMPONENT_MAP: да · push `c44e2058` · **CI green** [41449958217](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41449958217) + Semgrep/CodeQL
 
 ## Сверка фактов (SPEC 2026-11-02)
 

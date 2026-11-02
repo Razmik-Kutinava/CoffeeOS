@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-11-02 — docs: TASK_117 CI green — очередь шаг 14 done
+
+- Push `62f6e539..c44e2058` · CI [41449958217](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41449958217) + Semgrep/CodeQL green · шаг 14 → `done` · CBR #117. Не задеплоено (🚀 7). Next: `/start` → шаг 15 TASK_118.
+
 ## 2026-11-02 — docs: explore — не «на всякий», только если пути неясны
 
 - Канон: дефолт без `explore`; звать 1 раз только после узкого поиска, если кандидатов много/пути неясны. Мелочь и пути из ТЗ — без. Правки: `coffeeos-agent-workflow` § explore, `/spec`, SBR, `SUBAGENTS`.
