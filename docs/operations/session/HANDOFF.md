@@ -5,14 +5,14 @@
 **Дата:** 2026-11-02 · **ctx_trim:** `2026-11-02`  
 **Ветка:** `develop`  
 **Очередь:** [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) — один шаг = новый чат  
-**Следующий шаг:** push → CI green → шаг 15 `done` · 🚀 5+6+7 по апруву · 👤 Android+iPhone · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
-**Субагенты-батч:** last=never · tasks_since≥5 · nudge активен  
+**Следующий шаг:** `/start` → шаг 16 TASK_121 Subtask 8 · 🚀 5 + 🚀 6 + 🚀 7 — по апруву · 👤 Android+iPhone · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
+**Субагенты-батч:** last=never (skip на `/review` 12–15) · tasks_since≥6 · nudge активен  
 **Правила (сокр.):** bugbot/security — батч+nudge · `/regress` не дефолт · `explore` не «на всякий»
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь, шаг 15 закрыт — TASK_118** (2026-11-02) · **CI green** [41453248573](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41453248573) на `3e0e1749` + Semgrep/CodeQL · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · без миграции · не задеплоено (🚀 7) · [todo](todo.md) | 🚀 7 по апруву (после 16) → приёмка SMS на телефоне · новый чат → `/start` → шаг 16 |
 | **Очередь 15 — REVIEW TASK_118** (2026-11-02) — SMS → история CODE:BLACK · RED `7be416af` → GREEN `5422913e` · local PASS · crit-audit CLEAN · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · COMPONENT_MAP: нет · [todo](todo.md) | push → CI green → `done` |
-| **Очередь 15 — GREEN TASK_118** (2026-11-02) — SMS → `#/profile?order=` + `sms_entry`; resolve expired/invalid · RED `7be416af` → GREEN · [todo](todo.md) | `/review` |
 | **Очередь 15 — SPEC/intake TASK_118** (2026-11-02) · файлы 6 · Не ломать / Проверка · миграции нет | `/sbr` ✓ |
 | **Очередь 14 done — TASK_117** · CI green [41449958217](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41449958217) · не задеплоено (🚀 7) | 🚀 7 после 15–16 |
 | **Очередь 13 done — TASK_116** · CI green [41444177250](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41444177250) · не задеплоено (🚀 6) | 🚀 6 по апруву |
