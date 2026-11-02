@@ -1,16 +1,18 @@
-﻿# todo — TASK_121 Subtask 8: Повтор заказов других и закрытых точек (очередь, шаг 16)
+﻿# todo — 🚀 5+6+7 Fly v524 (шаги 12–16)
 
 | Поле | Значение |
 |------|----------|
-| **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · шаг **16** `done` · зависимости 12 / 13 = done |
-| **Основание** | [TASK-121-…](../milestones/veha_2/requirements/customer_tasks/TASK-121-Повтор-заказа-из-истории-с-проверкой-цен-в-текущей-точке.md) · секция Subtask 8 · CBR #121 · Google Doc v3 |
-| **Статус** | **done** 2026-11-02 · CI green [41456144439](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41456144439) · миграции нет · не задеплоено (🚀 7) |
+| **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · 🚀 **5/6/7** `done` |
+| **Статус** | **done** 2026-11-02 · Fly **v524** · эконом-пачка PASS · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_RESULT.md) |
+| **HEAD** | `7d161e84` · CI [41456788578](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41456788578) |
 
-## SBR
+## Сделано
 
-- [x] intake · SPEC · RED `51c50d5e` · GREEN `70da0ca3` · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4`
-- [x] `/review` — local PASS · crit-audit CLEAN · COMPONENT_MAP: да · push `38d277e2` · **CI green** [41456144439](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41456144439) + Semgrep/CodeQL
+- [x] Preflight: develop=origin, CI green, миграций нет
+- [x] Deploy coffeeos → v524
+- [x] Sentry 24h / Fly logs / Neon skip / УК skip / MCP Point A (3 сценария)
 
-## Итог
+## Дальше (не агент)
 
-`#repeat_preview` читает заказ через `CodeBlackCrossPointOrders` (как `#show`); цены — меню текущей точки; вне сети чужая точка → 404.
+- [ ] 👤 SMS «Заказ готов» / conflict на телефоне
+- [ ] при необходимости: `code_black_member=true` на Point A (сеть TASK_116)

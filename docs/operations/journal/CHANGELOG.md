@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-11)
 
+## 2026-11-02 — deploy: 🚀 5+6+7 Fly v524 — шаги 12–16 на проде
+
+- `fly deploy` coffeeos → **v524** (HEAD `7d161e84`, без миграций). Эконом-пачка: Sentry ruby 0 новых/24h · Fly logs 5xx 0 · Neon skip · УК skip · MCP Point A PASS (TASK_121 блок/match, TASK_116 история+метка точки, receipt smoke). Очередь 🚀 5/6/7 → `done`. [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_RESULT.md). Дальше: 👤 SMS на телефоне.
+
 ## 2026-11-02 — docs: TASK_121 Subtask 8 CI green — очередь шаг 16 done
 
 - Push `4b69eac3..38d277e2` · CI [41456144439](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41456144439) + Semgrep/CodeQL green · шаг 16 → `done` · CBR #121 Subtask 8. Не задеплоено (🚀 7). Next: 🚀 5/6/7 по апруву.

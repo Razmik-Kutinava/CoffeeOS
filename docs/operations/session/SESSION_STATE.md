@@ -4,21 +4,14 @@
 
 **Дата:** 2026-11-02 · **ctx_trim:** `2026-11-02`  
 **Ветка:** `develop`  
-**Субагенты-батч:** last=never · tasks_since≥7 · `⚠️ Субагенты: пора` (перед 🚀 — не блокер)
+**Субагенты-батч:** last=never · tasks_since≥7 · `⚠️ Субагенты: пора` (не блокер)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Очередь 16 done** (2026-11-02) · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` на `70da0ca3` · push `4b69eac3..38d277e2` · **CI green** [41456144439](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41456144439) + Semgrep/CodeQL · очередь 16 → `done` · CBR #121 Subtask 8 — done · COMPONENT_MAP: да · Fly MCP — после 🚀 7 · [todo](todo.md) | 🚀 5/6/7 по апруву |
-| **Очередь 16 REVIEW** (2026-11-02) · local PASS · crit-audit CLEAN · COMPONENT_MAP: да · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · `⚠️ Субагенты: пора` · [todo](todo.md) | push → CI green |
-| **ops: эконом-приёмка** (2026-11-02) · `dev-gates` § Эконом-режим · docs-only | — |
-| **Очередь 16 GREEN** (2026-11-02) · RED `51c50d5e` → GREEN `70da0ca3` · [todo](todo.md) | `/review` ✓ |
-| **Очередь 16 intake** (2026-11-02) · секция Subtask 8 · CBR #121 · очередь 16 `in_progress` · [todo](todo.md) | `/spec` ✓ |
-| **Очередь 15 done** (2026-11-02) · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` на `5422913e` · push `b96f675b..3e0e1749` · **CI green** [41453248573](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41453248573) + Semgrep/CodeQL · очередь 15 → `done` · CBR #118 — done · COMPONENT_MAP: нет · Fly MCP — после 🚀 7 · [todo](todo.md) | 🚀 7 по апруву (после 16) |
-| **Очередь 15 REVIEW TASK_118** (2026-11-02) · local PASS · crit-audit CLEAN · COMPONENT_MAP: нет · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · `⚠️ Субагенты: пора` · [todo](todo.md) | push → CI green |
-| **Очередь 14 done TASK_117** · CI [41449958217](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41449958217) · 🚀 7 | push done |
-| **Очередь 13 done TASK_116** · CI [41444177250](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41444177250) · 🚀 6 | — |
-| **Очередь 12 done TASK_121** · CI [41439722267](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41439722267) · 🚀 5 | — |
-| **Правила:** explore / regress / bugbot-security — см. agent-workflow (батч+nudge) | перед 🚀 |
+| **🚀 5+6+7 Fly v524 PASS** (2026-11-02) · HEAD `7d161e84` · CI green · эконом: Sentry 0 · logs OK · Neon skip · УК skip · MCP PASS (TASK_121 / TASK_116 / receipt) · очередь 🚀 5/6/7 → `done` · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_RESULT.md) · [todo](todo.md) | 👤 SMS на телефоне |
+| **Очередь 16 done** · CI [41456144439](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41456144439) · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · v524 | — |
+| **ops: эконом-приёмка** (2026-11-02) · `dev-gates` § Эконом-режим | — |
+| **Очередь 15/14/13/12 done** · задеплоено v524 | — |
 | **🚀 4 Fly v523** (2026-10-29) PASS | 👤 G4 |
 | **ctx-trim 2026-11-02** · архив Sep–Oct ops | `/start` |
 
