@@ -4,7 +4,7 @@
 |------|----------|
 | **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · шаг **15** `in_progress` · зависимости 2 / 4 / 5 / 13 / 14 / 0.4 = done |
 | **Основание** | [TASK-118-…](../milestones/veha_2/requirements/customer_tasks/TASK-118-SMS-Заказ-готов-история-заказов-CODE-BLACK.md) · CBR #118 · Google Doc v4 |
-| **Статус** | **GREEN** 2026-11-02 · RED `7be416af` → GREEN (ниже) · миграции нет · не задеплоено (🚀 7) |
+| **Статус** | **GREEN** 2026-11-02 · RED `7be416af` → GREEN `5422913e` · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · миграции нет · не задеплоено (🚀 7) |
 
 ## SBR
 
