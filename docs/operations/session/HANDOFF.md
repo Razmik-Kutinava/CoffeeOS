@@ -2,14 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-02 (шаг 13 TASK_116 done)  
+**Дата:** 2026-11-02 (шаг 13a TASK_119 Q3→A done)  
 **Ветка:** `develop`  
 **Очередь:** [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) — один шаг = новый чат, `/start` берёт шаг сам  
-**Следующий шаг:** 🚀 6 — по апруву владельца (после 13a/Q3) · у владельца также 🚀 5 (шаг 12) · 👤 Android+iPhone (G4 TASK_99) · `WALLET_FORCE_UNAVAILABLE` — отдельный апрув · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
+**Следующий шаг:** 🚀 5 и 🚀 6 — по апруву владельца (можно объединить) · новый чат → `/start` → шаг 14 TASK_117 · 👤 Android+iPhone (G4 TASK_99) · `WALLET_FORCE_UNAVAILABLE` — отдельный апрув · RLS-harden → `PRACTICES` V2-TASK-119-RLS-HARDEN (backlog) · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
 **Субагенты-батч:** last=never (skip на `/review` 13) · tasks_since≥3 · nudge активен
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь, шаг 13a закрыт — TASK_119 этап 2 / Q3→A** (2026-11-02) · этап 2 в очереди **не делаем** (RLS не действует) · Q3 закрыт · backlog RLS: [`PRACTICES` V2-TASK-119-RLS-HARDEN](../milestones/veha_2/reference/PRACTICES.md) · docs-only · COMPONENT_MAP: не требуется | 🚀 5 + 🚀 6 по апруву → приёмка Point A · новый чат → `/start` → шаг 14 TASK_117 |
 | **Очередь, шаг 13 закрыт — TASK_116** (2026-11-02) · **CI green** [41444177250](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41444177250) на `ce0baedf` + Semgrep/CodeQL · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · без миграции · не задеплоено (🚀 6) · [todo](todo.md) | 🚀 6 по апруву (после 13a/Q3) → приёмка Point A (история сети) · новый чат → `/start` → шаг 13a |
 | **Очередь, шаг 13 — REVIEW TASK_116** (2026-11-02) — история/чеки по сети CODE:BLACK; метка точки/`closed`; highlight `?order=` · RED `3869881a` → GREEN `75055edb` · `/regress` PASS · ревью диффа вручную (субагенты не запускались — решение владельца), 0 находок · crit-audit CLEAN · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · COMPONENT_MAP: да (4 строки) · без миграции · [todo](todo.md) | push → CI green → шаг 13 `done` |
 | **Правила: bugbot/security батч+nudge** (2026-11-02) — не на каждый `/review`; `⚠️ Субагенты: пора` после 2–3 задач / перед deploy; на оплате — «настаиваем»; запуск только по просьбе; **не блокер** push/deploy | перед 🚀 |

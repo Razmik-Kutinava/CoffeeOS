@@ -1,12 +1,11 @@
-# todo — TASK_116: История заказов клиента по всем точкам CODE:BLACK (очередь, шаг 13)
+# todo — TASK_116 done · шаг 13a Q3→A done
 
 | Поле | Значение |
 |------|----------|
-| **Основание** | [TASK-116-…](../milestones/veha_2/requirements/customer_tasks/TASK-116-История-заказов-клиента-по-всем-точкам-CODE-BLACK.md) — Subtask 1–13 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 13 · [Google Doc](https://docs.google.com/document/d/1W0uXR3bzAUmYg5W79T4Rb-jMDanuIJ0TZX8BgSKh70s/edit) · метка B / `TASK-CODE-BLACK-CROSS-POINT-ORDER-HISTORY` |
-| **Не в scope** | объединение / изменение записей клиентов · OTP-merge и linkers · принимать от клиента список точек или чужой `customer_id` · `shop_city_lookup` / `with_shop_city_lookup` · `CustomerTenantHistory` как источник заказов · `historyRepeatAdapter` и поведение «Повторить» (TASK_121 / G) · смена текущей точки и корзина (TASK_120 / F) · Quick Repeat · платежи / checkout / Wallet / FCM · SMS-каскад · `#active` / cancel / wallet_pass · этап 2 TASK_119 (шаг 13a / Q3) · миграция новой RLS-политики |
-| **Статус** | `done` — CI green [41444177250](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41444177250) · Next: 🚀 6 (после 13a/Q3) |
+| **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · 13 `done` · **13a `done`** 2026-11-02 (A: этап 2 не делаем) · RLS → [`PRACTICES` V2-TASK-119-RLS-HARDEN](../milestones/veha_2/reference/PRACTICES.md) |
+| **Статус** | Next: 🚀 5 + 🚀 6 по апруву · код — шаг 14 TASK_117 |
 
-## SBR
+## SBR (архив TASK_116)
 
 - [x] intake `732d6540` — текст 1:1, CBR #116, очередь 13 → `in_progress`
 - [x] SPEC — факты = код (ниже) · решения · файлы · Не ломать · Проверка · миграции нет

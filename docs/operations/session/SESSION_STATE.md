@@ -2,12 +2,13 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-02 (шаг 13 TASK_116 done)  
+**Дата:** 2026-11-02 (шаг 13a TASK_119 Q3→A done)  
 **Ветка:** `develop`  
 **Субагенты-батч:** `last=never (skip на /review 13)` · `tasks_since≥3` · `⚠️ Субагенты: пора` (перед 🚀 — не блокер; оплата — настаиваем)
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь 13a done — Q3→A** (2026-11-02) · этап 2 TASK_119 в очереди не делаем · Q3 закрыт · RLS-harden → `PRACTICES` **V2-TASK-119-RLS-HARDEN** (backlog B/C) · CBR #119 / ISSUES 🟡 обновлены · docs-only · Субагент: нет · [todo](todo.md) | 🚀 5 + 🚀 6 по апруву · `/start` → шаг 14 TASK_117 |
 | **Очередь 13 done** (2026-11-02) · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` на `75055edb` · push `2400053b..ce0baedf` · **CI green** [41444177250](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41444177250) + Semgrep/CodeQL · очередь 13 → `done` · CBR #116 — done · COMPONENT_MAP: да (4 строки) · Fly MCP — после 🚀 6 · [todo](todo.md) | 🚀 6 по апруву (после 13a/Q3) · `/start` → шаг 13a |
 | **Очередь 13 REVIEW** (2026-11-02) · local `/regress` PASS · bugbot / security-review: не запускались (решение владельца) → ревью диффа вручную: 0 находок · crit-audit CLEAN `b64a7657..75055edb` · COMPONENT_MAP: да — Profile, OrderReceipt, shopAccountOrders, OrdersController · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · Fly MCP — после 🚀 6 · Субагент: нет · [todo](todo.md) | push → CI green → очередь 13 `done` |
 | **Правила: bugbot/security батч+nudge** (2026-11-02) · не авто на каждый `/review`; `⚠️ Субагенты: пора` после 2–3 задач / перед deploy; оплата/hot-path — настаиваем; **не блокер** · Субагент: нет | перед 🚀 |

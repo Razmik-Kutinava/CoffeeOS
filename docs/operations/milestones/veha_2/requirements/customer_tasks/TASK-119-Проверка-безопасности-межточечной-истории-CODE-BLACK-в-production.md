@@ -4,7 +4,7 @@
 **Источник:** Google Doc Spec (v5, 2026-10-25)  
 **Артефакты:** `docs/operations/milestones/veha_2/artifacts/production_rls_verify/`  
 **Google Doc:** https://docs.google.com/document/d/1-YuCzTQCuGP_Mvioctw0lCQT1IOtzf1_0lsnZGVXXaA/edit  
-**Статус:** этап 1 (только чтение) — **done** 2026-10-28 (шаг 0.4): RLS в production не действует — [PROD_QUERIES_RESULT](../../artifacts/production_rls_verify/PROD_QUERIES_RESULT.md), [CODE_BYPASS_INVENTORY](../../artifacts/production_rls_verify/CODE_BYPASS_INVENTORY.md) · этап 2 (исправления) — шаг 13a очереди, только если этап 1 покажет, что RLS действует; текст этапа 2 формулирует заказчик
+**Статус:** этап 1 (только чтение) — **done** 2026-10-28 (шаг 0.4): RLS в production не действует — [PROD_QUERIES_RESULT](../../artifacts/production_rls_verify/PROD_QUERIES_RESULT.md), [CODE_BYPASS_INVENTORY](../../artifacts/production_rls_verify/CODE_BYPASS_INVENTORY.md) · этап 2 в очереди Push+SMS (шаг 13a) — **закрыт как ненужный сейчас** 2026-11-02 (решение владельца **A** / Q3): условие «RLS действует» не выполнено · включение RLS в production — **backlog** [`PRACTICES` V2-TASK-119-RLS-HARDEN](../../reference/PRACTICES.md) (вариант B или C, отдельный эпик)
 
 ---
 
@@ -73,3 +73,4 @@ SELECT version FROM schema_migrations ORDER BY version DESC LIMIT 20;
 
 - Шаг 0.4 очереди = этап 1: intake + перечень мест кода, рассчитанных на обход RLS (Subtask 10, только чтение кода) + 4 запроса раздела 5 на production read-only (`SET default_transaction_read_only = on`). Результаты — в `artifacts/production_rls_verify/` без паролей, URL и ключей.
 - Факты раздела 2 (файл:строка) на intake не сверялись — сверка в перечне Subtask 10.
+- **2026-11-02 / Q3 → A:** шаг 13a очереди закрыт без кода (этап 2 по условию строки не требуется). Владелец: RLS важен, но как отдельный эпик позже — `PRACTICES` **V2-TASK-119-RLS-HARDEN** (B = RLS на текущей роли; C = отдельная роль без `BYPASSRLS`, предпочтительнее). Не блокер 🚀 5 / 🚀 6.
