@@ -8,7 +8,8 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Очередь 16 REVIEW** (2026-11-02) · local «Проверка» Rails 15/0 + JS 40/0 · crit-audit CLEAN `5422913e..70da0ca3` · COMPONENT_MAP: да — OrdersController · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` на `70da0ca3` · `⚠️ Субагенты: пора` · [todo](todo.md) | push → CI green → очередь 16 `done` |
+| **Очередь 16 done** (2026-11-02) · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` на `70da0ca3` · push `4b69eac3..38d277e2` · **CI green** [41456144439](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41456144439) + Semgrep/CodeQL · очередь 16 → `done` · CBR #121 Subtask 8 — done · COMPONENT_MAP: да · Fly MCP — после 🚀 7 · [todo](todo.md) | 🚀 5/6/7 по апруву |
+| **Очередь 16 REVIEW** (2026-11-02) · local PASS · crit-audit CLEAN · COMPONENT_MAP: да · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · `⚠️ Субагенты: пора` · [todo](todo.md) | push → CI green |
 | **ops: эконом-приёмка** (2026-11-02) · `dev-gates` § Эконом-режим · docs-only | — |
 | **Очередь 16 GREEN** (2026-11-02) · RED `51c50d5e` → GREEN `70da0ca3` · [todo](todo.md) | `/review` ✓ |
 | **Очередь 16 intake** (2026-11-02) · секция Subtask 8 · CBR #121 · очередь 16 `in_progress` · [todo](todo.md) | `/spec` ✓ |

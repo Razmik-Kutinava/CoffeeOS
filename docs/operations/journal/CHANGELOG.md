@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-11)
 
+## 2026-11-02 — docs: TASK_121 Subtask 8 CI green — очередь шаг 16 done
+
+- Push `4b69eac3..38d277e2` · CI [41456144439](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41456144439) + Semgrep/CodeQL green · шаг 16 → `done` · CBR #121 Subtask 8. Не задеплоено (🚀 7). Next: 🚀 5/6/7 по апруву.
+
 ## 2026-11-02 — feat: TASK_121 Subtask 8 REVIEW — repeat_preview CODE:BLACK (очередь, шаг 16)
 
 - `#repeat_preview` → `CodeBlackCrossPointOrders#find_order!`; цены текущей точки. RED `51c50d5e` → GREEN `70da0ca3`. Local «Проверка» Rails 15/0 + JS 40/0. Ревью диффа вручную (bugbot/security skip). crit-audit CLEAN. Entire `01M6E6SK26KVPBMSJWMAJXCFQ4`. COMPONENT_MAP: да (OrdersController). Без миграции. Не задеплоено (🚀 7).

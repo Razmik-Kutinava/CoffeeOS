@@ -5,13 +5,14 @@
 **Дата:** 2026-11-02 · **ctx_trim:** `2026-11-02`  
 **Ветка:** `develop`  
 **Очередь:** [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) — один шаг = новый чат  
-**Следующий шаг:** push → CI green → шаг 16 `done` · затем 🚀 5 + 🚀 6 + 🚀 7 — по апруву · 👤 Android+iPhone · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
+**Следующий шаг:** 🚀 5 + 🚀 6 + 🚀 7 — по апруву · 👤 Android+iPhone · после 🚀 7 — SMS на телефоне · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
 **Субагенты-батч:** last=never (skip на `/review` 12–16) · tasks_since≥7 · nudge активен  
 **Правила (сокр.):** bugbot/security — батч+nudge · `/regress` не дефолт · `explore` не «на всякий» · после deploy — эконом-пачка (`dev-gates`)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Очередь, шаг 16 — REVIEW TASK_121 Subtask 8** (2026-11-02) — `#repeat_preview` → CodeBlack find; RED `51c50d5e` → GREEN `70da0ca3` · local «Проверка» Rails 15/0 + JS 40/0 · crit-audit CLEAN · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · COMPONENT_MAP: да (OrdersController) · без миграции · [todo](todo.md) | push → CI green → `done` |
+| **Очередь, шаг 16 закрыт — TASK_121 Subtask 8** (2026-11-02) · **CI green** [41456144439](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41456144439) на `38d277e2` + Semgrep/CodeQL · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · COMPONENT_MAP: да · без миграции · не задеплоено (🚀 7) · [todo](todo.md) | 🚀 7 по апруву → приёмка SMS на телефоне · также 🚀 5/6 по апруву |
+| **Очередь, шаг 16 — REVIEW TASK_121 Subtask 8** (2026-11-02) — `#repeat_preview` → CodeBlack; RED `51c50d5e` → GREEN `70da0ca3` · local PASS · crit-audit CLEAN · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · COMPONENT_MAP: да · [todo](todo.md) | push → CI green → `done` |
 | **ops: эконом-приёмка** (2026-11-02) — дефолт в `coffeeos-dev-gates` § Эконом-режим | — |
 | **Очередь, шаг 16 — SPEC/GREEN TASK_121 Subtask 8** (2026-11-02) · [todo](todo.md) | `/review` ✓ |
 | **Очередь, шаг 16 — intake TASK_121 Subtask 8** (2026-11-02) — секция Subtask 8 в TASK-121; зависимости 12/13 done · [todo](todo.md) | `/spec` ✓ |
