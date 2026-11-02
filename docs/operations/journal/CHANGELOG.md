@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-11)
 
+## 2026-11-02 — feat: TASK_121 Subtask 8 REVIEW — repeat_preview CODE:BLACK (очередь, шаг 16)
+
+- `#repeat_preview` → `CodeBlackCrossPointOrders#find_order!`; цены текущей точки. RED `51c50d5e` → GREEN `70da0ca3`. Local «Проверка» Rails 15/0 + JS 40/0. Ревью диффа вручную (bugbot/security skip). crit-audit CLEAN. Entire `01M6E6SK26KVPBMSJWMAJXCFQ4`. COMPONENT_MAP: да (OrdersController). Без миграции. Не задеплоено (🚀 7).
+
 ## 2026-11-02 — ops: эконом-режим пачки приёмки после deploy
 
 - Канон в `coffeeos-dev-gates`: Fly MCP = Chrome DevTools Point A; порядок Sentry→logs→узкий MCP; обязательное vs skip с причиной; запрет молча пропускать hot-path. Отсылки: `coffeeos-index`, `RULES_INDEX`, `agent-workflow`. Код app не тронут.

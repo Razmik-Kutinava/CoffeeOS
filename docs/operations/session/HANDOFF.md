@@ -5,14 +5,15 @@
 **Дата:** 2026-11-02 · **ctx_trim:** `2026-11-02`  
 **Ветка:** `develop`  
 **Очередь:** [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) — один шаг = новый чат  
-**Следующий шаг:** `/sbr` шаг 16 TASK_121 Subtask 8 · 🚀 5 + 🚀 6 + 🚀 7 — по апруву · 👤 Android+iPhone · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
-**Субагенты-батч:** last=never (skip на `/review` 12–15) · tasks_since≥6 · nudge активен  
+**Следующий шаг:** push → CI green → шаг 16 `done` · затем 🚀 5 + 🚀 6 + 🚀 7 — по апруву · 👤 Android+iPhone · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
+**Субагенты-батч:** last=never (skip на `/review` 12–16) · tasks_since≥7 · nudge активен  
 **Правила (сокр.):** bugbot/security — батч+nudge · `/regress` не дефолт · `explore` не «на всякий» · после deploy — эконом-пачка (`dev-gates`)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **ops: эконом-приёмка** (2026-11-02) — дефолт в `coffeeos-dev-gates` § Эконом-режим: Sentry+logs → узкий MCP Point A; Neon/УК skip с причиной; hot-path MCP не молчать | очередь 16 без сдвига |
-| **Очередь, шаг 16 — SPEC TASK_121 Subtask 8** (2026-11-02) — разрыв: `#repeat_preview` = `scope_visible_orders`, `#show` = CodeBlack; план: find через CodeBlack, цены уже по текущей точке; файлы 2 + соседи · Не ломать / Проверка · миграции нет · [todo](todo.md) | `/sbr` |
+| **Очередь, шаг 16 — REVIEW TASK_121 Subtask 8** (2026-11-02) — `#repeat_preview` → CodeBlack find; RED `51c50d5e` → GREEN `70da0ca3` · local «Проверка» Rails 15/0 + JS 40/0 · crit-audit CLEAN · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · COMPONENT_MAP: да (OrdersController) · без миграции · [todo](todo.md) | push → CI green → `done` |
+| **ops: эконом-приёмка** (2026-11-02) — дефолт в `coffeeos-dev-gates` § Эконом-режим | — |
+| **Очередь, шаг 16 — SPEC/GREEN TASK_121 Subtask 8** (2026-11-02) · [todo](todo.md) | `/review` ✓ |
 | **Очередь, шаг 16 — intake TASK_121 Subtask 8** (2026-11-02) — секция Subtask 8 в TASK-121; зависимости 12/13 done · [todo](todo.md) | `/spec` ✓ |
 | **Очередь, шаг 15 закрыт — TASK_118** (2026-11-02) · **CI green** [41453248573](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41453248573) на `3e0e1749` + Semgrep/CodeQL · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · без миграции · не задеплоено (🚀 7) · [todo](todo.md) | 🚀 7 по апруву (после 16) → приёмка SMS на телефоне |
 | **Очередь 15 — REVIEW TASK_118** (2026-11-02) — SMS → история CODE:BLACK · RED `7be416af` → GREEN `5422913e` · local PASS · crit-audit CLEAN · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · COMPONENT_MAP: нет · [todo](todo.md) | push → CI green → `done` |

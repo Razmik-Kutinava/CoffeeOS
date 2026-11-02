@@ -4,12 +4,13 @@
 
 **Дата:** 2026-11-02 · **ctx_trim:** `2026-11-02`  
 **Ветка:** `develop`  
-**Субагенты-батч:** last=never · tasks_since≥6 · `⚠️ Субагенты: пора` (перед 🚀 — не блокер)
+**Субагенты-батч:** last=never · tasks_since≥7 · `⚠️ Субагенты: пора` (перед 🚀 — не блокер)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **ops: эконом-приёмка** (2026-11-02) · `dev-gates` § Эконом-режим + отсылки index/RULES/agent-workflow · docs-only · [todo](todo.md) без сдвига | очередь 16 `/sbr` |
-| **Очередь 16 SPEC** (2026-11-02) · `#repeat_preview` → CodeBlack find (как `#show`); `HistoryRepeatPreview` без правок; FE без правок; тест другой точки — реверс для сети · файлы 2 · Не ломать / Проверка · миграции нет · Субагент: нет — пути ясны · [todo](todo.md) | `/sbr` RED |
+| **Очередь 16 REVIEW** (2026-11-02) · local «Проверка» Rails 15/0 + JS 40/0 · crit-audit CLEAN `5422913e..70da0ca3` · COMPONENT_MAP: да — OrdersController · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` на `70da0ca3` · `⚠️ Субагенты: пора` · [todo](todo.md) | push → CI green → очередь 16 `done` |
+| **ops: эконом-приёмка** (2026-11-02) · `dev-gates` § Эконом-режим · docs-only | — |
+| **Очередь 16 GREEN** (2026-11-02) · RED `51c50d5e` → GREEN `70da0ca3` · [todo](todo.md) | `/review` ✓ |
 | **Очередь 16 intake** (2026-11-02) · секция Subtask 8 · CBR #121 · очередь 16 `in_progress` · [todo](todo.md) | `/spec` ✓ |
 | **Очередь 15 done** (2026-11-02) · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` на `5422913e` · push `b96f675b..3e0e1749` · **CI green** [41453248573](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41453248573) + Semgrep/CodeQL · очередь 15 → `done` · CBR #118 — done · COMPONENT_MAP: нет · Fly MCP — после 🚀 7 · [todo](todo.md) | 🚀 7 по апруву (после 16) |
 | **Очередь 15 REVIEW TASK_118** (2026-11-02) · local PASS · crit-audit CLEAN · COMPONENT_MAP: нет · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · `⚠️ Субагенты: пора` · [todo](todo.md) | push → CI green |
