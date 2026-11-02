@@ -11,7 +11,7 @@
 - [x] intake `732d6540` — текст 1:1, CBR #116, очередь 13 → `in_progress`
 - [x] SPEC — факты = код (ниже) · решения · файлы · Не ломать · Проверка · миграции нет
 - [x] RED `3869881a` — падающие тесты (Rails + JS)
-- [x] GREEN — `Shop::CodeBlackCrossPointOrders` + history/show/tenant JSON + FE метка/highlight; задача Rails 15/0, JS 46/0; соседи orders+ownership PASS; rubocop 0; vite:build OK
+- [x] GREEN `75055edb` — `Shop::CodeBlackCrossPointOrders` + history/show/tenant JSON + FE метка/highlight; задача Rails 15/0, JS 46/0; соседи orders+ownership PASS; rubocop 0; vite:build OK · Entire `01M6E2SNX67JASNF4ZVNFRQCSA`
 - [ ] `/regress`
 - [ ] `/review` — bugbot + security-review + crit-audit + Entire + push + CI → очередь 13 `done`
 
