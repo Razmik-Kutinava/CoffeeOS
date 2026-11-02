@@ -8,7 +8,8 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Очередь 16 intake** (2026-11-02) · Google Docs MCP OK (`1PE0qQOQ…`) · секция Subtask 8 в `customer_tasks/TASK-121-…` · CBR #121 · очередь 16 → `in_progress` · сверка шапки: 12/13 done; «ждёт TASK_116» — устаревший снимок · миграции нет · зона карты → COMPONENT_MAP на `/spec` · Субагент: нет — intake · [todo](todo.md) | `/spec` шага 16 |
+| **Очередь 16 SPEC** (2026-11-02) · `#repeat_preview` → CodeBlack find (как `#show`); `HistoryRepeatPreview` без правок; FE без правок; тест другой точки — реверс для сети · файлы 2 · Не ломать / Проверка · миграции нет · Субагент: нет — пути ясны · [todo](todo.md) | `/sbr` RED |
+| **Очередь 16 intake** (2026-11-02) · секция Subtask 8 · CBR #121 · очередь 16 `in_progress` · [todo](todo.md) | `/spec` ✓ |
 | **Очередь 15 done** (2026-11-02) · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` на `5422913e` · push `b96f675b..3e0e1749` · **CI green** [41453248573](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41453248573) + Semgrep/CodeQL · очередь 15 → `done` · CBR #118 — done · COMPONENT_MAP: нет · Fly MCP — после 🚀 7 · [todo](todo.md) | 🚀 7 по апруву (после 16) |
 | **Очередь 15 REVIEW TASK_118** (2026-11-02) · local PASS · crit-audit CLEAN · COMPONENT_MAP: нет · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · `⚠️ Субагенты: пора` · [todo](todo.md) | push → CI green |
 | **Очередь 14 done TASK_117** · CI [41449958217](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41449958217) · 🚀 7 | push done |
