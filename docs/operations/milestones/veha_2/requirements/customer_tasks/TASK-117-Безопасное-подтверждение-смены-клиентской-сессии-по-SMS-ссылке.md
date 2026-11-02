@@ -60,6 +60,7 @@ TASK_117: Безопасное подтверждение смены клиен�
 - Зона карты: документ трогает `GuestOrderReconnect`, `OrderStatus.svelte`, `orderStatusNotifyActions.js`, `App.svelte` / сессию гостя → на `/spec` читать `session/COMPONENT_MAP.md` (зона GuestOrder* / OrderStatus*).
 - Subtask 8: сообщения недействительной/устаревшей ссылки — TASK_118 (шаг 15); в этой задаче только «сессия не меняется».
 - Subtask 9: аудит чтения `reconnect_token` на `/spec` (документ: поиск по frontend пуст).
-- Факты файла:строка на intake не сверялись — это `/spec`. Ожидаемы сдвиги после шагов 5–13 (корзина, push, история CODE:BLACK) в short links / reconnect / session / App.
+- Факты файла:строка сверены на SPEC 2026-11-02 — см. `docs/operations/session/todo.md` (шаг 14). Сдвиги: `OrderStatus` автоподписка `:341-343` (не `:240-243`); `orderStatusNotifyActions` ключ `:65-66` / запись `:259`; `cart_service` + `TENANT_SESSION_KEY` TASK_120.
+- Subtask 9: `reconnect_token` из URL нигде не читается (`URLSearchParams.get("reconnect_token")` пусто) — убрать из SMS Location.
 - Миграции в тексте нет.
-- Код не менялся на intake.
+- Код не менялся на intake / SPEC.

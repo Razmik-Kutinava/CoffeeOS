@@ -1,104 +1,116 @@
-# todo — TASK_116 done · шаг 13a Q3→A done
+﻿# todo — TASK_117: Безопасное подтверждение смены клиентской сессии по SMS-ссылке (очередь, шаг 14)
 
 | Поле | Значение |
 |------|----------|
-| **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · 13 `done` · **13a `done`** 2026-11-02 (A: этап 2 не делаем) · RLS → [`PRACTICES` V2-TASK-119-RLS-HARDEN](../milestones/veha_2/reference/PRACTICES.md) |
-| **Статус** | Next: 🚀 5 + 🚀 6 по апруву · код — шаг 14 TASK_117 |
+| **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · шаг **14** `in_progress` · зависимости 1 / 5 / 0.4 / 13 = done |
+| **Основание** | [TASK-117-…](../milestones/veha_2/requirements/customer_tasks/TASK-117-Безопасное-подтверждение-смены-клиентской-сессии-по-SMS-ссылке.md) · CBR #117 · Google Doc v3 |
+| **Статус** | SPEC 2026-11-02 · Next: `/sbr` · миграции нет |
 
-## SBR (архив TASK_116)
+## SBR
 
-- [x] intake `732d6540` — текст 1:1, CBR #116, очередь 13 → `in_progress`
+- [x] intake `8a6f4a66` — текст 1:1, CBR #117, очередь 14 → `in_progress`
 - [x] SPEC — факты = код (ниже) · решения · файлы · Не ломать · Проверка · миграции нет
-- [x] RED `3869881a` — падающие тесты (Rails + JS)
-- [x] GREEN `75055edb` — `Shop::CodeBlackCrossPointOrders` + history/show/tenant JSON + FE метка/highlight; задача Rails 15/0, JS 46/0; соседи orders+ownership PASS; rubocop 0; vite:build OK · Entire `01M6E2SNX67JASNF4ZVNFRQCSA`
-- [x] `/regress` PASS — Rails «Проверка» 66/0; JS 52/0 (+ code_black); rubocop 0; vite:build OK
-- [x] `/review` — ревью диффа вручную (bugbot/security skip — владелец) + crit-audit CLEAN + Entire `01M6E2SNX67JASNF4ZVNFRQCSA` + COMPONENT_MAP + push + CI green [41444177250](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41444177250) → очередь 13 `done`
+- [ ] RED — падающие тесты `[RED]`
+- [ ] GREEN — реализация + регрессия зоны `[GREEN]`
+- [ ] `/regress` → `/review`
 
 ## Сверка фактов (SPEC 2026-11-02)
 
 | Документ | Код | Итог |
 |---|---|---|
-| `orders_controller.rb:113-117` history: текущая точка + `customer_id`; `:130-138` без данных точки | `history` `:122-154` (сдвиг после TASK_121 `repeat_preview`); фильтр `tenant_id: @shop_tenant.id` + `customer_id` + `source: :mobile`; page/per_page max 50; JSON без `tenant` | ✅ сдвиг; поведение то же |
-| `orders_controller.rb:28-32` show только текущая точка → 404 чужой | `show` `:34-50`: `Order.where(tenant_id: @shop_tenant.id, customer_id: cid, source: :mobile)` | ✅ сдвиг; поведение то же |
-| `order_json` / `tenant_pickup_json` — метка точки заказа | `order_json` `:240-265` → `tenant: tenant_pickup_json` (`:283-288`) = **текущий** `@shop_tenant`, не точка заказа; без `id` / `display_address` | ⚠️ → для чека другой точки отдавать `TenantAddress.client_json(order.tenant)` (+ признак закрытости) |
-| `shopAccountOrders.js:13-16` page=1 per_page=20 | `:12-17` | ✅ |
-| `Profile.svelte:62-64,128` → receipt; `:1-81` query не читает | `openReceipt` `:62-64`; row `:126-128`; params/query нет; статус в разметке не показан (хотя API отдаёт `status`) | ✅ + Subtask 5/7 → UI |
-| `OrderReceipt.svelte:27-31,118-119` load; `:16,112` назад `/profile` | load `:27-31`; back `:16,112` → `push("/profile")` без query; названия точки нет | ✅ |
-| `TenantAddress.client_json` `:10-24` | `display` `:10-15`, `client_json` `:17-25` (id, name, city, address, display_address) | ✅ |
-| `CustomerTenantHistory` `:57-66,72-92` — не для заказов | `city_sales_points` `:57-66` + `with_shop_city_lookup`; `last_ordered` `:68-86` | ✅ не использовать |
-| `Rls::GucContext.with_shop_city_lookup` `:20-21,33-41` | то же; запрет для истории | ✅ |
-| `Tenant.code_black_network` (TASK_115) | `tenant.rb:75` — `where(code_black_member: true, type: "sales_point")` **без** фильтра `status` → закрытые точки сети уже в scope | ✅ |
-| `mobile_customers` phone unique, без tenant | `schema.rb:433-456` | ✅ |
-| `customer_session.rb:4` «разные customer_id» vs схема | комментарий `:3-5` устарел; bucket по точке `:7,10-19,22-29` — один `MobileCustomer` на телефон | ✅ как в документе |
-| `PaymentResult` / `Product` разбор query hash | `PaymentResult.svelte:164-165`, `Product.svelte:50-52` | ✅ образец для `#/profile?order=` |
-| `Header` display_address | `:105` (не `:71,79`) | ✅ сдвиг |
-| `OrderOwnership` | `scope_visible_orders` / `find_visible_order!` — только `@shop_tenant.id`; `show`/`history` свой `where`, не через ownership scope | ⚠️ сеть — новый сервис, ownership не ослаблять |
-| RLS prod (TASK_119 этап 1) | роль `neondb_owner` BYPASSRLS; политика `rls_orders_isolation` = только `app.current_tenant_id` (+ админы) | ✅ → код с фильтрами; `shop_city_lookup` запрещён |
-| Тесты history isolation | `orders_controller_test.rb:292-338` — без сети заказ B не виден с заголовком B до заказа в B; `ownership_idor_test.rb` — одна точка; нет теста show A при заголовке B | ✅ переписать/дополнить явно |
+| `order_short_links_controller.rb:12-27` — find → bind! → redirect с `reconnect_token` + `#/order/:id` | `show` `:12-27` — `OrderReadySmsLink.find_order` → `GuestOrderReconnect.bind!` → redirect `/shop?tenant_id=…&reconnect_token=…#/order/:id` | ✅ поведение; **нет** сравнения с текущим клиентом до bind |
+| `guest_order_reconnect.rb:9-23` bind без confirm | `token_for` `:9-14`, `bind!` `:16-23` → всегда `CustomerSession.set_customer_id!`; `owned_by_session?` `:51-74` тоже может bind | ✅; step-up в bind! нет |
+| Frontend читает `reconnect_token` из URL | `rg get("reconnect_token")` / `URLSearchParams`+reconnect — **пусто**; токен живёт в `sessionStorage` (`shopGuestSession.js`) и в теле API / Cable / checkout | ✅ Subtask 9: из URL не читается → **не добавлять в SMS-редирект** (Referer) |
+| `customer_session.rb:4-16`, `set_customer_id!:22-30` | bucket `:shop_customers_by_tenant` `:7-19`; set `:22-30`; clear `:32-45`; комментарий «разные customer_id» устарел (как TASK_116) | ✅ сдвиг строк ок |
+| `session_refresh.rb:20-41` пишет клиента | `call!` `:20-41` → `CustomerSession.set_customer_id!` | ✅ |
+| `session_controller#reconnect` | `:6-24` — bind! по order_id+token без сравнения «другой клиент уже в сессии» | ⚠️ confirm-путь не через reconnect «вслепую» |
+| `cart_service.rb:7,19` общий ключ | `SESSION_KEY` `:7`, `TENANT_SESSION_KEY` `:9` (TASK_120), `initialize` `:18-25` | ✅ сдвиг; сброс корзины при смене клиента — явно (R2), не путать со сменой точки |
+| `orderStatusNotifyActions.js:64-66,231-235` отметка push | ключ `coffeeos_shop_push_registered_v1` `:65-66`; запись `:259`; чтение `:359`; `:231-235` теперь JSDoc `subscribeOrderPush` (сдвиг TASK_113) | ✅ ключ тот же; **только удаление** при confirm (запрет менять имя/формат) |
+| `OrderStatus.svelte:240-243` автоподписка | автоподписка при `granted` — `:341-343` (`enablePushNotifications({ auto: true })`); `:240-243` — cancel | ⚠️ сдвиг; после смены клиента автоподписка только для **подтверждённого** клиента |
+| `subscriptionOfferCta.js:24-46` кэш профиля | `cache`/`inflight` `:12-14`, load `:24-53`, `clearSubscriptionOfferCtaCache` `:56-58` | ✅ сбрасывать clear при confirm |
+| `subscriptionOffer.js` кэш | `loadOfferProfile` без module-cache; `shownOrderIds` Set `:67`; install-banner кэширует `pwa_installed` в sessionStorage (`shopInstallBanner.js`) | ⚠️ module-cache оффера = CTA; Set показов — сбросить/не критично для чужого профиля |
+| `App.svelte onMount` + снимок окружения | `:112-128`: `restoreGuestSession` → `bootstrapShopTenant` → `reportSessionOpenOnce` (если не redirect); порядок TASK_112 **не менять** | ✅ FE-диалог — рядом, не переставляя цепочку |
+| Параллельные загрузки без отмены | `restoreGuestSession` / `silentRefresh` / `api` profile/cart — без AbortController / generation | ✅ Subtask 5 → generation / ignore stale |
+| Две ссылки подряд | short link синхронный bind на сервере; FE очереди нет | ✅ Subtask 7 → mutex/pending на FE + одно pending на сервере |
 
 **Находки:**
-- **Текущая точка вне сети:** если всегда отдавать только заказы `code_black_network`, несетевая точка потеряет свою историю (ломает Subtask 13). → решение: сеть включается **только** когда текущая точка ∈ `Tenant.code_black_network`; иначе — прежний фильтр одной точки.
-- **`order_json.tenant` сегодня = текущая витрина**, не точка заказа — при кросс-point чеке введёт в заблуждение; правим источник метки.
-- **Статус в API уже есть**, в `Profile` не рисуется — Subtask 5 = UI.
-- **`orders_controller.rb` ~292 строк** (>200) — логику выборки сети вынести в сервис, контроллер тонкий.
-- **RLS в тестах:** при `FORCE` + GUC текущей точки `Order.where(tenant_id: other)` пустой. Без новой политики (13a) кросс-чтение в сервисе — в транзакции с `SET LOCAL row_security = off` **после** фиксированного списка id сети и с `.where(customer_id:, tenant_id: network_ids)` в том же запросе + комментарий coffeeos-core (граница = код, prod BYPASSRLS). `shop_city_lookup` не трогать.
-- **Комментарий `CustomerSession`** про разные customer_id — не чинить в этой задаче (вне scope).
+- Сейчас SMS **сразу** перезаписывает `CustomerSession` для точки заказа — это баг относительно ТЗ (Subtask 2).
+- `reconnect_token` в query SMS-редиректа **лишний** (FE из URL не читает) и опасен для Referer → убрать (Subtask 9); bind при «нет конфликта» остаётся server-side до редиректа.
+- Subtask 4: после confirm → `#/profile?order=<id>` (highlight TASK_116). Subtask 1 (нет конфликта): документ не меняет целевой экран явно; **TASK_118** владеет SMS→история для всех; в TASK_117 без конфликта оставляем `#/order/:id`, после confirm — история (явный Gherkin).
+- Subtask 8 (тексты устарела/недействительна) — TASK_118; здесь только «сессия не меняется».
+- `POST /session/reconnect` и `owned_by_session?` — не расширять «тихим» bind чужого клиента; confirm — отдельный endpoint.
+- Зона COMPONENT_MAP: `OrderStatus`, `orderStatusNotifyActions`, `shopGuestSession`; после Review — обновить строки + при необходимости GuestOrder / short-link.
 
 ## Решения
 
-Решения агента (владелец может поправить):
-- **Когда сеть:** `current ∈ code_black_network` → `tenant_id IN Tenant.code_black_network.select(:id)` (закрытые включены); иначе → только `@shop_tenant.id`.
-- **Владелец:** только `customer_id` из `CustomerSession.customer_id(session, current)`; параметры клиента со списком точек / чужим id игнорируются / не принимаются.
-- **history JSON:** к существующим полям + `tenant: { id, name, display_address, closed }` (`closed` = `status != "active"`, R11); при `closed` фронт в строке показывает «Точка закрыта» без названия.
-- **show:** тот же scope сети/точки + `customer_id`; 404 без подробностей для чужого / вне сети; `tenant` в `order_json` — от **заказа** (`TenantAddress.client_json` + `closed`); корзину и `@shop_tenant` не менять.
-- **Выделение:** константа `HISTORY_ORDER_HIGHLIGHT_MS = 3000`; разбор `order` из hash query как в `PaymentResult`; scroll + outline до первого pointer/touch или таймаута; нет на странице — тихо.
-- **«Повторить»:** не трогать адаптер; кнопка остаётся на всех строках.
-- **RLS:** без миграции политики; узкий `row_security off` только в сервисе выборки (см. находки); тесты с `RlsTestBootstrap` / явными фильтрами.
+Владелец (уже в ТЗ): **R2** корзина очищается при confirm + текст в окне; **R5** сброс отметки «уведомления включены».
+
+Решения агента (можно поправить до `/sbr`):
+- **Конфликт:** `CustomerSession.customer_id(session, order.tenant_id)` present и ≠ `order.customer_id` → **не** bind; signed pending-токен (order/tenant/exp, без PII в URL) → `/shop?tenant_id=…&sms_transition=…#/…`; FE показывает confirm **до** смены сессии.
+- **Нет конфликта** (нет клиента в точке / тот же): bind как сейчас; redirect **без** `reconnect_token` в query; hash `#/order/:id` (пока не TASK_118).
+- **Confirm API:** `POST /shop/api/session/sms_transition` (pending token) → bind + `CartService` clear текущей точки + JSON ok; FE: clear push key, `clearSubscriptionOfferCtaCache`, generation++, navigate `#/profile?order=<id>`.
+- **Decline:** `DELETE` или `POST …/decline` — pending снимается, сессия/корзина без изменений; гость остаётся в текущей точке/сессии.
+- **Гонки (Subtask 5–7):** монотонный `sessionGeneration` на FE — ответы API со старым generation игнорируются; один in-flight transition; silent refresh после confirm только с новым generation; автоподписка OrderStatus не регистрирует push, пока висит pending transition.
+- **Не трогать:** порядок `App.onMount` / `reportSessionOpenOnce`; имя ключа push; OTP-merge / BindingStepUp; платежи; preprompt state на устройстве.
 
 План:
-1. Новый `Shop::CodeBlackCrossPointOrders` — ids сети, scope history, find for show (фильтры + RLS-обёртка).
-2. `OrdersController#history` / `#show` / `order_json` — через сервис; метка точки заказа.
-3. `shopAccountOrders.js` — поля tenant в typedef; хелперы подписи точки / closed.
-4. `Profile.svelte` — статус, метка точки, highlight по `?order=`.
-5. `OrderReceipt.svelte` — показать точку заказа (closed → «Точка закрыта»).
+1. Сервис `Shop::SmsSessionTransition` — detect conflict, issue/verify pending, `confirm!` (bind + clear cart), `decline!`.
+2. `OrderShortLinksController` — ветка conflict vs bind; убрать `reconnect_token` из redirect.
+3. API session — confirm/decline.
+4. FE: `smsSessionTransition.js` + диалог (компонент или минимальный в App) — тексты с предупреждением о корзине; clear кэшей; generation.
+5. Хуки: не вызывать `session/reconnect` «вслепую» из short-link path; OrderStatus auto-push ждёт confirm.
 
 ## Файлы (ожидаемо)
 
-1. `app/services/shop/code_black_cross_point_orders.rb` — **новый**: список id сети, scope истории, поиск заказа для show (Subtask 1–4, 6, 9, 12).
-2. `app/controllers/shop/api/orders_controller.rb` — `history` / `show` / `order_json.tenant` (Subtask 1–6, 8–9, 12–13).
-3. `app/frontend/lib/shopAccountOrders.js` — типы и подпись точки / closed (Subtask 8–9).
-4. `app/frontend/routes/Profile.svelte` — статус, метка точки, выделение `?order=` (Subtask 5, 7–9).
-5. `app/frontend/routes/OrderReceipt.svelte` — метка точки заказа в чеке (Subtask 4, 8–9).
+1. `app/services/shop/sms_session_transition.rb` — **новый**: conflict? / pending token / confirm! (bind + clear cart) / decline! (Subtask 1–4, 7–8).
+2. `app/controllers/shop/order_short_links_controller.rb` — не bind при конфликте; redirect без `reconnect_token` (Subtask 1–2, 8–9).
+3. `app/controllers/shop/api/session_controller.rb` (+ `config/routes.rb`) — confirm/decline SMS-transition (Subtask 2–4, 7).
+4. `app/frontend/lib/smsSessionTransition.js` — **новый**: разбор pending, generation, clear push/offer caches, вызов API (Subtask 2–7, 9).
+5. `app/frontend/components/SmsSessionTransitionDialog.svelte` — **новый**: окно confirm/decline + предупреждение про корзину (R2) (Subtask 2–4).
+6. `app/frontend/App.svelte` — показать диалог при pending; **не** менять порядок onMount / `reportSessionOpenOnce` (Subtask 5–7 + запрет TASK_112).
 
-Соседи (blast-radius, без правок кода задачи): `app/services/shop/tenant_address.rb` — только вызов `client_json` · `app/models/tenant.rb` — `code_black_network` · `app/controllers/concerns/shop/api/order_ownership.rb` — не ослаблять; `active`/cancel/wallet_pass без изменений · `app/frontend/lib/historyRepeatAdapter.js` — не трогать (Subtask 10, 13).
+Соседи (blast-radius, правки минимальны / только вызовы):
+- `app/services/shop/guest_order_reconnect.rb` — bind остаётся примитиваом; не добавлять тихий overwrite при конфликте в `owned_by_session?` / reconnect API для SMS-pending.
+- `app/services/shop/cart_service.rb` — clear через существующий API/методы (R2); не ломать TASK_120 tenant reset.
+- `app/frontend/lib/orderStatusNotifyActions.js` — только `removeItem` ключа push при confirm (R5); имя/формат ключа не менять.
+- `app/frontend/routes/OrderStatus.svelte` — автоподписка не для pending/устаревшей сессии (Subtask 6); вход `subscribeOrderPush` / TASK_99 не ломать.
 
 **Тесты:**
-- `test/services/shop/code_black_cross_point_orders_test.rb` — **новый**: сеть / вне сети / закрытая / разные org / чужой customer / пустой cid.
-- `test/integration/shop/api/orders_history_code_black_test.rb` — **новый**: history по сети; вне сети; пагинация без дыр; tenant в JSON; closed; чужой customer_id в params не помогает; show A при заголовке B (свой / чужой / вне сети); корзина не меняется.
-- Дополнить `test/integration/shop/api/orders_controller_test.rb` / `ownership_idor_test.rb` — явная регрессия одной точки и IDOR.
-- `test/javascript/shop_account_orders_test.mjs` и/или LK-тест — подпись точки, closed, highlight (на странице / нет / маршрут с query); SSR/разметка Profile/OrderReceipt по необходимости.
-- Тесты с политиками RLS (`rls_test_bootstrap` / роль без bypass) — фильтры в запросе и запрет `shop_city_lookup`.
+- `test/services/shop/sms_session_transition_test.rb` — **новый**
+- `test/integration/shop/order_short_links_test.rb` — дописать: conflict → нет bind; same/empty → bind; нет `reconnect_token` в Location; invalid → сессия та же
+- `test/integration/shop/api/sms_session_transition_test.rb` — **новый**: confirm/decline; корзина; две ссылки
+- Регрессия: `guest_order_reconnect_test.rb`, `guest_order_reconnect_flow_test.rb`, `session_refresh_test.rb`, `orders_controller_test.rb` (как в ТЗ)
+- JS: `test/javascript/sms_session_transition_test.mjs` — generation/stale, clear caches, decline без side-effects
 
 ## Не ломать
 
-- История и чек **одной** точки вне сети CODE:BLACK — как сейчас (только `tenant_id` текущей).
-- «Повторить» из ЛК/чека (TASK_94 + TASK_121): превью цен, `DELETE /cart` только после ok, notice, `releaseHistoryRepeatUi`.
-- `#active` / cancel / wallet_pass / ОФД-секция и poll чека.
-- Смена точки и сброс корзины (TASK_120); `CustomerTenantHistory` / выбор точки в шапке.
+- Оплата / checkout / Quick Repeat / Wallet / OTP-merge / BindingStepUp.
+- Сброс корзины при **смене точки** (TASK_120) и баннер «Корзина очищена: вы перешли в другую точку».
+- Порядок `App.onMount`: Silent Refresh → bootstrap → `reportSessionOpenOnce` (TASK_112); инвариант TASK_99 (`requestPermission` первым).
+- История CODE:BLACK + highlight `?order=` (TASK_116); превью повтора (TASK_121).
 
 ## Проверка
 
-- `bin/rails test test/services/shop/code_black_cross_point_orders_test.rb test/integration/shop/api/orders_history_code_black_test.rb test/integration/shop/api/orders_controller_test.rb test/integration/shop/api/ownership_idor_test.rb test/integration/shop/lk_history_repeat_one_click_test.rb test/integration/rls_tenant_isolation_test.rb test/integration/multi_tenant_isolation_test.rb test/integration/shop/api/tenant_isolation_test.rb`
-- `node --test test/javascript/lk_history_repeat_one_click_test.mjs test/javascript/shop_personal_account_lk_test.mjs test/javascript/history_repeat_price_check_test.mjs` (+ новый JS-тест выделения/метки, если добавим) · `bundle exec rubocop` по изменённым Ruby · `npm run vite:build`
+- `bin/rails test test/services/shop/sms_session_transition_test.rb test/integration/shop/order_short_links_test.rb test/integration/shop/api/sms_session_transition_test.rb test/services/shop/guest_order_reconnect_test.rb test/integration/shop/api/guest_order_reconnect_flow_test.rb test/integration/shop/api/session_refresh_test.rb test/integration/shop/api/orders_controller_test.rb`
+- `node --test test/javascript/sms_session_transition_test.mjs` (+ при правках OrderStatus/notify — зона push) · `bundle exec rubocop` по изменённым Ruby · `npm run vite:build`
 
 ## DoD
 
-- Subtask 1–13; миграции нет; `shop_city_lookup` не используется для истории/чека.
-- В сети — свои заказы всех точек-членов (вкл. закрытые) с меткой; вне сети точки — заказ не в списке; чужие не утекают; чек другой точки сети без смены точки/корзины; highlight ≤ 3 с.
-- «Повторить» и TASK_121 без регрессии; COMPONENT_MAP на `/review`: `OrdersController`, `Profile`, `OrderReceipt`.
+- Subtask 1–10; миграции нет; SMS не перезаписывает чужого клиента без confirm; decline без side-effects; confirm → корзина clear + push/offer caches + история с highlight; stale responses ignored; `reconnect_token` не в SMS Location.
+- COMPONENT_MAP на `/review`: App / OrderStatus / orderStatusNotifyActions / shopGuestSession (по факту диффа).
 
 ---
 
+# todo — TASK_116: История заказов CODE:BLACK (очередь, шаг 13) — done · 13a Q3→A done
+
+| Поле | Значение |
+|------|----------|
+| **Очередь** | шаг 13 `done` · 13a `done` (A) · RLS → PRACTICES V2-TASK-119-RLS-HARDEN |
+| **Статус** | `done` — CI green [41444177250] · не задеплоено (🚀 6) |
+
+Архив SPEC/файлов TASK_116 — в git history `todo.md` / HANDOFF; живой чеклист выше = TASK_117.
+
+---
 # todo — TASK_121: Повтор заказа из истории с проверкой цен в текущей точке (очередь, шаг 12) — done
 
 | Поле | Значение |
