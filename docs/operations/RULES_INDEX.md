@@ -6,7 +6,7 @@
 **Коммит:** канон CoffeeOS (commit после правок) **важнее** глобального User Rule «commit only when asked» — User Rule лучше удалить в Cursor Settings → Rules.  
 **Субагенты:** таблица этапов в `agent-workflow`; карта — `docs/agents/SUBAGENTS.md`.  
 **Команды:** `.cursor/commands/` + `.cursor/skills/` (human `/…`); цепочка start→spec→sbr→regress→review.  
-**Hot-path / приёмка:** PHASE 3 (`spec-build-review`) → CI green → deploy (апрув) → `dev-gates` § пайплайн (Sentry+логи+MCP).
+**Hot-path / приёмка:** PHASE 3 (`spec-build-review`) → CI green → deploy (апрув) → `dev-gates` § пайплайн + **эконом-режим** (Sentry+логи → узкий MCP Point A; Neon/УК skip с причиной).
 
 ## Always (`alwaysApply: true`) — короткий закон
 

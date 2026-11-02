@@ -8,6 +8,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
+| **ops: эконом-приёмка** (2026-11-02) · `dev-gates` § Эконом-режим + отсылки index/RULES/agent-workflow · docs-only · [todo](todo.md) без сдвига | очередь 16 `/sbr` |
 | **Очередь 16 SPEC** (2026-11-02) · `#repeat_preview` → CodeBlack find (как `#show`); `HistoryRepeatPreview` без правок; FE без правок; тест другой точки — реверс для сети · файлы 2 · Не ломать / Проверка · миграции нет · Субагент: нет — пути ясны · [todo](todo.md) | `/sbr` RED |
 | **Очередь 16 intake** (2026-11-02) · секция Subtask 8 · CBR #121 · очередь 16 `in_progress` · [todo](todo.md) | `/spec` ✓ |
 | **Очередь 15 done** (2026-11-02) · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` на `5422913e` · push `b96f675b..3e0e1749` · **CI green** [41453248573](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41453248573) + Semgrep/CodeQL · очередь 15 → `done` · CBR #118 — done · COMPONENT_MAP: нет · Fly MCP — после 🚀 7 · [todo](todo.md) | 🚀 7 по апруву (после 16) |

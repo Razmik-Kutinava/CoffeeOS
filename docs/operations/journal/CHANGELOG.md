@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-11)
 
+## 2026-11-02 — ops: эконом-режим пачки приёмки после deploy
+
+- Канон в `coffeeos-dev-gates`: Fly MCP = Chrome DevTools Point A; порядок Sentry→logs→узкий MCP; обязательное vs skip с причиной; запрет молча пропускать hot-path. Отсылки: `coffeeos-index`, `RULES_INDEX`, `agent-workflow`. Код app не тронут.
+
 ## 2026-11-02 — docs: SPEC TASK_121 Subtask 8 — повтор заказов других и закрытых точек (очередь, шаг 16)
 
 - Разрыв: `#repeat_preview` = `scope_visible_orders`; `#show` = CodeBlack. План: find через CodeBlack; цены уже по текущей точке; FE без правок. Файлы 2 · Не ломать / Проверка · миграции нет. Код не менялся. Next: `/sbr`.

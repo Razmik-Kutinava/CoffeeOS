@@ -34,7 +34,7 @@ PHASE 3: push без стопа — `spec-build-review.mdc` § PHASE 3.
 - SPEC → 2–7 путей; hot-path +1–3 соседа; в todo: `## Не ломать` + `## Проверка`
 - Не `@codebase` / не Glob README без нужды
 - Без gem’ов оплаты / CE / MCP prod без просьбы; ErrorCode Т‑Кассы ≠ сразу «наш баг»
-- Point A: `tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789`; Local PASS + Fly MCP в отчёте
+- Point A: `tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789`; Local PASS + Fly MCP в отчёте. После deploy — эконом-пачка по умолчанию: `coffeeos-dev-gates` § «Эконом-режим» (Sentry+logs → узкий MCP; не ждать «экономь» от владельца)
 
 ## Субагенты
 

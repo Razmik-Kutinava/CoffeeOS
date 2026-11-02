@@ -23,7 +23,7 @@ alwaysApply: true
 | Фича / CBR / CHECKLIST | `workflow/coffeeos-task-workflow.mdc` |
 | SBR | `workflow/spec-build-review.mdc` |
 | Entire / Review | `docs/operations/dev/ENTIRE.md` |
-| Тесты / deploy / hot-path | `workflow/coffeeos-dev-gates.mdc` |
+| Тесты / deploy / hot-path / эконом-приёмка | `workflow/coffeeos-dev-gates.mdc` (§ пачка + эконом-режим) |
 | Новые файлы | `workflow/coffeeos-repo-layout.mdc` |
 | ТЗ заказчика | `workflow/coffeeos-customer-intake.mdc` — **ID заказчика = канон** (EXT = суффикс, не новый `#`) |
 | Сплит файлов | `workflow/coffeeos-file-size-split.mdc` |
