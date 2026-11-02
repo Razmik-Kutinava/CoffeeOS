@@ -2,14 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-02 (TASK_116 /review → push/CI)  
+**Дата:** 2026-11-02 (шаг 13 TASK_116 done)  
 **Ветка:** `develop`  
 **Очередь:** [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) — один шаг = новый чат, `/start` берёт шаг сам  
-**Следующий шаг:** push → CI green → закрыть шаг 13 · затем 🚀 6 по апруву (после 13a/Q3) · у владельца: 🚀 5 (шаг 12) · 👤 Android+iPhone (G4 TASK_99) · `WALLET_FORCE_UNAVAILABLE` — отдельный апрув · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
-**Субагенты-батч:** last=never (skip по токенам на `/review` 13) · tasks_since≥3 · nudge активен
+**Следующий шаг:** 🚀 6 — по апруву владельца (после 13a/Q3) · у владельца также 🚀 5 (шаг 12) · 👤 Android+iPhone (G4 TASK_99) · `WALLET_FORCE_UNAVAILABLE` — отдельный апрув · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
+**Субагенты-батч:** last=never (skip на `/review` 13) · tasks_since≥3 · nudge активен
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь, шаг 13 закрыт — TASK_116** (2026-11-02) · **CI green** [41444177250](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41444177250) на `ce0baedf` + Semgrep/CodeQL · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · без миграции · не задеплоено (🚀 6) · [todo](todo.md) | 🚀 6 по апруву (после 13a/Q3) → приёмка Point A (история сети) · новый чат → `/start` → шаг 13a |
 | **Очередь, шаг 13 — REVIEW TASK_116** (2026-11-02) — история/чеки по сети CODE:BLACK; метка точки/`closed`; highlight `?order=` · RED `3869881a` → GREEN `75055edb` · `/regress` PASS · ревью диффа вручную (субагенты не запускались — решение владельца), 0 находок · crit-audit CLEAN · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · COMPONENT_MAP: да (4 строки) · без миграции · [todo](todo.md) | push → CI green → шаг 13 `done` |
 | **Правила: bugbot/security батч+nudge** (2026-11-02) — не на каждый `/review`; `⚠️ Субагенты: пора` после 2–3 задач / перед deploy; на оплате — «настаиваем»; запуск только по просьбе; **не блокер** push/deploy | перед 🚀 |
 | **Очередь, шаг 13 — /regress PASS TASK_116** (2026-11-02) — локальная регрессия зоны из todo: Rails 8 файлов 66/0; JS 52/0; rubocop и сборка OK · GREEN `75055edb` · Fly MCP Point A — после деплоя шага · [todo](todo.md) | `/review` |
