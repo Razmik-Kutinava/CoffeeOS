@@ -2,13 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-02 (шаг 15 intake TASK_118)  
+**Дата:** 2026-11-02 (шаг 15 SPEC TASK_118)  
 **Ветка:** `develop`  
 **Субагенты-батч:** `last=never (skip на /review 12–14)` · `tasks_since≥5` · `⚠️ Субагенты: пора` (перед 🚀 — не блокер; оплата — настаиваем)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Очередь 15 intake** (2026-11-02) · Google Docs MCP OK (`1DVbALzc…`) · текст 1:1 уже в `customer_tasks/TASK-118-…` (шаг 0.3) · CBR #118 · очередь 15 → `in_progress` · сверка шапки: зависимости = done; «не готов к Build» в тексте — устаревший снимок · Subtask 9 не повторять · миграции нет · зона карты (short link → ЛК/`?order=`) → COMPONENT_MAP на `/spec` · Субагент: нет — intake · [todo](todo.md) | `/spec` шага 15 |
+| **Очередь 15 SPEC** (2026-11-02) · факты = код: Location всё ещё `#/order` (token уже снят TASK_117); `find_order` смешивает expired/invalid; bootstrap preferred ломает S2 · план: resolve + Location `#/profile?order=` + `sms_entry` pin; HTML устарела/недействительна без bind; S9/S12 skip · файлы 6 · Не ломать / Проверка · миграции нет · COMPONENT_MAP: скорее нет · Субагент: нет — пути ясны · [todo](todo.md) | `/sbr` |
+| **Очередь 15 intake** (2026-11-02) · текст 1:1 уже в `customer_tasks/TASK-118-…` · CBR #118 · очередь 15 → `in_progress` · Subtask 9 не повторять · Субагент: нет — intake · [todo](todo.md) | `/spec` |
 | **Очередь 14 done** (2026-11-02) · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` на `ff924f2d` · push `62f6e539..c44e2058` · **CI green** [41449958217](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41449958217) + Semgrep/CodeQL · очередь 14 → `done` · CBR #117 — CI green · COMPONENT_MAP: да · Fly MCP — после 🚀 7 · [todo](todo.md) | 🚀 7 по апруву (после 15–16) |
 | **Очередь 14 REVIEW** (2026-11-02) · local «Проверка» Rails 48/0 + JS 12/0 · rubocop 0 · vite OK · bugbot/security: skip (владелец) → ревью диффа вручную: 0 · crit-audit CLEAN `75055edb..ff924f2d` · COMPONENT_MAP: да — Dialog + smsSessionTransition + OrderStatus · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · Fly MCP — после 🚀 7 · Субагент: нет · [todo](todo.md) | push → CI green → очередь 14 `done` |
 | **Правила: explore не дефолт** (2026-11-02) · звать только если пути неясны после узкого поиска; не «на всякий» / не рой репо · Субагент: нет | перед 🚀 |

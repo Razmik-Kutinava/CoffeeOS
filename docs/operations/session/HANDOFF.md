@@ -2,15 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-02 (шаг 15 intake TASK_118)  
+**Дата:** 2026-11-02 (шаг 15 SPEC TASK_118)  
 **Ветка:** `develop`  
 **Очередь:** [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) — один шаг = новый чат, `/start` берёт шаг сам  
-**Следующий шаг:** `/spec` шаг 15 TASK_118 · 🚀 5 + 🚀 6 + 🚀 7 — по апруву · 👤 Android+iPhone · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
+**Следующий шаг:** `/sbr` шаг 15 TASK_118 · 🚀 5 + 🚀 6 + 🚀 7 — по апруву · 👤 Android+iPhone · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
 **Субагенты-батч:** last=never (skip на `/review` 12–14) · tasks_since≥5 · nudge активен
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Очередь, шаг 15 — intake TASK_118** (2026-11-02) — SMS «Заказ готов» → история CODE:BLACK (D v4); текст 1:1 уже в [TASK-118-…](../milestones/veha_2/requirements/customer_tasks/TASK-118-SMS-Заказ-готов-история-заказов-CODE-BLACK.md) (шаг 0.3); Google Docs = локальный файл; Subtask 9 done; зависимости done; шапка совпадает; миграции нет · COMPONENT_MAP — на `/spec` (зона short link → Profile/`?order=`) · [todo](todo.md) | `/spec` |
+| **Очередь, шаг 15 — SPEC TASK_118** (2026-11-02) — SMS → `#/profile?order=` + `sms_entry` pin; resolve expired/invalid; bootstrap не уводит на preferred; S9 skip · файлы 6 · Не ломать / Проверка · миграции нет · [todo](todo.md) | `/sbr` |
+| **Очередь, шаг 15 — intake TASK_118** (2026-11-02) — текст 1:1 уже в [TASK-118-…](../milestones/veha_2/requirements/customer_tasks/TASK-118-SMS-Заказ-готов-история-заказов-CODE-BLACK.md); Subtask 9 done; зависимости done · [todo](todo.md) | `/spec` |
 | **Очередь, шаг 14 закрыт — TASK_117** (2026-11-02) · **CI green** [41449958217](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41449958217) на `c44e2058` + Semgrep/CodeQL · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · без миграции · не задеплоено (🚀 7) · [todo](todo.md) | 🚀 7 по апруву (после 15–16) → приёмка SMS на телефоне |
 | **Очередь, шаг 14 — REVIEW TASK_117** (2026-11-02) — SMS conflict → confirm; Location без `reconnect_token`; confirm → clear cart + caches + `#/profile?order=` · RED `d358c4a2` → GREEN `ff924f2d` · local «Проверка» Rails 48/0 JS 12/0 · ревью диффа вручную (субагенты skip) · crit-audit CLEAN · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · COMPONENT_MAP: да · [todo](todo.md) | push → CI green → шаг 14 `done` |
 | **Правила: explore не дефолт** (2026-11-02) — звать только если пути неясны после узкого поиска; не «на всякий» / не рой репо | перед 🚀 |

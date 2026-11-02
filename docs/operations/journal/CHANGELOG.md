@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-11-02 — docs: SPEC TASK_118 — SMS ready → history CODE:BLACK (очередь, шаг 15)
+
+- Факты = код; план: resolve expired/invalid; Location `#/profile?order=` + `sms_entry` pin в bootstrap; HTML ошибки без bind; S9 skip. Файлы 6 · Не ломать / Проверка · миграции нет. Код не менялся.
+
 ## 2026-11-02 — docs: intake TASK_118 — SMS «Заказ готов» → история CODE:BLACK (очередь, шаг 15)
 
 - Текст уже в `customer_tasks/TASK-118-…md` с шага 0.3; Google Docs = локальный файл 1:1; шаг 15 → `in_progress`; CBR #118; зависимости done; Subtask 9 не повторять. Код не менялся. Next: `/spec`.
