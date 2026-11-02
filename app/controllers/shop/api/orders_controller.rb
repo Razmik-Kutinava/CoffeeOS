@@ -24,7 +24,10 @@ module Shop
         cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
         return head :unauthorized if cid.blank?
 
-        order = scope_visible_orders(source: :mobile).includes(:order_items).find(params[:id])
+        # TASK_121 Subtask 8: чтение как #show (сеть CODE:BLACK); цены — текущая точка.
+        order = Shop::CodeBlackCrossPointOrders
+          .new(current_tenant: @shop_tenant, customer_id: cid)
+          .find_order!(params[:id])
         payload = Shop::HistoryRepeatPreview.new(order: order, tenant_id: @shop_tenant.id).call
         render json: payload
       rescue ActiveRecord::RecordNotFound
