@@ -32,13 +32,15 @@ class Shop::Api::SmsSessionTransitionTest < ActionDispatch::IntegrationTest
   test "POST sms_transition confirms: binds owner and clears cart" do
     open_session do |sess|
       headers = shop_tenant_headers(@tenant.id)
-      Shop::CustomerSession.set_customer_id!(sess.request.session, @tenant.id, @other.id)
+      verify_shop_email!(tenant_id: @tenant.id, email: @other.email, session: sess)
+      Shop::CustomerSession.set_customer_id!(sess.session, @tenant.id, @other.id)
 
       sess.post "/shop/api/cart/add",
         headers: headers,
         params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
         as: :json
       assert_equal 200, sess.response.status
+      assert_equal @other.id.to_s, Shop::CustomerSession.customer_id(sess.session, @tenant.id)
 
       token = Shop::SmsSessionTransition.pending_token_for(@order)
       sess.post "/shop/api/session/sms_transition",
@@ -50,7 +52,7 @@ class Shop::Api::SmsSessionTransitionTest < ActionDispatch::IntegrationTest
       assert_equal true, body["ok"]
       assert_equal @order.id, body["order_id"]
 
-      assert_equal @owner.id.to_s, Shop::CustomerSession.customer_id(sess.request.session, @tenant.id)
+      assert_equal @owner.id.to_s, Shop::CustomerSession.customer_id(sess.session, @tenant.id)
 
       sess.get "/shop/api/cart", headers: headers, as: :json
       assert_equal 200, sess.response.status
@@ -63,13 +65,15 @@ class Shop::Api::SmsSessionTransitionTest < ActionDispatch::IntegrationTest
   test "DELETE sms_transition declines without changing session or cart" do
     open_session do |sess|
       headers = shop_tenant_headers(@tenant.id)
-      Shop::CustomerSession.set_customer_id!(sess.request.session, @tenant.id, @other.id)
+      verify_shop_email!(tenant_id: @tenant.id, email: @other.email, session: sess)
+      Shop::CustomerSession.set_customer_id!(sess.session, @tenant.id, @other.id)
 
       sess.post "/shop/api/cart/add",
         headers: headers,
         params: { product_id: @product.id, quantity: 1, selected_modifiers: [] },
         as: :json
       assert_equal 200, sess.response.status
+      assert_equal @other.id.to_s, Shop::CustomerSession.customer_id(sess.session, @tenant.id)
 
       token = Shop::SmsSessionTransition.pending_token_for(@order)
       sess.delete "/shop/api/session/sms_transition",
@@ -77,8 +81,9 @@ class Shop::Api::SmsSessionTransitionTest < ActionDispatch::IntegrationTest
         params: { token: token },
         as: :json
       assert_equal 200, sess.response.status, sess.response.body
+      refute sess.response.parsed_body["logged_out"]
 
-      assert_equal @other.id.to_s, Shop::CustomerSession.customer_id(sess.request.session, @tenant.id)
+      assert_equal @other.id.to_s, Shop::CustomerSession.customer_id(sess.session, @tenant.id)
       sess.get "/shop/api/cart", headers: headers, as: :json
       items = sess.response.parsed_body["items"] || sess.response.parsed_body["cart"] || []
       assert_equal 1, items.size
@@ -88,7 +93,8 @@ class Shop::Api::SmsSessionTransitionTest < ActionDispatch::IntegrationTest
   test "second pending confirm while first unfinished: only one bind (last issued token wins)" do
     open_session do |sess|
       headers = shop_tenant_headers(@tenant.id)
-      Shop::CustomerSession.set_customer_id!(sess.request.session, @tenant.id, @other.id)
+      verify_shop_email!(tenant_id: @tenant.id, email: @other.email, session: sess)
+      Shop::CustomerSession.set_customer_id!(sess.session, @tenant.id, @other.id)
 
       order_b = Order.create!(
         tenant_id: @tenant.id,
@@ -115,8 +121,8 @@ class Shop::Api::SmsSessionTransitionTest < ActionDispatch::IntegrationTest
       # Первая (устаревшая) ссылка после успешного confirm второй — отклоняется или no-op без отката.
       sess.post "/shop/api/session/sms_transition",
         headers: headers, params: { token: t1 }, as: :json
-      assert_includes [200, 422], sess.response.status
-      assert_equal @owner.id.to_s, Shop::CustomerSession.customer_id(sess.request.session, @tenant.id)
+      assert_includes [ 200, 422 ], sess.response.status
+      assert_equal @owner.id.to_s, Shop::CustomerSession.customer_id(sess.session, @tenant.id)
     end
   end
 end

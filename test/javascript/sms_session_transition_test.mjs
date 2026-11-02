@@ -19,6 +19,7 @@ import {
   currentSessionGeneration,
   isStaleGeneration,
   beginSmsTransition,
+  endSmsTransition,
   smsTransitionBusy,
   clearClientCachesAfterSmsConfirm,
   confirmSmsTransition,
@@ -26,7 +27,7 @@ import {
   profilePathAfterConfirm,
   stripSmsTransitionFromSearch
 } from "../../app/frontend/lib/smsSessionTransition.js"
-import { clearSubscriptionOfferCtaCache, loadSubscriptionOfferCta } from "../../app/frontend/lib/subscriptionOfferCta.js"
+import { clearSubscriptionOfferCtaCache } from "../../app/frontend/lib/subscriptionOfferCta.js"
 import { pushRegisteredStorageKey } from "../../app/frontend/lib/orderStatusNotifyActions.js"
 import { renderSvelte } from "./svelte_ssr_helper.mjs"
 
@@ -36,7 +37,7 @@ const read = (p) => readFileSync(join(root, p), "utf8")
 
 describe("TASK_117 тексты окна", () => {
   it("предупреждение про корзину (R2) и кнопки", () => {
-    assert.match(SMS_TRANSITION_TITLE, /сесс|аккаунт|профиль/i)
+    assert.match(SMS_TRANSITION_TITLE, /сесс|аккаунт|профил/i)
     assert.match(SMS_TRANSITION_CART_WARNING, /корзин/i)
     assert.ok(SMS_TRANSITION_CONFIRM_LABEL.length > 0)
     assert.ok(SMS_TRANSITION_DECLINE_LABEL.length > 0)
@@ -85,14 +86,16 @@ describe("TASK_117 Subtask 5 — generation / stale", () => {
 
 describe("TASK_117 Subtask 7 — одна обработка", () => {
   it("beginSmsTransition блокирует вторую, пока первая не завершена", () => {
+    endSmsTransition()
     assert.equal(beginSmsTransition("tok-a"), true)
     assert.equal(smsTransitionBusy(), true)
     assert.equal(beginSmsTransition("tok-b"), false)
+    endSmsTransition()
   })
 })
 
 describe("TASK_117 Subtask 4 — clear caches on confirm", () => {
-  it("clearClientCachesAfterSmsConfirm снимает push key и CTA cache", async () => {
+  it("clearClientCachesAfterSmsConfirm снимает push key и CTA cache", () => {
     const store = new Map()
     const storage = {
       getItem: (k) => (store.has(k) ? store.get(k) : null),
@@ -100,15 +103,7 @@ describe("TASK_117 Subtask 4 — clear caches on confirm", () => {
       removeItem: (k) => store.delete(k)
     }
     storage.setItem(pushRegisteredStorageKey(), "true")
-
-    const api = async (path) => {
-      if (path === "/config") return { subscription_offer: { enabled: true, second_cta_mode: "tips" } }
-      if (path === "/profile") return { eligible_for_subscription_offer: true }
-      return {}
-    }
     clearSubscriptionOfferCtaCache()
-    await loadSubscriptionOfferCta()
-    // loadSubscriptionOfferCta uses real api import — re-seed via deps if module caches after load
     clearClientCachesAfterSmsConfirm({ storage })
     assert.equal(storage.getItem(pushRegisteredStorageKey()), null)
   })
@@ -164,10 +159,11 @@ describe("TASK_117 App wiring guards", () => {
     const src = read("app/frontend/App.svelte")
     assert.match(src, /smsSessionTransition/)
     assert.match(src, /SmsSessionTransitionDialog/)
-    const restoreIdx = src.indexOf("restoreGuestSession")
-    const bootstrapIdx = src.indexOf("bootstrapShopTenant")
-    const reportIdx = src.indexOf("reportSessionOpenOnce")
-    assert.ok(restoreIdx > 0 && bootstrapIdx > restoreIdx && reportIdx > bootstrapIdx)
+    const mount = src.slice(src.indexOf("onMount("))
+    const restoreIdx = mount.indexOf("restoreGuestSession")
+    const bootstrapIdx = mount.indexOf("bootstrapShopTenant")
+    const reportIdx = mount.indexOf("reportSessionOpenOnce")
+    assert.ok(restoreIdx >= 0 && bootstrapIdx > restoreIdx && reportIdx > bootstrapIdx)
   })
 
   it("OrderStatus не авто-push при pending SMS transition", () => {

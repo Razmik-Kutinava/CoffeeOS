@@ -48,6 +48,25 @@ module Shop
         end
         render json: { ok: true, logged_out: true }
       end
+
+      # TASK_117: подтверждение смены клиента по SMS pending-токену.
+      def sms_transition
+        order = Shop::SmsSessionTransition.confirm!(session, token: params[:token])
+        if order
+          render json: { ok: true, order_id: order.id }
+        else
+          render json: { ok: false, error: "Не удалось подтвердить переход" }, status: :unprocessable_entity
+        end
+      end
+
+      def sms_transition_decline
+        ok = Shop::SmsSessionTransition.decline!(session, token: params[:token])
+        if ok
+          render json: { ok: true }
+        else
+          render json: { ok: false, error: "Ссылка недействительна" }, status: :unprocessable_entity
+        end
+      end
     end
   end
 end

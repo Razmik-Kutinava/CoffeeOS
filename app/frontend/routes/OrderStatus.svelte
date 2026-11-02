@@ -26,6 +26,7 @@
     PUSH_OPEN_SETTINGS_CTA
   } from "../lib/orderStatusNotifyActions.js"
   import { currentPushPossible } from "../lib/pushEnvironmentClass.js"
+  import { smsTransitionPending } from "../lib/smsSessionTransition.js"
   import {
     isPrePromptStatus,
     shouldAutoShowPrePrompt,
@@ -338,7 +339,13 @@
       })
 
       pushAvailable = firebaseClientConfigured()
-      if (pushAvailable && typeof Notification !== "undefined" && Notification.permission === "granted") {
+      // TASK_117: не регистрировать push, пока висит SMS-confirm смены клиента
+      if (
+        !smsTransitionPending() &&
+        pushAvailable &&
+        typeof Notification !== "undefined" &&
+        Notification.permission === "granted"
+      ) {
         enablePushNotifications({ auto: true })
       }
     } catch (e) {

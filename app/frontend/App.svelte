@@ -31,6 +31,17 @@
     createVisibilityStatusGuard
   } from "./lib/codeblackPendingOrder.js"
   import { recoverPendingPayment } from "./lib/shopSbpPay.js"
+  import SmsSessionTransitionDialog from "./components/SmsSessionTransitionDialog.svelte"
+  import {
+    parseSmsTransitionToken,
+    beginSmsTransition,
+    endSmsTransition,
+    stripSmsTransitionFromSearch,
+    confirmSmsTransition,
+    declineSmsTransition,
+    profilePathAfterConfirm,
+    currentSessionGeneration
+  } from "./lib/smsSessionTransition.js"
 
   installSlowRequestTracker()
   initTelegram()
@@ -38,6 +49,54 @@
   installShopWebViewLayout()
 
   const pendingStatusGuard = createVisibilityStatusGuard()
+
+  let smsTransitionOpen = false
+  let smsTransitionBusy = false
+  let smsTransitionToken = null
+
+  function readSmsTransitionFromUrl() {
+    try {
+      const token = parseSmsTransitionToken(window.location.search || "")
+      if (!token) return
+      if (!beginSmsTransition(token)) return
+      smsTransitionToken = token
+      smsTransitionOpen = true
+      const nextSearch = stripSmsTransitionFromSearch(window.location.search || "")
+      const url = `${window.location.pathname}${nextSearch}${window.location.hash || ""}`
+      window.history.replaceState(window.history.state, "", url)
+    } catch {
+      /* не ломаем старт витрины */
+    }
+  }
+
+  async function onSmsTransitionConfirm() {
+    if (!smsTransitionToken || smsTransitionBusy) return
+    smsTransitionBusy = true
+    const gen = currentSessionGeneration()
+    const res = await confirmSmsTransition(smsTransitionToken, { api, generation: gen })
+    smsTransitionBusy = false
+    if (!res.ok) {
+      if (res.reason === "stale") {
+        smsTransitionOpen = false
+        smsTransitionToken = null
+        return
+      }
+      return
+    }
+    smsTransitionOpen = false
+    smsTransitionToken = null
+    push(profilePathAfterConfirm(res.order_id))
+  }
+
+  async function onSmsTransitionDecline() {
+    if (!smsTransitionToken || smsTransitionBusy) return
+    smsTransitionBusy = true
+    await declineSmsTransition(smsTransitionToken, { api })
+    smsTransitionBusy = false
+    smsTransitionOpen = false
+    smsTransitionToken = null
+    endSmsTransition()
+  }
 
   function lazyRoute(importer) {
     return wrap({
@@ -122,9 +181,11 @@
         } catch {
           /* телеметрия не должна ломать старт витрины */
         }
+        readSmsTransitionFromUrl()
       })
       .catch(() => {
         loadOperatingHours(api).catch(() => {})
+        readSmsTransitionFromUrl()
       })
     flushCartQueue(api).catch(() => {})
     flushOrderQueue(api).catch(() => {})
@@ -164,4 +225,10 @@
     <Router {routes} options={{ hash: true }} />
   </main>
   <CartSheet />
+  <SmsSessionTransitionDialog
+    open={smsTransitionOpen}
+    busy={smsTransitionBusy}
+    onConfirm={onSmsTransitionConfirm}
+    onDecline={onSmsTransitionDecline}
+  />
 </div>

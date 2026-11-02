@@ -225,6 +225,8 @@ Rails.application.routes.draw do
       get "orders/active", to: "orders#active"
       post "session/reconnect", to: "session#reconnect"
       post "session/refresh", to: "session#refresh"
+      post "session/sms_transition", to: "session#sms_transition"
+      delete "session/sms_transition", to: "session#sms_transition_decline"
       delete "session", to: "session#destroy"
       post "orders/:id/abandon", to: "orders#abandon"
       post "orders/:id/cancel", to: "orders#cancel"

@@ -5,6 +5,7 @@ require "test_helper"
 # TASK_93-C — GET /o/:order_hash → bind + TTL + forge 404
 class Shop::OrderShortLinksTest < ActionDispatch::IntegrationTest
   include TestFactories
+  include ShopEmailTestHelper
 
   setup do
     @tenant = create_tenant!(slug: "o-link-#{SecureRandom.hex(3)}")
@@ -43,23 +44,28 @@ class Shop::OrderShortLinksTest < ActionDispatch::IntegrationTest
       phone: "+79008200999",
       email: "olink-other-#{SecureRandom.hex(3)}@example.com"
     )
-    Shop::CustomerSession.set_customer_id!(session, @tenant.id, other.id)
+    open_session do |sess|
+      verify_shop_email!(tenant_id: @tenant.id, email: other.email, session: sess)
+      assert_equal other.id.to_s, Shop::CustomerSession.customer_id(sess.session, @tenant.id)
 
-    hash = Shop::OrderReadySmsLink.hash_for(@order)
-    get "/o/#{hash}", headers: { "HOST" => "www.example.com" }
-    assert_response :redirect
-    assert_match %r{/shop\?tenant_id=#{@tenant.id}&sms_transition=}, response.redirect_url
-    refute_match(/reconnect_token=/, response.redirect_url)
-    assert_equal other.id.to_s, Shop::CustomerSession.customer_id(session, @tenant.id).to_s
+      hash = Shop::OrderReadySmsLink.hash_for(@order)
+      sess.get "/o/#{hash}", headers: { "HOST" => "www.example.com" }
+      assert_equal 302, sess.response.status, sess.response.body
+      assert_match %r{/shop\?tenant_id=#{@tenant.id}&sms_transition=}, sess.response.redirect_url
+      refute_match(/reconnect_token=/, sess.response.redirect_url)
+      assert_equal other.id.to_s, Shop::CustomerSession.customer_id(sess.session, @tenant.id).to_s
+    end
   end
 
   test "TASK_117 same customer: bind without confirm token" do
-    Shop::CustomerSession.set_customer_id!(session, @tenant.id, @customer.id)
-    hash = Shop::OrderReadySmsLink.hash_for(@order)
-    get "/o/#{hash}"
-    assert_response :redirect
-    refute_match(/sms_transition=/, response.redirect_url)
-    assert_equal @customer.id.to_s, Shop::CustomerSession.customer_id(session, @tenant.id).to_s
+    open_session do |sess|
+      verify_shop_email!(tenant_id: @tenant.id, email: @customer.email, session: sess)
+      hash = Shop::OrderReadySmsLink.hash_for(@order)
+      sess.get "/o/#{hash}", headers: { "HOST" => "www.example.com" }
+      assert_equal 302, sess.response.status
+      refute_match(/sms_transition=/, sess.response.redirect_url)
+      assert_equal @customer.id.to_s, Shop::CustomerSession.customer_id(sess.session, @tenant.id).to_s
+    end
   end
 
   test "T-C2c /o/ not blocked for allowed host" do
