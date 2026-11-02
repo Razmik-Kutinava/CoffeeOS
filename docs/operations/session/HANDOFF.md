@@ -2,14 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-02 (шаг 14 TASK_117 REVIEW)  
+**Дата:** 2026-11-02 (правила: explore не «на всякий»)  
 **Ветка:** `develop`  
 **Очередь:** [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) — один шаг = новый чат, `/start` берёт шаг сам  
-**Следующий шаг:** 🚀 5 + 🚀 6 + 🚀 7 — по апруву · новый чат → `/start` → шаг 15 TASK_118 · 👤 Android+iPhone (G4 TASK_99) · `WALLET_FORCE_UNAVAILABLE` — отдельный апрув · RLS-harden → `PRACTICES` V2-TASK-119-RLS-HARDEN · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
+**Следующий шаг:** шаг 14 push→CI · 🚀 5 + 🚀 6 + 🚀 7 — по апруву · `/start` → шаг 15 TASK_118 · 👤 Android+iPhone · `⚠️ Субагенты: пора` перед 🚀 — не блокер  
 **Субагенты-батч:** last=never (skip на `/review` 13–14) · tasks_since≥4 · nudge активен
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Правила: explore не дефолт** (2026-11-02) — звать только если пути неясны после узкого поиска; не «на всякий» / не рой репо | шаг 14 push/CI |
 | **Очередь, шаг 14 — REVIEW TASK_117** (2026-11-02) — SMS conflict → confirm; Location без `reconnect_token`; confirm → clear cart + caches + `#/profile?order=` · RED `d358c4a2` → GREEN `ff924f2d` · local «Проверка» Rails 48/0 JS 12/0 · ревью диффа вручную (субагенты skip) · crit-audit CLEAN · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · COMPONENT_MAP: да · [todo](todo.md) | push → CI green → шаг 14 `done` |
 | **Правила: /regress не дефолт** (2026-11-02) — после GREEN сразу `/review` (local зона в PHASE 3); отдельный `/regress` только пауза / пачка патчей / хотфикс / просьба | перед 🚀 |
 | **Очередь, шаг 14 — SPEC TASK_117** (2026-11-02) — SMS-ссылка: conflict → confirm до bind; без конфликта — bind без `reconnect_token` в URL; confirm → clear cart + push/offer caches + `#/profile?order=`; generation против гонок · файлы 6 · Не ломать / Проверка · миграции нет · [todo](todo.md) | `/sbr` |

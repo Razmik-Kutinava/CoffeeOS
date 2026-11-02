@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-11-02 — docs: explore — не «на всякий», только если пути неясны
+
+- Канон: дефолт без `explore`; звать 1 раз только после узкого поиска, если кандидатов много/пути неясны. Мелочь и пути из ТЗ — без. Правки: `coffeeos-agent-workflow` § explore, `/spec`, SBR, `SUBAGENTS`.
+
 ## 2026-11-02 — docs: /regress вне дефолтной цепочки
 
 - После GREEN → `/review` (local зона = шаг 1 PHASE 3, обязательно). Отдельный `/regress` только: пауза без review, пачка патчей, хотфикс без PHASE 3, просьба владельца. Reuse в review если regress только что PASS. Правки: `regress.md`, sbr/unlazy/README, agent-workflow, SBR, skills, AGENTS, PUSH_SMS_QUEUE.
