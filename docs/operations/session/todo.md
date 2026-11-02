@@ -4,7 +4,7 @@
 |------|----------|
 | **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · шаг **16** `in_progress` · зависимости 12 / 13 = done |
 | **Основание** | [TASK-121-…](../milestones/veha_2/requirements/customer_tasks/TASK-121-Повтор-заказа-из-истории-с-проверкой-цен-в-текущей-точке.md) · секция Subtask 8 · CBR #121 · Google Doc v3 |
-| **Статус** | **GREEN** 2026-11-02 · RED `51c50d5e` · миграции нет |
+| **Статус** | **GREEN** 2026-11-02 · RED `51c50d5e` · GREEN `70da0ca3` · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · миграции нет |
 | **Субагент** | нет — пути ясны |
 
 ## SBR
@@ -12,7 +12,7 @@
 - [x] intake (шаг 12 + секция Subtask 8 шага 16)
 - [x] SPEC — факты = код (ниже) · решения · файлы · Не ломать · Проверка · миграции нет
 - [x] RED `51c50d5e` — падающие тесты `[RED]` (сеть / закрытая → 200; вне сети 404)
-- [x] GREEN — `#repeat_preview` → `CodeBlackCrossPointOrders#find_order!` · local Проверка PASS
+- [x] GREEN `70da0ca3` — `#repeat_preview` → `CodeBlackCrossPointOrders#find_order!` · local Проверка PASS · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4`
 - [ ] `/review`
 
 ## Факты = код (сверка на SPEC)
