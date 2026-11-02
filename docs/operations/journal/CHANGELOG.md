@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-11-02 — docs: intake TASK_118 — SMS «Заказ готов» → история CODE:BLACK (очередь, шаг 15)
+
+- Текст уже в `customer_tasks/TASK-118-…md` с шага 0.3; Google Docs = локальный файл 1:1; шаг 15 → `in_progress`; CBR #118; зависимости done; Subtask 9 не повторять. Код не менялся. Next: `/spec`.
+
 ## 2026-11-02 — docs: TASK_117 CI green — очередь шаг 14 done
 
 - Push `62f6e539..c44e2058` · CI [41449958217](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41449958217) + Semgrep/CodeQL green · шаг 14 → `done` · CBR #117. Не задеплоено (🚀 7). Next: `/start` → шаг 15 TASK_118.

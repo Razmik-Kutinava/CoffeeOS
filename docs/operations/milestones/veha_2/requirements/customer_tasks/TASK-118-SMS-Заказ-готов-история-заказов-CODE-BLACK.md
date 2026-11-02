@@ -1,10 +1,10 @@
 # TASK_118: SMS «Заказ готов» → история заказов CODE:BLACK
 
-**ID заказчика:** TASK_118 · **CBR:** #118 · **Дата intake:** 2026-10-28 (шаг 0.3 [очереди Push + SMS](../PUSH_SMS_QUEUE.md))  
+**ID заказчика:** TASK_118 · **CBR:** #118 · **Дата intake:** 2026-10-28 (шаг 0.3 [очереди Push + SMS](../PUSH_SMS_QUEUE.md)) · **шаг 15:** 2026-11-02  
 **Источник:** Google Doc Spec  
 **Артефакты:** нет (только текст)  
 **Google Doc:** https://docs.google.com/document/d/1DVbALzcHHRccOAMk3SMJUU1gA7StyB_pxmNA_RhScII/edit  
-**Статус:** Subtask 9 (тест длины SMS + строки-уточнения в ТЗ #39 и #82) — шаг 0.3 очереди, в работе · остальное (Subtask 1–8, 10–13) — шаг 15 очереди, ждёт TASK_115, TASK_116, TASK_117, TASK_120 и этап 1 TASK_119
+**Статус:** шаг 15 `in_progress` · Subtask 9 — done (шаг 0.3) · Subtask 1–8, 10–13 — в работе · зависимости A/B/C/F + этап 1 E + Патч 1 TASK_92 = done
 
 ---
 
@@ -68,6 +68,10 @@ TASK_118: SMS «Заказ готов» → история заказов CODE:B
 
 ## Заметки агента
 
-- Метки в тексте → ID заказчика (по таблице меток [очереди](../PUSH_SMS_QUEUE.md)): TASK-CODE-BLACK-NETWORK-MEMBERSHIP = TASK_115 (A), TASK-CODE-BLACK-CROSS-POINT-ORDER-HISTORY = TASK_116 (B), TASK-SHOP-SMS-SESSION-TRANSITION-EXT = TASK_117 (C), TASK-SHOP-CART-ON-TENANT-SWITCH = TASK_120 (F), TASK-PRODUCTION-RLS-VERIFY-HARDEN = TASK_119 (E). Метка `TASK-39-SMS-READY-LINK-ORDER-HISTORY-EXT` в строке-уточнении = эта задача (TASK_118). Текст строки вставляем дословно, метку не меняем.
-- Очередь: шаг 0.3 — только Subtask 9 (тест длины с реальным хостом из `fly.toml` + две строки-уточнения в ТЗ #39 и #82). Остальные подзадачи — шаг 15 очереди.
-- Факты из раздела 2 (номера строк, «65 из 70», «71 символ») сверяем с кодом на `/spec`.
+- Метки в тексте → ID заказчика (по таблице меток [очереди](../PUSH_SMS_QUEUE.md)): TASK-CODE-BLACK-NETWORK-MEMBERSHIP = TASK_115 (A), TASK-CODE-BLACK-CROSS-POINT-ORDER-HISTORY = TASK_116 (B), TASK-SHOP-SMS-SESSION-TRANSITION-EXT = TASK_117 (C), TASK-SHOP-CART-ON-TENANT-SWITCH = TASK_120 (F), TASK-PRODUCTION-RLS-VERIFY-HARDEN = TASK_119 (E), Патч 1 TASK_92 = шаг 2. Метка `TASK-39-SMS-READY-LINK-ORDER-HISTORY-EXT` в строке-уточнении = эта задача (TASK_118). Текст строки вставляем дословно, метку не меняем.
+- Очередь: шаг 0.3 — Subtask 9 done. Шаг 15 (2026-11-02) — остальное. Сверка шапки (п. 4): «Зависит от» = очередь 2, 4, 5, 13, 14, 0.4 — все `done`. Строка «Статус: документ не готов к Build…» в тексте заказчика — снимок на 2026-10-24; ждать больше нечего (A/B/C/F + этап 1 E закрыты). Текст заказчика не правим.
+- Google Docs MCP 2026-11-02: тело Doc = локальный файл 1:1 (v4), новый файл не создавали.
+- Subtask 9 (тест длины + уточнения в #39/#82) — уже сделан в 0.3, на Build не повторять.
+- После TASK_117: без конфликта short link ещё может вести на `#/order/:id`; TASK_118 владеет сменой цели на `#/profile?order=<id>` для всех действительных ссылок. `reconnect_token` из Location уже убран в шаге 14 — на `/spec` сверить, что документ ещё пишет `reconnect_token` в «Текущем поведении».
+- Факты из раздела 2 (номера строк, «65 из 70», редирект, 404) сверяем с кодом на `/spec`; зона карты (Profile / highlight `?order=`, short link → ЛК) → COMPONENT_MAP на `/spec`.
+- Миграции по тексту нет.
