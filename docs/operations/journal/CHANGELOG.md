@@ -11,6 +11,14 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-11-02 — docs: TASK_121 CI green — очередь шаг 12 done
+
+- Push `48412465..3c555276`, CI [41439722267](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41439722267) зелёный + Semgrep/CodeQL. Первая попытка упала на `scan_ruby` (свежие advisories `addressable`/`rack`) — гемы обновлены до 2.9.2 / 3.2.8. Шаг 12 очереди Push + SMS закрыт; следующий — 🚀 5 (по апруву), затем шаг 13 TASK_116. Не задеплоено.
+
+## 2026-11-02 — feat: TASK_121 REVIEW — проверка цен перед повтором из истории (очередь, шаг 12)
+
+- Ревью диффа вручную без bugbot/security-субагентов: 0 находок C1–C5. crit-audit CLEAN `6f13e80c..b64a7657`. COMPONENT_MAP: `historyRepeatAdapter`, `OrdersController#repeat_preview`, новые `historyRepeatPriceCheck` / `HistoryRepeatNotice`. Entire `01M6E12XSECHGEDV4WMJVTHYFX`.
+
 ## 2026-10-29 — docs: TASK_121 /regress PASS (очередь, шаг 12)
 
 - Локальная регрессия по todo «Проверка»: JS 10 файлов 106/109 (3 legacy `repeat_invalid_token_payment`, ISSUES); Rails 8 файлов 87 runs 0 F/E; вся JS-зона 951: 879/72 (baseline legacy); rubocop 0; `vite:build` OK. Следующий шаг — `/review`.

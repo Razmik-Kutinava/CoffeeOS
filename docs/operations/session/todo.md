@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK-121-…](../milestones/veha_2/requirements/customer_tasks/TASK-121-Повтор-заказа-из-истории-с-проверкой-цен-в-текущей-точке.md) — Subtask 1–7, 9–13 (Subtask 8 — шаг 16, после TASK_116) · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 12 · [Google Doc](https://docs.google.com/document/d/1PE0qQOQD3P2khmm19K8w0s1awGl9hOmQJkK90oVEKLQ/edit) · EXT TASK_94 (и Патч 1) |
 | **Не в scope** | Init/Charge и `widgetRepeatPayFlow` · Quick Repeat (`createRepeatInlineOrder`, `RepeatSection`) и общий FSM (`repeatInlinePayUiStore` — без новых состояний) · checkout · `clearCartAfterSuccessfulPay` · `OrderCreator`, `GrowthPromo`, расчёт цен в `CartService` · PATCH исходного заказа · смена точки и корзина при смене точки (TASK_120) · показ скидки в чеке · кнопка «Оформить по новым ценам» · заказы других и закрытых точек (Subtask 8) · `OrdersController#active/cancel/wallet_pass` · риск переиспользования pending-заказа в `OrderCreator` (раздел 3, вне задачи) |
-| **Статус** | `in_progress` — GREEN `b64a7657` (RED `f8c1be95`) |
+| **Статус** | `done` — CI green [41439722267](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41439722267) на `3c555276` · не задеплоено (🚀 5) |
 
 ## SBR
 
@@ -13,7 +13,7 @@
 - [x] RED `f8c1be95` — новые тесты (Rails + JS); перепись `runWith` в `lk_history_repeat_one_click_test.mjs` (Subtask 13)
 - [x] GREEN `b64a7657` — реализация; задача JS 40/0, Rails (preview + lk one-click) PASS; rubocop 0; `vite:build` OK
 - [x] `/regress` PASS — JS «Проверка» 10 файлов 106/109 (3 legacy `repeat_invalid_token`, ISSUES); Rails 8 файлов 87/0; вся JS-зона 951: 879/72 (baseline legacy); rubocop 0; `vite:build` OK
-- [ ] `/review` — bugbot + security-review + crit-audit, Entire, push, CI green, COMPONENT_MAP (`historyRepeatAdapter` + новая строка `OrdersController` — требование документа)
+- [x] `/review` — ревью диффа вручную (bugbot/security-review не запускались — решение владельца), crit-audit CLEAN, Entire `01M6E12XSECHGEDV4WMJVTHYFX`, push, CI green [41439722267](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41439722267) (+ фикс bundler-audit `3c555276`), COMPONENT_MAP: да (4 строки) → очередь 12 `done`
 
 ## Сверка фактов (SPEC 2026-10-29)
 
