@@ -11,7 +11,8 @@
 
 | Сейчас | Дальше |
 |--------|--------|
-| **🚀 5+6+7 Fly v524 PASS** (2026-11-02) · шаги 12–16 на проде · эконом: Sentry 0 · logs 5xx 0 · Neon skip · УК skip · MCP PASS · [MCP_RESULT v524](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_RESULT.md) · [todo](todo.md) | 👤 SMS E2E на телефоне · при необходимости выставить `code_black_member` на Point A |
+| **ops: Point A `code_black_member=true`** (2026-11-02) · прод, audit `tenant_code_black_member_changed` · [todo](todo.md) | 👤 SMS E2E на телефоне |
+| **🚀 5+6+7 Fly v524 PASS** (2026-11-02) · шаги 12–16 на проде · эконом: Sentry 0 · logs 5xx 0 · Neon skip · УК skip · MCP PASS · [MCP_RESULT v524](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_RESULT.md) · [todo](todo.md) | 👤 SMS на телефоне |
 | **Очередь, шаг 16 закрыт — TASK_121 Subtask 8** (2026-11-02) · **CI green** [41456144439](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41456144439) на `38d277e2` · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · без миграции · задеплоено v524 | — |
 | **ops: эконом-приёмка** (2026-11-02) — дефолт в `coffeeos-dev-gates` § Эконом-режим | — |
 | **Очередь 15 done — TASK_118** · CI [41453248573](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41453248573) · v524 | — |

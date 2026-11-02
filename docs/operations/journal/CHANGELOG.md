@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-11)
 
+## 2026-11-02 — ops: Point A включён в сеть CODE:BLACK
+
+- Прод: `tenants.code_black_member` у `2fdee1ac-…` (Витрина А) `false` → `true` + audit `tenant_code_black_member_changed`. Код не менялся. Чтобы в истории реально были «другие точки», их тоже надо отметить в сети (сейчас sales_point с флагом — только Point A).
+
 ## 2026-11-02 — deploy: 🚀 5+6+7 Fly v524 — шаги 12–16 на проде
 
 - `fly deploy` coffeeos → **v524** (HEAD `7d161e84`, без миграций). Эконом-пачка: Sentry ruby 0 новых/24h · Fly logs 5xx 0 · Neon skip · УК skip · MCP Point A PASS (TASK_121 блок/match, TASK_116 история+метка точки, receipt smoke). Очередь 🚀 5/6/7 → `done`. [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_RESULT.md). Дальше: 👤 SMS на телефоне.

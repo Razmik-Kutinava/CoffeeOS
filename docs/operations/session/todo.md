@@ -15,4 +15,7 @@
 ## Дальше (не агент)
 
 - [ ] 👤 SMS «Заказ готов» / conflict на телефоне
-- [ ] при необходимости: `code_black_member=true` на Point A (сеть TASK_116)
+
+## Ops
+
+- [x] Point A `code_black_member=true` на проде (2026-11-02)
