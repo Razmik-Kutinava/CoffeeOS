@@ -1,99 +1,115 @@
-# todo — TASK_121: Повтор заказа из истории с проверкой цен в текущей точке (очередь, шаг 12)
+# todo — TASK_116: История заказов клиента по всем точкам CODE:BLACK (очередь, шаг 13)
 
 | Поле | Значение |
 |------|----------|
-| **Основание** | [TASK-121-…](../milestones/veha_2/requirements/customer_tasks/TASK-121-Повтор-заказа-из-истории-с-проверкой-цен-в-текущей-точке.md) — Subtask 1–7, 9–13 (Subtask 8 — шаг 16, после TASK_116) · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 12 · [Google Doc](https://docs.google.com/document/d/1PE0qQOQD3P2khmm19K8w0s1awGl9hOmQJkK90oVEKLQ/edit) · EXT TASK_94 (и Патч 1) |
-| **Не в scope** | Init/Charge и `widgetRepeatPayFlow` · Quick Repeat (`createRepeatInlineOrder`, `RepeatSection`) и общий FSM (`repeatInlinePayUiStore` — без новых состояний) · checkout · `clearCartAfterSuccessfulPay` · `OrderCreator`, `GrowthPromo`, расчёт цен в `CartService` · PATCH исходного заказа · смена точки и корзина при смене точки (TASK_120) · показ скидки в чеке · кнопка «Оформить по новым ценам» · заказы других и закрытых точек (Subtask 8) · `OrdersController#active/cancel/wallet_pass` · риск переиспользования pending-заказа в `OrderCreator` (раздел 3, вне задачи) |
-| **Статус** | `done` — CI green [41439722267](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41439722267) на `3c555276` · не задеплоено (🚀 5) |
+| **Основание** | [TASK-116-…](../milestones/veha_2/requirements/customer_tasks/TASK-116-История-заказов-клиента-по-всем-точкам-CODE-BLACK.md) — Subtask 1–13 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 13 · [Google Doc](https://docs.google.com/document/d/1W0uXR3bzAUmYg5W79T4Rb-jMDanuIJ0TZX8BgSKh70s/edit) · метка B / `TASK-CODE-BLACK-CROSS-POINT-ORDER-HISTORY` |
+| **Не в scope** | объединение / изменение записей клиентов · OTP-merge и linkers · принимать от клиента список точек или чужой `customer_id` · `shop_city_lookup` / `with_shop_city_lookup` · `CustomerTenantHistory` как источник заказов · `historyRepeatAdapter` и поведение «Повторить» (TASK_121 / G) · смена текущей точки и корзина (TASK_120 / F) · Quick Repeat · платежи / checkout / Wallet / FCM · SMS-каскад · `#active` / cancel / wallet_pass · этап 2 TASK_119 (шаг 13a / Q3) · миграция новой RLS-политики |
+| **Статус** | `in_progress` — SPEC готов · Next: `/sbr` |
 
 ## SBR
 
-- [x] intake `19e4e4d0` — текст 1:1, CBR #121, очередь 12 → `in_progress`
+- [x] intake `732d6540` — текст 1:1, CBR #116, очередь 13 → `in_progress`
 - [x] SPEC — факты = код (ниже) · решения · файлы · Не ломать · Проверка · миграции нет
-- [x] RED `f8c1be95` — новые тесты (Rails + JS); перепись `runWith` в `lk_history_repeat_one_click_test.mjs` (Subtask 13)
-- [x] GREEN `b64a7657` — реализация; задача JS 40/0, Rails (preview + lk one-click) PASS; rubocop 0; `vite:build` OK
-- [x] `/regress` PASS — JS «Проверка» 10 файлов 106/109 (3 legacy `repeat_invalid_token`, ISSUES); Rails 8 файлов 87/0; вся JS-зона 951: 879/72 (baseline legacy); rubocop 0; `vite:build` OK
-- [x] `/review` — ревью диффа вручную (bugbot/security-review не запускались — решение владельца), crit-audit CLEAN, Entire `01M6E12XSECHGEDV4WMJVTHYFX`, push, CI green [41439722267](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41439722267) (+ фикс bundler-audit `3c555276`), COMPONENT_MAP: да (4 строки) → очередь 12 `done`
+- [ ] RED — падающие тесты (Rails + JS)
+- [ ] GREEN — реализация + регрессия зоны
+- [ ] `/regress`
+- [ ] `/review` — bugbot + security-review + crit-audit + Entire + push + CI → очередь 13 `done`
 
-## Сверка фактов (SPEC 2026-10-29)
+## Сверка фактов (SPEC 2026-11-02)
 
 | Документ | Код | Итог |
 |---|---|---|
-| `historyRepeatAdapter.js` `:60-91` создание, `:73` `DELETE /cart`, `:74-80` `addToCart` без `try`, `:82-91` `POST /orders`, `:174-179` оплата, `:212-230` catch, `:37-45,60` маппинг, `:65-71` профиль 422 | то же (маппинг `:33-46`); `runHistoryRepeatPayFlow` `:146-234`, `:241-244` — это `startHistoryRepeatFromOrderId` (из `Profile`) | ✅ без сдвига |
-| `Profile.svelte:47-50,135-140`, `OrderReceipt.svelte:74-82`, `:159-170` | то же; обе кнопки ловят исключение адаптера → `repeatError = e.message` у кнопки, `disabled` / выход по `payUi.busy`; переход на `/` делает адаптер (`navigate`) | ✅ |
-| `shopCartAdd.js:78-82` тело, `:89-93` ответ | `:81-85`, `:92` | ✅ сдвиг +3 |
-| `cart_service.rb:16-21` любой Hash-сессии, `:25-26` RecordNotFound, `:155` `price`, `:159` `unit_total`, `:163` total без акции, `:206-215,280-299` цена | `initialize` `:18-25` (+ сброс TASK_120 `:180-187` — на пустом Hash метки нет → не срабатывает), `add!` `:33-34`, `price` `:166`, `unit_total` `:170`, total `:174`, `line_unit_price` / `verified_modifier_delta` `:305-324` | ✅ сдвиг от TASK_120 |
-| `orders_controller.rb:243-251` items, `:248` `price` = `unit_price`, `:233` `total` = `final_amount` | то же; ещё `discount_amount` `:235` уже в ответе | ✅ |
-| `routes.rb:198-202` — эндпоинта расчёта нет | корзина `:199-203`; `get "orders/:id"` `:233` | ✅ |
-| `order_creator.rb:101-113` `unit_price` с модификаторами, `:59-61` акция только при `save_card`, `:43-47,368-378` reuse pending | то же (`:360-378`); `modifier_options.selected_modifiers` хранит `id/name/price` | ✅ |
-| `growth_promo.rb:155` `update_column(:counter)` в `point_allows_promo?` | то же (`app/services/payments/growth_promo.rb`) | ✅ превью его не вызывает |
-| `OrderOwnership` | `app/controllers/concerns/shop/api/order_ownership.rb`: `find_visible_order!` при pending / `reconnect_token` **пишет в сессию** (`set_customer_id!`, `GuestOrderReconnect.bind!`); `scope_visible_orders` — только `customer_id` сессии, без записи | ⚠️ → превью через `scope_visible_orders` (как `show`, без `try_reconnect_from_params!`) |
-| «то же ограничение частоты, что у корзины» | у `/shop/api/cart*` своего правила нет — только общий `shop/api` 150/мин/IP (`rack_attack.rb:177-179`) | ✅ превью под ним автоматически, Rack::Attack не меняем |
-| COMPONENT_MAP `:19` Profile, `:20` OrderReceipt, `:11` cartSheetStore, `:22` PaymentMethodsSheet, `:42` historyRepeatAdapter, `:44` widgetRepeatPayFlow | `:19`, `:20`, `:11`, `:22` — на месте; `historyRepeatAdapter` `:45`, `widgetRepeatPayFlow` `:48` (сдвиг от строк TASK_110); строки `OrdersController` в карте нет | ✅ |
-| Тесты `lk_history_repeat_one_click_test.mjs:54-211`, `:79-119`; `.rb:7-40` | то же; `runWith` (`:147-166`) зовёт `runHistoryRepeatPayFlow` с `api: async () => ({})` — с превью по умолчанию все 6 тестов Патча 1 упадут | ⚠️ → явная перепись `runWith` (подставляем совпавшее превью) |
-| Раздел «Проверка»: `npm test -- --run`, `npm run lint`, `npm run typecheck` | в `package.json` только `vite:dev` / `vite:build`; JS-тесты — `node --test` | ⚠️ команды — по структуре проекта (документ разрешает: «определить при сборке») |
+| `orders_controller.rb:113-117` history: текущая точка + `customer_id`; `:130-138` без данных точки | `history` `:122-154` (сдвиг после TASK_121 `repeat_preview`); фильтр `tenant_id: @shop_tenant.id` + `customer_id` + `source: :mobile`; page/per_page max 50; JSON без `tenant` | ✅ сдвиг; поведение то же |
+| `orders_controller.rb:28-32` show только текущая точка → 404 чужой | `show` `:34-50`: `Order.where(tenant_id: @shop_tenant.id, customer_id: cid, source: :mobile)` | ✅ сдвиг; поведение то же |
+| `order_json` / `tenant_pickup_json` — метка точки заказа | `order_json` `:240-265` → `tenant: tenant_pickup_json` (`:283-288`) = **текущий** `@shop_tenant`, не точка заказа; без `id` / `display_address` | ⚠️ → для чека другой точки отдавать `TenantAddress.client_json(order.tenant)` (+ признак закрытости) |
+| `shopAccountOrders.js:13-16` page=1 per_page=20 | `:12-17` | ✅ |
+| `Profile.svelte:62-64,128` → receipt; `:1-81` query не читает | `openReceipt` `:62-64`; row `:126-128`; params/query нет; статус в разметке не показан (хотя API отдаёт `status`) | ✅ + Subtask 5/7 → UI |
+| `OrderReceipt.svelte:27-31,118-119` load; `:16,112` назад `/profile` | load `:27-31`; back `:16,112` → `push("/profile")` без query; названия точки нет | ✅ |
+| `TenantAddress.client_json` `:10-24` | `display` `:10-15`, `client_json` `:17-25` (id, name, city, address, display_address) | ✅ |
+| `CustomerTenantHistory` `:57-66,72-92` — не для заказов | `city_sales_points` `:57-66` + `with_shop_city_lookup`; `last_ordered` `:68-86` | ✅ не использовать |
+| `Rls::GucContext.with_shop_city_lookup` `:20-21,33-41` | то же; запрет для истории | ✅ |
+| `Tenant.code_black_network` (TASK_115) | `tenant.rb:75` — `where(code_black_member: true, type: "sales_point")` **без** фильтра `status` → закрытые точки сети уже в scope | ✅ |
+| `mobile_customers` phone unique, без tenant | `schema.rb:433-456` | ✅ |
+| `customer_session.rb:4` «разные customer_id» vs схема | комментарий `:3-5` устарел; bucket по точке `:7,10-19,22-29` — один `MobileCustomer` на телефон | ✅ как в документе |
+| `PaymentResult` / `Product` разбор query hash | `PaymentResult.svelte:164-165`, `Product.svelte:50-52` | ✅ образец для `#/profile?order=` |
+| `Header` display_address | `:105` (не `:71,79`) | ✅ сдвиг |
+| `OrderOwnership` | `scope_visible_orders` / `find_visible_order!` — только `@shop_tenant.id`; `show`/`history` свой `where`, не через ownership scope | ⚠️ сеть — новый сервис, ownership не ослаблять |
+| RLS prod (TASK_119 этап 1) | роль `neondb_owner` BYPASSRLS; политика `rls_orders_isolation` = только `app.current_tenant_id` (+ админы) | ✅ → код с фильтрами; `shop_city_lookup` запрещён |
+| Тесты history isolation | `orders_controller_test.rb:292-338` — без сети заказ B не виден с заголовком B до заказа в B; `ownership_idor_test.rb` — одна точка; нет теста show A при заголовке B | ✅ переписать/дополнить явно |
 
 **Находки:**
-- **Механизма сообщений на главной нет.** `cartSheetError` (баннер TASK_120) живёт в шторке корзины, и `Catalog` при открытии зовёт `refreshCartSheet()` → `cartSheetError.set(null)` (`cartSheetStore.js:259`) — сообщение стёрлось бы сразу. → по документу «небольшой закрывающийся блок над каталогом», в потоке страницы (канон CartSheet: без `fixed`).
-- **Неактивная опция модификатора корзину не останавливает:** `ModifierSelection.build` и `verified_modifier_delta` не смотрят `is_active` — опция с `is_active: false` считается по цене. Удалённая опция → `RecordNotFound`. Subtask 7 требует считать неактивную опцию недоступностью → проверка `is_active` в сервисе превью одним запросом, `CartService` не меняем.
-- **Профиль и чек, скорее всего, без правок:** переход на `/` и сброс `history:*` делает адаптер, ошибка превью приходит в существующий `repeatError`. Документ перечисляет оба файла «ожидаемо» — правим, только если тест покажет нужду.
-- `historyRepeatAdapter.js` 244 строки, `orders_controller.rb` 281 — уже больше 200; правки минимальные (+≈15 / +≈15), логика сравнения и тексты — в новом модуле; сплит вне scope.
-- Плашка установки (`ShopPwaBanner`, `fixed`, `top: 3.25rem`) может закрыть верх блока сообщения на iPhone — то же, что ISSUES 🟡 «плашка закрывает заголовок первой категории»; не чиним здесь.
+- **Текущая точка вне сети:** если всегда отдавать только заказы `code_black_network`, несетевая точка потеряет свою историю (ломает Subtask 13). → решение: сеть включается **только** когда текущая точка ∈ `Tenant.code_black_network`; иначе — прежний фильтр одной точки.
+- **`order_json.tenant` сегодня = текущая витрина**, не точка заказа — при кросс-point чеке введёт в заблуждение; правим источник метки.
+- **Статус в API уже есть**, в `Profile` не рисуется — Subtask 5 = UI.
+- **`orders_controller.rb` ~292 строк** (>200) — логику выборки сети вынести в сервис, контроллер тонкий.
+- **RLS в тестах:** при `FORCE` + GUC текущей точки `Order.where(tenant_id: other)` пустой. Без новой политики (13a) кросс-чтение в сервисе — в транзакции с `SET LOCAL row_security = off` **после** фиксированного списка id сети и с `.where(customer_id:, tenant_id: network_ids)` в том же запросе + комментарий coffeeos-core (граница = код, prod BYPASSRLS). `shop_city_lookup` не трогать.
+- **Комментарий `CustomerSession`** про разные customer_id — не чинить в этой задаче (вне scope).
 
 ## Решения
 
-Решения агента в рамках документа (владелец может поправить):
-- **Ответ превью** — `GET /shop/api/orders/:id/repeat_preview` → `{ order_id, items: [{ product_id, product_name, quantity, price, unit_total, line_total, unavailable }], total, previous_total, previous_discount }`. Старые значения (`price` = `unit_price`, `previous_total` = `final_amount`, `previous_discount` = `discount_amount`) берёт сервер из того же заказа — сравнение на клиенте не зависит от порядка строк в `GET /orders/:id`. Тело запроса не нужно: состав читается только из выбранного заказа.
-- **Сравнение** (клиент, чистая функция) — в копейках (`Math.round(x * 100)`). Порядок причин: недоступная позиция → «некоторых позиций нет в этой точке»; акция (`previous_discount > 0` или `previous_total` ≠ сумме старых строк) → «он был оформлен по акции»; любая цена за единицу или общая сумма отличается → «цены изменились»; иначе — повтор как раньше.
-- **Расчёт по строке** — отдельный `CartService` на своём пустом Hash на каждую строку заказа (`add!` → `json_lines`), `RecordNotFound` / `OverflowError` → `unavailable: true`; строки не сливаются, одна плохая не ломает остальные. Запросы в цикле — осознанно: цену считает только `CartService` (документ запрещает менять/дублировать расчёт), строк не больше `MAX_CART_LINES` (20). Строка без `product_id`, удалённая или неактивная опция (один запрос `ProductModifierOption.where(id:)`) → `unavailable`.
-- **Владелец** — `scope_visible_orders.includes(:order_items).find(id)`; без входа — 401 (как `show`), чужой / другой точки — 404 `Order not found` без подробностей; `reconnect_token` / pending в превью не принимаем (они пишут в сессию).
-- **Адаптер** — превью в начале `runHistoryRepeatPayFlow` (параметр `previewRepeat`, по умолчанию — запрос превью), после `busy: true` (кнопка заблокирована на время проверки, подпись прежняя), **до** `createOrder` и вне основного `try`: несовпадение → `resetRepeatInlinePayUi()` + сообщение в память + `navigate("/")`, возврат `{ repeatBlocked: <причина> }`; ошибка превью → `resetRepeatInlinePayUi()` и исключение с текстом «Не удалось проверить цены. Попробуйте ещё раз.» (экраны покажут его в `repeatError`, `errorText` в общий store не пишем). `widgetRepeatPayFlow` и FSM не трогаем.
-- **Сообщение на главной** — store в памяти; блок в начале `Catalog.svelte` (над категориями и над скелетоном), крестик + свайп в сторону; закрывается и при уходе с главной (`onDestroy`) → «один раз», после перезагрузки нет.
+Решения агента (владелец может поправить):
+- **Когда сеть:** `current ∈ code_black_network` → `tenant_id IN Tenant.code_black_network.select(:id)` (закрытые включены); иначе → только `@shop_tenant.id`.
+- **Владелец:** только `customer_id` из `CustomerSession.customer_id(session, current)`; параметры клиента со списком точек / чужим id игнорируются / не принимаются.
+- **history JSON:** к существующим полям + `tenant: { id, name, display_address, closed }` (`closed` = `status != "active"`, R11); при `closed` фронт в строке показывает «Точка закрыта» без названия.
+- **show:** тот же scope сети/точки + `customer_id`; 404 без подробностей для чужого / вне сети; `tenant` в `order_json` — от **заказа** (`TenantAddress.client_json` + `closed`); корзину и `@shop_tenant` не менять.
+- **Выделение:** константа `HISTORY_ORDER_HIGHLIGHT_MS = 3000`; разбор `order` из hash query как в `PaymentResult`; scroll + outline до первого pointer/touch или таймаута; нет на странице — тихо.
+- **«Повторить»:** не трогать адаптер; кнопка остаётся на всех строках.
+- **RLS:** без миграции политики; узкий `row_security off` только в сервисе выборки (см. находки); тесты с `RlsTestBootstrap` / явными фильтрами.
 
 План:
-1. **`app/services/shop/history_repeat_preview.rb`** (новый) — `Shop::HistoryRepeatPreview.new(order:, tenant_id:).call` → хеш ответа (Subtask 1, 5, 7, 10: без сессии гостя, без `GrowthPromo`).
-2. **`OrdersController#repeat_preview`** + `get "orders/:id/repeat_preview"` перед `get "orders/:id"` (Subtask 1, 10).
-3. **`app/frontend/lib/historyRepeatPriceCheck.js`** (новый) — тексты (Subtask 11), `fetchRepeatPreview`, `compareRepeatPreview` → `{ ok } | { ok: false, reason }` (Subtask 2–5, 7), store сообщения `historyRepeatNotice` + `showHistoryRepeatNotice` / `dismissHistoryRepeatNotice` (Subtask 6).
-4. **`historyRepeatAdapter.js`** — шаг превью в `runHistoryRepeatPayFlow` (Subtask 1–6, 9, 12).
-5. **`app/frontend/components/HistoryRepeatNotice.svelte`** (новый) + монтирование в **`Catalog.svelte`** (Subtask 6).
+1. Новый `Shop::CodeBlackCrossPointOrders` — ids сети, scope history, find for show (фильтры + RLS-обёртка).
+2. `OrdersController#history` / `#show` / `order_json` — через сервис; метка точки заказа.
+3. `shopAccountOrders.js` — поля tenant в typedef; хелперы подписи точки / closed.
+4. `Profile.svelte` — статус, метка точки, highlight по `?order=`.
+5. `OrderReceipt.svelte` — показать точку заказа (closed → «Точка закрыта»).
 
 ## Файлы (ожидаемо)
 
-1. `app/services/shop/history_repeat_preview.rb` — **новый**: расчёт текущих цен и наличия по строкам заказа на временных сессиях `CartService`, проверка опций (Subtask 1, 5, 7, 10).
-2. `app/controllers/shop/api/orders_controller.rb` — действие `repeat_preview`: владелец, вызов сервиса, JSON (Subtask 1, 10).
-3. `config/routes.rb` — `get "orders/:id/repeat_preview"`.
-4. `app/frontend/lib/historyRepeatPriceCheck.js` — **новый**: тексты, запрос превью, сравнение, store сообщения (Subtask 2–7, 11).
-5. `app/frontend/lib/historyRepeatAdapter.js` — проверка до `DELETE /cart`, переход на `/` при несовпадении, ошибка превью (Subtask 1–6, 9, 12).
-6. `app/frontend/components/HistoryRepeatNotice.svelte` — **новый**: закрывающийся блок над каталогом (Subtask 6).
-7. `app/frontend/routes/Catalog.svelte` — монтирование блока (Subtask 6).
+1. `app/services/shop/code_black_cross_point_orders.rb` — **новый**: список id сети, scope истории, поиск заказа для show (Subtask 1–4, 6, 9, 12).
+2. `app/controllers/shop/api/orders_controller.rb` — `history` / `show` / `order_json.tenant` (Subtask 1–6, 8–9, 12–13).
+3. `app/frontend/lib/shopAccountOrders.js` — типы и подпись точки / closed (Subtask 8–9).
+4. `app/frontend/routes/Profile.svelte` — статус, метка точки, выделение `?order=` (Subtask 5, 7–9).
+5. `app/frontend/routes/OrderReceipt.svelte` — метка точки заказа в чеке (Subtask 4, 8–9).
 
-Соседи (blast-radius, без правок): `app/services/shop/cart_service.rb` — только вызов (`initialize` / `add!` / `json_lines`) · `app/controllers/concerns/shop/api/order_ownership.rb` — `scope_visible_orders` · `app/frontend/routes/Profile.svelte`, `OrderReceipt.svelte` — кнопки повтора и `repeatError` (правка только если тест покажет нужду).
+Соседи (blast-radius, без правок кода задачи): `app/services/shop/tenant_address.rb` — только вызов `client_json` · `app/models/tenant.rb` — `code_black_network` · `app/controllers/concerns/shop/api/order_ownership.rb` — не ослаблять; `active`/cancel/wallet_pass без изменений · `app/frontend/lib/historyRepeatAdapter.js` — не трогать (Subtask 10, 13).
 
 **Тесты:**
-- `test/services/shop/history_repeat_preview_test.rb` — **новый**: цены совпадают; цена выше; ниже; товар недоступен (снят с продажи / выключен / нет настройки точки / неактивен); опция удалена; опция неактивна; изменилась надбавка опции; строка без `product_id`; заказ по акции — `previous_discount` / `previous_total`; `Payments::GrowthPromo.price!` и `point_allows_promo?` не вызываются, `counter` не меняется.
-- `test/integration/shop/api/orders_repeat_preview_test.rb` — **новый**: владелец → 200 и форма ответа; корзина гостя до и после — та же, `Set-Cookie` нет (TASK_120 Патч 1); без входа — 401; чужой заказ и заказ другой точки — 404 без данных; `reconnect_token` не привязывает сессию; правило `shop/api` покрывает путь превью (`rack_attack_test_helper`).
-- `test/javascript/history_repeat_price_check_test.mjs` — **новый**: совпадение → `ok`; цена выше / ниже; общая сумма отличается; акция; недоступная позиция; модификаторы (сравнение `unit_total` ↔ `price`); приоритет причин; тексты-константы; путь запроса превью; store сообщения (показ, закрытие, не в `localStorage`); SSR `HistoryRepeatNotice` (текст, крестик, `aria-label`, без `position: fixed`) и монтирование в `Catalog`.
-- `test/javascript/lk_history_repeat_one_click_test.mjs` — дополнить: превью вызывается до `DELETE /cart`; несовпадение (цены / акция / недоступно) → нет `DELETE /cart`, `addToCart`, `POST /orders`, оплаты; `navigate("/")` один раз, сообщение в store, `history:*` сброшен; ошибка превью → без навигации и без заказа, исключение с текстом, `busy: false`, `errorText` пустой; без отличий — прежняя цепочка. **Явная перепись:** `runWith` (`:147-166`) получает `previewRepeat` с совпавшим превью — тесты Патча 1 проверяют прежнее поведение после проверки (Subtask 12–13).
-- `test/integration/shop/lk_history_repeat_one_click_test.rb` — охранный: адаптер по-прежнему на `runRepeatWidgetPayFlow`, превью до `DELETE /cart` по исходнику.
+- `test/services/shop/code_black_cross_point_orders_test.rb` — **новый**: сеть / вне сети / закрытая / разные org / чужой customer / пустой cid.
+- `test/integration/shop/api/orders_history_code_black_test.rb` — **новый**: history по сети; вне сети; пагинация без дыр; tenant в JSON; closed; чужой customer_id в params не помогает; show A при заголовке B (свой / чужой / вне сети); корзина не меняется.
+- Дополнить `test/integration/shop/api/orders_controller_test.rb` / `ownership_idor_test.rb` — явная регрессия одной точки и IDOR.
+- `test/javascript/shop_account_orders_test.mjs` и/или LK-тест — подпись точки, closed, highlight (на странице / нет / маршрут с query); SSR/разметка Profile/OrderReceipt по необходимости.
+- Тесты с политиками RLS (`rls_test_bootstrap` / роль без bypass) — фильтры в запросе и запрет `shop_city_lookup`.
 
 ## Не ломать
 
-- Повтор из истории без отличий (TASK_94 + Патч 1): очистка корзины → позиции → `POST /orders` → оплата; CONFIRMED → `/`; отказ карты / нет карт → экран оплаты, не `/`; сеть — повтор на месте; `releaseHistoryRepeatUi` при уходе с ЛК и чека.
-- Quick Repeat на главной и общий store / FSM: `history:*` не остаётся после блокировки повтора; `widgetRepeatPayFlow`, Init/Charge, `clearCartAfterSuccessfulPay` — без изменений.
-- Корзина гостя и cookie-сессия: превью не пишет в сессию (TASK_120 Патч 1 — без `Set-Cookie`), корзина и баннер смены точки (TASK_120) — как были; каталог и `CartSheet` — единственный нижний слой.
-- Чек `#/order/:id/receipt`: ОФД-секция и её опрос, «Итого» = `final_amount`.
+- История и чек **одной** точки вне сети CODE:BLACK — как сейчас (только `tenant_id` текущей).
+- «Повторить» из ЛК/чека (TASK_94 + TASK_121): превью цен, `DELETE /cart` только после ok, notice, `releaseHistoryRepeatUi`.
+- `#active` / cancel / wallet_pass / ОФД-секция и poll чека.
+- Смена точки и сброс корзины (TASK_120); `CustomerTenantHistory` / выбор точки в шапке.
 
 ## Проверка
 
-- `node --test test/javascript/history_repeat_price_check_test.mjs test/javascript/lk_history_repeat_one_click_test.mjs test/javascript/widget_repeat_pay_flow_fallback_ui_test.mjs test/javascript/widget_repeat_pay_flow_patch1_test.mjs test/javascript/open_repeat_payment_sheet_test.mjs test/javascript/repeat_invalid_token_payment_test.mjs test/javascript/clear_cart_after_successful_pay_test.mjs test/javascript/subscription_offer_card_test.mjs test/javascript/cart_tenant_reset_test.mjs test/javascript/shop_catalog_load_test.mjs` (`repeat_invalid_token_payment` — 3 известных legacy, ISSUES)
-- `bin/rails test test/services/shop/history_repeat_preview_test.rb test/integration/shop/api/orders_repeat_preview_test.rb test/integration/shop/lk_history_repeat_one_click_test.rb test/integration/shop/api/orders_controller_test.rb test/services/shop/cart_service_test.rb test/services/shop/cart_service_tenant_switch_test.rb test/integration/shop/api/cart_persistence_test.rb test/integration/shop/api/cart_tenant_switch_test.rb` · `bundle exec rubocop` по изменённым Ruby-файлам · вся JS-зона `node --test "test/javascript/**/*.mjs"` (известные legacy — ISSUES) · `npm run vite:build`
+- `bin/rails test test/services/shop/code_black_cross_point_orders_test.rb test/integration/shop/api/orders_history_code_black_test.rb test/integration/shop/api/orders_controller_test.rb test/integration/shop/api/ownership_idor_test.rb test/integration/shop/lk_history_repeat_one_click_test.rb test/integration/rls_tenant_isolation_test.rb test/integration/multi_tenant_isolation_test.rb test/integration/shop/api/tenant_isolation_test.rb`
+- `node --test test/javascript/lk_history_repeat_one_click_test.mjs test/javascript/shop_personal_account_lk_test.mjs test/javascript/history_repeat_price_check_test.mjs` (+ новый JS-тест выделения/метки, если добавим) · `bundle exec rubocop` по изменённым Ruby · `npm run vite:build`
 
 ## DoD
 
-- Subtask 1–7, 9–13; миграции нет.
-- При отличии цены или суммы, заказе по акции, недоступной позиции — заказ и платёж не создаются, корзина не меняется, гость на главной с сообщением; ошибка превью — сообщение у кнопки, гость на экране; без отличий — TASK_94 и Патч 1 как были.
-- Fly MCP на Point A после 🚀 5: повтор совпавшего заказа (оплата не обязательна — до шторки), заказ с изменённой ценой / по акции → главная с сообщением, корзина цела.
-- COMPONENT_MAP на `/review`: `historyRepeatAdapter` + новая строка `OrdersController` (документ) + решение по новым блоку и модулю.
+- Subtask 1–13; миграции нет; `shop_city_lookup` не используется для истории/чека.
+- В сети — свои заказы всех точек-членов (вкл. закрытые) с меткой; вне сети точки — заказ не в списке; чужие не утекают; чек другой точки сети без смены точки/корзины; highlight ≤ 3 с.
+- «Повторить» и TASK_121 без регрессии; COMPONENT_MAP на `/review`: `OrdersController`, `Profile`, `OrderReceipt`.
+
+---
+
+# todo — TASK_121: Повтор заказа из истории с проверкой цен в текущей точке (очередь, шаг 12) — done
+
+| Поле | Значение |
+|------|----------|
+| **Основание** | [TASK-121-…](../milestones/veha_2/requirements/customer_tasks/TASK-121-Повтор-заказа-из-истории-с-проверкой-цен-в-текущей-точке.md) — Subtask 1–7, 9–13 (Subtask 8 — шаг 16) · очередь шаг 12 |
+| **Статус** | `done` — CI green [41439722267](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41439722267) · не задеплоено (🚀 5) |
+
+## SBR (архив)
+
+- [x] intake → SPEC → RED `f8c1be95` → GREEN `b64a7657` → `/regress` → `/review` + CI → очередь 12 `done`
 
 ---
 
