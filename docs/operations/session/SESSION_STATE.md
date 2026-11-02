@@ -2,12 +2,13 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-02 (шаг 13a TASK_119 Q3→A done)  
+**Дата:** 2026-11-02 (шаг 14 TASK_117 intake)  
 **Ветка:** `develop`  
 **Субагенты-батч:** `last=never (skip на /review 13)` · `tasks_since≥3` · `⚠️ Субагенты: пора` (перед 🚀 — не блокер; оплата — настаиваем)
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Очередь 14 intake** (2026-11-02) · Google Docs MCP OK (`1_QJ0B8…`, одна вкладка) · новый `customer_tasks/TASK-117-Безопасное-подтверждение-смены-клиентской-сессии-по-SMS-ссылке.md` (текст 1:1) · CBR #117 · очередь 14 → `in_progress` · сверка шапки (п. 4): «Зависит от» TASK_112 / TASK_120 + этап 1 E = «1, 5, 0.4» (все `done`); приёмка Subtask 4 после 13 — шаг 13 `done`; «готов к Build» = `todo` · метки: SMS-SESSION-TRANSITION-EXT = 117, ENV-SNAPSHOT = 112, CART-ON-TENANT-SWITCH = 120, RLS-VERIFY = 119, SMS-READY-LINK = 118 · миграции нет (по тексту) · зона карты (GuestOrderReconnect, OrderStatus, сессия) → на `/spec` читать COMPONENT_MAP · факты файл:строка не сверялись · Субагент: нет — intake | `/spec` шага 14 |
 | **Очередь 13a done — Q3→A** (2026-11-02) · этап 2 TASK_119 в очереди не делаем · Q3 закрыт · RLS-harden → `PRACTICES` **V2-TASK-119-RLS-HARDEN** (backlog B/C) · CBR #119 / ISSUES 🟡 обновлены · docs-only · Субагент: нет · [todo](todo.md) | 🚀 5 + 🚀 6 по апруву · `/start` → шаг 14 TASK_117 |
 | **Очередь 13 done** (2026-11-02) · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` на `75055edb` · push `2400053b..ce0baedf` · **CI green** [41444177250](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41444177250) + Semgrep/CodeQL · очередь 13 → `done` · CBR #116 — done · COMPONENT_MAP: да (4 строки) · Fly MCP — после 🚀 6 · [todo](todo.md) | 🚀 6 по апруву (после 13a/Q3) · `/start` → шаг 13a |
 | **Очередь 13 REVIEW** (2026-11-02) · local `/regress` PASS · bugbot / security-review: не запускались (решение владельца) → ревью диффа вручную: 0 находок · crit-audit CLEAN `b64a7657..75055edb` · COMPONENT_MAP: да — Profile, OrderReceipt, shopAccountOrders, OrdersController · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · Fly MCP — после 🚀 6 · Субагент: нет · [todo](todo.md) | push → CI green → очередь 13 `done` |
