@@ -2,8 +2,9 @@
 
 require "test_helper"
 
-# TASK_121 Subtask 1, 10: GET /shop/api/orders/:id/repeat_preview — только владелец,
-# корзина и cookie-сессия гостя не меняются, общий лимит shop API.
+# TASK_121 Subtask 1, 8, 10: GET /shop/api/orders/:id/repeat_preview — только владелец,
+# корзина и cookie-сессия гостя не меняются, общий лимит shop API;
+# Subtask 8: заказы других/закрытых точек сети CODE:BLACK — цены текущей точки.
 class Shop::Api::OrdersRepeatPreviewTest < ActionDispatch::IntegrationTest
   include TestFactories
   include ShopEmailTestHelper
@@ -36,6 +37,29 @@ class Shop::Api::OrdersRepeatPreviewTest < ActionDispatch::IntegrationTest
 
   def session_cookie_written?(sess)
     Array(sess.response.headers["set-cookie"]).join("\n").include?("#{SESSION_COOKIE}=")
+  end
+
+  def seed_history_order!(tenant:, customer:, unit_price: 200)
+    order = Order.create!(
+      tenant_id: tenant.id,
+      customer_id: customer.id,
+      customer_name: "Guest",
+      order_number: "RP8-#{SecureRandom.hex(3)}",
+      source: :mobile,
+      status: :issued,
+      total_amount: unit_price * 2,
+      discount_amount: 0,
+      final_amount: unit_price * 2
+    )
+    OrderItem.create!(
+      order: order,
+      product_id: @product.id,
+      product_name: @product.name,
+      quantity: 2,
+      unit_price: unit_price,
+      total_price: unit_price * 2
+    )
+    order
   end
 
   test "owner gets current prices of the order lines in this point" do
@@ -116,8 +140,8 @@ class Shop::Api::OrdersRepeatPreviewTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test "order of another point is not visible from this point → 404" do
-    tenant_b = create_tenant!(name: "Shop B", slug: "shop-b-#{SecureRandom.hex(4)}")
+  test "order of another point outside CODE:BLACK network → 404" do
+    tenant_b = create_tenant!(name: "Shop B", slug: "shop-b-#{SecureRandom.hex(4)}", code_black_member: false)
     enable_product_for_tenant!(tenant: tenant_b, product: @product, price: 210)
 
     open_session do |sess|
@@ -127,6 +151,69 @@ class Shop::Api::OrdersRepeatPreviewTest < ActionDispatch::IntegrationTest
       sess.get "/shop/api/orders/#{order_id}/repeat_preview", headers: headers(tenant_b)
       assert_equal 404, sess.response.status
       refute_includes sess.response.body, "unit_total"
+    end
+  end
+
+  # TASK_121 Subtask 8 [TDD]
+  test "CODE:BLACK network: order of another point → preview prices of current point" do
+    org_a = create_organization!(name: "RP8 OrgA #{SecureRandom.hex(3)}")
+    org_b = create_organization!(name: "RP8 OrgB #{SecureRandom.hex(3)}")
+    point_a = create_tenant!(name: "RP8 A", slug: "rp8-a-#{SecureRandom.hex(3)}", organization: org_a, code_black_member: true)
+    point_b = create_tenant!(name: "RP8 B", slug: "rp8-b-#{SecureRandom.hex(3)}", organization: org_b, code_black_member: true)
+    enable_product_for_tenant!(tenant: point_a, product: @product, price: 200)
+    setting_b = enable_product_for_tenant!(tenant: point_b, product: @product, price: 250)
+    customer = create_mobile_customer!(email: "rp8-net-#{SecureRandom.hex(3)}@example.com")
+    order = seed_history_order!(tenant: point_a, customer: customer, unit_price: 200)
+
+    open_session do |sess|
+      verify_shop_email!(tenant_id: point_b.id, email: customer.email, session: sess)
+      setting_b.update!(price: 260)
+
+      sess.get "/shop/api/orders/#{order.id}/repeat_preview", headers: headers(point_b)
+      assert_equal 200, sess.response.status, sess.response.body
+      body = sess.response.parsed_body
+      assert_equal order.id, body["order_id"]
+      line = body["items"].first
+      assert_equal 200.0, line["price"]
+      assert_equal 260.0, line["unit_total"]
+      assert_equal 520.0, line["line_total"]
+      assert_equal false, line["unavailable"]
+      assert_equal 520.0, body["total"]
+      assert_equal 400.0, body["previous_total"]
+    end
+  end
+
+  # TASK_121 Subtask 8 [TDD]
+  test "CODE:BLACK network: order of closed point → preview prices of current point" do
+    org = create_organization!(name: "RP8 ClosedOrg #{SecureRandom.hex(3)}")
+    point_closed = create_tenant!(
+      name: "RP8 Closed",
+      slug: "rp8-c-#{SecureRandom.hex(3)}",
+      organization: org,
+      code_black_member: true,
+      status: "blocked"
+    )
+    point_b = create_tenant!(name: "RP8 Open", slug: "rp8-o-#{SecureRandom.hex(3)}", organization: org, code_black_member: true)
+    enable_product_for_tenant!(tenant: point_closed, product: @product, price: 190)
+    setting_b = enable_product_for_tenant!(tenant: point_b, product: @product, price: 240)
+    customer = create_mobile_customer!(email: "rp8-cl-#{SecureRandom.hex(3)}@example.com")
+    order = seed_history_order!(tenant: point_closed, customer: customer, unit_price: 190)
+
+    open_session do |sess|
+      verify_shop_email!(tenant_id: point_b.id, email: customer.email, session: sess)
+
+      sess.get "/shop/api/orders/#{order.id}/repeat_preview", headers: headers(point_b)
+      assert_equal 200, sess.response.status, sess.response.body
+      body = sess.response.parsed_body
+      assert_equal order.id, body["order_id"]
+      line = body["items"].first
+      assert_equal 190.0, line["price"]
+      assert_equal 240.0, line["unit_total"]
+      assert_equal 480.0, line["line_total"]
+      assert_equal false, line["unavailable"]
+      assert_equal 480.0, body["total"]
+      assert_equal 380.0, body["previous_total"]
+      assert_equal setting_b.price.to_f, line["unit_total"]
     end
   end
 
