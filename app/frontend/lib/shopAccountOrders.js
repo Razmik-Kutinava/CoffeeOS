@@ -1,8 +1,12 @@
 import { api } from "./api.js"
 import { isOfflineError } from "./shopNetwork.js"
 
+/** TASK_116: выделение заказа в истории до первого касания, не дольше 3 с. */
+export const HISTORY_ORDER_HIGHLIGHT_MS = 3000
+
 /**
- * @typedef {{ id: number|string, order_number?: string, title?: string, created_at: string, total?: number, status?: string }} AccountOrderRow
+ * @typedef {{ id?: string, name?: string, display_address?: string, closed?: boolean }} AccountOrderTenant
+ * @typedef {{ id: number|string, order_number?: string, title?: string, created_at: string, total?: number, status?: string, tenant?: AccountOrderTenant }} AccountOrderRow
  */
 
 /**
@@ -39,4 +43,29 @@ export function orderHistoryLabel(order) {
 /** @param {AccountOrderRow} order */
 export function orderHistoryTitle(order) {
   return order.title?.trim() || "Заказ"
+}
+
+/**
+ * TASK_116: название точки или «Точка закрыта» без названия (R11).
+ * @param {{ tenant?: AccountOrderTenant } | null | undefined} orderOrTenant
+ */
+export function orderHistoryPointLabel(orderOrTenant) {
+  const tenant = orderOrTenant?.tenant ?? orderOrTenant
+  if (!tenant || typeof tenant !== "object") return ""
+  if (tenant.closed) return "Точка закрыта"
+  return (tenant.name || "").trim()
+}
+
+/**
+ * @param {string} [hash] location.hash, например `#/profile?order=42`
+ * @returns {string | null}
+ */
+export function parseProfileHighlightOrderId(hash) {
+  const raw = hash == null ? "" : String(hash)
+  const qi = raw.indexOf("?")
+  if (qi < 0) return null
+  const path = raw.slice(0, qi)
+  if (!path.includes("/profile")) return null
+  const id = new URLSearchParams(raw.slice(qi + 1)).get("order")
+  return id && String(id).trim() ? String(id).trim() : null
 }

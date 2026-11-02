@@ -36,11 +36,9 @@ module Shop
         cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
         return head :unauthorized if cid.blank?
 
-        order = Order.where(
-          tenant_id: @shop_tenant.id,
-          source: :mobile,
-          customer_id: cid
-        ).includes(:order_items, :fiscal_receipts, :payments).find(params[:id])
+        order = Shop::CodeBlackCrossPointOrders
+          .new(current_tenant: @shop_tenant, customer_id: cid)
+          .find_order!(params[:id])
 
         Rails.logger.info("[Shop::Order] Viewing order #{order.id} by customer #{cid}")
         render json: order_json(order)
@@ -122,35 +120,30 @@ module Shop
       def history
         try_reconnect_from_params!
         cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
-        if cid.present?
-          orders = Order.where(tenant_id: @shop_tenant.id, customer_id: cid, source: :mobile)
-            .order(created_at: :desc)
-            .includes(:order_items)
-
-          if ActiveModel::Type::Boolean.new.cast(params[:today])
-            orders = orders.where("orders.created_at >= ?", Time.zone.today.beginning_of_day)
-          end
-
-          page = [ params[:page].to_i, 1 ].max
-          raw = params[:per_page].presence&.to_i
-          per_page = raw.nil? || raw < 1 ? 20 : [ raw, 50 ].min
-          orders = orders.limit(per_page).offset((page - 1) * per_page)
-
-          render json: orders.map { |o|
-            first_item = o.order_items.first
-            {
-              id: o.id,
-              order_number: o.order_number,
-              title: first_item&.product_name.presence || "Заказ",
-              status: o.status,
-              total: o.final_amount.to_f,
-              created_at: o.created_at.iso8601,
-              items_count: o.order_items.size
-            }
-          }
-        else
-          render json: []
+        if cid.blank?
+          return render json: []
         end
+
+        page = [ params[:page].to_i, 1 ].max
+        raw = params[:per_page].presence&.to_i
+        per_page = raw.nil? || raw < 1 ? 20 : [ raw, 50 ].min
+        since = ActiveModel::Type::Boolean.new.cast(params[:today]) ? Time.zone.today.beginning_of_day : nil
+        cross = Shop::CodeBlackCrossPointOrders.new(current_tenant: @shop_tenant, customer_id: cid)
+        orders = cross.history_orders(page: page, per_page: per_page, since: since)
+
+        render json: orders.map { |o|
+          first_item = o.order_items.first
+          {
+            id: o.id,
+            order_number: o.order_number,
+            title: first_item&.product_name.presence || "Заказ",
+            status: o.status,
+            total: o.final_amount.to_f,
+            created_at: o.created_at.iso8601,
+            items_count: o.order_items.size,
+            tenant: cross.tenant_json(o.tenant)
+          }
+        }
       end
 
       # #35 A3 + #36 A1/A2 — активные заказы: status sheet + чек (items/mods/totals)
@@ -248,7 +241,7 @@ module Shop
           fiscal_expected: order.payments.any? { |p| p.provider.to_s == "tbank" },
           created_at: order.created_at.iso8601,
           reconnect_token: Shop::GuestOrderReconnect.token_for(order),
-          tenant: tenant_pickup_json,
+          tenant: order_tenant_json(order),
           **Shop::OrderCancellationPresenter.meta_for(order),
           fiscal_receipts: fiscal_receipts_json(order),
           items: order.order_items.map do |item|
@@ -286,6 +279,15 @@ module Shop
           address: @shop_tenant.address,
           city: @shop_tenant.city
         }
+      end
+
+      # TASK_116: метка точки заказа (не текущей витрины); city/address сохранены для старых клиентов.
+      def order_tenant_json(order)
+        tenant = order.tenant || @shop_tenant
+        Shop::CodeBlackCrossPointOrders
+          .new(current_tenant: @shop_tenant, customer_id: nil)
+          .tenant_json(tenant)
+          .merge(address: tenant.address, city: tenant.city)
       end
     end
   end

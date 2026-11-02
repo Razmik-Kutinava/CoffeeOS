@@ -4,10 +4,13 @@
   import { api } from "../lib/api.js"
   import { useTelegramBack } from "../lib/telegram.js"
   import {
+    HISTORY_ORDER_HIGHLIGHT_MS,
     fetchAccountOrderHistory,
     formatOrderHistoryDate,
     orderHistoryLabel,
-    orderHistoryTitle
+    orderHistoryPointLabel,
+    orderHistoryTitle,
+    parseProfileHighlightOrderId
   } from "../lib/shopAccountOrders.js"
   import PlgBlockSection from "../components/PlgBlockSection.svelte"
   import SubscriptionOfferCard from "../components/SubscriptionOfferCard.svelte"
@@ -27,9 +30,17 @@
   let supportSheetOpen = $state(false)
   let payUi = $state(/** @type {any} */ ({}))
   let repeatError = $state("")
+  let highlightOrderId = $state(/** @type {string | null} */ (null))
 
   onMount(() => {
     const unsubPay = repeatInlinePayUi.subscribe((v) => { payUi = v || {} })
+    const clearHighlight = () => { highlightOrderId = null }
+    let highlightTimer = 0
+    const onFirstPointer = () => {
+      clearHighlight()
+      window.clearTimeout(highlightTimer)
+      window.removeEventListener("pointerdown", onFirstPointer)
+    }
     ;(async () => {
       try {
         user = await api("profile")
@@ -43,10 +54,23 @@
       orders = result.orders
       historyError = result.errorKind
       historyLoading = false
+
+      const targetId = parseProfileHighlightOrderId(window.location.hash)
+      if (targetId && orders.some((o) => String(o.id) === String(targetId))) {
+        highlightOrderId = String(targetId)
+        queueMicrotask(() => {
+          const el = document.querySelector(`[data-highlight-order-id="${CSS.escape(String(targetId))}"]`)
+          el?.scrollIntoView?.({ block: "nearest", behavior: "smooth" })
+        })
+        highlightTimer = window.setTimeout(clearHighlight, HISTORY_ORDER_HIGHLIGHT_MS)
+        window.addEventListener("pointerdown", onFirstPointer, { once: true })
+      }
     })()
     return () => {
       unsubPay()
       releaseHistoryRepeatUi()
+      window.clearTimeout(highlightTimer)
+      window.removeEventListener("pointerdown", onFirstPointer)
     }
   })
 
@@ -124,13 +148,30 @@
     {:else}
       <div class="history-list">
         {#each orders as order (order.id)}
-          <div class="history-row" data-testid="shop-lk-order-row">
+          {@const isHighlight = highlightOrderId != null && String(order.id) === highlightOrderId}
+          <div
+            class="history-row"
+            class:history-row--highlight={isHighlight}
+            data-testid="shop-lk-order-row"
+            data-highlight-order-id={order.id}
+          >
+            {#if isHighlight}
+              <span hidden data-testid="shop-lk-order-highlight"></span>
+            {/if}
             <button type="button" class="history-main" onclick={() => openReceipt(order.id)}>
               <div class="history-top">
                 <span class="order-no">№{orderHistoryLabel(order)}</span>
                 <span class="order-date">{formatOrderHistoryDate(order.created_at)}</span>
               </div>
               <div class="order-title">{orderHistoryTitle(order)}</div>
+              <div class="order-meta">
+                {#if order.status}
+                  <span class="order-status" data-testid="shop-lk-order-status">{order.status}</span>
+                {/if}
+                {#if orderHistoryPointLabel(order)}
+                  <span class="order-point" data-testid="shop-lk-order-point">{orderHistoryPointLabel(order)}</span>
+                {/if}
+              </div>
             </button>
             <button
               type="button"
@@ -166,11 +207,15 @@
   h2 { margin: 0 0 12px; font-size: 16px; font-weight: 700; }
   .history-list { display: flex; flex-direction: column; gap: 8px; }
   .history-row { display: flex; align-items: stretch; gap: 8px; background: #2a2a2a; border-radius: 12px; overflow: hidden; }
+  .history-row--highlight { outline: 2px solid #ff8c42; outline-offset: -2px; }
   .history-main { flex: 1; background: none; border: none; color: inherit; text-align: left; padding: 14px 12px; cursor: pointer; }
   .history-top { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
   .order-no { font-weight: 600; font-size: 14px; }
   .order-date { color: #a0a0a0; font-size: 13px; }
   .order-title { color: #ddd; font-size: 14px; }
+  .order-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; font-size: 12px; color: #a0a0a0; }
+  .order-status { text-transform: lowercase; }
+  .order-point { color: #c8c8c8; }
   .repeat-btn { align-self: center; margin-right: 10px; padding: 8px 12px; border-radius: 999px; border: 1px solid #ff8c42; background: transparent; color: #ff8c42; font-size: 13px; cursor: pointer; white-space: nowrap; }
   .state-empty, .state-error { text-align: center; padding: 32px 16px; color: #a0a0a0; }
   .btn { margin-top: 12px; background: #ff8c42; color: #fff; border: none; border-radius: 12px; padding: 10px 20px; font-weight: 600; cursor: pointer; }

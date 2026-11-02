@@ -10,6 +10,7 @@
     ORDER_RECEIPT_FISCAL_POLL_MS,
     shouldKeepPollingFiscal
   } from "../lib/orderReceiptFiscalPoll.js"
+  import { orderHistoryPointLabel } from "../lib/shopAccountOrders.js"
 
   let { params = {} } = $props()
 
@@ -120,6 +121,9 @@
   {:else}
     <section class="card">
       <h2>{primaryTitle()}</h2>
+      {#if orderHistoryPointLabel(order)}
+        <div class="point-label" data-testid="shop-order-receipt-point">{orderHistoryPointLabel(order)}</div>
+      {/if}
 
       <div class="check-section" data-testid="shop-order-fiscal-section">
         <h3>Чек</h3>
@@ -194,6 +198,7 @@
   h1 { margin: 0; font-size: 20px; font-weight: 700; }
   .card { margin: 16px; padding: 16px; background: #2a2a2a; border-radius: 16px; }
   h2 { margin: 0 0 12px; font-size: 18px; }
+  .point-label { margin: -4px 0 14px; font-size: 13px; color: #c8c8c8; }
   .check-section { margin-bottom: 16px; }
   .check-section h3 { margin: 0 0 8px; font-size: 14px; font-weight: 600; color: #c0c0c0; }
   .ofd-box { background: #1a1a1a; border-radius: 12px; padding: 12px; color: #a0a0a0; font-size: 13px; line-height: 1.45; min-height: 48px; }

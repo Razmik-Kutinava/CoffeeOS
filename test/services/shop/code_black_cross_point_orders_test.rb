@@ -59,7 +59,7 @@ class Shop::CodeBlackCrossPointOrdersTest < ActiveSupport::TestCase
     oc = make_order!(tenant: @point_closed, customer: @customer, created_at: 1.hour.ago)
     make_order!(tenant: @point_out, customer: @customer)
 
-    ids = service(tenant: @point_a, customer_id: @customer.id).history_scope.order(created_at: :desc).pluck(:id)
+    ids = service(tenant: @point_a, customer_id: @customer.id).history_scope.map(&:id)
     assert_equal [ oc.id, ob.id, oa.id ], ids
   end
 
@@ -67,7 +67,7 @@ class Shop::CodeBlackCrossPointOrdersTest < ActiveSupport::TestCase
     make_order!(tenant: @point_out, customer: @customer)
     oa = make_order!(tenant: @point_a, customer: @customer)
 
-    ids = service(tenant: @point_a, customer_id: @customer.id).history_scope.pluck(:id)
+    ids = service(tenant: @point_a, customer_id: @customer.id).history_scope.map(&:id)
     assert_equal [ oa.id ], ids
   end
 
@@ -75,7 +75,7 @@ class Shop::CodeBlackCrossPointOrdersTest < ActiveSupport::TestCase
     make_order!(tenant: @point_a, customer: @customer)
     out = make_order!(tenant: @point_out, customer: @customer)
 
-    ids = service(tenant: @point_out, customer_id: @customer.id).history_scope.pluck(:id)
+    ids = service(tenant: @point_out, customer_id: @customer.id).history_scope.map(&:id)
     assert_equal [ out.id ], ids
   end
 
@@ -83,14 +83,14 @@ class Shop::CodeBlackCrossPointOrdersTest < ActiveSupport::TestCase
     make_order!(tenant: @point_a, customer: @other)
     mine = make_order!(tenant: @point_b, customer: @customer)
 
-    ids = service(tenant: @point_a, customer_id: @customer.id).history_scope.pluck(:id)
+    ids = service(tenant: @point_a, customer_id: @customer.id).history_scope.map(&:id)
     assert_equal [ mine.id ], ids
   end
 
   test "blank customer_id → empty scope" do
     make_order!(tenant: @point_a, customer: @customer)
-    assert_empty service(tenant: @point_a, customer_id: nil).history_scope.pluck(:id)
-    assert_empty service(tenant: @point_a, customer_id: "").history_scope.pluck(:id)
+    assert_empty service(tenant: @point_a, customer_id: nil).history_scope.map(&:id)
+    assert_empty service(tenant: @point_a, customer_id: "").history_scope.map(&:id)
   end
 
   test "find_order! returns own network order from another point" do
