@@ -29,28 +29,35 @@ module Shop
       Base64.urlsafe_encode64(uuid_bytes + mac, padding: false)
     end
 
-    def self.find_order(order_hash)
+    # TASK_118: distinguish expired (MAC ok, TTL out) vs invalid (forge/garbage).
+    # Returns { status: :ok|:expired|:invalid, order: Order? }.
+    def self.resolve(order_hash)
       raw = Base64.urlsafe_decode64(order_hash.to_s)
-      return nil unless raw&.bytesize == TOKEN_BYTES
+      return { status: :invalid } unless raw&.bytesize == TOKEN_BYTES
 
       uuid_bytes = raw.byteslice(0, UUID_BYTES)
       mac = raw.byteslice(UUID_BYTES, MAC_BYTES)
       hex = uuid_bytes.unpack1("H*")
-      return nil unless hex&.length == 32
+      return { status: :invalid } unless hex&.length == 32
 
       uuid = [
         hex[0, 8], hex[8, 4], hex[12, 4], hex[16, 4], hex[20, 12]
       ].join("-")
       expected = OpenSSL::HMAC.digest("SHA256", secret, uuid)[0, MAC_BYTES]
-      return nil unless ActiveSupport::SecurityUtils.secure_compare(mac, expected)
+      return { status: :invalid } unless ActiveSupport::SecurityUtils.secure_compare(mac, expected)
 
       order = Order.find_by(id: uuid, source: :mobile)
-      return nil unless order
-      return nil if link_expired?(order)
+      return { status: :invalid } unless order
+      return { status: :expired } if link_expired?(order)
 
-      order
+      { status: :ok, order: order }
     rescue ArgumentError, TypeError
-      nil
+      { status: :invalid }
+    end
+
+    def self.find_order(order_hash)
+      result = resolve(order_hash)
+      result[:status] == :ok ? result[:order] : nil
     end
 
     def self.sms_message_for(order)

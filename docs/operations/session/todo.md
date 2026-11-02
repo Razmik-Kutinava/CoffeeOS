@@ -4,14 +4,14 @@
 |------|----------|
 | **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · шаг **15** `in_progress` · зависимости 2 / 4 / 5 / 13 / 14 / 0.4 = done |
 | **Основание** | [TASK-118-…](../milestones/veha_2/requirements/customer_tasks/TASK-118-SMS-Заказ-готов-история-заказов-CODE-BLACK.md) · CBR #118 · Google Doc v4 |
-| **Статус** | **SPEC** 2026-11-02 · миграции нет · Subtask 9 не повторять · код не тронут |
+| **Статус** | **GREEN** 2026-11-02 · RED `7be416af` → GREEN (ниже) · миграции нет · не задеплоено (🚀 7) |
 
 ## SBR
 
 - [x] intake (0.3 + шаг 15) — текст 1:1, CBR #118, очередь `in_progress`
 - [x] SPEC — факты = код (ниже) · решения · файлы · Не ломать · Проверка · миграции нет
-- [ ] RED — падающие тесты `[RED]`
-- [ ] GREEN — реализация + зона «Проверка»
+- [x] RED `7be416af` — resolve/screens/pin/profile Location `[RED]`
+- [x] GREEN — `resolve` + short link HTML/Location + `sms_entry` pin; задача short_links 8/0, sms_link 13/0; sms_transition 7+3; rack 5/0; ownership 11/0; JS pin+preferred 9/0 + sms_session 12/0; rubocop 0
 - [ ] `/review`
 
 ## Сверка фактов (SPEC 2026-11-02)

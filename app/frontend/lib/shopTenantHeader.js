@@ -145,14 +145,45 @@ export function shopTenantRedirectPending() {
   return tenantRedirectPending
 }
 
-export function navigateToTenant(tenantId, { remember = true } = {}) {
+export function navigateToTenant(tenantId, { remember = true, hash } = {}) {
   if (!tenantId) return
   if (remember) saveSelectedTenantId(tenantId)
   const url = new URL(window.location.href)
   url.searchParams.set("tenant_id", tenantId)
-  const hash = window.location.hash || "#/"
+  const nextHash = hash != null ? hash : window.location.hash || "#/"
   tenantRedirectPending = true
-  window.location.assign(`${url.pathname}${url.search}${hash}`)
+  window.location.assign(`${url.pathname}${url.search}${nextHash}`)
+}
+
+/** Query `sms_entry=1` from TASK_118 short-link redirect. */
+export function readSmsEntryFlag(search = typeof window !== "undefined" ? window.location.search : "") {
+  try {
+    return new URLSearchParams(search).get("sms_entry") === "1"
+  } catch {
+    return false
+  }
+}
+
+/**
+ * TASK_118: SMS entry must not yield to saved preferred point (S2).
+ * Closed/disabled current → preferred with `#/profile` and no `?order=` (S10).
+ *
+ * @param {{ smsEntry: boolean, currentAllowed: boolean, preferred?: string|null, currentId?: string|null, hash?: string }} opts
+ * @returns {{ action: "normal"|"stay"|"navigate", tenantId?: string, hash?: string }}
+ */
+export function resolveSmsEntryTenantNavigation({
+  smsEntry,
+  currentAllowed,
+  preferred = null,
+  currentId: _currentId = null,
+  hash: _hash = "#/"
+} = {}) {
+  if (!smsEntry) return { action: "normal" }
+  if (currentAllowed) return { action: "stay" }
+  if (preferred) {
+    return { action: "navigate", tenantId: String(preferred), hash: "#/profile" }
+  }
+  return { action: "stay" }
 }
 
 /** Старт витрины: редирект на точку с историей / выбранную, затем state шапки. */
@@ -189,6 +220,24 @@ export async function bootstrapShopTenant(api) {
   const currentAllowed =
     Array.isArray(switchableIds) &&
     switchableIds.map((id) => String(id)).includes(String(currentId))
+
+  const smsNav = resolveSmsEntryTenantNavigation({
+    smsEntry: readSmsEntryFlag(),
+    currentAllowed,
+    preferred,
+    currentId,
+    hash: typeof window !== "undefined" ? window.location.hash || "#/" : "#/"
+  })
+
+  if (smsNav.action === "stay") {
+    await refreshTenantHeader(api, cfg)
+    return cfg
+  }
+
+  if (smsNav.action === "navigate") {
+    navigateToTenant(smsNav.tenantId, { remember: true, hash: smsNav.hash })
+    return cfg
+  }
 
   // Inactive / чужой current (Fly Overnight) → всегда на preferred из активного списка
   if (!currentAllowed && preferred) {
