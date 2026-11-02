@@ -18,7 +18,9 @@ CoffeeOS SBR BUILD. Читай: `spec-build-review`, `coffeeos-commit-ops`, `cof
 
 После успешного GREEN:
 
-`Next: /regress`
+`Next: /review`
+
+(Отдельный `/regress` — **не** дефолт; только пауза / пачка патчей / хотфикс / просьба — см. `regress.md`.)
 
 Если только RED (ещё нужен GREEN):
 

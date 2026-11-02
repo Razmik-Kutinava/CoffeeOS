@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-11-02 — docs: /regress вне дефолтной цепочки
+
+- После GREEN → `/review` (local зона = шаг 1 PHASE 3, обязательно). Отдельный `/regress` только: пауза без review, пачка патчей, хотфикс без PHASE 3, просьба владельца. Reuse в review если regress только что PASS. Правки: `regress.md`, sbr/unlazy/README, agent-workflow, SBR, skills, AGENTS, PUSH_SMS_QUEUE.
+
 ## 2026-11-02 — docs: SPEC TASK_117 — SMS session transition confirm (очередь, шаг 14)
 
 - Факты = код; план: `SmsSessionTransition` + short link без тихого overwrite + confirm/decline API + FE-диалог/generation; после confirm — история с highlight; `reconnect_token` убрать из SMS Location. Файлы 6 · Не ломать / Проверка · миграции нет. Код не менялся.

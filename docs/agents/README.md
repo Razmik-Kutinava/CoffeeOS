@@ -8,7 +8,7 @@
 
 - **`AGENTS.md`** — канон процесса агента (ветки, правила, сервисы)
 - **`SUBAGENTS.md`** — когда звать Cursor-субагентов (explore/shell/bugbot/…)
-- Slash-команды: `.cursor/commands/` (`/start` `/spec` `/sbr` `/regress` `/review`)
+- Slash-команды: `.cursor/commands/` (`/start` `/spec` `/sbr` `/review`; `/regress` вне дефолтной цепочки)
 - Подпапка `AGENTS/` удалена 2026-08-09 (шум)
 
 ## Зачем это нам

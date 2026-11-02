@@ -13,7 +13,7 @@
 └── rules/                    ← правила агента (*.mdc)
 ```
 
-**Команды:** см. [`commands/README.md`](commands/README.md). Цепочка: `/start` → `/spec` → `/sbr` → `/regress` → `/review`. Каждая печатает `Next: /…`.
+**Команды:** см. [`commands/README.md`](commands/README.md). Цепочка: `/start` → `/spec` → `/sbr` → `/review`. `/regress` — вне цепочки. Каждая печатает `Next: /…`.
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: regress
-description: "CoffeeOS /regress — регрессия зоны до push/Fly. Вызывать через /regress."
+description: "CoffeeOS /regress — отдельная регрессия зоны (не дефолт). Пауза/пачка/хотфикс/просьба. Вызывать через /regress."
 disable-model-invocation: true
 ---
 
-Выполни инструкции из `.cursor/commands/regress.md` целиком. В конце: `Next: /review` (или `/sbr` при FAIL).
+Выполни инструкции из `.cursor/commands/regress.md` целиком. Не дефолт после GREEN — обычно `/review`. В конце: `Next: /review` | `/sbr` | стоп.

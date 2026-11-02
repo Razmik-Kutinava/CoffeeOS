@@ -62,9 +62,15 @@ PHASE 3: push без стопа — `spec-build-review.mdc` § PHASE 3.
 
 **Запрещено:** стопать `/review`, push, CI или deploy из‑за «субагенты не гонялись». Владелец может забить (токены) — ок. После прогона батча: в шапке `Субагенты-батч: last=<sha> · tasks_since=0`.
 
+### `/regress` (не дефолт)
+
+Дефолт после GREEN: **`/review`** (local зона = шаг 1 PHASE 3 — **обязателен**, код не ослаблять).  
+Отдельный `/regress` — **только**: пауза без review · пачка патчей до одного review · хотфикс/чинка без PHASE 3 · явная просьба. Канон: `.cursor/commands/regress.md`.  
+Запрещено звать `/regress` «потому что так в старой цепочке». Если `/regress` только что PASS и код не менялся → в `/review` `Local: reuse /regress PASS`.
+
 ## Slash / Entire / ctx-trim
 
-- Команды: `.cursor/commands/` · цепочка `/start` → `/spec` → `/sbr` → `/regress` → `/review` · кривая задача: `/patch` · после команды: `Next: /…`
+- Команды: `.cursor/commands/` · цепочка `/start` → `/spec` → `/sbr` → `/review` · `/regress` вне цепочки · кривая задача: `/patch` · после команды: `Next: /…`
 - Entire: `docs/operations/dev/ENTIRE.md`; пустой `explain` на REVIEW — стоп; CLI только WSL
 - `/ctx-trim`: `coffeeos-context-hygiene.mdc` (weekly пт–вс если `ctx_trim` >7d)
 

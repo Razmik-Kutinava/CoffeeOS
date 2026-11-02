@@ -4,4 +4,4 @@ description: "CoffeeOS /unlazy — ledger приёмки + gate-check. Substanti
 disable-model-invocation: true
 ---
 
-Выполни инструкции из `.cursor/commands/unlazy.md` целиком. В конце: `Next: /sbr` или `/regress` или `/review` по фазе.
+Выполни инструкции из `.cursor/commands/unlazy.md` целиком. В конце: `Next: /sbr` или `/review` по фазе.

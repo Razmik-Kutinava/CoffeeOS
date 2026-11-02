@@ -6,16 +6,17 @@ Slash-команды в чате Agent: введи `/` и выбери имя ф
 |---------|------|-------|-------------------|
 | `/start` | `start.md` | Старт; умный (не глотать всё). PHASE 0 только для нового ТЗ | `/spec` или `/sbr` |
 | `/spec` | `spec.md` | SPEC + 2–7 файлов | `/sbr` |
-| `/sbr` | `sbr.md` | RED→GREEN | `/regress` |
-| `/regress` | `regress.md` | Тесты зоны **до** push/Fly | `/review` |
-| `/review` | `review.md` | PHASE 3: local → ревью+crit-audit → Entire → push/CI → стоп; bugbot/security — nudge, не авто | `deploy — только по апруву` |
+| `/sbr` | `sbr.md` | RED→GREEN | `/review` |
+| `/regress` | `regress.md` | **Не дефолт** — отдельная зона: пауза / пачка / хотфикс / просьба | `/review` или стоп |
+| `/review` | `review.md` | PHASE 3: **local зона** → ревью+crit-audit → Entire → push/CI → стоп; bugbot/security — nudge | `deploy — только по апруву` |
 | `/crit-audit` | `crit-audit.md` | Аудит критических (C1–C5 + падающий тест, журнал, вердикт CLEAN/BLOCKED); сам в `/review` | `/review` или `/sbr` |
 | `/trace-bug` | `trace-bug.md` | Сквозной аудит бага оплата/OTP/merge (до правок) | `/spec` или `/sbr` |
 | `/ctx-trim` | `ctx-trim.md` | Архив ops, сжатие ISSUES, аудит rules, анализ токенов | `/start` |
-| `/unlazy` | `unlazy.md` | Substantial: GATES ledger + gate-check (не мелочь) | `/sbr` / `/regress` / `/review` |
+| `/unlazy` | `unlazy.md` | Substantial: GATES ledger + gate-check (не мелочь) | `/sbr` / `/review` |
 | `/patch` | `patch.md` | Кривая задача / кривой ответ: патч / EXT / переписать | `/sbr` или `/spec` |
 
-Цепочка: `/start` → (`/unlazy` при substantial) → `/spec` → `/sbr` → `/regress` → `/review`  
+Цепочка: `/start` → (`/unlazy` при substantial) → `/spec` → `/sbr` → `/review`  
+`/regress` — вне цепочки, только когда нужен отдельно (`regress.md`)  
 **Очередь Push + SMS:** один шаг = новый чат; `/start` сам берёт шаг из [`PUSH_SMS_QUEUE.md`](../../docs/operations/milestones/veha_2/requirements/PUSH_SMS_QUEUE.md), `/review` закрывает его и печатает `Next (новый чат): …`  
 Кривая после Review: `/patch` → `/sbr` (карта — после следующего Review)  
 **Периодика:** `/ctx-trim` — вручную или пт–вс (если `ctx_trim` >7 дней в HANDOFF)  

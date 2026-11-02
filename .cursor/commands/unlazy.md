@@ -26,8 +26,4 @@ Checker: `node .agents/skills/unlazy/scripts/gate-check.mjs`.
 
 Если gates зелёные после GREEN:
 
-`Next: /regress`
-
-Если после regress:
-
 `Next: /review`

@@ -2,7 +2,7 @@
 
 **Канон (не дублировать):** [`spec-build-review.mdc`](../rules/workflow/spec-build-review.mdc) § PHASE 3.
 
-Порядок: local → ревью диффа вручную + **`/crit-audit`** ([`crit-audit.md`](crit-audit.md); C1–C5 + падающий тест, `CLEAN` обязателен) → Entire (`explain` не пустой, иначе attach, не push) → push/CI (логи, чин, снова push) → **CI green → стоп**. Deploy — апрув владельца.
+Порядок: **local зона** («Проверка» / `dev-gates` — канон перед push; отдельный `/regress` не нужен; reuse только если `/regress` только что PASS и код не менялся) → ревью диффа вручную + **`/crit-audit`** ([`crit-audit.md`](crit-audit.md); C1–C5 + падающий тест, `CLEAN` обязателен) → Entire (`explain` не пустой, иначе attach, не push) → push/CI (логи, чин, снова push) → **CI green → стоп**. Deploy — апрув владельца.
 
 **`bugbot` / `security-review`:** не автозапуск. Политика батч+nudge (не блокер) — [`coffeeos-agent-workflow.mdc`](../rules/workflow/coffeeos-agent-workflow.mdc) § bugbot/security. В отчёте при ≥2–3 задачах с прошлого батча или перед deploy — строка `⚠️ Субагенты: пора`; на оплате/hot-path — «настаиваем». Старт субагентов — только по явной просьбе владельца.
 
