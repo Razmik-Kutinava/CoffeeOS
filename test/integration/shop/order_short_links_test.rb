@@ -27,12 +27,38 @@ class Shop::OrderShortLinksTest < ActionDispatch::IntegrationTest
     )
   end
 
-  test "T-C3a T-C3b T-C5c /o/:hash redirects with reconnect_token and binds guest session" do
+  test "T-C3a T-C3b T-C5c /o/:hash binds guest session without reconnect_token in Location (TASK_117)" do
     hash = Shop::OrderReadySmsLink.hash_for(@order)
     get "/o/#{hash}", headers: { "HOST" => "www.example.com" }
     assert_response :redirect
-    assert_match %r{/shop\?tenant_id=#{@tenant.id}&reconnect_token=}, response.redirect_url
+    assert_match %r{/shop\?tenant_id=#{@tenant.id}(?:&|#|\z)}, response.redirect_url
+    refute_match(/reconnect_token=/, response.redirect_url)
+    refute_match(/sms_transition=/, response.redirect_url)
     assert_match %r{#/order/#{@order.id}\z}, response.redirect_url
+    assert_equal @customer.id.to_s, Shop::CustomerSession.customer_id(session, @tenant.id).to_s
+  end
+
+  test "TASK_117 conflict: other customer in session → sms_transition, no bind" do
+    other = create_mobile_customer!(
+      phone: "+79008200999",
+      email: "olink-other-#{SecureRandom.hex(3)}@example.com"
+    )
+    Shop::CustomerSession.set_customer_id!(session, @tenant.id, other.id)
+
+    hash = Shop::OrderReadySmsLink.hash_for(@order)
+    get "/o/#{hash}", headers: { "HOST" => "www.example.com" }
+    assert_response :redirect
+    assert_match %r{/shop\?tenant_id=#{@tenant.id}&sms_transition=}, response.redirect_url
+    refute_match(/reconnect_token=/, response.redirect_url)
+    assert_equal other.id.to_s, Shop::CustomerSession.customer_id(session, @tenant.id).to_s
+  end
+
+  test "TASK_117 same customer: bind without confirm token" do
+    Shop::CustomerSession.set_customer_id!(session, @tenant.id, @customer.id)
+    hash = Shop::OrderReadySmsLink.hash_for(@order)
+    get "/o/#{hash}"
+    assert_response :redirect
+    refute_match(/sms_transition=/, response.redirect_url)
     assert_equal @customer.id.to_s, Shop::CustomerSession.customer_id(session, @tenant.id).to_s
   end
 
