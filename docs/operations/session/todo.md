@@ -1,16 +1,18 @@
-﻿# todo — TASK_118: SMS «Заказ готов» → история заказов CODE:BLACK (очередь, шаг 15)
+﻿# todo — TASK_121 Subtask 8: Повтор заказов других и закрытых точек (очередь, шаг 16)
 
 | Поле | Значение |
 |------|----------|
-| **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · шаг **15** `done` · зависимости 2 / 4 / 5 / 13 / 14 / 0.4 = done |
-| **Основание** | [TASK-118-…](../milestones/veha_2/requirements/customer_tasks/TASK-118-SMS-Заказ-готов-история-заказов-CODE-BLACK.md) · CBR #118 · Google Doc v4 |
-| **Статус** | **done** 2026-11-02 · CI green [41453248573](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41453248573) · миграции нет · не задеплоено (🚀 7) |
+| **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · шаг **16** `in_progress` · зависимости 12 / 13 = done |
+| **Основание** | [TASK-121-…](../milestones/veha_2/requirements/customer_tasks/TASK-121-Повтор-заказа-из-истории-с-проверкой-цен-в-текущей-точке.md) · секция Subtask 8 · CBR #121 · Google Doc v3 |
+| **Статус** | **intake** 2026-11-02 · текст 1:1 (шаг 12 + секция Subtask 8) · миграции нет · код не тронут |
 
 ## SBR
 
-- [x] intake · SPEC · RED `7be416af` · GREEN `5422913e` · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4`
-- [x] `/review` — local PASS · crit-audit CLEAN · COMPONENT_MAP: нет · push `3e0e1749` · **CI green** [41453248573](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41453248573) + Semgrep/CodeQL
+- [x] intake (шаг 12 + секция Subtask 8 шага 16) — CBR #121, очередь 16 → `in_progress`
+- [ ] SPEC — сверка файл:строка · решения · файлы · Не ломать · Проверка · миграции нет
+- [ ] RED / GREEN / `/review`
 
-## Итог
+## Scope (из документа, только Subtask 8)
 
-SMS `/o/:hash` → `#/profile?order=` + `sms_entry` pin; expired/invalid → HTML без bind; TASK_117 confirm сохранён; Subtask 9 — шаг 0.3.
+- [ ] Subtask 8: заказ другой или закрытой точки сети → тот же сценарий превью/повтора; цены по меню **текущей** точки; чтение заказа — механизм TASK_116 (`TASK-CODE-BLACK-CROSS-POINT-ORDER-HISTORY`)
+- Backend-тест: заказ другой точки (после TASK_116)

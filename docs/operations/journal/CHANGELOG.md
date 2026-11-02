@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-11)
 
+## 2026-11-02 — docs: intake TASK_121 Subtask 8 — повтор заказов других и закрытых точек (очередь, шаг 16)
+
+- Секция Subtask 8 в `customer_tasks/TASK-121-…md`; Google Docs = локальный 1:1; шаг 16 → `in_progress`; CBR #121; зависимости 12/13 done; статус «ждёт TASK_116» — устаревший снимок. Код не менялся. Next: `/spec`.
+
 ## 2026-11-02 — docs: TASK_118 CI green — очередь шаг 15 done
 
 - Push `b96f675b..3e0e1749` · CI [41453248573](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41453248573) + Semgrep/CodeQL green · шаг 15 → `done` · CBR #118. Не задеплоено (🚀 7). Next: `/start` → шаг 16 TASK_121 Subtask 8.
