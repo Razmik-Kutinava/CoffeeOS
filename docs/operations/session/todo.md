@@ -4,15 +4,15 @@
 |------|----------|
 | **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · шаг **14** `in_progress` · зависимости 1 / 5 / 0.4 / 13 = done |
 | **Основание** | [TASK-117-…](../milestones/veha_2/requirements/customer_tasks/TASK-117-Безопасное-подтверждение-смены-клиентской-сессии-по-SMS-ссылке.md) · CBR #117 · Google Doc v3 |
-| **Статус** | GREEN 2026-11-02 · Next: `/regress` · миграции нет |
+| **Статус** | REVIEW 2026-11-02 · очередь 14 → `done` после CI · миграции нет |
 
 ## SBR
 
 - [x] intake `8a6f4a66` — текст 1:1, CBR #117, очередь 14 → `in_progress`
 - [x] SPEC — факты = код (ниже) · решения · файлы · Не ломать · Проверка · миграции нет
 - [x] RED `d358c4a2` — падающие тесты `[RED]`
-- [x] GREEN — `SmsSessionTransition` + short link + API + FE dialog/generation; задача Rails 17/0, JS 12/0; соседи reconnect+refresh 13/0; rubocop 0; vite OK
-- [ ] `/regress` → `/review`
+- [x] GREEN `ff924f2d` — `SmsSessionTransition` + short link + API + FE dialog/generation; задача Rails 17/0, JS 12/0; соседи reconnect+refresh 13/0; rubocop 0; vite OK · Entire `01M6E2SNX67JASNF4ZVNFRQCSA`
+- [x] `/review` — local «Проверка» Rails 48/0 + JS 12/0 (вместо отдельного `/regress`) · ревью диффа вручную (bugbot/security skip — владелец) · crit-audit CLEAN · COMPONENT_MAP: да · push → CI
 
 ## Сверка фактов (SPEC 2026-11-02)
 

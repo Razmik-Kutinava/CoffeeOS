@@ -2,13 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-02 (правила: /regress вне дефолта; цепочка → /review)  
+**Дата:** 2026-11-02 (шаг 14 TASK_117 REVIEW)  
 **Ветка:** `develop`  
-**Субагенты-батч:** `last=never (skip на /review 13)` · `tasks_since≥3` · `⚠️ Субагенты: пора` (перед 🚀 — не блокер; оплата — настаиваем)
+**Субагенты-батч:** `last=never (skip на /review 13–14)` · `tasks_since≥4` · `⚠️ Субагенты: пора` (перед 🚀 — не блокер; оплата — настаиваем)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Правила: /regress не дефолт** (2026-11-02) · цепочка `/sbr` → `/review` (local зона в PHASE 3) · отдельный `/regress` только пауза/пачка/хотфикс/просьба · Субагент: нет | шаг 14 `/sbr` |
+| **Очередь 14 REVIEW** (2026-11-02) · local «Проверка» Rails 48/0 + JS 12/0 · rubocop 0 · vite OK · bugbot/security: skip (владелец) → ревью диффа вручную: 0 · crit-audit CLEAN `75055edb..ff924f2d` · COMPONENT_MAP: да — Dialog + smsSessionTransition + OrderStatus · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · Fly MCP — после 🚀 7 · Субагент: нет · [todo](todo.md) | push → CI green → очередь 14 `done` |
+| **Правила: /regress не дефолт** (2026-11-02) · цепочка `/sbr` → `/review` (local зона в PHASE 3) · отдельный `/regress` только пауза/пачка/хотфикс/просьба · Субагент: нет | перед 🚀 |
 | **Очередь 14 SPEC** (2026-11-02) · факты = код: short link сразу bind без сравнения; `reconnect_token` из URL FE не читает → убрать из SMS Location; автоподписка OrderStatus `:341-343` (сдвиг); CTA-кэш `clearSubscriptionOfferCtaCache` · решения: pending `sms_transition` + confirm/decline API; после confirm → `#/profile?order=`; без конфликта hash остаётся `#/order/:id` до TASK_118 · файлы 6 · Не ломать / Проверка · миграции нет · Субагент: нет — пути ясны · [todo](todo.md) | `/sbr` |
 | **Очередь 13a done — Q3→A** (2026-11-02) · этап 2 TASK_119 в очереди не делаем · Q3 закрыт · RLS-harden → `PRACTICES` **V2-TASK-119-RLS-HARDEN** (backlog B/C) · CBR #119 / ISSUES 🟡 обновлены · docs-only · Субагент: нет · [todo](todo.md) | 🚀 5 + 🚀 6 по апруву · `/start` → шаг 14 TASK_117 |
 | **Очередь 13 done** (2026-11-02) · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` на `75055edb` · push `2400053b..ce0baedf` · **CI green** [41444177250](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41444177250) + Semgrep/CodeQL · очередь 13 → `done` · CBR #116 — done · COMPONENT_MAP: да (4 строки) · Fly MCP — после 🚀 6 · [todo](todo.md) | 🚀 6 по апруву (после 13a/Q3) · `/start` → шаг 13a |

@@ -15,6 +15,10 @@
 
 - После GREEN → `/review` (local зона = шаг 1 PHASE 3, обязательно). Отдельный `/regress` только: пауза без review, пачка патчей, хотфикс без PHASE 3, просьба владельца. Reuse в review если regress только что PASS. Правки: `regress.md`, sbr/unlazy/README, agent-workflow, SBR, skills, AGENTS, PUSH_SMS_QUEUE.
 
+## 2026-11-02 — feat: TASK_117 REVIEW — SMS session transition confirm (очередь, шаг 14)
+
+- Conflict → окно confirm до bind; Location без `reconnect_token`; confirm → clear cart + push/offer caches + `#/profile?order=`. RED `d358c4a2` → GREEN `ff924f2d`. Local «Проверка» Rails 48/0 + JS 12/0. Ревью диффа вручную (bugbot/security skip). crit-audit CLEAN. Entire `01M6E2SNX67JASNF4ZVNFRQCSA`. COMPONENT_MAP обновлён. Без миграции. Не задеплоено (🚀 7).
+
 ## 2026-11-02 — docs: SPEC TASK_117 — SMS session transition confirm (очередь, шаг 14)
 
 - Факты = код; план: `SmsSessionTransition` + short link без тихого overwrite + confirm/decline API + FE-диалог/generation; после confirm — история с highlight; `reconnect_token` убрать из SMS Location. Файлы 6 · Не ломать / Проверка · миграции нет. Код не менялся.
