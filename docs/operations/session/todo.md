@@ -12,7 +12,7 @@
 - [x] SPEC — факты = код (ниже) · решения · файлы · Не ломать · Проверка · миграции нет
 - [x] RED `f8c1be95` — новые тесты (Rails + JS); перепись `runWith` в `lk_history_repeat_one_click_test.mjs` (Subtask 13)
 - [x] GREEN `b64a7657` — реализация; задача JS 40/0, Rails (preview + lk one-click) PASS; rubocop 0; `vite:build` OK
-- [ ] `/regress`
+- [x] `/regress` PASS — JS «Проверка» 10 файлов 106/109 (3 legacy `repeat_invalid_token`, ISSUES); Rails 8 файлов 87/0; вся JS-зона 951: 879/72 (baseline legacy); rubocop 0; `vite:build` OK
 - [ ] `/review` — bugbot + security-review + crit-audit, Entire, push, CI green, COMPONENT_MAP (`historyRepeatAdapter` + новая строка `OrdersController` — требование документа)
 
 ## Сверка фактов (SPEC 2026-10-29)
