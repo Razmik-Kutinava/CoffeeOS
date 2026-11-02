@@ -20,6 +20,17 @@ module Shop
         render json: { error: e.message, status: 422 }, status: :unprocessable_entity
       end
 
+      def repeat_preview
+        cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)
+        return head :unauthorized if cid.blank?
+
+        order = scope_visible_orders(source: :mobile).includes(:order_items).find(params[:id])
+        payload = Shop::HistoryRepeatPreview.new(order: order, tenant_id: @shop_tenant.id).call
+        render json: payload
+      rescue ActiveRecord::RecordNotFound
+        render_order_not_found!
+      end
+
       def show
         try_reconnect_from_params!
         cid = Shop::CustomerSession.customer_id(session, @shop_tenant.id)

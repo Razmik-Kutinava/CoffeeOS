@@ -12,6 +12,8 @@
   import { handleCatalogScroll, refreshCartSheet } from "../lib/cartSheetStore.js"
   import CategorySection from "../components/CategorySection.svelte"
   import PageSkeleton from "../components/PageSkeleton.svelte"
+  import HistoryRepeatNotice from "../components/HistoryRepeatNotice.svelte"
+  import { dismissHistoryRepeatNotice } from "../lib/historyRepeatPriceCheck.js"
 
   let categories = $state([])
   let loading = $state(true)
@@ -65,6 +67,7 @@
       stopCatalogPolling()
       window.removeEventListener("scroll", onScroll)
       window.removeEventListener("online", onOnline)
+      dismissHistoryRepeatNotice()
     }
   })
 
@@ -80,6 +83,8 @@
     return "Проверьте интернет и обновите страницу"
   }
 </script>
+
+<HistoryRepeatNotice />
 
 {#if loading}
   <PageSkeleton />

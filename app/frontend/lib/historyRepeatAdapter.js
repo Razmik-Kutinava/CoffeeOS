@@ -25,6 +25,12 @@ import {
   setTokenInvalid,
   isInvalidRebillPaymentError
 } from "./repeatInvalidTokenStore.js"
+import {
+  compareRepeatPreview,
+  fetchRepeatPreview,
+  showHistoryRepeatNotice,
+  HISTORY_REPEAT_PREVIEW_FAILED_TEXT
+} from "./historyRepeatPriceCheck.js"
 
 /**
  * @param {object} order — GET /orders/:id JSON
@@ -134,6 +140,10 @@ async function defaultOpenPaymentSheet(item, opts) {
   return openRepeatPaymentSheet(item, opts)
 }
 
+async function defaultPreviewRepeat(order, api) {
+  return fetchRepeatPreview(order, { api })
+}
+
 /**
  * Оркестрация как RepeatSection.onPayCardClick, источник состава — historical Order.
  * TASK_94 Патч 1: CONFIRMED → главный экран `/` (статус через OrderStatusSheet);
@@ -150,6 +160,7 @@ export async function runHistoryRepeatPayFlow({
   payFlow = runRepeatWidgetPayFlow,
   navigate = defaultNavigate,
   openPaymentSheet = defaultOpenPaymentSheet,
+  previewRepeat = defaultPreviewRepeat,
   setTimeoutFn = setTimeout
 }) {
   clearResetTimer()
@@ -167,6 +178,22 @@ export async function runHistoryRepeatPayFlow({
     showNewCardForm: false,
     savedCards: []
   })
+
+  try {
+    const preview = await previewRepeat(order, api)
+    const check = compareRepeatPreview(preview)
+    if (!check.ok) {
+      resetRepeatInlinePayUi()
+      showHistoryRepeatNotice(check.reason)
+      await navigate("/")
+      patchRepeatInlinePayUi({ busy: false })
+      return { repeatBlocked: check.reason }
+    }
+  } catch (_e) {
+    resetRepeatInlinePayUi()
+    patchRepeatInlinePayUi({ busy: false })
+    throw Object.assign(new Error(HISTORY_REPEAT_PREVIEW_FAILED_TEXT), { previewFailed: true })
+  }
 
   try {
     const { orderId } = await createOrder(order, { api })

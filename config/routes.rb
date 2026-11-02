@@ -230,6 +230,7 @@ Rails.application.routes.draw do
       post "orders/:id/cancel", to: "orders#cancel"
       post "orders/:id/finalize", to: "orders#finalize"
       get "orders/:id/wallet_pass", to: "orders#wallet_pass"
+      get "orders/:id/repeat_preview", to: "orders#repeat_preview"
       get "orders/:id", to: "orders#show"
       post "orders/:order_id/email", to: "orders/email#create"
       post "promo_codes/apply", to: "promo_codes#apply"
