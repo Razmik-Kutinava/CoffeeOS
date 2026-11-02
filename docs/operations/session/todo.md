@@ -1,21 +1,16 @@
-﻿# todo — 🚀 5+6+7 Fly v524 (шаги 12–16)
+﻿# todo — MCP SMS-ссылка (симуляция без телефона)
 
 | Поле | Значение |
 |------|----------|
-| **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · 🚀 **5/6/7** `done` |
-| **Статус** | **done** 2026-11-02 · Fly **v524** · эконом-пачка PASS · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_RESULT.md) |
-| **HEAD** | `7d161e84` · CI [41456788578](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41456788578) |
+| **Статус** | **done** 2026-11-02 · [MCP_SMS_LINK](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_SMS_LINK.md) |
+| **Основание** | после 🚀 7 · живая SMS на телефон — skip (решение владельца) |
 
 ## Сделано
 
-- [x] Preflight: develop=origin, CI green, миграций нет
-- [x] Deploy coffeeos → v524
-- [x] Sentry 24h / Fly logs / Neon skip / УК skip / MCP Point A (3 сценария)
+- [x] `/o/{hash}` happy → `#/profile?order=` + `sms_entry=1`
+- [x] conflict → диалог → Отмена (сессия B11)
+- [x] invalid → «Ссылка недействительна»
 
-## Дальше (не агент)
+## Дальше
 
-- [ ] 👤 SMS «Заказ готов» / conflict на телефоне
-
-## Ops
-
-- [x] Point A `code_black_member=true` на проде (2026-11-02)
+- по плану владельца (живая SMS не нужна)

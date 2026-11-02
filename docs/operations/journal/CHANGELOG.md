@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-11)
 
+## 2026-11-02 — MCP: симуляция SMS-ссылки `/o/{hash}` на Fly v524 (без телефона)
+
+- Happy: short-link → `sms_entry=1` + `#/profile?order=` (гость B11). Conflict: чужая сессия → диалог TASK_117 → Отмена. Invalid HTML. Якоря TTL freshen на 2 тестовых заказах. [MCP_SMS_LINK](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_SMS_LINK.md). Живая SMS — skip.
+
 ## 2026-11-02 — ops: Point A включён в сеть CODE:BLACK
 
 - Прод: `tenants.code_black_member` у `2fdee1ac-…` (Витрина А) `false` → `true` + audit `tenant_code_black_member_changed`. Код не менялся. Чтобы в истории реально были «другие точки», их тоже надо отметить в сети (сейчас sales_point с флагом — только Point A).

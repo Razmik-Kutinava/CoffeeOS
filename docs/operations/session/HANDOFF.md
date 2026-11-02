@@ -5,14 +5,15 @@
 **Дата:** 2026-11-02 · **ctx_trim:** `2026-11-02`  
 **Ветка:** `develop`  
 **Очередь:** [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) — один шаг = новый чат  
-**Следующий шаг:** 👤 SMS на телефоне (после 🚀 7) · Android+iPhone по очереди · `⚠️ Субагенты: пора` (tasks_since≥7) — не блокер  
+**Следующий шаг:** очередь Push+SMS закрыта по агенту · Android+iPhone / живая SMS — только если владелец захочет · `⚠️ Субагенты: пора` (tasks_since≥7) — не блокер  
 **Субагенты-батч:** last=never (skip на `/review` 12–16) · tasks_since≥7 · nudge активен  
 **Правила (сокр.):** bugbot/security — батч+nudge · `/regress` не дефолт · `explore` не «на всякий» · после deploy — эконом-пачка (`dev-gates`)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **ops: Point A `code_black_member=true`** (2026-11-02) · прод, audit `tenant_code_black_member_changed` · [todo](todo.md) | 👤 SMS E2E на телефоне |
-| **🚀 5+6+7 Fly v524 PASS** (2026-11-02) · шаги 12–16 на проде · эконом: Sentry 0 · logs 5xx 0 · Neon skip · УК skip · MCP PASS · [MCP_RESULT v524](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_RESULT.md) · [todo](todo.md) | 👤 SMS на телефоне |
+| **MCP SMS-ссылка (без телефона) PASS** (2026-11-02) · `/o/{hash}` happy + conflict decline + invalid · [MCP_SMS_LINK](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_SMS_LINK.md) · [todo](todo.md) | дальше по плану владельца (живая SMS — skip) |
+| **ops: Point A `code_black_member=true`** (2026-11-02) · прод · [todo](todo.md) | — |
+| **🚀 5+6+7 Fly v524 PASS** (2026-11-02) · [MCP_RESULT v524](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_RESULT.md) · [todo](todo.md) | — |
 | **Очередь, шаг 16 закрыт — TASK_121 Subtask 8** (2026-11-02) · **CI green** [41456144439](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41456144439) на `38d277e2` · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · без миграции · задеплоено v524 | — |
 | **ops: эконом-приёмка** (2026-11-02) — дефолт в `coffeeos-dev-gates` § Эконом-режим | — |
 | **Очередь 15 done — TASK_118** · CI [41453248573](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41453248573) · v524 | — |
