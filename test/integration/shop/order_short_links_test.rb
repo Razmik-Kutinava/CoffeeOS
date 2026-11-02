@@ -28,14 +28,26 @@ class Shop::OrderShortLinksTest < ActionDispatch::IntegrationTest
     )
   end
 
-  test "T-C3a T-C3b T-C5c /o/:hash binds guest session without reconnect_token in Location (TASK_117)" do
+  test "TASK_118 /o/:hash binds and redirects to profile history with sms_entry (no reconnect_token)" do
     hash = Shop::OrderReadySmsLink.hash_for(@order)
     get "/o/#{hash}", headers: { "HOST" => "www.example.com" }
     assert_response :redirect
-    assert_match %r{/shop\?tenant_id=#{@tenant.id}(?:&|#|\z)}, response.redirect_url
+    assert_match %r{/shop\?tenant_id=#{@tenant.id}}, response.redirect_url
+    assert_match(/sms_entry=1/, response.redirect_url)
     refute_match(/reconnect_token=/, response.redirect_url)
     refute_match(/sms_transition=/, response.redirect_url)
-    assert_match %r{#/order/#{@order.id}\z}, response.redirect_url
+    assert_match %r{#/profile\?order=#{@order.id}\z}, response.redirect_url
+    assert_equal @customer.id.to_s, Shop::CustomerSession.customer_id(session, @tenant.id).to_s
+  end
+
+  test "TASK_118 S7 reopening valid link repeats bind + profile redirect" do
+    hash = Shop::OrderReadySmsLink.hash_for(@order)
+    2.times do
+      get "/o/#{hash}", headers: { "HOST" => "www.example.com" }
+      assert_response :redirect
+      assert_match %r{#/profile\?order=#{@order.id}\z}, response.redirect_url
+      assert_match(/sms_entry=1/, response.redirect_url)
+    end
     assert_equal @customer.id.to_s, Shop::CustomerSession.customer_id(session, @tenant.id).to_s
   end
 
@@ -51,7 +63,9 @@ class Shop::OrderShortLinksTest < ActionDispatch::IntegrationTest
       hash = Shop::OrderReadySmsLink.hash_for(@order)
       sess.get "/o/#{hash}", headers: { "HOST" => "www.example.com" }
       assert_equal 302, sess.response.status, sess.response.body
-      assert_match %r{/shop\?tenant_id=#{@tenant.id}&sms_transition=}, sess.response.redirect_url
+      assert_match %r{/shop\?tenant_id=#{@tenant.id}}, sess.response.redirect_url
+      assert_match(/sms_transition=/, sess.response.redirect_url)
+      assert_match(/sms_entry=1/, sess.response.redirect_url)
       refute_match(/reconnect_token=/, sess.response.redirect_url)
       assert_equal other.id.to_s, Shop::CustomerSession.customer_id(sess.session, @tenant.id).to_s
     end
@@ -64,6 +78,7 @@ class Shop::OrderShortLinksTest < ActionDispatch::IntegrationTest
       sess.get "/o/#{hash}", headers: { "HOST" => "www.example.com" }
       assert_equal 302, sess.response.status
       refute_match(/sms_transition=/, sess.response.redirect_url)
+      assert_match %r{#/profile\?order=#{@order.id}\z}, sess.response.redirect_url
       assert_equal @customer.id.to_s, Shop::CustomerSession.customer_id(sess.session, @tenant.id).to_s
     end
   end
@@ -75,23 +90,26 @@ class Shop::OrderShortLinksTest < ActionDispatch::IntegrationTest
     refute_equal 403, response.status
   end
 
-  test "T-C3c unknown hash returns 404 without bind" do
+  test "TASK_118 invalid hash shows «Ссылка недействительна» without bind" do
     get "/o/zzzzzzzzzzzzzzzzzzzzzz"
-    assert_response :not_found
+    assert_response :ok
+    assert_includes response.body, "Ссылка недействительна"
+    refute_includes response.body, "Ссылка устарела"
     assert_nil Shop::CustomerSession.customer_id(session, @tenant.id)
   end
 
-  test "T-C3d forged MAC returns 404 without bind" do
+  test "TASK_118 forged MAC shows «Ссылка недействительна» without bind" do
     hash = Shop::OrderReadySmsLink.hash_for(@order)
     raw = Base64.urlsafe_decode64(hash)
     forged_raw = raw.byteslice(0, 16) + raw.byteslice(16, 4).bytes.map { |b| b ^ 0xff }.pack("C*")
     forged = Base64.urlsafe_encode64(forged_raw, padding: false)
     get "/o/#{forged}"
-    assert_response :not_found
+    assert_response :ok
+    assert_includes response.body, "Ссылка недействительна"
     assert_nil Shop::CustomerSession.customer_id(session, @tenant.id)
   end
 
-  test "T-C5a expired token returns 404 without bind" do
+  test "TASK_118 expired link shows «Ссылка устарела» with CTA, without bind" do
     @order.update!(
       ready_notified_at: 49.hours.ago,
       ready_at: 49.hours.ago,
@@ -99,7 +117,11 @@ class Shop::OrderShortLinksTest < ActionDispatch::IntegrationTest
     )
     hash = Shop::OrderReadySmsLink.hash_for(@order)
     get "/o/#{hash}"
-    assert_response :not_found
+    assert_response :ok
+    assert_includes response.body, "Ссылка устарела"
+    assert_includes response.body, "Открыть мои заказы"
+    assert_includes response.body, "/shop#/profile"
+    refute_includes response.body, @order.id.to_s
     assert_nil Shop::CustomerSession.customer_id(session, @tenant.id)
   end
 end

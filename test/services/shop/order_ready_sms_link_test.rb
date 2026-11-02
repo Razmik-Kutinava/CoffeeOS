@@ -101,4 +101,47 @@ class Shop::OrderReadySmsLinkTest < ActiveSupport::TestCase
     hash = Shop::OrderReadySmsLink.hash_for(@order)
     assert_nil Shop::OrderReadySmsLink.find_order(hash)
   end
+
+  test "TASK_118 resolve :ok returns order" do
+    hash = Shop::OrderReadySmsLink.hash_for(@order)
+    result = Shop::OrderReadySmsLink.resolve(hash)
+    assert_equal :ok, result[:status]
+    assert_equal @order.id, result[:order].id
+  end
+
+  test "TASK_118 resolve :expired when MAC ok but TTL passed" do
+    @order.update!(
+      ready_notified_at: 49.hours.ago,
+      ready_at: 49.hours.ago,
+      updated_at: 49.hours.ago
+    )
+    hash = Shop::OrderReadySmsLink.hash_for(@order)
+    result = Shop::OrderReadySmsLink.resolve(hash)
+    assert_equal :expired, result[:status]
+    assert_nil result[:order]
+    assert_nil Shop::OrderReadySmsLink.find_order(hash)
+  end
+
+  test "TASK_118 resolve :invalid for forged MAC and garbage" do
+    hash = Shop::OrderReadySmsLink.hash_for(@order)
+    raw = Base64.urlsafe_decode64(hash)
+    forged_raw = raw.byteslice(0, 16) + raw.byteslice(16, 4).bytes.map { |b| b ^ 0xff }.pack("C*")
+    forged = Base64.urlsafe_encode64(forged_raw, padding: false)
+
+    assert_equal :invalid, Shop::OrderReadySmsLink.resolve(forged)[:status]
+    assert_equal :invalid, Shop::OrderReadySmsLink.resolve("not-a-hash!!")[:status]
+    assert_equal :invalid, Shop::OrderReadySmsLink.resolve("")[:status]
+  end
+
+  test "TASK_118 S8 resolve TTL anchor is ready_notified_at not updated_at" do
+    notified = 47.hours.ago
+    @order.update!(
+      ready_notified_at: notified,
+      ready_at: 50.hours.ago,
+      updated_at: Time.current
+    )
+    hash = Shop::OrderReadySmsLink.hash_for(@order)
+    result = Shop::OrderReadySmsLink.resolve(hash)
+    assert_equal :ok, result[:status], "47h from ready_notified_at must still be valid despite fresh updated_at"
+  end
 end
