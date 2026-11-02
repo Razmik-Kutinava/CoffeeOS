@@ -2,13 +2,14 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-02 (очередь Push + SMS: шаг 13 — SPEC TASK_116)  
+**Дата:** 2026-11-02 (очередь Push + SMS: шаг 13 — /regress PASS TASK_116)  
 **Ветка:** `develop`
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Очередь 13 SPEC** (2026-11-02) · факты = код: history `:122-154`, show `:34-50`, `order_json.tenant` = текущая витрина (⚠️), `TenantAddress.client_json` `:17-25`, `code_black_network` без фильтра status, Profile без query/статуса/метки, OrderReceipt без точки заказа · находки: сеть только если текущая ∈ сети (иначе ломается история вне сети); RLS-тесты → узкий `row_security off` в сервисе с фильтрами, без `shop_city_lookup`; контроллер ~292 → вынос в сервис · решения: tenant JSON + `closed`, highlight 3 с, show scope = history scope · миграции нет · файлы: `code_black_cross_point_orders.rb` (новый), `orders_controller.rb`, `shopAccountOrders.js`, `Profile.svelte`, `OrderReceipt.svelte` · Субагент: нет — пути ясны · [todo](todo.md) | `/sbr` |
-| **Очередь 13 intake** (2026-11-02) · Google Docs MCP OK · `customer_tasks/TASK-116-…` + CBR #116 · очередь 13 → `in_progress` · зависимости 4/0.4/12 done · Субагент: нет — intake | `/spec` |
+| **Очередь 13 /regress PASS** (2026-11-02) · зона: история/чек CODE:BLACK + RLS/изоляция + repeat из ЛК · Rails «Проверка» 8 файлов **66/0** · JS 4 файла **52/0** · rubocop 0 · `vite:build` OK · GREEN `75055edb` (Entire `01M6E2SNX67JASNF4ZVNFRQCSA`) · Fly MCP Point A — после 🚀 6 · не запушено · Субагент: нет · [todo](todo.md) | `/review` |
+| **Очередь 13 GREEN** (2026-11-02) · RED `3869881a` → GREEN `75055edb` · `CodeBlackCrossPointOrders` + history/show tenant JSON + Profile/OrderReceipt · задача Rails 15/0, соседи orders+ownership PASS · Субагент: нет · [todo](todo.md) | `/regress` |
+| **Очередь 13 SPEC** (2026-11-02) · факты = код · файлы 5 · Не ломать / Проверка · миграции нет · Субагент: нет · [todo](todo.md) | `/sbr` |
 | **Очередь 12 done** (2026-11-02) · Entire `01M6E12XSECHGEDV4WMJVTHYFX` на `60b2e799` (attach `--force`) · push `48412465..3c555276` · **CI green** [41439722267](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41439722267) + Semgrep/CodeQL · 1-я попытка CI: fail `scan_ruby` (addressable/rack advisories) → `3c555276` · очередь 12 → `done` · CBR #121 — CI green · COMPONENT_MAP: да (4 строки) · Fly MCP — после 🚀 5 · [todo](todo.md) | 🚀 5 по апруву |
 | **Очередь 12 REVIEW** (2026-11-02) · local `/regress` PASS · bugbot / security-review: не запускались (решение владельца) → ревью диффа вручную: 0 находок (C1–C5: `scope_visible_orders`, без reconnect/сессии, без `GrowthPromo`, превью до `DELETE /cart`, busy сброшен) · crit-audit CLEAN `6f13e80c..b64a7657` · COMPONENT_MAP: да — `historyRepeatAdapter`, `OrdersController`, новые `historyRepeatPriceCheck` / `HistoryRepeatNotice` · Entire attach до push · Fly MCP — после 🚀 5 · [todo](todo.md) | push → CI green → очередь 12 `done` |
 | **Очередь 12 /regress PASS** (2026-10-29) · зона: повтор из истории + превью цен, корзина/tenant, widget repeat · JS 10 файлов (todo «Проверка») 106/109 — 3 legacy `repeat_invalid_token` (ISSUES) · Rails 8 файлов 87/0 · вся JS-зона 951: 879/72 (baseline legacy) · rubocop 0 · `vite:build` OK · GREEN `b64a7657` · Fly MCP Point A — после 🚀 5 · не запушено · Субагент: нет · [todo](todo.md) | `/review` |

@@ -2,15 +2,16 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-02 (очередь Push + SMS: шаг 13 — SPEC TASK_116)  
+**Дата:** 2026-11-02 (очередь Push + SMS: шаг 13 — /regress PASS TASK_116)  
 **Ветка:** `develop`  
 **Очередь:** [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) — один шаг = новый чат, `/start` берёт шаг сам  
-**Следующий шаг:** `/sbr` шага 13 TASK_116 · у владельца: 🚀 5 (шаг 12) по апруву · 👤 приёмка Android + iPhone (G4 TASK_99) · `WALLET_FORCE_UNAVAILABLE` — отдельный апрув · шаг 13a / Q3 — отдельно
+**Следующий шаг:** `/review` шага 13 TASK_116 · у владельца: 🚀 5 (шаг 12) по апруву · 👤 приёмка Android + iPhone (G4 TASK_99) · `WALLET_FORCE_UNAVAILABLE` — отдельный апрув · шаг 13a / Q3 — отдельно
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Очередь, шаг 13 — SPEC TASK_116** (2026-11-02) — поведение кода совпало с документом (сдвиги строк после TASK_121) · план: новый сервис выборки истории/чека по `customer_id` сессии + `Tenant.code_black_network` (только если текущая точка в сети; иначе — одна точка); метка точки и `closed` в JSON; UI статуса/точки/highlight `?order=` в Profile; точка в OrderReceipt; без `shop_city_lookup`; RLS — узкий `row_security off` в сервисе с фильтрами (prod BYPASSRLS); «Повторить» не трогаем · миграции нет · правки: 1 новый сервис + OrdersController + shopAccountOrders + Profile + OrderReceipt · [todo](todo.md) | `/sbr` |
-| **Очередь, шаг 13 — intake TASK_116** (2026-11-02) — ТЗ «История заказов клиента по всем точкам CODE:BLACK» сохранено дословно + строка #116 в реестре · этап 1 TASK_119: RLS не действует → чтение кодом с фильтрами; 13a/Q3 не блокер · миграции нет · код не менялся | `/spec` |
+| **Очередь, шаг 13 — /regress PASS TASK_116** (2026-11-02) — локальная регрессия зоны из todo: Rails 8 файлов 66/0 (история CODE:BLACK, orders, ownership, lk repeat, RLS ×3); JS 52/0 (lk repeat + personal account + price check + code_black); rubocop и сборка OK · GREEN `75055edb` · Fly MCP Point A — после деплоя шага · не запушено · [todo](todo.md) | `/review` |
+| **Очередь, шаг 13 — GREEN TASK_116** (2026-11-02) — история и чеки по сети CODE:BLACK (если текущая точка в сети), метка точки/`closed`, highlight `?order=`; RED `3869881a` → GREEN `75055edb` · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · не запушено · [todo](todo.md) | `/regress` |
+| **Очередь, шаг 13 — SPEC TASK_116** (2026-11-02) — план сервиса + FE; миграции нет · [todo](todo.md) | `/sbr` |
 | **Очередь, шаг 12 закрыт — TASK_121** (2026-11-02) · **CI green** [41439722267](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/41439722267) на `3c555276` + Semgrep/CodeQL · Entire `01M6E12XSECHGEDV4WMJVTHYFX` · без миграции · не задеплоено (🚀 5) · [todo](todo.md) | 🚀 5 по апруву → приёмка Point A (повтор / блок на главной) |
 | **Очередь, шаг 12 — REVIEW TASK_121** (2026-11-02) — перед повтором из истории витрина спрашивает превью цен и наличия; при отличии / акции / недоступности — главная с сообщением над каталогом, без заказа и оплаты; при совпадении — как TASK_94 · RED `f8c1be95` → GREEN `b64a7657` · `/regress` PASS · ревью диффа вручную (субагенты не запускались — решение владельца), 0 находок · crit-audit CLEAN · COMPONENT_MAP: 4 строки · [todo](todo.md) | push → CI green → шаг 12 `done` |
 | **Очередь, шаг 12 — /regress PASS TASK_121** (2026-10-29) — локальная регрессия зоны из todo: JS 10 файлов 106/109 (3 известных legacy в `repeat_invalid_token`), Rails 87/0, вся JS-зона 879/72 (baseline legacy без новых падений), rubocop и сборка OK · GREEN `b64a7657` · Fly MCP Point A — после деплоя шага · не запушено · [todo](todo.md) | `/review` |

@@ -4,7 +4,7 @@
 |------|----------|
 | **Основание** | [TASK-116-…](../milestones/veha_2/requirements/customer_tasks/TASK-116-История-заказов-клиента-по-всем-точкам-CODE-BLACK.md) — Subtask 1–13 · [очередь Push + SMS](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) шаг 13 · [Google Doc](https://docs.google.com/document/d/1W0uXR3bzAUmYg5W79T4Rb-jMDanuIJ0TZX8BgSKh70s/edit) · метка B / `TASK-CODE-BLACK-CROSS-POINT-ORDER-HISTORY` |
 | **Не в scope** | объединение / изменение записей клиентов · OTP-merge и linkers · принимать от клиента список точек или чужой `customer_id` · `shop_city_lookup` / `with_shop_city_lookup` · `CustomerTenantHistory` как источник заказов · `historyRepeatAdapter` и поведение «Повторить» (TASK_121 / G) · смена текущей точки и корзина (TASK_120 / F) · Quick Repeat · платежи / checkout / Wallet / FCM · SMS-каскад · `#active` / cancel / wallet_pass · этап 2 TASK_119 (шаг 13a / Q3) · миграция новой RLS-политики |
-| **Статус** | `in_progress` — GREEN · Next: `/regress` |
+| **Статус** | `in_progress` — `/regress` PASS · Next: `/review` |
 
 ## SBR
 
@@ -12,7 +12,7 @@
 - [x] SPEC — факты = код (ниже) · решения · файлы · Не ломать · Проверка · миграции нет
 - [x] RED `3869881a` — падающие тесты (Rails + JS)
 - [x] GREEN `75055edb` — `Shop::CodeBlackCrossPointOrders` + history/show/tenant JSON + FE метка/highlight; задача Rails 15/0, JS 46/0; соседи orders+ownership PASS; rubocop 0; vite:build OK · Entire `01M6E2SNX67JASNF4ZVNFRQCSA`
-- [ ] `/regress`
+- [x] `/regress` PASS — Rails «Проверка» 66/0; JS 52/0 (+ code_black); rubocop 0; vite:build OK
 - [ ] `/review` — bugbot + security-review + crit-audit + Entire + push + CI → очередь 13 `done`
 
 ## Сверка фактов (SPEC 2026-11-02)
