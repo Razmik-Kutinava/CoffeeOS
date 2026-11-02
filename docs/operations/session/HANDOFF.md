@@ -2,13 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-02 (очередь Push + SMS: шаг 13 — /regress PASS TASK_116)  
+**Дата:** 2026-11-02 (правила: bugbot/security = батч+nudge)  
 **Ветка:** `develop`  
 **Очередь:** [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) — один шаг = новый чат, `/start` берёт шаг сам  
-**Следующий шаг:** `/review` шага 13 TASK_116 · у владельца: 🚀 5 (шаг 12) по апруву · 👤 приёмка Android + iPhone (G4 TASK_99) · `WALLET_FORCE_UNAVAILABLE` — отдельный апрув · шаг 13a / Q3 — отдельно
+**Следующий шаг:** `/review` шага 13 TASK_116 (без авто bugbot/security) · `⚠️ Субагенты: пора` перед 🚀 — не блокер · у владельца: 🚀 5 (шаг 12) по апруву · 👤 приёмка Android + iPhone (G4 TASK_99) · `WALLET_FORCE_UNAVAILABLE` — отдельный апрув · шаг 13a / Q3 — отдельно  
+**Субагенты-батч:** last=never (skip по токенам) · tasks_since≥3 · nudge активен
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Правила: bugbot/security батч+nudge** (2026-11-02) — не на каждый `/review`; агент пишет `⚠️ Субагенты: пора` после 2–3 задач / перед deploy; на оплате — «настаиваем»; запуск только по просьбе; **не блокер** push/deploy | очередь 13 `/review` |
 | **Очередь, шаг 13 — /regress PASS TASK_116** (2026-11-02) — локальная регрессия зоны из todo: Rails 8 файлов 66/0 (история CODE:BLACK, orders, ownership, lk repeat, RLS ×3); JS 52/0 (lk repeat + personal account + price check + code_black); rubocop и сборка OK · GREEN `75055edb` · Fly MCP Point A — после деплоя шага · не запушено · [todo](todo.md) | `/review` |
 | **Очередь, шаг 13 — GREEN TASK_116** (2026-11-02) — история и чеки по сети CODE:BLACK (если текущая точка в сети), метка точки/`closed`, highlight `?order=`; RED `3869881a` → GREEN `75055edb` · Entire `01M6E2SNX67JASNF4ZVNFRQCSA` · не запушено · [todo](todo.md) | `/regress` |
 | **Очередь, шаг 13 — SPEC TASK_116** (2026-11-02) — план сервиса + FE; миграции нет · [todo](todo.md) | `/sbr` |

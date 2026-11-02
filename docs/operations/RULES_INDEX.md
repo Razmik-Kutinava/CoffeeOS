@@ -23,7 +23,7 @@
 | Файл | Когда |
 |------|--------|
 | `workflow/coffeeos-task-workflow.mdc` | Фича / CBR / CHECKLIST / отчёт / старт сессии |
-| `workflow/spec-build-review.mdc` | SBR SPEC→RED→GREEN→REVIEW; **PHASE 3 канон** (local → 2 субагента → Entire → push/CI → стоп) |
+| `workflow/spec-build-review.mdc` | SBR SPEC→RED→GREEN→REVIEW; **PHASE 3 канон** (local → ревью+crit-audit → Entire → push/CI → стоп; bugbot/security — батч+nudge, не блокер) |
 | `workflow/coffeeos-dev-gates.mdc` | DoD, **пайплайн стенд**, регрессия зон, миграции, hot-path |
 | `workflow/coffeeos-repo-layout.mdc` | Куда класть файлы; `scripts/scratch/` |
 | `workflow/coffeeos-file-size-split.mdc` | Лимиты 50/120/200 (globs app) |

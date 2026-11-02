@@ -2,11 +2,13 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-02 (очередь Push + SMS: шаг 13 — /regress PASS TASK_116)  
-**Ветка:** `develop`
+**Дата:** 2026-11-02 (правила: bugbot/security = батч+nudge)  
+**Ветка:** `develop`  
+**Субагенты-батч:** `last=never (недавно skip по токенам)` · `tasks_since≥3` · `⚠️ Субагенты: пора` (перед 🚀 / после `/review` 13 — не блокер; оплата — настаиваем)
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Правила: bugbot/security батч+nudge** (2026-11-02) · не авто на каждый `/review`; уведомление `⚠️ Субагенты: пора` после 2–3 задач / перед deploy; оплата/hot-path — настаиваем; **не блокер** · канон `coffeeos-agent-workflow.mdc` + SBR PHASE 3 · Субагент: нет | очередь 13 `/review` (без авто-субагентов) |
 | **Очередь 13 /regress PASS** (2026-11-02) · зона: история/чек CODE:BLACK + RLS/изоляция + repeat из ЛК · Rails «Проверка» 8 файлов **66/0** · JS 4 файла **52/0** · rubocop 0 · `vite:build` OK · GREEN `75055edb` (Entire `01M6E2SNX67JASNF4ZVNFRQCSA`) · Fly MCP Point A — после 🚀 6 · не запушено · Субагент: нет · [todo](todo.md) | `/review` |
 | **Очередь 13 GREEN** (2026-11-02) · RED `3869881a` → GREEN `75055edb` · `CodeBlackCrossPointOrders` + history/show tenant JSON + Profile/OrderReceipt · задача Rails 15/0, соседи orders+ownership PASS · Субагент: нет · [todo](todo.md) | `/regress` |
 | **Очередь 13 SPEC** (2026-11-02) · факты = код · файлы 5 · Не ломать / Проверка · миграции нет · Субагент: нет · [todo](todo.md) | `/sbr` |

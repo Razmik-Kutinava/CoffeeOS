@@ -45,7 +45,7 @@ alwaysApply: false
 
 ## Пайплайн на стенд (после PHASE 3)
 
-**До deploy:** канон [`spec-build-review.mdc`](spec-build-review.mdc) § PHASE 3 (local → 2 субагента → Entire → push/CI → **стоп**). Не копировать сюда.
+**До deploy:** канон [`spec-build-review.mdc`](spec-build-review.mdc) § PHASE 3 (local → ревью+crit-audit → Entire → push/CI → **стоп**). Nudge `bugbot`/`security` — [`coffeeos-agent-workflow.mdc`](coffeeos-agent-workflow.mdc) § батч; **не блокер**. Не копировать сюда.
 
 **Когда этот §:** после апрува **deploy**. **Не:** мелочь / только docs. **Deploy** — не из «ебашь» и не из CI green автоматически.
 

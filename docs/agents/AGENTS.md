@@ -36,7 +36,7 @@ Rails 8, PostgreSQL, Svelte/Vite, Pundit, Minitest.
 | `/spec` | SPEC + 2–7 файлов + hot-path «Не ломать»/«Проверка» |
 | `/sbr` | RED → GREEN |
 | `/regress` | Тесты зоны (Local) |
-| `/review` | PHASE 3 канон: local → 2 субагента → Entire → push/CI → стоп (deploy — апрув) |
+| `/review` | PHASE 3: local → ревью+crit-audit → Entire → push/CI → стоп; bugbot/security — nudge, не авто (deploy — апрув) |
 | `/trace-bug` | Диагностика hot-path интеграции до правок |
 
 Карта: `.cursor/commands/README.md` · субагенты: `docs/agents/SUBAGENTS.md` · Entire: `docs/operations/dev/ENTIRE.md`

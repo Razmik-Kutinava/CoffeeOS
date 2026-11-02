@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-09)
 
+## 2026-11-02 — docs: bugbot/security — батч + nudge, не блокер
+
+- Канон: не автозапуск на каждый `/review`. Уведомление `⚠️ Субагенты: пора` после 2–3 задач / перед deploy; на оплате/hot-path — настаиваем. Запуск только по просьбе владельца; отсутствие субагентов не стопает push/CI/deploy. Правки: `coffeeos-agent-workflow`, SBR PHASE 3, `dev-gates`, `/review`, `SUBAGENTS`/`AGENTS`, `RULES_INDEX`.
+
 ## 2026-11-02 — docs: TASK_116 /regress PASS (очередь, шаг 13)
 
 - Локальная регрессия по todo «Проверка»: Rails 8 файлов 66/0; JS 52/0; rubocop 0; `vite:build` OK. GREEN `75055edb`. Следующий шаг — `/review`. Fly MCP Point A — после 🚀 6.
