@@ -4,7 +4,7 @@
 |------|----------|
 | **Очередь** | [PUSH_SMS_QUEUE](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) · шаг **15** `in_progress` · зависимости 2 / 4 / 5 / 13 / 14 / 0.4 = done |
 | **Основание** | [TASK-118-…](../milestones/veha_2/requirements/customer_tasks/TASK-118-SMS-Заказ-готов-история-заказов-CODE-BLACK.md) · CBR #118 · Google Doc v4 |
-| **Статус** | **GREEN** 2026-11-02 · RED `7be416af` → GREEN `5422913e` · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · миграции нет · не задеплоено (🚀 7) |
+| **Статус** | **REVIEW** 2026-11-02 · RED `7be416af` → GREEN `5422913e` · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · crit-audit CLEAN · COMPONENT_MAP: нет · миграции нет · не задеплоено (🚀 7) |
 
 ## SBR
 
@@ -12,7 +12,7 @@
 - [x] SPEC — факты = код (ниже) · решения · файлы · Не ломать · Проверка · миграции нет
 - [x] RED `7be416af` — resolve/screens/pin/profile Location `[RED]`
 - [x] GREEN — `resolve` + short link HTML/Location + `sms_entry` pin; задача short_links 8/0, sms_link 13/0; sms_transition 7+3; rack 5/0; ownership 11/0; JS pin+preferred 9/0 + sms_session 12/0; rubocop 0
-- [ ] `/review`
+- [x] `/review` — local «Проверка» PASS · ревью диффа вручную (bugbot/security skip) · crit-audit CLEAN · COMPONENT_MAP: нет · Entire `01M6E6SK26KVPBMSJWMAJXCFQ4` · push → CI
 
 ## Сверка фактов (SPEC 2026-11-02)
 
@@ -78,4 +78,4 @@
 
 ## COMPONENT_MAP
 
-На REVIEW: **скорее нет** — short link + `shopTenantHeader` вне CartSheet/OrderStatus*/GuestOrder*; Profile/highlight не правим (только Location). Если всё же тронем Profile — да.
+**Обновление требуется: нет** — short link + `shopTenantHeader` вне CartSheet/OrderStatus*/GuestOrder*; Profile/highlight не менялись (только Location hash с сервера).

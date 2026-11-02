@@ -11,6 +11,10 @@
 
 ## Текущий месяц (2026-11)
 
+## 2026-11-02 — feat: TASK_118 REVIEW — SMS ready → history CODE:BLACK (очередь, шаг 15)
+
+- Location `#/profile?order=` + `sms_entry` pin; resolve expired/invalid → HTML без bind. RED `7be416af` → GREEN `5422913e`. Local «Проверка» PASS. Ревью диффа вручную (bugbot/security skip). crit-audit CLEAN. Entire `01M6E6SK26KVPBMSJWMAJXCFQ4`. COMPONENT_MAP: нет. Без миграции. Не задеплоено (🚀 7).
+
 ## 2026-11-02 — ops: ctx-trim токенов (Sep–Oct archive + шапки + ISSUES)
 
 - CHANGELOG: живой только `2026-11`; архив `CHANGELOG-2026-09.md` + `CHANGELOG-2026-10.md`. HANDOFF/SESSION сжаты; pre-trim в `session/archive/*-pre-trim.md`. ISSUES 🔴 без 🟢 → `ISSUES-resolved-through-2026-10.md`. `ctx_trim: 2026-11-02`. Код не тронут.
