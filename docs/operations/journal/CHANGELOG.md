@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-11)
 
+## 2026-11-06 — SMS «Готов!» сразу и карточка гостя остаётся на ready
+
+- Mobile-заказ в `ready`: SMS уходит сразу, даже если гость онлайн. Пауза ~20с и пропуск «сокет online» сняты. Текст `CODE:BLACK. Готов! {host}/o/{hash}` тот же; повтор и пустой телефон не шлют. Push, FCM, Wallet, препромпт и плашка установки не выключались. Табло бариста не менялось.
+- Главный экран: карточка на `ready` с полоской 100% и шагом «Готов»; крестик только там, закрывает гость. `issued` / `closed` / `cancelled` карточку снимают. `GET /shop/api/orders/active` включает `ready`.
+- RED `4978600e` · GREEN `8f262444`. Local: Rails 48/0 + соседи 46/0 · JS 90/0. crit-audit CLEAN (CI pending, Fly MCP skip — push и deploy запрещены). Entire: нет id.
+
 ## 2026-11-02 — MCP: симуляция SMS-ссылки `/o/{hash}` на Fly v524 (без телефона)
 
 - Happy: short-link → `sms_entry=1` + `#/profile?order=` (гость B11). Conflict: чужая сессия → диалог TASK_117 → Отмена. Invalid HTML. Якоря TTL freshen на 2 тестовых заказах. [MCP_SMS_LINK](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_SMS_LINK.md). Живая SMS — skip.

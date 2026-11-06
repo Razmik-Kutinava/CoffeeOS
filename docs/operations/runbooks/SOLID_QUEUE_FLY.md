@@ -43,4 +43,4 @@ Pick **one** always-on runner. Do **not** rely on a stopped worker with `SOLID_Q
 
 - `config/puma.rb` — Solid Queue plugin gate
 - `config/deploy.yml` — `SOLID_QUEUE_IN_PUMA: true`
-- Guest ready cascade: `Shop::OrderReadyCascadeJob` · grace + `SMS_GRACE_JOB_BUFFER`
+- Guest ready cascade: `Shop::OrderReadyCascadeJob` сразу на mobile `ready`, без SMS grace

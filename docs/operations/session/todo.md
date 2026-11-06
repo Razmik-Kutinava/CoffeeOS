@@ -34,4 +34,4 @@
 
 - [x] RED — тесты нового контракта падают (`4978600e`)
 - [x] GREEN — SMS сразу на ready; карточка с полной полоской «Готов» и X только там
-- [ ] REVIEW — регрессия зоны, crit-audit, ops. Push нет (явный запрет). Deploy нет.
+- [x] REVIEW — регрессия зоны, crit-audit CLEAN. Push нет (явный запрет). Deploy нет. Entire id нет.

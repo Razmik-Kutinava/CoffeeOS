@@ -25,7 +25,7 @@
 | #80 Registration + Callcheck | 🟡 | live ждёт телефон |
 | #81 Notifications/Wallet/Push | 🟡 | tips / Wallet без certs |
 | EmailVerification tenant-wide | 🟡 | backlog |
-| #82 Cascade SMS + sheet stuck | 🟡 | deploy → Fly MCP |
+| #82 Cascade SMS + sheet stuck | 🟡 | local 2026-11-06 на develop (SMS сразу + карточка ready); прод до deploy старый · Fly MCP после деплоя |
 | #71 email after pay remember | 🟡 | апрув заказчика |
 | JS legacy fails (TASK_99 /regress baseline) | 🟡 | email_collection / cancel 422 / personal_cabinet [RED] / sticky_cancel / repeat_invalid_token |
 | Шторка «Связь с поддержкой» под CartSheet | 🔴 | оба `z-index: 50` · ждём задачу заказчика · [MEASURE](milestones/veha_2/artifacts/active_orders_receipt_display_restore/customer_preview_2026-10-05/MEASURE.md) |

@@ -40,8 +40,7 @@ Barista update_status
 | FE subscribe | `app/frontend/lib/shopOrderCable.js` |
 | Auth | `tenant_id`, `order_id`, `reconnect_token`; optional `customer_id` из session |
 
-**Presence:** subscribe → `OrderReadyPresence.mark_online!` (skip SMS в cascade если online).  
-**#82 Патч_1:** на ready — `begin_sms_grace!` (TTL = `SMS_GRACE`); внутри grace `mark_online!` no-op (Cable reconnect ≠ ложный SMS skipped).
+**Presence:** subscribe → `OrderReadyPresence.mark_online!`. SMS «Готов!» этот флаг не читает.
 
 **Reconnect fallback:** `POST /shop/api/session/reconnect` + повтор subscribe; polling `GET orders/active` (#47).
 **SMS short link:** `GET /o/:order_hash` → bind `GuestOrderReconnect` + redirect `/shop?tenant_id=&reconnect_token=#/order/:id` (`OrderReadySmsLink`).
@@ -68,17 +67,20 @@ ENV: Firebase/VAPID — см. `Shop::FirebaseConfig`.
 
 ---
 
-## Cascade «Заказ готов» (#39 · #82 Патч_1)
+## Cascade «Заказ готов»
 
 ```
-ready status
-  → begin_sms_grace! + OrderReadyCascadeJob (wait SMS_GRACE)
-       → OrderReadyPresence (online? skip SMS; grace suppress reconnect)
+ready status (mobile)
+  → OrderReadyCascadeJob.perform_later (сразу, без паузы)
        → OrderReadyPaidNotifier → SMS.ru ≤70
-            msg: CODE:BLACK. Заказ готов! codeblack.xyz/o/{order_hash}
+            msg: CODE:BLACK. Готов! {host}/o/{hash}
+       повтор со status=sent не слать; нет телефона — не слать
+  WebSocket, FCM/WebPush, Wallet — как раньше, не вместо SMS
 ```
 
-Логи: `order_notification_logs`. SMS канон: **без Telegram** (superseded v1). Presence fail → `PresenceUnavailableError` + `retry_on`.
+Логи: `order_notification_logs`. SMS канон: **без Telegram**. Гость онлайн — SMS всё равно уходит.
+
+Карточка на главном экране остаётся на `ready` (полоска 100%, шаг «Готов», крестик только там). `issued` / `closed` / `cancelled` карточку снимают. `GET orders/active` включает `ready`.
 
 ---
 
