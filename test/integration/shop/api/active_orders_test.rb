@@ -47,7 +47,7 @@ class Shop::Api::ActiveOrdersTest < ActionDispatch::IntegrationTest
     )
   end
 
-  test "#82 GET orders/active returns accepted preparing only (hide ready; no issued)" do
+  test "GET orders/active keeps ready on the sheet and drops issued" do
     verify_shop_email!(tenant_id: @tenant.id, email: @email)
 
     get "/shop/api/orders/active", headers: shop_tenant_headers(@tenant.id), as: :json
@@ -58,7 +58,7 @@ class Shop::Api::ActiveOrdersTest < ActionDispatch::IntegrationTest
     assert_kind_of Array, orders
     ids = orders.map { |o| o["id"] || o["order_id"] }
     assert_includes ids, @active.id
-    assert_not_includes ids, @ready.id, "#82 hide-on-ready: ready не в шторке"
+    assert_includes ids, @ready.id, "ready stays on the guest sheet until the guest closes it"
     assert_not_includes ids, @issued.id
 
     preparing = orders.find { |o| (o["id"] || o["order_id"]) == @active.id }

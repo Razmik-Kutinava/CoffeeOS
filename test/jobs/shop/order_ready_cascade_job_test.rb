@@ -69,18 +69,17 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
     ENV.delete("WALLET_SIMULATE")
   end
 
-  test "#39 v2 when user online via WS skips SMS" do
+  test "ready mobile sends SMS even when guest is online on the socket" do
     Shop::OrderReadyPresence.mark_online!(@order.id)
+    assert Shop::OrderReadyPresence.online?(@order.id)
 
-    logs = capture_cascade_logs do
+    assert_difference -> { OrderNotificationLog.where(order_id: @order.id, channel: "sms", status: "sent").count }, 1 do
       Shop::OrderReadyCascadeJob.perform_now(@order.id)
     end
 
-    assert_match(
-      /\[Cascade\]\[Order ##{@order.id}\] User is online via WebSocket\. SMS skipped\./,
-      logs
-    )
-    assert_equal 0, OrderNotificationLog.where(order_id: @order.id).count
+    msg = OrderNotificationLog.where(order_id: @order.id, channel: "sms", status: "sent").last.payload["msg"].to_s
+    assert_match(%r{\ACODE:BLACK\. Готов! coffeeos\.fly\.dev/o/}, msg)
+    assert_operator msg.length, :<=, 70
   end
 
   test "#39 v2 when user offline does not log SMS skipped" do
@@ -93,54 +92,35 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
     assert_no_match(/SMS skipped\./, logs)
   end
 
-  test "#82 P1 Presence/cache failure logs and schedules ActiveJob retry" do
+  test "cache failure does not block ready SMS (presence is not consulted)" do
     original = Rails.cache.method(:read)
     Rails.cache.define_singleton_method(:read) do |*_args|
       raise StandardError, "cache 500"
     end
 
-    logs = capture_cascade_logs do
-      assert_enqueued_with(job: Shop::OrderReadyCascadeJob, args: [ @order.id ]) do
+    assert_difference -> { OrderNotificationLog.where(order_id: @order.id, channel: "sms", status: "sent").count }, 1 do
+      assert_nothing_raised do
         Shop::OrderReadyCascadeJob.perform_now(@order.id)
       end
     end
-    assert_match(/Presence unavailable/, logs)
-    assert_match(/cache 500/, logs)
   ensure
     Rails.cache.define_singleton_method(:read, original) if original
   end
 
-  test "#82 P1 Cable reconnect during SMS_GRACE still sends SMS (no false skip)" do
-    Shop::GuestOrderBroadcaster.send(:enqueue_ready_cascade!, @order)
-    assert Shop::OrderReadyPresence.in_sms_grace?(@order.id)
-
-    # Simulate shopOrderCable retry (~5s) inside grace: channel subscribed → mark_online!
+  test "enqueue does not open an SMS grace window" do
     Shop::OrderReadyPresence.mark_online!(@order.id)
-    assert_not Shop::OrderReadyPresence.online?(@order.id)
 
-    captured_msg = nil
-    original = Shop::SmsRuClient.method(:send_message!)
-    Shop::SmsRuClient.define_singleton_method(:send_message!) do |phone:, msg:, **_|
-      captured_msg = msg
-      Struct.new(:sms_id).new("p1-grace-sms")
-    end
+    Shop::GuestOrderBroadcaster.send(:enqueue_ready_cascade!, @order)
 
-    assert_difference -> { OrderNotificationLog.where(order_id: @order.id, channel: "sms", status: "sent").count } => 1 do
-      Shop::OrderReadyCascadeJob.perform_now(@order.id)
-    end
-    assert_match(%r{coffeeos\.fly\.dev/o/}, captured_msg.to_s)
-    refute_match(%r{codeblack\.xyz}, captured_msg.to_s)
-  ensure
-    Shop::SmsRuClient.define_singleton_method(:send_message!, original) if original
+    assert_not Shop::OrderReadyPresence.in_sms_grace?(@order.id)
+    assert Shop::OrderReadyPresence.online?(@order.id), "presence stays; SMS no longer depends on it"
   end
 
-  test "#82 P1 online after grace expires still skips SMS" do
-    Shop::OrderReadyPresence.begin_sms_grace!(@order.id, duration: 1.second)
-    travel 2.seconds do
-      Shop::OrderReadyPresence.mark_online!(@order.id)
-      assert_no_difference -> { OrderNotificationLog.where(order_id: @order.id, channel: "sms").count } do
-        Shop::OrderReadyCascadeJob.perform_now(@order.id)
-      end
+  test "blank phone does not send ready SMS" do
+    @customer.update!(phone: nil)
+
+    assert_no_difference -> { OrderNotificationLog.where(order_id: @order.id, channel: "sms").count } do
+      Shop::OrderReadyCascadeJob.perform_now(@order.id)
     end
   end
 
@@ -177,20 +157,23 @@ class Shop::OrderReadyCascadeJobTest < ActiveSupport::TestCase
     assert_match(/SMS skipped: already sent/, logs)
   end
 
-  test "Group 4: cascade enqueued with SMS_GRACE after ready" do
-    source = File.read(Rails.root.join("app/services/shop/guest_order_broadcaster.rb"))
-    assert_match(/SMS_GRACE/, source)
-    assert_operator Shop::OrderReadyCascadeJob::SMS_GRACE, :>=, 5.seconds
-    assert_equal 5.seconds, Shop::OrderReadyCascadeJob::SMS_GRACE_JOB_BUFFER
+  test "cascade job source does not skip SMS when the socket is online" do
+    source = File.read(Rails.root.join("app/jobs/shop/order_ready_cascade_job.rb"))
+    assert_no_match(/presence_online\?/, source)
+    assert_no_match(/OrderReadyPresence/, source)
+    assert_no_match(/User is online via WebSocket/, source)
+    assert_not Shop::OrderReadyCascadeJob.const_defined?(:SMS_GRACE)
+    assert_not Shop::OrderReadyCascadeJob.const_defined?(:SMS_GRACE_JOB_BUFFER)
   end
 
-  test "#39 v2 online presence creates no notification logs even with telegram_chat_id" do
+  test "online presence still sends SMS and does not use telegram" do
     Shop::OrderReadyPresence.mark_online!(@order.id)
     @customer.update!(telegram_chat_id: "183760838")
 
-    assert_no_difference -> { OrderNotificationLog.count } do
+    assert_difference -> { OrderNotificationLog.where(order_id: @order.id, channel: "sms", status: "sent").count }, 1 do
       Shop::OrderReadyCascadeJob.perform_now(@order.id)
     end
+    assert_equal 0, OrderNotificationLog.where(order_id: @order.id, channel: "telegram").count
   end
 
   test "#39 v2 SMS network error logs failed and does not raise" do

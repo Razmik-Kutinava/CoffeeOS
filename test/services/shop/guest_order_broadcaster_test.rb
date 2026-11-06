@@ -126,15 +126,20 @@ class Shop::GuestOrderBroadcasterTest < ActiveSupport::TestCase
     end
   end
 
-  test "#82 clears stale presence on ready so cascade SMS is not blocked" do
+  test "ready enqueue keeps push and wallet and does not wait on presence" do
     @order.update!(status: :ready)
     Shop::OrderReadyPresence.mark_online!(@order.id)
+    source = File.read(Rails.root.join("app/services/shop/guest_order_broadcaster.rb"))
+    assert_match(/OrderStatusPushNotifier/, source)
+    assert_match(/enqueue_wallet_pass_update!/, source)
+    assert_no_match(/begin_sms_grace!/, source)
+    assert_no_match(/SMS_GRACE/, source)
+
+    assert_enqueued_with(job: Shop::OrderReadyCascadeJob, args: [ @order.id ]) do
+      Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "preparing")
+    end
     assert Shop::OrderReadyPresence.online?(@order.id)
-
-    Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "preparing")
-
-    assert_not Shop::OrderReadyPresence.online?(@order.id),
-               "stale order:{id}:online after ready must clear (SMS after grace)"
+    assert_not Shop::OrderReadyPresence.in_sms_grace?(@order.id)
   end
 
   test "#39 does not enqueue OrderReadyCascadeJob when status is preparing" do
@@ -227,16 +232,17 @@ class Shop::GuestOrderBroadcasterTest < ActiveSupport::TestCase
     end
   end
 
-  test "T-J3a cascade wait is SMS_GRACE + SMS_GRACE_JOB_BUFFER (20s)" do
+  test "cascade is enqueued immediately when status becomes ready" do
     freeze_time do
       @order.update!(status: :ready)
-      buffer = Shop::OrderReadyCascadeJob.const_get(:SMS_GRACE_JOB_BUFFER)
-      assert_equal 5.seconds, buffer
-      expected_at = Time.current + Shop::OrderReadyCascadeJob::SMS_GRACE + buffer
 
-      assert_enqueued_with(job: Shop::OrderReadyCascadeJob, args: [ @order.id ], at: expected_at) do
+      assert_enqueued_with(job: Shop::OrderReadyCascadeJob, args: [ @order.id ]) do
         Shop::GuestOrderBroadcaster.call(order: @order.reload, old_status: "preparing")
       end
+
+      job = ActiveJob::Base.queue_adapter.enqueued_jobs.reverse.find { |row| row[:job] == Shop::OrderReadyCascadeJob }
+      assert job, "cascade job must be enqueued"
+      assert_nil job[:at], "ready SMS must not wait ~20s"
     end
   end
 end

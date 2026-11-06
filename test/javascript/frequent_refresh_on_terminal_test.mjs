@@ -50,16 +50,22 @@ describe("F3 — applyCableEvent terminal hook", () => {
     assert.equal(state.orders.length, 0)
   })
 
-  it("#82 invokes onTerminal for ready (hide-on-ready + frequent refresh)", () => {
+  it("ready keeps the card and refreshes frequent via onReady, not onTerminal", () => {
     const state = createOrderStatusSheetState()
     state.setOrders([{ id: "42", status: "preparing", order_number: "N" }])
-    let called = 0
+    let terminal = 0
+    let ready = 0
     applyCableEvent(
       state,
       { type: "status_changed", order_id: "42", status: "ready" },
-      { onTerminal: () => { called += 1 } }
+      {
+        onTerminal: () => { terminal += 1 },
+        onReady: () => { ready += 1 }
+      }
     )
-    assert.equal(called, 1)
-    assert.equal(state.orders.length, 0)
+    assert.equal(terminal, 0)
+    assert.equal(ready, 1)
+    assert.equal(state.orders.length, 1)
+    assert.equal(state.orders[0].status, "ready")
   })
 })

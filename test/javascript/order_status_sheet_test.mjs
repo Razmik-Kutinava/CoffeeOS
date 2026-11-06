@@ -18,8 +18,11 @@ import {
   dismissOrder,
   visibleOrders,
   shouldShowStatusSheetUi,
-  DISMISS_CONTRACT
+  DISMISS_CONTRACT,
+  SHEET_TERMINAL_STATUSES,
+  showReadyDismiss
 } from "../../app/frontend/lib/orderStatusSheet.js"
+import { accordionRowView } from "../../app/frontend/lib/activeOrdersAccordion.js"
 
 describe("orderStatusSheet — modes + pointer policy (#35 A2)", () => {
   it("exports peek and hidden modes", () => {
@@ -148,10 +151,11 @@ describe("applyCableEvent (#35 A1/A2 + #63 immutable)", () => {
     assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
   })
 
-  it("#82 preparing→ready removes card (hide-on-ready) and calls onTerminal", () => {
+  it("preparing→ready keeps the card and does not treat ready as terminal", () => {
     const state = createOrderStatusSheetState()
     state.setOrders([{ id: "42", status: "preparing", order_number: "N" }])
     let terminalHits = 0
+    let readyHits = 0
 
     applyCableEvent(
       state,
@@ -160,28 +164,60 @@ describe("applyCableEvent (#35 A1/A2 + #63 immutable)", () => {
         order_id: "42",
         status: "ready"
       },
-      { onTerminal: () => { terminalHits += 1 } }
+      {
+        onTerminal: () => { terminalHits += 1 },
+        onReady: () => { readyHits += 1 }
+      }
     )
 
-    assert.equal(state.orders.length, 0)
-    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)
-    assert.equal(terminalHits, 1)
+    assert.equal(state.orders.length, 1)
+    assert.equal(state.orders[0].status, "ready")
+    assert.equal(state.orders[0].userDismissed, false)
+    assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.PEEK)
+    assert.equal(terminalHits, 0)
+    assert.equal(readyHits, 1)
+    assert.equal(SHEET_TERMINAL_STATUSES.includes("ready"), false)
+    assert.deepEqual(
+      [ "issued", "closed", "cancelled" ].filter((s) => SHEET_TERMINAL_STATUSES.includes(s)),
+      [ "issued", "closed", "cancelled" ]
+    )
+  })
+
+  it("ready row is filled to the end on step Готов", () => {
+    const row = accordionRowView(
+      { id: "42", status: "ready", order_number: "N" },
+      null
+    )
+    assert.equal(row.fillPercent, 100)
+    assert.equal(row.showProgress, true)
+    const readyStep = row.steps.find((step) => step.label === "Готов")
+    assert.equal(readyStep.state, "current")
+  })
+
+  it("accepted and preparing do not show the dismiss cross", () => {
+    assert.equal(showReadyDismiss("accepted"), false)
+    assert.equal(showReadyDismiss("preparing"), false)
+    assert.equal(showReadyDismiss("ready"), true)
+    assert.equal(showReadyDismiss("issued"), false)
   })
 })
 
 describe("reconnect refresh (#35 A3 + #63 Subtask 2)", () => {
-  it("#82 applyReconnectOrders drops ready (API/sheet hide-on-ready)", () => {
+  it("applyReconnectOrders keeps ready and drops issued", () => {
     const state = createOrderStatusSheetState()
     state.setOrders([{ id: "old", status: "preparing", order_number: "OLD" }])
     const before = state.orders
     applyReconnectOrders(state, [
       { id: "new", status: "ready", order_number: "NEW" },
-      { id: "keep", status: "preparing", order_number: "KEEP" }
+      { id: "keep", status: "preparing", order_number: "KEEP" },
+      { id: "gone", status: "issued", order_number: "GONE" }
     ])
     assert.notEqual(state.orders, before)
-    assert.equal(state.orders.length, 1)
-    assert.equal(state.orders[0].id, "keep")
-    assert.equal(state.orders[0].status, "preparing")
+    assert.deepEqual(
+      state.orders.map((o) => o.id).sort(),
+      [ "keep", "new" ]
+    )
+    assert.equal(state.orders.find((o) => o.id === "new").status, "ready")
     assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.PEEK)
   })
 
@@ -257,7 +293,9 @@ describe("#63 dismiss + route visibility", () => {
       order_id: "42",
       status: "ready"
     })
-    assert.equal(state.orders.length, 0)
+    assert.equal(state.orders.length, 1)
+    assert.equal(state.orders[0].status, "ready")
+    assert.equal(state.orders[0].userDismissed, true)
     assert.equal(state.dismissedIds["42"], true)
     assert.equal(visibleOrders(state.orders).length, 0)
     assert.equal(state.mode, ORDER_STATUS_SHEET_MODES.HIDDEN)

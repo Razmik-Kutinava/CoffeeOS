@@ -246,17 +246,24 @@ describe("#84 restore receipt in status sheet", () => {
     )
   })
 
-  it("TASK_83 patch v1: no × dismiss button in DOM (SSR)", async () => {
-    const state = createActiveOrdersAccordionState(sampleOrders)
-    const html = await renderSvelte(accordionComponentPath, {
+  it("dismiss cross is only in the DOM when status is ready", async () => {
+    const preparing = await renderSvelte(accordionComponentPath, {
       order: sampleOrders[0],
-      accordionState: state,
+      accordionState: createActiveOrdersAccordionState(sampleOrders),
       onDismiss: () => {}
     })
-    assert.doesNotMatch(html, /status-widget-dismiss/)
-    assert.doesNotMatch(html, /aoa__dismiss/)
-    assert.match(html, /data-testid="active-order-receipt-cta"/)
-    assert.match(html, /data-testid="order-action-buttons"/)
+    assert.doesNotMatch(preparing, /data-testid="active-order-ready-dismiss"/)
+    assert.match(preparing, /data-testid="active-order-receipt-cta"/)
+
+    const readyOrder = { ...sampleOrders[0], status: "ready" }
+    const ready = await renderSvelte(accordionComponentPath, {
+      order: readyOrder,
+      accordionState: createActiveOrdersAccordionState([ readyOrder ]),
+      onDismiss: () => {}
+    })
+    assert.match(ready, /data-testid="active-order-ready-dismiss"/)
+    assert.match(ready, /aria-label="Закрыть карточку заказа"/)
+    assert.doesNotMatch(ready, /data-testid="active-order-receipt-cta"/)
   })
 })
 
