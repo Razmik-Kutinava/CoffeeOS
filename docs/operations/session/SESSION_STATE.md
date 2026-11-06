@@ -8,6 +8,7 @@
 
 | Сейчас | Дальше |
 |--------|--------|
+| **Сверка #75/#76 промо 11₽** (2026-11-06) · логику не переписывали · перевыпуск вне scope · гонка привязки без утечки · статус #76 в CBR поправлен · push/deploy нет · [todo](todo.md) | дальше по плану владельца |
 | **SMS «Готов!» сразу + карточка на ready** (2026-11-06) · local-done · RED `4978600e` · GREEN `8f262444` · push/deploy нет · [todo](todo.md) | push и Fly MCP — только по апруву |
 | **MCP SMS-ссылка PASS** (2026-11-02) · без телефона · happy/conflict/invalid · [MCP_SMS_LINK](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_SMS_LINK.md) · [todo](todo.md) | дальше по плану владельца |
 | **ops: Point A `code_black_member=true`** (2026-11-02) · прод · [todo](todo.md) | — |

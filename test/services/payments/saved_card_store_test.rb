@@ -104,7 +104,16 @@ class Payments::SavedCardStoreTest < ActiveSupport::TestCase
 
     assert errors.all?(&:nil?), "[TDD] race не должен ронять необработанным: #{errors.compact.map { |e| "#{e.class}: #{e.message}" }}"
     winners = results.select { |r| r.is_a?(MobilePaymentMethod) }
-    assert_equal 1, winners.size, "[TDD] ровно одна успешная привязка, got=#{results.inspect}"
+    refusals = results.reject { |r| r.is_a?(MobilePaymentMethod) }
+    assert_equal 1, winners.size, "[TDD] ровно одна успешная привязка"
+    assert_equal [:blocked_method_taken], refusals
+    winner = winners.first
+    refusal_text = refusals.first.to_s
+    [ winner.card_token, winner.card_masked, winner.card_hash, winner.customer_id, winner.bank_card_id ].each do |secret|
+      refute_includes refusal_text, secret.to_s
+    end
+    loser = [ @customer_a, @customer_b ].find { |customer| customer.id != winner.customer_id }
+    assert_nil Shop::SavedCardJson.serialize(MobilePaymentMethod.primary_for(loser.id))
     hash = Payments::SavedCardStore.card_hash_for(card_id)
     assert_equal 1, MobilePaymentMethod.where(card_hash: hash, is_active: true).count
   end

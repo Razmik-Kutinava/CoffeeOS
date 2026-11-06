@@ -1,4 +1,30 @@
-﻿# todo — SMS «Готов!» всегда + карточка на ready
+﻿# todo — сверка #75/#76 промо 11₽
+
+| Поле | Значение |
+|------|----------|
+| **Статус** | local-done · логику промо не меняли · push/deploy нет |
+| **Основание** | владелец: сверить три сданных документа, закрыть реальные хвосты |
+
+## Файлы
+
+- `test/services/payments/saved_card_store_test.rb` — в существующей гонке ответ без данных чужой карты
+- заметки #75 / #76, CBR и список `customer_tasks/README.md` — перевыпуск вне scope, аудит дублей, статус галочки
+
+## Не ломать
+
+- `GrowthPromo.available?` / `eligible?` / `price!`, подписка, SMS, web push, повтор заказа
+- `method_hash` с витрины на создании заказа не передавать
+- `backfill_pre_promo` / `saved_without_promo` с `point_id` NULL не трогать
+- боевую галочку точки и базу не переключать
+
+## Проверка
+
+- `bin/rails test test/services/payments/growth_promo_test.rb test/services/payments/growth_promo_point_campaign_test.rb test/services/payments/growth_ledger_backfill_test.rb test/controllers/platform/tenants_controller_test.rb test/services/platform/point_campaign_settings_sync_test.rb test/models/point_campaign_setting_test.rb test/services/payments/saved_card_store_test.rb`
+- гонка: `bin/rails test test/services/payments/saved_card_store_test.rb -n "/parallel bind/"` → 1 run, 15 assertions, 0 failures
+
+---
+
+# todo — SMS «Готов!» всегда + карточка на ready
 
 | Поле | Значение |
 |------|----------|
