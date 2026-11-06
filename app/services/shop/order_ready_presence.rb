@@ -14,7 +14,7 @@ module Shop
       "order:#{order_id}:sms_grace"
     end
 
-    def self.begin_sms_grace!(order_id, duration: Shop::OrderReadyCascadeJob::SMS_GRACE)
+    def self.begin_sms_grace!(order_id, duration: 15.seconds)
       Rails.cache.write(grace_key(order_id), true, expires_in: duration)
       mark_offline!(order_id)
     end

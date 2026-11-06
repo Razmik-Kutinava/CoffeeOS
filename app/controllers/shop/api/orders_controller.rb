@@ -163,8 +163,9 @@ module Shop
           tenant_id: @shop_tenant.id,
           customer_id: cid,
           source: :mobile,
-          # #82/#35: только accepted|preparing — hide-on-ready (виджет во время готовки).
-          status: %w[accepted preparing]
+          # accepted|preparing|ready — карточка на главном до крестика гостя.
+          # issued/closed/cancelled в выборку не входят.
+          status: %w[accepted preparing ready]
         ).where("orders.created_at >= ?", ACTIVE_ORDERS_WINDOW.ago)
           .includes(:order_items).order(created_at: :desc)
 

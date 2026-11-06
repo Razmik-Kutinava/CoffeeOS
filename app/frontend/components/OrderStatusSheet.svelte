@@ -16,7 +16,8 @@
     stopActiveOrdersPolling,
     visibleOrders,
     shouldShowStatusSheetUi,
-    statusWidgetUiVisible
+    statusWidgetUiVisible,
+    dismissOrder
   } from "../lib/orderStatusSheet.js"
   import {
     createActiveOrdersAccordionState
@@ -100,7 +101,8 @@
         reconnectToken: token,
         onStatus: (payload) => {
           applyCableEvent(sheet, payload, {
-            onTerminal: () => { refreshFrequentProducts() }
+            onTerminal: () => { refreshFrequentProducts() },
+            onReady: () => { refreshFrequentProducts() }
           })
           sync()
         },
@@ -140,6 +142,11 @@
       sync()
       refreshFrequentProducts()
     }
+  }
+
+  function onDismissOrder(order) {
+    dismissOrder(sheet, order?.id || order?.order_id)
+    sync()
   }
 
   function onCancelRequest(order) {
@@ -262,6 +269,7 @@
             bind:accordionState
             onOpenDetail={(o) => push(`/order/${o.id || o.order_id}`)}
             onCancelRequest={onCancelRequest}
+            onDismiss={onDismissOrder}
           />
         {/each}
         {#if scrollable}

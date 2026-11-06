@@ -38,13 +38,15 @@
   } from "../lib/pushPrePrompt.js"
   import OrderActionButtons from "./OrderActionButtons.svelte"
   import PushPrePrompt from "./PushPrePrompt.svelte"
+  import { showReadyDismiss } from "../lib/orderStatusSheet.js"
 
   let {
     order,
     sheetContext = "peek",
     accordionState = $bindable(),
     onOpenDetail = undefined,
-    onCancelRequest = undefined
+    onCancelRequest = undefined,
+    onDismiss = undefined
   } = $props()
 
   let row = $derived(
@@ -82,6 +84,7 @@
   )
   let canCancel = $derived(Boolean(order?.can_cancel))
   let status = $derived(String(order?.status || ""))
+  let readyDismiss = $derived(showReadyDismiss(status))
   let showReceiptCta = $derived(
     status === "accepted" || status === "paid" || status === "preparing"
   )
@@ -411,6 +414,18 @@
         </div>
       {/if}
     </button>
+    {#if readyDismiss}
+      <button
+        type="button"
+        class="aoa__dismiss"
+        data-testid="active-order-ready-dismiss"
+        aria-label="Закрыть карточку заказа"
+        onclick={(e) => {
+          e.stopPropagation()
+          onDismiss?.(order)
+        }}
+      >×</button>
+    {/if}
     <OrderActionButtons
       status={status}
       os={deviceOs}
@@ -536,6 +551,19 @@
     border: 0;
     color: inherit;
     padding: 0;
+    cursor: pointer;
+  }
+  .aoa__dismiss {
+    flex: 0 0 auto;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #c8c8c8;
+    font-size: 1.15rem;
+    line-height: 1;
     cursor: pointer;
   }
   .aoa__meta {

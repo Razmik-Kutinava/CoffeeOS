@@ -146,13 +146,17 @@ export function dismissOrder(state, orderId) {
   refreshMode(state)
 }
 
-/** Terminal для снятия карточки / refresh frequent — ready (#82/#35) + выдача/отмена. */
+/** Снятие карточки: выдача и отмена. ready остаётся, пока гость не нажмёт X. */
 export const SHEET_TERMINAL_STATUSES = Object.freeze([
-  "ready",
   "issued",
   "closed",
   "cancelled"
 ])
+
+/** Крестик только на «Готов». На принят/готовится карточка без X. */
+export function showReadyDismiss(status) {
+  return String(status || "") === "ready"
+}
 
 /** Стабильный ключ набора id — poll не tear-down Cable, если список тот же. */
 export function activeOrderIdsKey(orders) {
@@ -169,7 +173,7 @@ export function applyCableEvent(state, payload, hooks = {}) {
   if (!orderId) return
 
   const status = String(payload.status || "")
-  // #82/#35: ready скрывает виджет с гл. экрана (+ onTerminal → frequent/повторить)
+  // issued/closed/cancelled снимают карточку. ready остаётся (X закрывает гость).
   const terminal = SHEET_TERMINAL_STATUSES.includes(status)
   if (terminal) {
     // dismissedIds не сбрасываем: если id вернётся из stale sync — виджет не всплывёт снова
@@ -199,6 +203,7 @@ export function applyCableEvent(state, payload, hooks = {}) {
   // #63: новая ссылка массива — Svelte 5 re-render без F5
   state.orders = state.orders.map((o, i) => (i === idx ? next : o))
   refreshMode(state)
+  if (status === "ready" && typeof hooks.onReady === "function") hooks.onReady()
 }
 
 export function applyReconnectOrders(state, orders) {
@@ -206,6 +211,6 @@ export function applyReconnectOrders(state, orders) {
     const status = String(o?.status || "")
     return status && !SHEET_TERMINAL_STATUSES.includes(status)
   })
-  // accepted|preparing — карточка во время готовки; ready+terminal отсекает API/фильтр
+  // accepted|preparing|ready остаются; issued/closed/cancelled отсекаются
   state.setOrders(list)
 }
