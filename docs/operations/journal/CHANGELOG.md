@@ -11,6 +11,12 @@
 
 ## Текущий месяц (2026-11)
 
+## 2026-11-10 — 🚀 SMS «Готов!» + карточка ready на прод
+
+- Push `develop` → `ccd04d32` (SMS GREEN `8f262444` + сверка #75 + CI-фиксы: RuboCop, nokogiri 1.19.7, rails-html-sanitizer 1.7.2, Rails **8.1.4.1**).
+- CI green [42830433851](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/42830433851). Deploy GHA [42831055166](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/42831055166): image `deployment-01M72WM4…`, release_command OK, web+worker started.
+- Эконом-пачка: Sentry 24h 0 новых · Fly logs skip (нет local fly token) · MCP Point A smoke PASS + бандл readyDismiss · live SMS/карточка — 👤. [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_sms_ready_2026-11-10/MCP_RESULT.md).
+
 ## 2026-11-06 — сверка #75/#76 промо 11₽: хвосты и статус галочки
 
 - Логику промо, подписку, SMS и web push не меняли. Тесты зоны зелёные: `growth_promo` 20/0, точка/журнал/привязка 57/0, гонка после допроверки 1/0.

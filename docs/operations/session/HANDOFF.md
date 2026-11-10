@@ -2,17 +2,18 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-06 · **ctx_trim:** `2026-11-02`  
+**Дата:** 2026-11-10 · **ctx_trim:** `2026-11-02`  
 **Ветка:** `develop`  
 **Очередь:** [`PUSH_SMS_QUEUE.md`](../milestones/veha_2/requirements/PUSH_SMS_QUEUE.md) — один шаг = новый чат  
-**Следующий шаг:** сверка #75/#76 закрыта локально · push и deploy — только по просьбе владельца · `⚠️ Субагенты: пора` (tasks_since≥8) — не блокер  
-**Субагенты-батч:** last=never (skip на `/review` 12–16 и на SMS/ready-sheet) · tasks_since≥8 · nudge активен  
+**Следующий шаг:** 👤 живой тест SMS «Готов!» (заказ → Готово → SMS + карточка с X) · имя отправителя SMS.ru у заказчика · `⚠️ Субагенты: пора` (tasks_since≥8) — не блокер  
+**Субагенты-батч:** last=never · tasks_since≥8 · nudge активен  
 **Правила (сокр.):** bugbot/security — батч+nudge · `/regress` не дефолт · `explore` не «на всякий» · после deploy — эконом-пачка (`dev-gates`)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Сверка #75/#76 промо 11₽** (2026-11-06) · логику не переписывали · перевыпуск вне scope · гонка привязки без утечки · статус #76 в CBR поправлен · push/deploy нет · [todo](todo.md) | дальше по плану владельца |
-| **SMS «Готов!» сразу + карточка на ready** (2026-11-06) · local-done · RED `4978600e` · GREEN `8f262444` · push/deploy нет · [todo](todo.md) | push и Fly MCP — только по апруву |
+| **🚀 SMS «Готов!» на прод** (2026-11-10) · push `ccd04d32` · CI green · deploy GHA [42831055166](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/42831055166) · image `01M72WM4…` · эконом-пачка PASS · [MCP](../milestones/veha_2/artifacts/mcp/fly_sms_ready_2026-11-10/MCP_RESULT.md) · [todo](todo.md) | 👤 live SMS + карточка |
+| **Сверка #75/#76 промо 11₽** (2026-11-06) · запушено с SMS · [todo](todo.md) | — |
+| **SMS «Готов!» сразу + карточка на ready** · GREEN `8f262444` · **на проде** · [todo](todo.md) | 👤 приёмка телефоном |
 | **MCP SMS-ссылка (без телефона) PASS** (2026-11-02) · `/o/{hash}` happy + conflict decline + invalid · [MCP_SMS_LINK](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_SMS_LINK.md) · [todo](todo.md) | дальше по плану владельца (живая SMS — skip) |
 | **ops: Point A `code_black_member=true`** (2026-11-02) · прод · [todo](todo.md) | — |
 | **🚀 5+6+7 Fly v524 PASS** (2026-11-02) · [MCP_RESULT v524](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_RESULT.md) · [todo](todo.md) | — |
@@ -26,7 +27,7 @@
 | **🚀 4 — Fly v523 PASS** (2026-10-29) · шаги 10–11 | 👤 G4 |
 | **ctx-trim 2026-11-02** — архив Sep–Oct ops | `/start` |
 
-**Fly:** v524 · https://codeblack.coffee · app `coffeeos`  
+**Fly:** image `deployment-01M72WM4ZZZGMEYSE9B5F7V2ZZ` (после v524) · https://codeblack.coffee · app `coffeeos`  
 **Point A:** https://codeblack.coffee/shop?tenant_id=2fdee1ac-4674-41ee-b89e-87b45643f789  
 
 **Архив session:** [`archive/README.md`](archive/README.md) · pre-trim: `handoff-2026-09-10-pre-trim.md`  

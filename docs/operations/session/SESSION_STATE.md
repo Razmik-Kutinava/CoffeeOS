@@ -2,14 +2,15 @@
 
 ## Шапка (агент читает только это + todo + ISSUES «🔴 Открыто»)
 
-**Дата:** 2026-11-06 · **ctx_trim:** `2026-11-02`  
+**Дата:** 2026-11-10 · **ctx_trim:** `2026-11-02`  
 **Ветка:** `develop`  
 **Субагенты-батч:** last=never · tasks_since≥8 · `⚠️ Субагенты: пора` (не блокер)
 
 | Сейчас | Дальше |
 |--------|--------|
-| **Сверка #75/#76 промо 11₽** (2026-11-06) · логику не переписывали · перевыпуск вне scope · гонка привязки без утечки · статус #76 в CBR поправлен · push/deploy нет · [todo](todo.md) | дальше по плану владельца |
-| **SMS «Готов!» сразу + карточка на ready** (2026-11-06) · local-done · RED `4978600e` · GREEN `8f262444` · push/deploy нет · [todo](todo.md) | push и Fly MCP — только по апруву |
+| **🚀 SMS «Готов!» на прод** (2026-11-10) · `ccd04d32` · CI [42830433851](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/42830433851) · deploy [42831055166](https://github.com/Razmik-Kutinava/CoffeeOS/actions/runs/42831055166) · Sentry 0 · MCP smoke PASS · live SMS 👤 · [todo](todo.md) | 👤 заказ → Готово → SMS + X |
+| **Сверка #75/#76** · запушено с SMS · [todo](todo.md) | — |
+| **SMS ready UX** · на проде · [todo](todo.md) | 👤 приёмка |
 | **MCP SMS-ссылка PASS** (2026-11-02) · без телефона · happy/conflict/invalid · [MCP_SMS_LINK](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_SMS_LINK.md) · [todo](todo.md) | дальше по плану владельца |
 | **ops: Point A `code_black_member=true`** (2026-11-02) · прод · [todo](todo.md) | — |
 | **🚀 5+6+7 Fly v524 PASS** (2026-11-02) · очередь 🚀 5/6/7 → `done` · [MCP_RESULT](../milestones/veha_2/artifacts/mcp/fly_v524_2026-11-02/MCP_RESULT.md) · [todo](todo.md) | — |
