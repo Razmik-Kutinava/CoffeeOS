@@ -40,8 +40,9 @@ gem "kamal", require: false
 # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
 gem "thruster", require: false
 
-# CVE floor: nokogiri ≥1.19.4 (ReDoS / parse); pulled by rails, pin for bundler-audit regression guard
-gem "nokogiri", ">= 1.19.4"
+# CVE floor: nokogiri ≥1.19.5 (SSRF/UAF/XSS advisories); pulled by rails, pin for bundler-audit regression guard
+gem "nokogiri", ">= 1.19.5"
+gem "rails-html-sanitizer", ">= 1.7.2"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"

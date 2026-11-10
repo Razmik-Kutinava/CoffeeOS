@@ -106,7 +106,7 @@ class Payments::SavedCardStoreTest < ActiveSupport::TestCase
     winners = results.select { |r| r.is_a?(MobilePaymentMethod) }
     refusals = results.reject { |r| r.is_a?(MobilePaymentMethod) }
     assert_equal 1, winners.size, "[TDD] ровно одна успешная привязка"
-    assert_equal [:blocked_method_taken], refusals
+    assert_equal [ :blocked_method_taken ], refusals
     winner = winners.first
     refusal_text = refusals.first.to_s
     [ winner.card_token, winner.card_masked, winner.card_hash, winner.customer_id, winner.bank_card_id ].each do |secret|
